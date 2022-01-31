@@ -1,0 +1,12 @@
+[submodule "vim/.vim/pack/vendor/start/vim-surround"]
+	path = vim/.vim/pack/vendor/start/vim-surround
+	url = https://tpope.io/vim/surround.git
+[submodule "vim/.vim/pack/vendor/start/CamelCaseMotion"]
+	path = vim/.vim/pack/vendor/start/CamelCaseMotion
+	url = https://github.com/bkad/CamelCaseMotion
+[submodule "vim/.vim/pack/vendor/start/vim-visual-multi"]
+	path = vim/.vim/pack/vendor/start/vim-visual-multi
+	url = https://github.com/mg979/vim-visual-multi
+[submodule "vim/.vim/pack/vendor/start/nerdtree"]
+	path = vim/.vim/pack/vendor/start/nerdtree
+	url = https://github.com/preservim/nerdtree
