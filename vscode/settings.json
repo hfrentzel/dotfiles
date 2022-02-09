@@ -1,0 +1,105 @@
+{
+    // Disable some uneeded VS Code features
+    "editor.minimap.enabled": false,
+    "editor.scrollBeyondLastLine": false,
+    "editor.codeLens": false,
+    "workbench.enableExperiments": false,
+    "workbench.startupEditor": "none",
+    "workbench.tips.enabled": false,
+    "explorer.autoReveal": false,
+    "extensions.autoUpdate": "onlyEnabledExtensions",
+
+    // Editor Settings
+    "editor.lineNumbers": "relative",
+    "editor.cursorSurroundingLines": 3, // scroll-off
+    "editor.guides.bracketPairs": "active",
+    "editor.guides.bracketPairsHorizontal": false,
+    "editor.overviewRulerBorder": false,
+    "editor.roundedSelection": false,
+    "editor.stickyTabStops": true,
+    "editor.trimAutoWhitespace": false,
+    "problems.showCurrentInStatus": true,
+    "zenMode.hideLineNumbers": false,
+    "files.insertFinalNewline": true,
+    "files.eol": "\n",
+
+    "explorer.openEditors.sortOrder": "alphabetical",
+    "breadcrumbs.symbolPath": "last",
+    "workbench.tree.renderIndentGuides": "always",
+    "workbench.settings.enableNaturalLanguageSearch": false,
+    "window.menuBarVisibility": "visible",
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.copyOnSelection": true,
+    "terminal.integrated.cursorStyle": "line",
+    "problems.sortOrder": "position",
+    
+    // Git Tab Settings
+    "git.alwaysShowStagedChangesResourceGroup": true,
+    "git.autorefresh": false,
+    "git.branchSortOrder": "alphabetically",
+    
+    // VS Code Vim Settings
+    "vim.cursorStylePerMode.insert": "line",
+    "vim.cursorStylePerMode.normal": "block",
+    "vim.cursorStylePerMode.replace": "underline",
+    "vim.leader": ",",
+    "vim.foldfix": true,
+
+    "vim.camelCaseMotion.enable": true,
+
+    // CSS Linting
+    "css.lint.boxModel": "warning",
+    "css.lint.duplicateProperties": "warning",
+    "css.lint.float": "warning",
+    "css.lint.universalSelector": "warning",
+    "css.lint.zeroUnits": "warning",
+    "less.lint.boxModel": "warning",
+    "less.lint.duplicateProperties": "warning",
+    "less.lint.float": "warning",
+    "less.lint.universalSelector": "warning",
+    "less.lint.zeroUnits": "warning",
+    "scss.lint.boxModel": "warning",
+    "scss.lint.duplicateProperties": "error",
+    "scss.lint.float": "warning",
+    "scss.lint.universalSelector": "warning",
+    "scss.lint.zeroUnits": "warning",
+    
+    // HTML Linting
+    "html.format.endWithNewline": true,
+    "html.format.indentHandlebars": true,
+    "html.format.templating": true,
+    
+    // JS Linting
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": true,
+    "javascript.format.semicolons": "insert",
+    
+    // Python Linting
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportGeneralTypeIssues": "warning"
+    },
+
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Path": "C:\\Users\\frentzeh\\dev\\venvs\\py39\\Scripts\\flake8.exe",
+    "python.linting.flake8Args": [
+        "--max-complexity=12",
+        "--max-line-length=127"
+    ],
+    "gitlens.hovers.currentLine.over": "line",
+    "gitlens.codeLens.enabled": false,
+    "gitlens.defaultDateFormat": "M/D/YYYY",
+    "gitlens.currentLine.enabled": false,
+    "gitlens.hovers.enabled": false,
+    "gitlens.blame.format": " ${date|10} ${author|15}",
+    "gitlens.blame.avatars": false,
+    "gitlens.blame.compact": false,
+    "gitlens.blame.highlight.locations": [
+        "gutter",
+        "overview"
+    ],
+    "gitlens.changes.locations": [
+        "overview",
+        "gutter"
+    ],
+    "gitlens.keymap": "none",
+}
