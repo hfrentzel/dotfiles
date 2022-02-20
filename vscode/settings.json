@@ -80,7 +80,7 @@
     },
 
     "python.linting.flake8Enabled": true,
-    "python.linting.flake8Path": "C:\\Users\\frentzeh\\dev\\venvs\\py39\\Scripts\\flake8.exe",
+    "python.linting.flake8Path": "C:\\Users\\frentzeh\\dotfiles\\python\\py310venv\\Scripts\\flake8.exe",
     "python.linting.flake8Args": [
         "--max-complexity=12",
         "--max-line-length=127"
@@ -102,4 +102,16 @@
         "gutter"
     ],
     "gitlens.keymap": "none",
+
+    "powershell.buttons.showRunButtons": false,
+    "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationForFirstPipeline",
+    "powershell.codeFormatting.trimWhitespaceAroundPipe": true,
+    "powershell.codeFormatting.useCorrectCasing": true,
+    "powershell.codeFormatting.whitespaceBetweenParameters": true,
+    "powershell.enableProfileLoading": false,
+    "powershell.integratedConsole.showOnStartup": false,
+    "powershell.integratedConsole.suppressStartupBanner": true,
+    "powershell.promptToUpdatePowerShell": false,
+    "powershell.sideBar.CommandExplorerVisibility": false,
+    "powershell.startAsLoginShell.osx": false
 }

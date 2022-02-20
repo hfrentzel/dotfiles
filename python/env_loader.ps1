@@ -29,6 +29,6 @@ function Start-Python {
 	return $LASTEXITCODE
 }
 
-Do {
+do {
 	Start-Python 
 } while ($LASTEXITCODE -eq 5)
