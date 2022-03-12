@@ -10,9 +10,12 @@ set ttyfast
 autocmd VimLeave * silent !echo -ne "\e[5 q"
 autocmd VimEnter * silent !echo -ne "\e[1 q"
 
-
 set tabstop=4
 set expandtab
+set shiftwidth=4
+set autoindent
+
+set rnu
 set number
 
 set noerrorbells
@@ -20,3 +23,9 @@ set visualbell
 
 let mapleader = ","
 let g:camelcasemotion_key = '<leader>'
+
+set scrolloff=3
+nmap <leader>n :set rnu!<cr>
+
+nnoremap <C-H> <C-W>h
+nnoremap <C-L> <C-W>l

@@ -1,0 +1,38 @@
+"" Source real .vimrc
+source ~/.vimrc
+Plug 'preservim/nerdtree'
+Plug 'tpope/vim-surround'
+
+map <C-.> <Action>(MoveEditorToOppositeTabGroup)
+map <C-,> <Action>(MoveTabRight)
+
+" vim-gitgutter actions
+map ]c <Action>(VcsShowNextChangeMarker)
+map [c <Action>(VcsShowPrevChangeMarker)
+
+map <leader>b <Action>(ToggleLineBreakpoint)
+map <leader>r <Action>(RenameElement)
+
+nmap <leader>1 :NERDTreeFind<cr>
+nmap <leader>2 <Action>(ActivateVersionControlToolWindow)
+nmap <leader>3 <Action>(ActivateProblemsViewToolWindow)
+nmap <leader>4 <Action>(ActivateRunToolWindow)
+nmap <leader>5 <Action>(ActivateDebugToolWindow)
+nmap <leader>0 <Action>(ActivateTerminalToolWindow)
+
+command Flake action Tool_External Tools_Flake3
+command FlakeOld action Tool_External Tools_Flake2
+command Hgit action Tool_External Tools_Hgit
+
+" CamelCaseMotion approximation (obsolete with proper CamelCaseMotion plugin)
+" Missing inner word motions e.g. i<leader>w
+nmap <leader>w [w
+nmap <leader>b [b
+nmap <leader>e ]w
+nmap <leader>ge ]b
+
+" Find more examples here: https://jb.gg/share-ideavimrc
+" Don't use Ex mode, use Q for formatting.
+map Q gq
+
+

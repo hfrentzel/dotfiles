@@ -10,3 +10,6 @@
 [submodule "vim/.vim/pack/vendor/start/nerdtree"]
 	path = vim/.vim/pack/vendor/start/nerdtree
 	url = https://github.com/preservim/nerdtree
+[submodule "vim/.vim/pack/vendor/start/tcomment_vim"]
+	path = vim/.vim/pack/vendor/start/tcomment_vim
+	url = https://github.com/tomtom/tcomment_vim
