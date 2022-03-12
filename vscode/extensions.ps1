@@ -6,11 +6,11 @@ function Install-VSCode-Extension{
     )
     
     if($installedExtensions | Select-String -Pattern $extensionId) {
-        Echo "$extensionName already installed"
+        Write-Output "$extensionName already installed"
     } else {
-        Echo "Installing $extensionName..."
+        Write-Output "Installing $extensionName..."
         code --install-extension $extensionId
-        Echo "$extensionName installed"
+        Write-Output "$extensionName installed"
     }
 
 }
