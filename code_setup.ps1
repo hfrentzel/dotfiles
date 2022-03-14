@@ -15,6 +15,7 @@ $baseExtensions = @(
     @{Name="Live Server";Id="ritwickdey.LiveServer"}
     @{Name="GiLens";Id="eamodio.gitlens"}
     @{Name="VS Code Powershell";Id="ms-vscode.PowerShell"}
+    @{Name="Base16 Themes";Id="andrsdc.base16-themes"}
 )
 
 Install-Extension-List -extensions $baseExtensions

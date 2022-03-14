@@ -25,3 +25,4 @@ add_symlink ${PWD}/vim/.vimrc ~/.vimrc
 add_symlink ${PWD}/vim/.vim ~/.vim
 add_symlink ${PWD}/tmux/.tmux.conf ~/.tmux.conf
 add_symlink ${PWD}/bash/.bashrc ~/.bashrc
+add_symlink ${PWD}/bash/.bash ~/.bash
