@@ -10,22 +10,39 @@ set ttyfast
 autocmd VimLeave * silent !echo -ne "\e[5 q"
 autocmd VimEnter * silent !echo -ne "\e[1 q"
 
+set noerrorbells
+set visualbell
+
 set tabstop=4
 set expandtab
 set shiftwidth=4
 set autoindent
+set splitright
+set scrolloff=3
 
-set rnu
+set relativenumber
 set number
-
-set noerrorbells
-set visualbell
 
 let mapleader = ","
 let g:camelcasemotion_key = '<leader>'
 
-set scrolloff=3
+" <c-_> maps <c-/> functions like other editors
+let g:tcomment_mapleader1 = '<c-!>'
+nnoremap <c-_> :TComment<cr>
+vnoremap <c-_> :TCommentMaybeInline<cr>
+
 nmap <leader>n :set rnu!<cr>
 
+" Easier window movement
 nnoremap <C-H> <C-W>h
 nnoremap <C-L> <C-W>l
+
+" UPPERCASE word
+nnoremap <c-u> mzviwUe`z
+inoremap <c-u> <esc>viwUea
+
+nnoremap <leader>ev :vs ~/.vimrc<cr>
+
+" Add relative line movements to jump list
+nnoremap <expr> k (v:count > 5 ? "m'" . v:count : '') . 'k'
+nnoremap <expr> j (v:count > 5 ? "m'" . v:count : '') . 'j'
