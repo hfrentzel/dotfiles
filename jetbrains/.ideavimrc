@@ -30,7 +30,12 @@ nmap <leader>w [w
 nmap <leader>b [b
 nmap <leader>e ]w
 nmap <leader>ge ]b
+omap <leader>w [w
+omap <leader>b [b
+omap <leader>e ]w
+omap <leader>ge ]b
 
+inoremap <c-u> <esc>viwUea
 " Find more examples here: https://jb.gg/share-ideavimrc
 " Don't use Ex mode, use Q for formatting.
 map Q gq

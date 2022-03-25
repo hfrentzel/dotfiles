@@ -62,3 +62,7 @@ source ~/.bash/color.sh
 [ -n "$TMUX" ] && \
     export $(tmux show-environment | grep ^USERPROFILE) && \
     export $(tmux show-environment | grep ^WSLENV)
+    
+    
+LOCAL_RC=$HOME/.bashrc.local
+test -f $LOCAL_RC && source $LOCAL_RC
