@@ -2,6 +2,9 @@
     path = ~/.gitconfig.local
 [alias]
     st = status -sb
+    ll = log --oneline
+    last = log -1 --stat
+    br = branch
 [core]
 	autocrlf = true
 [diff]
