@@ -3,9 +3,6 @@
 BASEDIR=$(dirname $0)
 cd $BASEDIR
 
-# ln -s ${PWD}/vim/.vimrc ~/.vimrc
-# ln -s ${PWD}/vim/.vim ~/.vim
-
 add_symlink () {
     src_file=$1
     new_link=$2
@@ -26,3 +23,4 @@ add_symlink ${PWD}/vim/.vim ~/.vim
 add_symlink ${PWD}/tmux/.tmux.conf ~/.tmux.conf
 add_symlink ${PWD}/bash/.bashrc ~/.bashrc
 add_symlink ${PWD}/bash/.bash ~/.bash
+add_symlink ${PWD}/git/gitconfig ~/.gitconfig
