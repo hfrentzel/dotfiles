@@ -35,10 +35,12 @@ nmap <leader>n :set rnu!<cr>
 
 " Easier window movement
 nnoremap <C-H> <C-W>h
+nnoremap <C-J> <C-W>j
+nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 
 " UPPERCASE word
-nnoremap <c-u> mzviwUe`z
+nnoremap U mzviwUe`z
 inoremap <c-u> <esc>viwUea
 
 nnoremap <leader>ev :vs ~/.vimrc<cr>
@@ -47,3 +49,10 @@ nnoremap <leader>sv :source ~/.vimrc<cr>
 " Add relative line movements to jump list
 nnoremap <expr> k (v:count > 5 ? "m'" . v:count : '') . 'k'
 nnoremap <expr> j (v:count > 5 ? "m'" . v:count : '') . 'j'
+
+let s:vimrc_local=$HOME . '/.vimrc.local'
+if filereadable(s:vimrc_local)
+    execute 'source ' . s:vimrc_local
+endif
+
+filetype plugin indent on
