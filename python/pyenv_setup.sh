@@ -1,3 +1,4 @@
+. ~/dotfiles/linux/packages.sh
 DESIRED_VERSIONS=('3.10' '3.9' '3.8' '2.7') 
 
 if [ ! -d $HOME/.pyenv ]; then
@@ -5,7 +6,16 @@ if [ ! -d $HOME/.pyenv ]; then
     export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init --path)"
     eval "$(pyenv init -)"
+
+    python_packages=('build-essential' 'libssl-dev' 'zlib1g-dev' 'libbz2-dev' \
+        'libreadline-dev' 'libsqlite3-dev' 'wget' 'curl' 'llvm' \
+        'libncursesw5-dev' 'xz-utils' 'tk-dev' 'libxml2-dev' 'libxmlsec1-dev' \
+        'libffi-dev' 'liblzma-dev')
+    install_packages "${python_packages[@]}"
 fi
+
+
+
 SET_GLOBAL="pyenv global"
 
 ALL_VERSIONS=$(pyenv install --list)
