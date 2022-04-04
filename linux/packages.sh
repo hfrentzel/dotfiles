@@ -16,6 +16,7 @@ install_packages () {
 
     if [ "$install_command" != "sudo apt-get install" ]; then
         echo "$install_command"
+        eval $install_command
     fi
 }
 

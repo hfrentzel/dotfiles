@@ -65,5 +65,7 @@ if filereadable(s:vimrc_local)
     execute 'source ' . s:vimrc_local
 endif
 
+hi QuickFixLine ctermbg=DarkGray
+
 filetype plugin indent on
 syntax on

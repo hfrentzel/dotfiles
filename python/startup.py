@@ -19,7 +19,8 @@ class Pip(object):
 
     @staticmethod
     def get_freeze():
-        curr_installed = {(p := pv.split('=='))[0].lower(): p[1] for pv in freeze() if '==' in pv}
+        curr_installed = {(p := pv.split('=='))[0].lower(): p[1]
+                          for pv in freeze() if '==' in pv}
         return curr_installed
 
 
