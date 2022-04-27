@@ -5,7 +5,5 @@
     ll = log --oneline
     last = log -1 --stat
     br = branch
-[core]
-	autocrlf = true
 [diff]
 	compactionHeuristic = true

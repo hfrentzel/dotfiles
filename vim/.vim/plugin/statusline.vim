@@ -4,15 +4,12 @@ function! StandardStatusLine() abort
     set statusline+=\ %y
 
     set statusline+=%=
-    set statusline+=%l
-    set statusline+=/
-    set statusline+=%L
-    set statusline+=,
-    set statusline+=\ %c
+
+    set statusline+=\ (%{get(b:,\"git_branch\",\"\")})\ 
+    set statusline+=%{RHS()}
 endfunction
 
 function! SetEsStatusLine() abort
-        
     set laststatus=2
     set statusline=%F
     set statusline+=\ %y
@@ -20,13 +17,19 @@ function! SetEsStatusLine() abort
     set statusline+=\ %{GetEnv()}
 
     set statusline+=%=
-    set statusline+=%l
-    set statusline+=/
-    set statusline+=%L
-    set statusline+=,
-    set statusline+=\ %c
-
+    set statusline+=%{RHS()}
 endfunction
+
+function! RHS() abort
+    let l:line=''
+    let l:line.=line('.')
+    let l:line.='/'
+    let l:line.=line('$')
+    let l:line.=', '
+    let l:line.=virtcol('.')
+    return l:line
+endfunction
+
 
 function! GetEnv() abort
     if exists('g:VimKib#currentEnv')
@@ -35,7 +38,12 @@ function! GetEnv() abort
     return 'No Cluster Set'
 endfunction
 
-call StandardStatusLine()
+augroup gitbranch
+    autocmd!
+    autocmd BufEnter,FocusGained,BufWritePost * 
+                \let b:git_branch = substitute(system("git branch --show-current"), "\n", "", "g")
+augroup end
+
 augroup FileTypes
     autocmd!
     autocmd filetype * call StandardStatusLine()
