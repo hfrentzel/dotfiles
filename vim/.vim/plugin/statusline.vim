@@ -1,6 +1,6 @@
 function! StandardStatusLine() abort
     set laststatus=2
-    set statusline=%F
+    set statusline+=%{get(b:,\"adjusted_path\",\"\")}
     set statusline+=\ %y
 
     set statusline+=%=
@@ -11,7 +11,7 @@ endfunction
 
 function! SetEsStatusLine() abort
     set laststatus=2
-    set statusline=%F
+    set statusline+=%{get(b:,\"adjusted_path\",\"\")}
     set statusline+=\ %y
 
     set statusline+=\ %{GetEnv()}
@@ -30,7 +30,6 @@ function! RHS() abort
     return l:line
 endfunction
 
-
 function! GetEnv() abort
     if exists('g:VimKib#currentEnv')
         return '--' . toupper(g:VimKib#currentEnv) . '--'
@@ -38,10 +37,19 @@ function! GetEnv() abort
     return 'No Cluster Set'
 endfunction
 
-augroup gitbranch
+function! GetGitData() abort
+    let l:is_git_dir = trim(system('git rev-parse --is-inside-work-tree'))
+    if l:is_git_dir is# 'true'
+        let b:git_branch = substitute(system('git branch --show-current'), '\n', '', 'g')
+        let l:git_root = substitute(system('git rev-parse --show-toplevel'), '\n', '', 'g')
+        let l:root_name = '~' . split(l:git_root, '/')[-1] . '~'
+        let b:adjusted_path = l:root_name . matchstr(expand('%:p'), l:git_root . '\zs.*\ze')
+    endif
+endfunction
+
+augroup StatusLineData
     autocmd!
-    autocmd BufEnter,FocusGained,BufWritePost * 
-                \let b:git_branch = substitute(system("git branch --show-current"), "\n", "", "g")
+    autocmd BufEnter,FocusGained,BufWritePost * call GetGitData()
 augroup end
 
 augroup FileTypes
