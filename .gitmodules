@@ -31,3 +31,6 @@
 [submodule "vim/.vim/pack/vendor/start/vim-lsp-settings"]
 	path = vim/.vim/pack/vendor/start/vim-lsp-settings
 	url = https://github.com/mattn/vim-lsp-settings
+[submodule "vim/.vim/pack/vendor/start/vim-tmux-navigator"]
+	path = vim/.vim/pack/vendor/start/vim-tmux-navigator
+	url = git@github.com:christoomey/vim-tmux-navigator

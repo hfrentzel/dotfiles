@@ -34,7 +34,10 @@ let g:CommandTMatchWindowReverse = 0
 let g:CommandTCancelMap=['<esc>', '<C-C>']
 
 " <c-_> maps <c-/> functions like other editors
-let g:tcomment_mapleader1 = '<c-!>'
+let g:tcomment_mapleader1 = ''
+let g:tcomment_mapleader2 = ''
+let g:tcomment_mapleader_comment_anyway = ''
+let g:tcomment_textobject_inlinecomment = ''
 nnoremap <c-_> :TComment<cr>
 vnoremap <c-_> :TCommentMaybeInline<cr>
 
