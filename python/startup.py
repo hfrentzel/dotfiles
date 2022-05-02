@@ -19,19 +19,25 @@ class Pip(object):
 
     @staticmethod
     def get_freeze():
-        curr_installed = {(p := pv.split('=='))[0].lower(): p[1] for pv in freeze() if '==' in pv}
+        # curr_installed = {(p := pv.split('=='))[0].lower(): p[1] for pv in freeze() if '==' in pv}
+        curr_installed = {}
+        for pv in freeze():
+            if '==' in pv:
+                p = pv.split('==')
+                curr_installed[p[0].lower()] = p[1]
+        
         return curr_installed
 
 
 if 'venv' in sys.executable:
-    os.chdir(f'{sys.executable}\\..\\..\\..')
+    os.chdir('%s\\..\\..\\..' % sys.executable)
 
 
 def get_requirements(filename, reqs):
     with open(filename) as f:
         for line in f.readlines():
             if line.startswith('-r'):
-                get_requirements(line[:-1].split('  ')[1], reqs)
+                get_requirements(line[:-1].split(' ')[1], reqs)
             elif line.startswith('git+'):
                 continue
             else:
@@ -60,3 +66,5 @@ if os.path.exists('requirements.txt'):
     if not_installed:
         print('The following modules are not installed')
         print(', '.join(not_installed))
+    if not (out_of_date or not_installed):
+        print('All packages are up to date.')

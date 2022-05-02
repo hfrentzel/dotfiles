@@ -1,7 +1,4 @@
 "" Source real .vimrc
-unmap j
-unmap k
-
 source ~/.vimrc
 Plug 'preservim/nerdtree'
 Plug 'tpope/vim-surround'
@@ -43,4 +40,6 @@ inoremap <c-u> <esc>viwUea
 " Don't use Ex mode, use Q for formatting.
 map Q gq
 
+unmap j
+unmap k
 

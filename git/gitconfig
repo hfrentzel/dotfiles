@@ -1,11 +1,14 @@
 [include]
     path = ~/.gitconfig.local
 [alias]
+    co = checkout
     st = status -sb
-    ll = log --oneline
+    ll = log --oneline --first-parent
+    myll = log --oneline --first-parent --no-merges
+    mylast = log -1 --stat --no-merges --first-parent
     last = log -1 --stat
     br = branch
 [core]
-	autocrlf = true
+	autocrlf = input
 [diff]
 	compactionHeuristic = true

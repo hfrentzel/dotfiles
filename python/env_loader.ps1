@@ -1,10 +1,10 @@
-. 'C:/Users/frentzeh/dotfiles/python/pyvenvs.ps1'
+$envs = Import-Csv -Path "~/dotfiles/python/.pyvenvs" -Header Name,Location
 
 $lines = @()
 $newLine = ''
 for ($i = 0; $i -lt $envs.count; $i++ )
 {
-	$newLine += [String]::Format("{0,-20}", "$i) $($envs[$i]['Name'])")
+	$newLine += [String]::Format("{0,-20}", "$i) $($envs[$i].Name)")
 	if (($i + 1) % 3 -eq 0) {
 		$lines += "$newLine`n"
 		$newLine = ''
@@ -22,10 +22,10 @@ function Start-Python {
 	if ($choice -eq 'q') {
 		return 0
 	}
-	$env:PYPROMPT = $envs[$choice]['Name']
+	$env:PYPROMPT = $envs[$choice].Name
 	$env:PYTHONSTARTUP = "C:/Users/frentzeh/dotfiles/python/startup.py"
 
-	& $envs[$choice]['Location']
+	Invoke-Expression $envs[$choice].Location
 	return $LASTEXITCODE
 }
 
