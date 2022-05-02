@@ -1,4 +1,3 @@
-
 let &t_SI.="\e[5 q" "SI = INSERT mode
 let &t_SR.="\e[4 q" "SR = REPLACE mode
 let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
@@ -13,6 +12,7 @@ autocmd VimEnter * silent !echo -ne "\e[1 q"
 set noerrorbells
 set visualbell
 
+set backspace=indent,eol,start
 set tabstop=4
 set expandtab
 set shiftwidth=4
@@ -25,6 +25,13 @@ set number
 
 let mapleader = ","
 let g:camelcasemotion_key = '<leader>'
+
+let g:CommandTFileScanner = 'git'
+let g:CommandTInputDebounce = 50
+let g:CommandTMaxCachedDirectories = 10
+let g:CommandTMatchWindowAtTop = 1
+let g:CommandTMatchWindowReverse = 0
+let g:CommandTCancelMap=['<esc>', '<C-C>']
 
 " <c-_> maps <c-/> functions like other editors
 let g:tcomment_mapleader1 = '<c-!>'
@@ -50,9 +57,15 @@ nnoremap <leader>sv :source ~/.vimrc<cr>
 nnoremap <expr> k (v:count > 5 ? "m'" . v:count : '') . 'k'
 nnoremap <expr> j (v:count > 5 ? "m'" . v:count : '') . 'j'
 
+command -range=% Fnl :<line1>,<line2>s/\\n/\r/g
+
+" Local overrides
 let s:vimrc_local=$HOME . '/.vimrc.local'
 if filereadable(s:vimrc_local)
     execute 'source ' . s:vimrc_local
 endif
 
+hi QuickFixLine ctermbg=DarkGray
+
 filetype plugin indent on
+syntax on

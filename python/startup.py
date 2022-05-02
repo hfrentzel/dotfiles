@@ -25,7 +25,7 @@ class Pip(object):
             if '==' in pv:
                 p = pv.split('==')
                 curr_installed[p[0].lower()] = p[1]
-        
+
         return curr_installed
 
 
