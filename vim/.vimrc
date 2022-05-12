@@ -41,7 +41,15 @@ let g:tcomment_textobject_inlinecomment = ''
 nnoremap <c-_> :TComment<cr>
 vnoremap <c-_> :TCommentMaybeInline<cr>
 
-nmap <leader>n :set rnu!<cr>
+nnoremap <leader>n :set rnu!<cr>
+
+nnoremap <leader>1 :NERDTree<cr>
+augroup NerdTree
+    autocmd!
+    autocmd BufEnter * nnoremap <leader>1 :NERDTreeToggle<cr>
+    autocmd BufEnter * if(&filetype == 'nerdtree') | nnoremap <leader>1 :NERDTreeClose<cr> | endif
+    autocmd Filetype nerdtree nnoremap <leader>1 :NERDTreeClose<cr>
+augroup end
 
 " Easier window movement
 nnoremap <C-H> <C-W>h

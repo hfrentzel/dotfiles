@@ -1,6 +1,6 @@
 function! StandardStatusLine() abort
     set laststatus=2
-    set statusline+=%{get(b:,\"adjusted_path\",\"\")}
+    set statusline=%{get(b:,\"adjusted_path\",\"\")}
     set statusline+=\ %y
 
     set statusline+=%=
@@ -11,7 +11,7 @@ endfunction
 
 function! SetEsStatusLine() abort
     set laststatus=2
-    set statusline+=%{get(b:,\"adjusted_path\",\"\")}
+    set statusline=%{get(b:,\"adjusted_path\",\"\")}
     set statusline+=\ %y
 
     set statusline+=\ %{GetEnv()}
