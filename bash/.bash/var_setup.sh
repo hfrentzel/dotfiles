@@ -1,4 +1,4 @@
-filename=~/sandbox/hfrentzel/configs/variables
+filename=~/variables
 if [[ ! -f $filename ]]; then
     return
 fi

@@ -13,3 +13,7 @@ If (Test-Path "~/dotfiles/python/python_helpers.ps1") {
 If (Test-Path "~/dotfiles/git/git_stage.ps1") {
 	. "~/dotfiles/git/git_stage.ps1"
 }
+
+If (Test-Path "~/dotfiles/powershell/var_setup.ps1") {
+	. "~/dotfiles/powershell/var_setup.ps1"
+}
