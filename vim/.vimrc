@@ -12,11 +12,6 @@ autocmd VimEnter * silent !echo -ne "\e[1 q"
 set noerrorbells
 set visualbell
 
-set backspace=indent,eol,start
-set tabstop=4
-set expandtab
-set shiftwidth=4
-set autoindent
 set splitright
 set scrolloff=3
 
@@ -43,13 +38,12 @@ vnoremap <c-_> :TCommentMaybeInline<cr>
 
 nnoremap <leader>n :set rnu!<cr>
 
-nnoremap <leader>1 :NERDTree<cr>
-augroup NerdTree
-    autocmd!
-    autocmd BufEnter * nnoremap <leader>1 :NERDTreeToggle<cr>
-    autocmd BufEnter * if(&filetype == 'nerdtree') | nnoremap <leader>1 :NERDTreeClose<cr> | endif
-    autocmd Filetype nerdtree nnoremap <leader>1 :NERDTreeClose<cr>
-augroup end
+nnoremap <leader>1 :NERDTreeFocus<cr>
+
+if has('mouse')
+    set mouse=a
+    set ttymouse=xterm2
+endif
 
 " Easier window movement
 nnoremap <C-H> <C-W>h
