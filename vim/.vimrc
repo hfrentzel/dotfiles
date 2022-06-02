@@ -12,7 +12,6 @@ autocmd VimEnter * silent !echo -ne "\e[1 q"
 set noerrorbells
 set visualbell
 
-set splitright
 set scrolloff=3
 
 set relativenumber
