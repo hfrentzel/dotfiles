@@ -35,8 +35,13 @@ let g:tcomment_textobject_inlinecomment = ''
 nnoremap <c-_> :TComment<cr>
 vnoremap <c-_> :TCommentMaybeInline<cr>
 
-nnoremap <leader>n :set rnu!<cr>
+" Copy to system clipboard
+if !empty($IS_WSL)
+    vnoremap <silent> <C-c> "+y:call system("clip.exe", getreg("+"))<CR>
+    vnoremap <silent> <RightMouse> "+y:call system("clip.exe", getreg("+"))<CR>
+endif
 
+nnoremap <leader>n :set rnu!<cr>
 nnoremap <leader>1 :NERDTreeFocus<cr>
 
 if has('mouse')
