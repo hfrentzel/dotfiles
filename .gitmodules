@@ -31,3 +31,6 @@
 [submodule "vim/.vim/pack/vendor/start/vim-tmux-navigator"]
 	path = vim/.vim/pack/vendor/start/vim-tmux-navigator
 	url = git@github.com:christoomey/vim-tmux-navigator
+[submodule "vim/.vim/pack/vendor/start/vim-python-pep8-indent"]
+	path = vim/.vim/pack/vendor/start/vim-python-pep8-indent
+	url = https://github.com/vimjas/vim-python-pep8-indent
