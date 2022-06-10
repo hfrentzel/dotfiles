@@ -10,3 +10,4 @@ if has('autocmd')
         autocmd User NERDTreeInit call autocmds#get_last_file()
     augroup END
 endif
+

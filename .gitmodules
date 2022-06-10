@@ -34,3 +34,6 @@
 [submodule "vim/.vim/pack/vendor/start/vim-python-pep8-indent"]
 	path = vim/.vim/pack/vendor/start/vim-python-pep8-indent
 	url = https://github.com/vimjas/vim-python-pep8-indent
+[submodule "vim/.vim/pack/vendor/start/pinnacle"]
+	path = vim/.vim/pack/vendor/start/pinnacle
+	url = https://github.com/wincent/pinnacle.git
