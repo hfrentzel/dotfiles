@@ -37,3 +37,15 @@
 [submodule "vim/.vim/pack/vendor/start/pinnacle"]
 	path = vim/.vim/pack/vendor/start/pinnacle
 	url = https://github.com/wincent/pinnacle.git
+[submodule "vim/.vim/pack/vendor/start/ultisnips"]
+	path = vim/.vim/pack/vendor/start/ultisnips
+	url = https://github.com/SirVer/ultisnips
+[submodule "vim/.vim/pack/vendor/start/vim-lsp-ultisnips"]
+	path = vim/.vim/pack/vendor/start/vim-lsp-ultisnips
+	url = https://github.com/thomasfaingnaert/vim-lsp-ultisnips
+[submodule "vim/.vim/pack/vendor/start/asyncomplete.vim"]
+	path = vim/.vim/pack/vendor/start/asyncomplete.vim
+	url = https://github.com/prabirshrestha/asyncomplete.vim
+[submodule "vim/.vim/pack/vendor/start/asyncomplete-lsp.vim"]
+	path = vim/.vim/pack/vendor/start/asyncomplete-lsp.vim
+	url = https://github.com/prabirshrestha/asyncomplete-lsp.vim

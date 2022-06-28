@@ -1,23 +1,23 @@
 function! StandardStatusLine() abort
-    set laststatus=2
-    set statusline=%{get(b:,\"adjusted_path\",\"\")}
-    set statusline+=\ %y
+    setlocal laststatus=2
+    setlocal statusline=%{get(b:,\"adjusted_path\",\"\")}
+    setlocal statusline+=\ %y
 
-    set statusline+=%=
+    setlocal statusline+=%=
 
-    set statusline+=\ (%{get(b:,\"git_branch\",\"\")})\ 
-    set statusline+=%{RHS()}
+    setlocal statusline+=\ (%{get(b:,\"git_branch\",\"\")})\ 
+    setlocal statusline+=%{RHS()}
 endfunction
 
 function! SetEsStatusLine() abort
-    set laststatus=2
-    set statusline=%{get(b:,\"adjusted_path\",\"\")}
-    set statusline+=\ %y
+    setlocal laststatus=2
+    setlocal statusline=%{get(b:,\"adjusted_path\",\"\")}
+    setlocal statusline+=\ %y
 
-    set statusline+=\ %{GetEnv()}
+    setlocal statusline+=\ %{GetEnv()}
 
-    set statusline+=%=
-    set statusline+=%{RHS()}
+    setlocal statusline+=%=
+    setlocal statusline+=%{RHS()}
 endfunction
 
 function! RHS() abort
