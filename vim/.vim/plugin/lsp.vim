@@ -30,20 +30,23 @@ endif
 
 function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> K <plug>(lsp-hover)
+    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 endfunction
 
-let g:lsp_settings = {
-\    'pylsp': {
-\        'workspace_config': {
-\            'pylsp': {
-\                'configurationSources': ['flake8'],
-\                'plugins': {
-\                    'flake8': {'maxLineLength': 120}
-\                }
-\            }
-\        }
-\     }
-\}
+" let g:lsp_settings = {
+" \    'pylsp': {
+" \        'workspace_config': {
+" \            'pylsp': {
+" \                'configurationSources': ['flake8'],
+" \                'plugins': {
+" \                    'flake8': {'maxLineLength': 120}
+" \                }
+" \            }
+" \        }
+" \     }
+" \}
 
 augroup lsp_install
     au!
