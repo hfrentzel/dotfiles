@@ -49,3 +49,6 @@
 [submodule "vim/.vim/pack/vendor/start/asyncomplete-lsp.vim"]
 	path = vim/.vim/pack/vendor/start/asyncomplete-lsp.vim
 	url = https://github.com/prabirshrestha/asyncomplete-lsp.vim
+[submodule "vim/.vim/pack/vendor/start/asyncomplete-ultisnips.vim"]
+	path = vim/.vim/pack/vendor/start/asyncomplete-ultisnips.vim
+	url = https://github.com/prabirshrestha/asyncomplete-ultisnips.vim

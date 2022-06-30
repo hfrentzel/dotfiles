@@ -29,27 +29,26 @@ if executable('pylsp')
 endif
 
 function! s:on_lsp_buffer_enabled() abort
+    nmap <buffer> <leader>3 <plug>(lsp-document-diagnostics)
+    nmap <buffer> gd <plug>(lsp-definition)
     nmap <buffer> K <plug>(lsp-hover)
-    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-    inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 endfunction
-
-" let g:lsp_settings = {
-" \    'pylsp': {
-" \        'workspace_config': {
-" \            'pylsp': {
-" \                'configurationSources': ['flake8'],
-" \                'plugins': {
-" \                    'flake8': {'maxLineLength': 120}
-" \                }
-" \            }
-" \        }
-" \     }
-" \}
 
 augroup lsp_install
     au!
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
+
+let g:UltiSnipsExpandTrigger='<tab>'
+let g:UltiSnipsJumpForwardTrigger='<tab>'
+let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
+let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+let g:UltiSnipsEditSplit="vertical"
+call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+    \ 'name': 'ultisnips',
+    \ 'allowlist': ['*'],
+    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+    \ }))
+
+let b:did_after_plugin_ultisnips_after = 1
 

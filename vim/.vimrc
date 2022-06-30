@@ -74,13 +74,6 @@ if filereadable(s:vimrc_local)
     execute 'source ' . s:vimrc_local
 endif
 
-let g:UltiSnipsExpandTrigger='<tab>'
-let g:UltiSnipsJumpForwardTrigger='<c-b>'
-let g:UltiSnipsJumpBackwardTrigger='<c-q>'
-let g:UltiSnipsSnippetDirectories=["UltiSnips"]
-let g:UltiSnipsEditSplit="vertical"
-
-
 hi QuickFixLine ctermbg=DarkGray
 
 filetype plugin indent on
