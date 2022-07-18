@@ -1,6 +1,6 @@
 let s:filename = expand('~/workspaces')
 if !filereadable(s:filename)
-    exit
+    finish
 endif
 
 for line in readfile(s:filename)
