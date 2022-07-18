@@ -20,6 +20,8 @@ add_symlink () {
 
 add_symlink ${PWD}/vim/.vimrc ~/.vimrc
 add_symlink ${PWD}/vim/.vim ~/.vim
+mkdir -p ~/.config/nvim
+add_symlink ${PWD}/vim/.config/nvim/init.vim ~/.config/nvim/init.vim
 add_symlink ${PWD}/tmux/.tmux.conf ~/.tmux.conf
 add_symlink ${PWD}/bash/.bashrc ~/.bashrc
 add_symlink ${PWD}/bash/.bash ~/.bash

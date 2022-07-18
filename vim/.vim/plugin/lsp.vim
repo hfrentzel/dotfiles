@@ -1,3 +1,9 @@
+if has('nvim')
+    finish
+endif
+        "             'jedi': {'environment': lsp#utils#find_nearest_parent_file_directory(
+        "                 lsp#utils#get_buffer_path(), ['venv/']).'/venv'
+        "             }
 
 if executable('pylsp') 
     " let g:lsp_experimental_workspace_folders = 1

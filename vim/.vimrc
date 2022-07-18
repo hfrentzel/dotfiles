@@ -46,7 +46,9 @@ nnoremap <leader>1 :NERDTreeFocus<cr>
 
 if has('mouse')
     set mouse=a
-    set ttymouse=xterm2
+    if !has('nvim')
+        set ttymouse=xterm2
+    endif
 endif
 
 " Easier window movement

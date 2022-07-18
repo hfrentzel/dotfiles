@@ -1,3 +1,7 @@
+if has('nvim')
+    finish
+endif
+
 function! CloseAndExpand() abort
    call asyncomplete#close_popup()
    return "\<C-R>=UltiSnips#ExpandSnippet()\<cr>"

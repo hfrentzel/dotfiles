@@ -25,9 +25,6 @@
 [submodule "vim/.vim/pack/vendor/start/vim-lsp"]
 	path = vim/.vim/pack/vendor/start/vim-lsp
 	url = https://github.com/prabirshrestha/vim-lsp
-[submodule "vim/.vim/pack/vendor/start/vim-lsp-settings"]
-	path = vim/.vim/pack/vendor/start/vim-lsp-settings
-	url = https://github.com/mattn/vim-lsp-settings
 [submodule "vim/.vim/pack/vendor/start/vim-tmux-navigator"]
 	path = vim/.vim/pack/vendor/start/vim-tmux-navigator
 	url = git@github.com:christoomey/vim-tmux-navigator
@@ -52,3 +49,6 @@
 [submodule "vim/.vim/pack/vendor/start/asyncomplete-ultisnips.vim"]
 	path = vim/.vim/pack/vendor/start/asyncomplete-ultisnips.vim
 	url = https://github.com/prabirshrestha/asyncomplete-ultisnips.vim
+[submodule "vim/.vim/pack/vendor/start/nvim-lspconfig"]
+	path = vim/.vim/pack/vendor/opt/nvim-lspconfig
+	url = https://github.com/neovim/nvim-lspconfig
