@@ -38,12 +38,26 @@ function! GetEnv() abort
 endfunction
 
 function! GetGitData() abort
-    let l:is_git_dir = trim(system('git rev-parse --is-inside-work-tree'))
+    let l:git_prefix = 'git -C "'.expand('%:p:h').'"'
+
+    if exists("b:workspace")
+        let l:root_path = b:workspace
+        let l:root_name = '~' . g:workspaces[b:workspace] . '~'
+    endif
+
+    let l:is_git_dir = trim(system(l:git_prefix.' rev-parse --is-inside-work-tree'))
     if l:is_git_dir is# 'true'
-        let b:git_branch = substitute(system('git branch --show-current'), '\n', '', 'g')
-        let l:git_root = substitute(system('git rev-parse --show-toplevel'), '\n', '', 'g')
-        let l:root_name = '~' . split(l:git_root, '/')[-1] . '~'
-        let b:adjusted_path = l:root_name . matchstr(expand('%:p'), l:git_root . '\zs.*\ze')
+        let b:git_branch = substitute(system(l:git_prefix.' branch --show-current'), '\n', '', 'g')
+        if !exists("l:root_path")
+            let l:root_path = substitute(system(l:git_prefix.' rev-parse --show-toplevel'), '\n', '', 'g')
+            let l:root_name = '~' . split(l:root_path, '/')[-1] . '~'
+        endif
+    endif
+
+    if exists("l:root_path")
+        let b:adjusted_path = l:root_name . matchstr(expand('%:p'), l:root_path . '\zs.*\ze')
+    else
+        let b:adusted_path = expand('%:p')
     endif
 endfunction
 

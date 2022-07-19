@@ -20,7 +20,7 @@
 	path = vim/.vim/pack/vendor/start/VimKib
 	url = git@github.com:hfrentzel/VimKib.git
 [submodule "vim/.vim/pack/vendor/start/command-t"]
-	path = vim/.vim/pack/vendor/start/command-t
+	path = vim/.vim/pack/vendor/opt/command-t
 	url = https://github.com/wincent/command-t.git
 [submodule "vim/.vim/pack/vendor/start/vim-lsp"]
 	path = vim/.vim/pack/vendor/start/vim-lsp

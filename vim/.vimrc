@@ -76,6 +76,11 @@ if filereadable(s:vimrc_local)
     execute 'source ' . s:vimrc_local
 endif
 
+if has('packages')
+    packadd! command-t
+endif
+
+
 hi QuickFixLine ctermbg=DarkGray
 
 filetype plugin indent on

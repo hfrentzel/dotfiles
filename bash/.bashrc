@@ -65,6 +65,7 @@ source ~/.bash/color.sh
     export $(tmux show-environment | grep ^USERPROFILE) && \
     export $(tmux show-environment | grep ^WSLENV)
 
+export PATH="$HOME/.local/bin:$PATH"
 
 # Pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -73,6 +74,7 @@ if [ -d $PYENV_ROOT ]; then
     eval "$(pyenv init --path)"
     eval "$(pyenv init -)"
 fi
+
     
     
 LOCAL_RC=$HOME/.bashrc.local
