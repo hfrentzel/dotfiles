@@ -5,6 +5,12 @@ function! StandardStatusLine() abort
 
     setlocal statusline+=%=
 
+    setlocal statusline+=%1*
+    setlocal statusline+=%{NumErrors()}
+    setlocal statusline+=%2*
+    setlocal statusline+=%{NumWarnings()}
+    setlocal statusline+=%*
+
     setlocal statusline+=\ (%{get(b:,\"git_branch\",\"\")})\ 
     setlocal statusline+=%{RHS()}
 endfunction
@@ -18,6 +24,26 @@ function! SetEsStatusLine() abort
 
     setlocal statusline+=%=
     setlocal statusline+=%{RHS()}
+endfunction
+
+function! NumErrors() abort
+    if !exists('b:diagnostic_counts')
+        return ""
+    endif
+    if b:diagnostic_counts['error'] > 0
+        return "E ".b:diagnostic_counts['error']." "
+    endif
+    return ""
+endfunction
+
+function! NumWarnings() abort
+    if !exists('b:diagnostic_counts')
+        return ""
+    endif
+    if b:diagnostic_counts['warning'] > 0
+        return "W ".b:diagnostic_counts['warning']." "
+    endif
+    return ""
 endfunction
 
 function! RHS() abort

@@ -16,7 +16,8 @@ endfor
 
 function s:set_workspace() abort
     let filename = expand('%:p')
-    for directory in keys(g:workspaces)
+    let g:workspace_regex = join(keys(g:workspaces), '|')
+    for directory in (keys(g:workspaces)->sort({i1, i2 -> len(i2) - len(i1)}))
         if stridx(filename, directory) > -1
             let b:workspace = directory
             break

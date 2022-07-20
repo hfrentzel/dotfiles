@@ -1,4 +1,5 @@
 local on_attach = function ()
+    vim.wo.signcolumn = 'number'
     vim.keymap.set('n', 'K', "<cmd>lua vim.lsp.buf.hover()<CR>", {buffer = true, silent = true})
     vim.keymap.set('n', 'gd', "<cmd>lua vim.lsp.buf.definition()<CR>", {buffer = true, silent = true})
     vim.keymap.set('n', '<leader>3', "<cmd>lua vim.diagnostic.setloclist()<CR>", {buffer = true, silent = true})
@@ -36,8 +37,19 @@ require'lspconfig'.pylsp.setup{
     },
 }
 
+_G.updateDiags = function()
+    vim.diagnostic.setloclist({open = false})
+    vim.b['diagnostic_counts'] = { 
+        error = vim.fn.len(vim.diagnostic.get(0, {severity = 1})),
+        warning = vim.fn.len(vim.diagnostic.get(0, {severity = 2})),
+        info = vim.fn.len(vim.diagnostic.get(0, {severity = 3})),
+        hint = vim.fn.len(vim.diagnostic.get(0, {severity = 4})),
+    }
+end
+
+
 vim.cmd('augroup diagnostics')
 vim.cmd('autocmd!')
-vim.cmd('autocmd DiagnosticChanged * lua vim.diagnostic.setloclist({open = false})')
+vim.cmd('autocmd DiagnosticChanged * lua updateDiags()')
 vim.cmd('augroup END')
     
