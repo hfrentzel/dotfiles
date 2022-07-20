@@ -52,3 +52,6 @@
 [submodule "vim/.vim/pack/vendor/start/nvim-lspconfig"]
 	path = vim/.vim/pack/vendor/opt/nvim-lspconfig
 	url = https://github.com/neovim/nvim-lspconfig
+[submodule "vim/.vim/pack/vendor/opt/base16-vim"]
+	path = vim/.vim/pack/vendor/opt/base16-vim
+	url = https://github.com/chriskempson/base16-vim.git

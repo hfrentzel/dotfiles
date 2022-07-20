@@ -76,7 +76,10 @@ if filereadable(s:vimrc_local)
     execute 'source ' . s:vimrc_local
 endif
 
+let base16colorspace=256
+
 if has('packages')
+    packadd! base16-vim
     packadd! command-t
 endif
 
