@@ -82,3 +82,7 @@ test -f $LOCAL_RC && source $LOCAL_RC
 test -f ~/variables && source $HOME/.bash/var_setup.sh
 test -f ~/workspaces && source $HOME/.bash/workspace_setup.sh
 
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

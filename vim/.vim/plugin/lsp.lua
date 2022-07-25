@@ -10,6 +10,11 @@ end
 local util = require('lspconfig/util')
 local path = util.path
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
+
+
 local py_before_init = function(params, config)
     local match = vim.fn.glob(path.join(config.root_dir, '*', 'pyvenv.cfg'))
     if match ~= '' then
@@ -21,6 +26,7 @@ require'lspconfig'.pylsp.setup{
     name = 'pylsp',
     on_attach = on_attach,
     before_init = py_before_init,
+    capabilities = capabilities,
     root_dir = function(fname)
         if vim.b['workspace'] then
             return vim.b['workspace']
