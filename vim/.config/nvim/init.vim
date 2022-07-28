@@ -11,3 +11,4 @@ packadd! cmp-nvim-lsp
 packadd! cmp-nvim-lua
 packadd! cmp-path
 packadd! cmp-buffer
+packadd! gitsigns.nvim
