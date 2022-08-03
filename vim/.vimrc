@@ -57,6 +57,14 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 
+nmap <leader>z :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+    if !exists("*synstack")
+        return
+    endif
+    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunction
+
 " UPPERCASE word
 nnoremap U mzviwUe`z
 inoremap <c-u> <esc>viwUea
@@ -81,6 +89,7 @@ let base16colorspace=256
 if has('packages')
     packadd! base16-vim
     packadd! command-t
+    packadd! fugitive
 endif
 
 
