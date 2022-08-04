@@ -1,11 +1,23 @@
+import asyncio
 import os
 import subprocess
-import asyncio
 
-from setup_tools.symlink import add_symlink
 from setup_tools.installers import install_linux_package, pip_install, \
     async_proc
-from vim import install_neovim
+from vim import install_neovim, install_command_t
+
+all_actions = {}
+
+
+def create_action(name, action, dependencies=None):
+    async def task(job):
+        if dependencies is not None:
+            for d in dependencies:
+                await all_actions[d]
+
+        await job
+
+    all_actions[name] = asyncio.create_task(task(action))
 
 
 async def init_git():
@@ -18,45 +30,28 @@ async def init_git():
     print('Submodules updated')
 
 
-async def install_command_t(dotfiles_home):
-    print('Installing neovim gem...')
-    await async_proc('sudo gem install neovim')
-    os.chdir(f'{dotfiles_home}/vim/.vim/pack/vendor/opt/command-t/ruby/command-t/ext/command-t')
-    await async_proc('ruby extconf.rb')
-    await async_proc('make')
-
-
 async def main():
-    subprocess.run(['sudo', 'pwd'], capture_output=True)
+    subprocess.run(['sudo', 'pwd'], capture_output=True, check=True)
 
     dotfiles_home = os.path.dirname(os.path.abspath(__file__))
     os.chdir(dotfiles_home)
 
-    submods = asyncio.create_task(init_git())
+    create_action('submodules', init_git())
+    create_action('apt_update', async_proc('sudo apt update'))
 
-    await async_proc('sudo apt update')
-    pytho = asyncio.create_task(install_linux_package('python3-pip'))
-    ruby = asyncio.create_task(install_linux_package('ruby'))
-    ruby_dev = asyncio.create_task(install_linux_package('ruby-dev'))
-    dos2unix = asyncio.create_task(install_linux_package('dos2unix'))
-    neovim = asyncio.create_task(install_neovim())
+    # Apt packages
+    create_action('dos2unix', install_linux_package('dos2unix'), ['apt_update'])
+    create_action('neovim', install_neovim(dotfiles_home))
+    create_action('pip', install_linux_package('python3-pip'), ['apt_update'])
+    create_action('ruby', install_linux_package('ruby'), ['apt_update'])
+    create_action('ruby-dev', install_linux_package('ruby-dev'), ['apt_update'])
 
-    await pytho
-    pylsp = asyncio.create_task(pip_install('python-lsp-server'))
+    create_action(pip_install('python-lsp-server'), ['pip'])
 
-    add_symlink(f'{dotfiles_home}/vim/.vimrc', '~/.vimrc')
-    add_symlink(f'{dotfiles_home}/vim/.vim', '~/.vim')
-    add_symlink(f'{dotfiles_home}/vim/.config/nvim/init.vim', '~/.config/nvim/init.vim')
+    create_action('command_t', install_command_t(dotfiles_home), ['ruby', 'ruby-dev', 'submodules'])
 
-    await ruby
-    await ruby_dev
-    await submods
-
-    await install_command_t(dotfiles_home)
-
-    await neovim
-    await dos2unix
-    await pylsp
+    for a in all_actions.values():
+        await a
 
 
 if __name__ == '__main__':

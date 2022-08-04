@@ -1,12 +1,13 @@
 import asyncio
 
 
-async def async_proc(cmd, input=None):
-    process = await asyncio.create_subprocess_shell(cmd,
-                                                    stdin=asyncio.subprocess.PIPE if input else None,
-                                                    stdout=asyncio.subprocess.PIPE,
-                                                    stderr=asyncio.subprocess.PIPE)
-    stdout, stderr = await process.communicate(input)
+async def async_proc(cmd, stdin=None):
+    process = await asyncio.create_subprocess_shell(
+        cmd,
+        stdin=asyncio.subprocess.PIPE if stdin else None,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE)
+    stdout, stderr = await process.communicate(stdin)
     return {
         'stdout': stdout,
         'stderr': stderr,

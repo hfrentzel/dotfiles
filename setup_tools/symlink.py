@@ -10,8 +10,8 @@ def add_symlink(src, dest):
         else:
             print(f'Error. {dest} already exists')
         return False
-    else:
-        print(f'{dest} does not exist. Creating symlink...')
-        os.makedirs(os.path.dirname(dest), exist_ok=True)
-        os.symlink(src, dest)
-        return True
+
+    print(f'{dest} does not exist. Creating symlink...')
+    os.makedirs(os.path.dirname(dest), exist_ok=True)
+    os.symlink(src, dest)
+    return True
