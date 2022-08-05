@@ -26,3 +26,4 @@ add_symlink ${PWD}/tmux/.tmux.conf ~/.tmux.conf
 add_symlink ${PWD}/bash/.bashrc ~/.bashrc
 add_symlink ${PWD}/bash/.bash ~/.bash
 add_symlink ${PWD}/git/gitconfig ~/.gitconfig
+add_symlink ${PWD}/python/pylintrc ~/.pylintrc

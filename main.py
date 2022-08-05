@@ -6,7 +6,7 @@ from setup_tools.installers import install_linux_package, pip_install, \
     async_proc
 from vim import install_neovim, install_command_t
 
-all_actions = {}
+all_actions: dict = {}
 
 
 def create_action(name, action, dependencies=None):
@@ -46,7 +46,10 @@ async def main():
     create_action('ruby', install_linux_package('ruby'), ['apt_update'])
     create_action('ruby-dev', install_linux_package('ruby-dev'), ['apt_update'])
 
-    create_action(pip_install('python-lsp-server'), ['pip'])
+    create_action('pylsp', pip_install('python-lsp-server'), ['pip'])
+    create_action('flake8', pip_install('flake8'), ['pip'])
+    create_action('pylint', pip_install('flake8'), ['pip'])
+    create_action('mypy', pip_install('pylsp-mypy'), ['pip'])
 
     create_action('command_t', install_command_t(dotfiles_home), ['ruby', 'ruby-dev', 'submodules'])
 

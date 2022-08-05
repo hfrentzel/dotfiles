@@ -2,6 +2,7 @@
     path = ~/.gitconfig.local
 [alias]
     co = checkout
+    d = diff HEAD
     st = status -sb
     ll = log --oneline --first-parent
     myll = log --oneline --first-parent --no-merges

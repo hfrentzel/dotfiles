@@ -15,8 +15,10 @@ function s:setColor()
 
             execute 'highlight Comment ' . pinnacle#italicize('Comment')
             let l:bg = pinnacle#extract_bg('StatusLine')
-            execute 'highlight User1 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticError'), 'bg': bg})
-            execute 'highlight User2 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticWarn'), 'bg': bg})
+            if has('nvim')
+                execute 'highlight User1 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticError'), 'bg': bg})
+                execute 'highlight User2 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticWarn'), 'bg': bg})
+            endif
         else
             echoerr 'Bad scheme ' . s:scheme[0]
         endif
