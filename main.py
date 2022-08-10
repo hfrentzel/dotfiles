@@ -2,9 +2,9 @@ import asyncio
 import os
 import subprocess
 
-from setup_tools.installers import install_linux_package, pip_install, \
-    async_proc
+from setup_tools.installers import install_linux_package, async_proc
 from vim import install_neovim, install_command_t
+from languages.python import install_python
 
 all_actions: dict = {}
 
@@ -41,15 +41,12 @@ async def main():
 
     # Apt packages
     create_action('dos2unix', install_linux_package('dos2unix'), ['apt_update'])
-    create_action('neovim', install_neovim(dotfiles_home))
-    create_action('pip', install_linux_package('python3-pip'), ['apt_update'])
+    create_action('ripgrep', install_linux_package('ruby-dev'), ['apt_update'])
     create_action('ruby', install_linux_package('ruby'), ['apt_update'])
     create_action('ruby-dev', install_linux_package('ruby-dev'), ['apt_update'])
 
-    create_action('pylsp', pip_install('python-lsp-server'), ['pip'])
-    create_action('flake8', pip_install('flake8'), ['pip'])
-    create_action('pylint', pip_install('flake8'), ['pip'])
-    create_action('mypy', pip_install('pylsp-mypy'), ['pip'])
+    create_action('neovim', install_neovim(dotfiles_home))
+    create_action('python', install_python(dotfiles_home))
 
     create_action('command_t', install_command_t(dotfiles_home), ['ruby', 'ruby-dev', 'submodules'])
 
