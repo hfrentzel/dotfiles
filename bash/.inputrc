@@ -1,0 +1,9 @@
+set bell-style visible
+
+# Menu Complete
+TAB: menu-complete
+"\e[Z": menu-complete-backward
+
+"\C-a": beginning-of-line
+"\C-e": end-of-line
+

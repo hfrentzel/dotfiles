@@ -18,7 +18,19 @@ capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 local py_before_init = function(params, config)
     local match = vim.fn.glob(path.join(config.root_dir, '*', 'pyvenv.cfg'))
     if match ~= '' then
-        config.settings.pylsp.plugins.jedi = {environment = path.dirname(match)}
+        venv_dir = path.dirname(match)
+        config.settings.pylsp.plugins.jedi = {environment = venv_dir}
+        config.settings.pylsp.plugins.pylsp_mypy.overrides =
+        {"--python-executable", path.join(venv_dir, 'bin', 'python'), true}
+    end
+
+    local pylint_match = vim.fn.glob(path.join(config.root_dir, '*/lib/*', 'site-packages/'))
+    if pylint_match ~= '' then
+        config.settings.pylsp.plugins.pylint.args = {'--init-hook', '"import sys; sys.path.extend([\''
+        .. pylint_match
+        .. '\', \''
+        .. config.root_dir
+        .. '\'])"'}
     end
 end
 
@@ -37,6 +49,7 @@ require'lspconfig'.pylsp.setup{
             plugins = {
                 flake8 = {enabled = true, maxLineLength = 120},
                 pycodestyle = {enabled = false},
+                pylsp_mypy = {enabled = true},
                 pyflakes = {enabled = false},
                 pylint = {enabled = true}
             }
