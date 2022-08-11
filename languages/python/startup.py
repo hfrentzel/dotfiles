@@ -30,7 +30,7 @@ class Pip(object):
 
 
 if 'venv' in sys.executable:
-    os.chdir('%s\\..\\..\\..' % sys.executable)
+    os.chdir(os.path.join(os.path.dirname(sys.executable), '..', '..'))
 
 
 def get_requirements(filename, reqs):
@@ -48,7 +48,7 @@ def get_requirements(filename, reqs):
                     reqs[parsed[0]] = None
 
 
-reqs = {}
+reqs: dict = {}
 if os.path.exists('requirements.txt'):
     get_requirements('requirements.txt', reqs)
     curr_installed = Pip.get_freeze()

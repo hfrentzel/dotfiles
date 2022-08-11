@@ -27,4 +27,4 @@ add_symlink ${PWD}/bash/.bashrc ~/.bashrc
 add_symlink ${PWD}/bash/.inputrc ~/.inputrc
 add_symlink ${PWD}/bash/.bash ~/.bash
 add_symlink ${PWD}/git/gitconfig ~/.gitconfig
-add_symlink ${PWD}/languages/python/pylintrc ~/.pylintrc
+add_symlink ${PWD}/languages/python/.pylintrc ~/.pylintrc

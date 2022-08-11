@@ -1,14 +1,20 @@
 [include]
     path = ~/.gitconfig.local
 [alias]
+    br = branch
     co = checkout
-    d = diff HEAD
     st = status -sb
+
+    # Stage all changed files
+    A = add -A
+
+    # compare a file against current branch
+    d = diff HEAD
+
     ll = log --oneline --first-parent
     myll = log --oneline --first-parent --no-merges
     mylast = log -1 --stat --no-merges --first-parent
     last = log -1 --stat
-    br = branch
 [blame]
     date = short
 [color "blame"]
