@@ -57,8 +57,8 @@ function! RHS() abort
 endfunction
 
 function! GetEnv() abort
-    if exists('g:VimKib#currentEnv')
-        return '--' . toupper(g:VimKib#currentEnv) . '--'
+    if exists('g:vimKibCurrentEnv')
+        return '--' . toupper(g:vimKibCurrentEnv) . '--'
     endif
     return 'No Cluster Set'
 endfunction
