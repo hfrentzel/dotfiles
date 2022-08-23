@@ -4,6 +4,7 @@
     br = branch
     co = checkout
     st = status -sb
+    cm = commit -m
 
     # Stage all changed files
     A = add -A
