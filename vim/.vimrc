@@ -57,6 +57,8 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 
+nnoremap gb :ls<CR>:b<Space>
+
 nmap <leader>z :call <SID>SynStack()<CR>
 function! <SID>SynStack()
     if !exists("*synstack")
@@ -77,6 +79,7 @@ nnoremap <expr> k (v:count > 5 ? "m'" . v:count : '') . 'k'
 nnoremap <expr> j (v:count > 5 ? "m'" . v:count : '') . 'j'
 
 command -range=% Fnl :<line1>,<line2>s/\\n/\r/g
+command Fjson :%!jq . -
 
 " Local overrides
 let s:vimrc_local=$HOME . '/.vimrc.local'

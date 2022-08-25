@@ -85,3 +85,9 @@
 [submodule "vim/.vim/pack/vendor/opt/plenary.nvim"]
 	path = vim/.vim/pack/vendor/opt/plenary.nvim
 	url = https://github.com/nvim-lua/plenary.nvim
+[submodule "vim/.vim/pack/vendor/opt/LuaSnip"]
+	path = vim/.vim/pack/vendor/opt/LuaSnip
+	url = https://github.com/L3MON4D3/LuaSnip
+[submodule "vim/.vim/pack/vendor/opt/cmp_luasnip"]
+	path = vim/.vim/pack/vendor/opt/cmp_luasnip
+	url = https://github.com/saadparwaiz1/cmp_luasnip

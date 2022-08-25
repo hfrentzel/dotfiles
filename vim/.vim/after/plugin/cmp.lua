@@ -1,4 +1,5 @@
 local cmp = require'cmp'
+local luasnip = require'luasnip'
 
 local column = function() 
     local _line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -27,6 +28,8 @@ cmp.setup {
                 else
                     cmp.select_next_item()
                 end
+            elseif luasnip.expand_or_locally_jumpable() then
+                luasnip.expand_or_jump()
             elseif in_whitespace() then
                 vim.api.nvim_feedkeys(
                 vim.api.nvim_replace_termcodes('<Tab>', true, true, true),
@@ -35,10 +38,23 @@ cmp.setup {
                 cmp.complete()
             end
         end, {'i', 's'}),
+
+        ['<Enter>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                if luasnip.expand_or_locally_jumpable() then
+                    luasnip.expand_or_jump()
+                else
+                    fallback()
+                end
+            else
+                fallback()
+            end
+        end, {'i', 's'})
     },
 
     sources = cmp.config.sources({
         { name = 'buffer'},
+        { name = 'luasnip'},
         { name = 'nvim_lsp'},
         { name = 'nvim_lua'},
         { name = 'path'}

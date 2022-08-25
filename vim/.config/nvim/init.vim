@@ -15,6 +15,8 @@ packadd! cmp-buffer
 packadd! gitsigns.nvim
 packadd! playground
 packadd! plenary.nvim
+packadd! LuaSnip
+packadd! cmp_luasnip
 
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()

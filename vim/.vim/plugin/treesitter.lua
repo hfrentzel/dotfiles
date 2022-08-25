@@ -26,3 +26,5 @@ require 'nvim-treesitter.configs'.setup {
         persist_queries = false,
     }
 }
+
+vim.keymap.set('n', '<leader>x', '<cmd>lua print(require"nvim-treesitter.ts_utils".get_node_at_cursor():type())<CR>')
