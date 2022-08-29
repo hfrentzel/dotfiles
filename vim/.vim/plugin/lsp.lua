@@ -1,3 +1,5 @@
+local path = require('lspconfig/util').path
+
 local on_attach = function ()
     vim.wo.signcolumn = 'number'
     vim.keymap.set('n', 'K', "<cmd>lua vim.lsp.buf.hover()<CR>", {buffer = true, silent = true})
@@ -7,13 +9,8 @@ local on_attach = function ()
     vim.keymap.set('n', ']d', "<cmd>lua vim.diagnostic.goto_next()<CR>", {buffer = true, silent = true})
 end
 
-local util = require('lspconfig/util')
-local path = util.path
-
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
-
-
 
 local py_before_init = function(params, config)
     local match = vim.fn.glob(path.join(config.root_dir, '*', 'pyvenv.cfg'))
@@ -74,7 +71,6 @@ _G.updateDiags = function()
         hint = vim.fn.len(vim.diagnostic.get(0, {severity = 4})),
     }
 end
-
 
 vim.cmd('augroup diagnostics')
 vim.cmd('autocmd!')

@@ -1,0 +1,48 @@
+xxx  Normal             Shift                      Ctrl                     <leader>              Alt
+a    append             append_at_end              add_to_number
+b    back_word          back_WORD                  git_blame                back_camel_word
+c    change-            change_to_end              abort_pending_commands   open_cluster_popup
+d    delete-            delete_to_end              window_down_half_screen  end_camel_word
+e    end_word           end_WORD                   window_down_one_line
+f    find               find_backwards             window_down_one_screen
+g    /modifier/         goto_last_line             show_buffer_info
+h    left               goto_top_of_screen         window_left
+i    insert             insert_at_start_of_line    goto_next_jump_list
+j    down               join                       window_down
+k    up                 +                          window_up
+l    right              goto_bottom_of_screen      window_right
+m    mark               goto_middle_of_screen      +down
+n    repeat_search      repeat_search_backwards    +down
+o    new_line_below     new_line_above             goto_prev_jump_list
+p    paste              paste_before_cursor        +up
+q    record_macro       execute_most_recent_macro  +visual_block_mode
+r    replace            enter_replace_mode         redo
+s    substitute         substitute_line            _
+t    find_unTil         find_unTil_backwards       +tag_stack_jump          open_command_t
+u    undo               capitalize                 window_up_half_screen
+v    enter_visual_mode  visual_line_mode           visual_block_mode
+w    next_word          next_WORD                  /modifier/               next_camel_word
+x    delete             delete_backwards           subtract_from_number
+y    yank-              yank_to_end_of_line        window_up_one_line
+z    /modifier/         +                          Suspend
+1    _                  _                          _                        open_nerdtree
+2    _                  execute_macro              _
+3    _                  search_word_backwards      _                        open_problems_window
+4    _                  goto_end_of_line           _
+5    _                  goto_matching_brace        _
+6    _                  goto_first_char_of_line    alternate_file
+7    _                  +                          _
+8    _                  search_word_forwards       _
+9    _                  back_sentence              _                        previous_window_tab   prvious_tmux_window
+0    _                  next_sentence              _                        next_window_tab       next_tmux_window
+-    open_netrw         _                          ABOVE
+=    indent             +down                      ABOVE
+[    /modifier/         back_paragraph             <Esc>
+]    /modifier/         next_paragraph             goto_tag_definition
+\    _                  goto_column                _
+;    repeat_find        enter_command_mode         ABOVE
+'    goto_mark          use_register               _
+,    <leader>           shift_left                 ABOVE
+.    repeat_action      shift_right                _
+/    search             search_backwards           comment
+`    goto_mark          toggle_case                _

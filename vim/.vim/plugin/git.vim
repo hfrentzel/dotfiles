@@ -1,4 +1,3 @@
-
 " https://github.com/tpope/vim-fugitive/issues/1474
 function! s:BlameToggle() abort
     let found = 0

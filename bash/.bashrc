@@ -77,10 +77,12 @@ fi
 
     
     
-LOCAL_RC=$HOME/.bashrc.local
-test -f $LOCAL_RC && source $LOCAL_RC
 test -f ~/variables && source $HOME/.bash/var_setup.sh
 test -f ~/workspaces && source $HOME/.bash/workspace_setup.sh
+source $HOME/.bash/python.sh
+
+LOCAL_RC=$HOME/.bashrc.local
+test -f $LOCAL_RC && source $LOCAL_RC
 
 
 export NVM_DIR="$HOME/.nvm"

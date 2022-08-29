@@ -11,8 +11,8 @@ require 'nvim-treesitter.configs'.setup {
         enable = true,
         keymaps = {
             init_selection = 'gnn',
-            node_incremental = 'K',
-            node_decremental = 'J'
+            node_incremental = 'gk',
+            node_decremental = 'gj'
         }
     },
 
@@ -22,8 +22,8 @@ require 'nvim-treesitter.configs'.setup {
 
     playground = {
         enable = true,
-        updatetime = 25,
         persist_queries = false,
+        updatetime = 25,
     }
 }
 

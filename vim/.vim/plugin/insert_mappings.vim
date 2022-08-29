@@ -29,3 +29,12 @@ for [open, close] in items(s:bracket_pairs)
     execute "inoremap <expr> ".close." strpart(getline('.'), col('.')-1, 1)
                 \ == '".close."' ? '\<Right>' : '".close."'"
 endfor
+
+"Remove pair when backspacing inside empty pair
+function BracketBS()
+    let pair = getline('.')[col('.')-2 : col('.') -1]
+    return stridx('()[]{}', pair) % 2 == 0 ? "\<del>\<c-h>" : "\<bs>"
+endfunction
+
+inoremap <silent> <BS> <C-R>=BracketBS()<CR>
+

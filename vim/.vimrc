@@ -71,9 +71,6 @@ endfunction
 nnoremap U mzviwUe`z
 inoremap <c-u> <esc>viwUea
 
-nnoremap <leader>ev :vs ~/.vimrc<cr>
-nnoremap <leader>sv :source ~/.vimrc<cr>
-
 " Add relative line movements to jump list
 nnoremap <expr> k (v:count > 5 ? "m'" . v:count : '') . 'k'
 nnoremap <expr> j (v:count > 5 ? "m'" . v:count : '') . 'j'

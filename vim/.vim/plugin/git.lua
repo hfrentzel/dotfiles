@@ -1,4 +1,5 @@
 require('gitsigns').setup{
+
     signs = {
         add = {hl = 'GitSignsAdd', text = '+', numhl='GitSignsAddNr', linehl='GitSignsAddLn'},
         change = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
@@ -18,6 +19,8 @@ require('gitsigns').setup{
             vim.schedule(function() gs.prev_hunk() end)
             return '<Ignore>'
         end, {buffer = bufnr, expr=true})
+
+        vim.keymap.set('n', 'gh', gs.preview_hunk)
         
     end
 }
