@@ -1,14 +1,14 @@
 [submodule "vim/.vim/pack/vendor/start/vim-surround"]
-	path = vim/.vim/pack/vendor/start/vim-surround
+	path = vim/.vim/pack/vendor/opt/vim-surround
 	url = https://tpope.io/vim/surround.git
 [submodule "vim/.vim/pack/vendor/start/CamelCaseMotion"]
-	path = vim/.vim/pack/vendor/start/CamelCaseMotion
+	path = vim/.vim/pack/vendor/opt/CamelCaseMotion
 	url = https://github.com/bkad/CamelCaseMotion
 [submodule "vim/.vim/pack/vendor/start/vim-visual-multi"]
 	path = vim/.vim/pack/vendor/start/vim-visual-multi
 	url = https://github.com/mg979/vim-visual-multi
 [submodule "vim/.vim/pack/vendor/start/nerdtree"]
-	path = vim/.vim/pack/vendor/start/nerdtree
+	path = vim/.vim/pack/vendor/opt/nerdtree
 	url = https://github.com/preservim/nerdtree
 [submodule "vim/.vim/pack/vendor/start/tcomment_vim"]
 	path = vim/.vim/pack/vendor/start/tcomment_vim
@@ -22,11 +22,8 @@
 [submodule "vim/.vim/pack/vendor/start/command-t"]
 	path = vim/.vim/pack/vendor/opt/command-t
 	url = https://github.com/wincent/command-t.git
-[submodule "vim/.vim/pack/vendor/start/vim-lsp"]
-	path = vim/.vim/pack/vendor/start/vim-lsp
-	url = https://github.com/prabirshrestha/vim-lsp
 [submodule "vim/.vim/pack/vendor/start/vim-tmux-navigator"]
-	path = vim/.vim/pack/vendor/start/vim-tmux-navigator
+	path = vim/.vim/pack/vendor/opt/vim-tmux-navigator
 	url = git@github.com:christoomey/vim-tmux-navigator
 [submodule "vim/.vim/pack/vendor/start/vim-python-pep8-indent"]
 	path = vim/.vim/pack/vendor/start/vim-python-pep8-indent
@@ -34,21 +31,6 @@
 [submodule "vim/.vim/pack/vendor/start/pinnacle"]
 	path = vim/.vim/pack/vendor/start/pinnacle
 	url = https://github.com/wincent/pinnacle.git
-[submodule "vim/.vim/pack/vendor/start/ultisnips"]
-	path = vim/.vim/pack/vendor/start/ultisnips
-	url = https://github.com/SirVer/ultisnips
-[submodule "vim/.vim/pack/vendor/start/vim-lsp-ultisnips"]
-	path = vim/.vim/pack/vendor/start/vim-lsp-ultisnips
-	url = https://github.com/thomasfaingnaert/vim-lsp-ultisnips
-[submodule "vim/.vim/pack/vendor/start/asyncomplete.vim"]
-	path = vim/.vim/pack/vendor/start/asyncomplete.vim
-	url = https://github.com/prabirshrestha/asyncomplete.vim
-[submodule "vim/.vim/pack/vendor/start/asyncomplete-lsp.vim"]
-	path = vim/.vim/pack/vendor/start/asyncomplete-lsp.vim
-	url = https://github.com/prabirshrestha/asyncomplete-lsp.vim
-[submodule "vim/.vim/pack/vendor/start/asyncomplete-ultisnips.vim"]
-	path = vim/.vim/pack/vendor/start/asyncomplete-ultisnips.vim
-	url = https://github.com/prabirshrestha/asyncomplete-ultisnips.vim
 [submodule "vim/.vim/pack/vendor/start/nvim-lspconfig"]
 	path = vim/.vim/pack/vendor/opt/nvim-lspconfig
 	url = https://github.com/neovim/nvim-lspconfig

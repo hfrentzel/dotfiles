@@ -87,11 +87,14 @@ endif
 let base16colorspace=256
 
 if has('packages')
+    packadd! CamelCaseMotion
     packadd! base16-vim
     packadd! command-t
     packadd! fugitive
+    packadd! nerdtree
+    packadd! vim-surround
+    packadd! vim-tmux-navigator
 endif
-
 
 hi QuickFixLine ctermbg=DarkGray
 
