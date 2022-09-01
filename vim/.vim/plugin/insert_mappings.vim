@@ -36,5 +36,5 @@ function BracketBS()
     return stridx('()[]{}', pair) % 2 == 0 ? "\<del>\<c-h>" : "\<bs>"
 endfunction
 
-inoremap <silent> <BS> <C-R>=BracketBS()<CR>
+" inoremap <silent> <BS> <C-R>=BracketBS()<CR>
 

@@ -4,6 +4,7 @@ let g:python3_host_prog = trim(system('which python3'))
 source ~/.vimrc
 
 set completeopt=menu,menuone,noselect
+let g:CommandTPreferredImplementation='lua'
 
 packadd! nvim-cmp
 packadd! nvim-lspconfig

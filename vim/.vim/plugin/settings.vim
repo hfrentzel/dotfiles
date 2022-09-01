@@ -13,6 +13,8 @@ set shiftwidth=4                        " Spaces per tab
 set tabstop=4                           " Spaces per tab
 set autoindent                          " maintain indent on new line
 
+set switchbuf=usetab
+
 if has('vertsplit')
     set splitright                      " Open splits to the right
 endif
