@@ -14,4 +14,13 @@ color() {
 
     echo "$theme" > "$BASE16_CONFIG"
     sh "$script_file"
+
+    if [ -n "$TMUX" ]; then
+        local bg=$(grep color_background= "$script_file" | cut -d \" -f2 | sed -e 's#/##g')
+        local ws=$(grep color18= "$script_file" | cut -d \" -f2 | sed -e 's#/##g')
+        command tmux set -a window-active-style "bg=#$bg"
+        command tmux set -a window-style "bg=#$ws"
+        command tmux set -a pane-active-border-style "bg=#$ws"
+        command tmux set -a pane-border-style "bg=#$ws"
+    fi
 }

@@ -18,6 +18,7 @@ function s:setColor()
             if has('nvim')
                 execute 'highlight User1 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticError'), 'bg': bg})
                 execute 'highlight User2 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticWarn'), 'bg': bg})
+                execute 'highlight User3 ' . pinnacle#embolden('StatusLine')
             endif
         else
             echoerr 'Bad scheme ' . s:scheme[0]

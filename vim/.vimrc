@@ -77,6 +77,7 @@ nnoremap <expr> j (v:count > 5 ? "m'" . v:count : '') . 'j'
 
 command -range=% Fnl :<line1>,<line2>s/\\n/\r/g
 command Fjson :%!jq . -
+command -bar PyToJson :silent %s/$\n//eg | silent s/'/"/eg | s/True/true/eg | s/False/false/eg | %!jq . -
 
 " Local overrides
 let s:vimrc_local=$HOME . '/.vimrc.local'
