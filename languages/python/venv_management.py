@@ -21,7 +21,7 @@ def _get_existing() -> dict:
     existing_venvs = {}
     with open(venv_file, encoding='utf-8') as f:
         for line in f.readlines():
-            name, location = line.split(' ')
+            name, location = line.strip().split(' ')
             existing_venvs[name] = location
 
     return existing_venvs
@@ -50,7 +50,7 @@ def pymake(new_venv, directory):
 
     with open(venv_file, 'w', encoding='utf-8') as f:
         for name, location in existing_venvs.items():
-            f.write(f'{name} {location}')
+            f.write(f'{name} {location}\n')
 
 
 def pyrun():
@@ -113,7 +113,7 @@ def pykill(name):
 
     with open(venv_file, 'w', encoding='utf-8') as f:
         for name, location in existing_venvs.items():
-            f.write(f'{name} {location}')
+            f.write(f'{name} {location}\n')
 
     print(f"'{name}' deleted")
 

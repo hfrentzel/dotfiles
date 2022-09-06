@@ -66,6 +66,7 @@ source ~/.bash/color.sh
     export $(tmux show-environment | grep ^WSLENV)
 
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.bin:$PATH"
 
 # Pyenv
 export PYENV_ROOT="$HOME/.pyenv"

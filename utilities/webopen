@@ -1,0 +1,61 @@
+#!/usr/bin/python3
+from argparse import ArgumentParser
+from os import path, getenv
+from shlex import split
+from subprocess import run
+import re
+import webbrowser
+
+webopen = ArgumentParser()
+subtools = webopen.add_subparsers()
+
+BASE_URL = 'https://www.github.com'
+
+
+def git(args):
+    filename = path.abspath(args.filename)
+    git_head = f'git -C "{path.dirname(filename)}"'
+
+    repo_base_dir = run(split(f'{git_head} rev-parse --show-toplevel'),
+                        capture_output=True, check=True).stdout.decode().rstrip('\n')
+    remote_url = run(split(f'{git_head} config --get remote.origin.url'),
+                     capture_output=True, check=True).stdout.decode().rstrip('\n')
+    branch = run(split(f'{git_head} rev-parse --abbrev-ref origin/HEAD'),
+                 capture_output=True,
+                 check=True).stdout.decode().rstrip('\n').split('/')[1]
+
+    relative_path = re.search(f'{repo_base_dir}/(.*)', fr'{filename}').group(1).replace('\\', '/')
+    remote_url = re.search(r':(.+?)(?=\.git|$)', remote_url).group(1)
+
+    full_url = f'{BASE_URL}/{remote_url}/tree/{branch}/{relative_path}'
+    print(full_url)
+    webbrowser.open_new_tab(full_url)
+
+
+git_open = subtools.add_parser('gh')
+git_open.set_defaults(func=git)
+git_open.add_argument('filename')
+
+
+def jira(args):
+    jira_base = getenv('JIRA_BASE')
+    if not jira_base:
+        print('No $JIRA_BASE environment variable is set')
+        return
+    full_url = f'{jira_base}/browse/{args.ticket}'
+    print(full_url)
+    webbrowser.open_new_tab(full_url)
+
+
+jira_open = subtools.add_parser('jira')
+jira_open.set_defaults(func=jira)
+jira_open.add_argument('ticket')
+
+
+def main():
+    args = webopen.parse_args()
+    args.func(args)
+
+
+if __name__ == '__main__':
+    main()
