@@ -59,6 +59,9 @@ nnoremap <C-L> <C-W>l
 
 nnoremap gb :ls<CR>:b<Space>
 
+" Open current fold and only current fold
+nnoremap zB zMzO
+
 nmap <leader>z :call <SID>SynStack()<CR>
 function! <SID>SynStack()
     if !exists("*synstack")

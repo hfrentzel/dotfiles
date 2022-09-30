@@ -1,12 +1,18 @@
 local path = require('lspconfig/util').path
+local helpers = require('dot_helpers')
 
 local on_attach = function ()
-    vim.wo.signcolumn = 'number'
-    vim.keymap.set('n', 'K', "<cmd>lua vim.lsp.buf.hover()<CR>", {buffer = true, silent = true})
-    vim.keymap.set('n', 'gd', "<cmd>lua vim.lsp.buf.definition()<CR>", {buffer = true, silent = true})
-    vim.keymap.set('n', '<leader>3', "<cmd>lua vim.diagnostic.setloclist()<CR>", {buffer = true, silent = true})
-    vim.keymap.set('n', '[d', "<cmd>lua vim.diagnostic.goto_prev()<CR>", {buffer = true, silent = true})
-    vim.keymap.set('n', ']d', "<cmd>lua vim.diagnostic.goto_next()<CR>", {buffer = true, silent = true})
+    vim.wo.signcolumn = 'yes'
+    vim.keymap.set('n', 'K', "<cmd>lua vim.lsp.buf.hover()<CR>", 
+        {buffer = true, silent = true})
+    vim.keymap.set('n', 'gd', "<cmd>lua vim.lsp.buf.definition()<CR>", 
+        {buffer = true, silent = true})
+    vim.keymap.set('n', '<leader>3', "<cmd>lua vim.diagnostic.setloclist()<CR>", 
+        {buffer = true, silent = true})
+    vim.keymap.set('n', '[d', "<cmd>lua vim.diagnostic.goto_prev()<CR>", 
+        {buffer = true, silent = true})
+    vim.keymap.set('n', ']d', "<cmd>lua vim.diagnostic.goto_next()<CR>", 
+        {buffer = true, silent = true})
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -16,21 +22,24 @@ local py_before_init = function(params, config)
     local match = vim.fn.glob(path.join(config.root_dir, '*', 'pyvenv.cfg'))
     if match ~= '' then
         venv_dir = path.dirname(match)
+        version = helpers.get_python_major_version(match)
 
         config.settings.pylsp.plugins.jedi = {environment = venv_dir}
         config.settings.pylsp.plugins.pylsp_mypy.overrides =
-        {"--python-executable", path.join(venv_dir, 'bin', 'python'), true}
+        {"--python-executable", path.join(venv_dir, 'bin', 'python'), 
+            "--python-version", version, "--namespace-packages", true}
     end
 
-    local pylint_match = vim.fn.glob(path.join(config.root_dir, '*/lib/*', 'site-packages/'))
+    local pylint_match = vim.fn.glob(
+        path.join(config.root_dir, '*/lib/*', 'site-packages/'))
     if pylint_match ~= '' then
-        config.settings.pylsp.plugins.pylint.args = {'--init-hook', '"import sys; sys.path.extend([\''
+        config.settings.pylsp.plugins.pylint.args = {'--init-hook="import sys; sys.path.extend([\''
         .. pylint_match
         .. '\', \''
         .. config.root_dir
         .. '\'])"'}
     elseif config.root_dir then
-        config.settings.pylsp.plugins.pylint.args = {'--init-hook', '"import sys; sys.path.append(\'' .. config.root_dir .. '\')"'}
+        config.settings.pylsp.plugins.pylint.args = {'--init-hook="import sys; sys.path.append(\'' .. config.root_dir .. '\')"'}
     end
 end
 
@@ -43,10 +52,7 @@ require'lspconfig'.pylsp.setup{
         if vim.b['workspace'] then
             return vim.b['workspace']
         else
-            git_prefix = 'git -C ' .. vim.fn.expand('%:p:h')
-            if vim.fn.system(git_prefix .. ' rev-parse  --is-inside-work-tree') then
-                return vim.fn.substitute(vim.fn.system(git_prefix .. ' rev-parse --show-toplevel'), '\n', '', 'g')
-            end
+            return helpers.get_git_root()
         end
     end,
     settings = {

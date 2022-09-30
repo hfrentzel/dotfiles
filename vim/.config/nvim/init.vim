@@ -1,6 +1,6 @@
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
-let g:python3_host_prog = trim(system('which python3'))
+let g:python3_host_prog = trim(system('which python'))
 source ~/.vimrc
 
 set completeopt=menu,menuone,noselect

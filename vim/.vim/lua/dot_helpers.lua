@@ -1,0 +1,25 @@
+
+local functions = {}
+
+functions.get_python_major_version = function(pyvenv_file)
+    for line in io.lines(pyvenv_file) do
+        version = vim.fn.matchstr(line, "version = \\(\\d.\\d\\)")
+        if version ~= '' then
+            return version
+        end
+    end
+    return nil
+end
+
+functions.get_git_root = function()
+    git_prefix = 'git -C ' .. vim.fn.expand('%:p:h')
+    if vim.fn.system(git_prefix .. 
+        ' rev-parse  --is-inside-work-tree') then
+
+        return vim.fn.substitute(vim.fn.system(
+            git_prefix .. ' rev-parse --show-toplevel'),
+            '\n', '', 'g')
+    end
+end
+
+return functions
