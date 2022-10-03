@@ -76,7 +76,7 @@ if [ -d $PYENV_ROOT ]; then
     eval "$(pyenv init -)"
 fi
 
-    
+test -f ~/dotfiles/git/git_stage.sh && source $HOME/dotfiles/git/git_stage.sh
     
 test -f ~/variables && source $HOME/.bash/var_setup.sh
 test -f ~/workspaces && source $HOME/.bash/workspace_setup.sh
