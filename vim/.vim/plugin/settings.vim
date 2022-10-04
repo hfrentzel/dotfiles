@@ -12,6 +12,9 @@ set expandtab                           " Always uses spaces over tabs
 set shiftwidth=4                        " Spaces per tab
 set tabstop=4                           " Spaces per tab
 set autoindent                          " maintain indent on new line
+set textwidth=80
+
+set fillchars=eob:\ 
 
 set switchbuf=usetab
 

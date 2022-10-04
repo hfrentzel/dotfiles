@@ -7,22 +7,23 @@ function s:setColor()
 
     let s:color_file = expand('~/.base16')
 
-    if filereadable(s:color_file)
-        let s:scheme = readfile(s:color_file, '', 1)
+    if !filereadable(s:color_file)
+        return
+    endif
 
-        if filereadable(expand('~/.vim/pack/vendor/opt/base16-vim/colors/base16-' . s:scheme[0] . '.vim'))
-            execute 'color base16-' . s:scheme[0]
+    let s:scheme = readfile(s:color_file, '', 1)
 
-            execute 'highlight Comment ' . pinnacle#italicize('Comment')
-            let l:bg = pinnacle#extract_bg('StatusLine')
-            if has('nvim')
-                execute 'highlight User1 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticError'), 'bg': bg})
-                execute 'highlight User2 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticWarn'), 'bg': bg})
-                execute 'highlight User3 ' . pinnacle#embolden('StatusLine')
-            endif
-        else
-            echoerr 'Bad scheme ' . s:scheme[0]
-        endif
+    if !filereadable(expand('~/.vim/pack/vendor/opt/base16-vim/colors/base16-' . s:scheme[0] . '.vim'))
+        echoerr 'Bad scheme ' . s:scheme[0]
+    endif
+
+    execute 'color base16-' . s:scheme[0]
+    execute 'highlight Comment ' . pinnacle#italicize('Comment')
+    let l:bg = pinnacle#extract_bg('StatusLine')
+    if has('nvim')
+        execute 'highlight User1 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticError'), 'bg': bg})
+        execute 'highlight User2 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticWarn'), 'bg': bg})
+        execute 'highlight User3 ' . pinnacle#embolden('StatusLine')
     endif
 endfunction
 
