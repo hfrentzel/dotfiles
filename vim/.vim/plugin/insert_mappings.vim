@@ -1,10 +1,3 @@
-" Navigate while in insert mode
-inoremap <c-h> <left>
-inoremap <c-j> <down>
-inoremap <c-k> <up>
-inoremap <c-l> <right>
-
-
 " Mappings to handle auto brackets
 let s:bracket_pairs = {'{': '}', '[': ']', '(': ')'}
 
