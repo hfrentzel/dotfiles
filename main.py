@@ -3,6 +3,7 @@ import os
 import subprocess
 
 from setup_tools.installers import install_linux_package, async_proc
+from setup_tools.symlink import add_symlink
 from vim import install_neovim, install_command_t
 from languages.python import install_python
 
@@ -49,6 +50,8 @@ async def main():
     create_action('python', install_python(dotfiles_home))
 
     create_action('command_t', install_command_t(dotfiles_home), ['ruby', 'ruby-dev', 'submodules'])
+
+    add_symlink(f'{dotfiles_home}/configs/.rgrc', '~/.rgrc')
 
     for a in all_actions.values():
         await a
