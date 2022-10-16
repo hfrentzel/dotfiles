@@ -1,15 +1,15 @@
 import os
 
 from setup_tools.installers import install_linux_package, async_proc
-from setup_tools.symlink import add_symlink
+from setup_tools.symlink import symlink
 
 
-async def install_neovim(dotfiles_home):
+async def install_neovim():
     await install_linux_package('neovim', 'ppa:neovim-ppa/stable')
 
-    add_symlink(f'{dotfiles_home}/vim/.vimrc', '~/.vimrc')
-    add_symlink(f'{dotfiles_home}/vim/.vim', '~/.vim')
-    add_symlink(f'{dotfiles_home}/vim/.config/nvim/init.vim', '~/.config/nvim/init.vim')
+    symlink('DOTROOT/vim/.vimrc', '~/.vimrc')
+    symlink('DOTROOT/vim/.vim', '~/.vim')
+    symlink('DOTROOT/vim/.config/nvim/init.vim', '~/.config/nvim/init.vim')
 
 
 async def install_command_t(dotfiles_home):

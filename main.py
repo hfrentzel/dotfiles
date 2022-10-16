@@ -3,7 +3,7 @@ import os
 import subprocess
 
 from setup_tools.installers import install_linux_package, async_proc
-from setup_tools.symlink import add_symlink
+from setup_tools.symlink import symlink, execute_symlinks
 from vim import install_neovim, install_command_t
 from languages.python import install_python
 
@@ -47,12 +47,19 @@ async def main():
     create_action('ruby-dev', install_linux_package('ruby-dev'), ['apt_update'])
 
     create_action('neovim', install_neovim(dotfiles_home))
-    create_action('python', install_python(dotfiles_home))
+    create_action('python', install_python())
 
-    create_action('command_t', install_command_t(dotfiles_home), ['ruby', 'ruby-dev', 'submodules'])
+    create_action('command_t', install_command_t(dotfiles_home),
+                  ['ruby', 'ruby-dev', 'submodules'])
 
-    add_symlink(f'{dotfiles_home}/configs/.rgrc', '~/.rgrc')
+    symlink('DOTROOT/bash/.bash', '~/.bash')
+    symlink('DOTROOT/bash/.bashrc', '~/.bashrc')
+    symlink('DOTROOT/bash/.inputrc', '~/.inputrc')
+    symlink('DOTROOT/configs/.rgrc', '~/.rgrc')
+    symlink('DOTROOT/git/gitconfig', '~/.gitconfig')
+    symlink('DOTROOT/tmux/.tmux.conf', '~/.tmux.conf')
 
+    execute_symlinks(dotfiles_home)
     for a in all_actions.values():
         await a
 

@@ -1,5 +1,6 @@
 import os
 
+_symlinks = []
 
 def add_symlink(src, dest):
     src = os.path.expanduser(src)
@@ -15,3 +16,12 @@ def add_symlink(src, dest):
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     os.symlink(src, dest)
     return True
+
+
+def symlink(src, dest):
+    _symlinks.append((src, dest))
+
+
+def execute_symlinks(dotfiles_home):
+    for src, dest in _symlinks:
+        add_symlink(src.replace('DOTROOT', dotfiles_home), dest)
