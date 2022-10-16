@@ -8,6 +8,7 @@ function! StandardStatusLine() abort
 
     setlocal statusline+=%=
 
+    setlocal statusline+=%{statusline#NoErrors()}
     setlocal statusline+=%1*
     setlocal statusline+=%{statusline#NumErrors()}
     setlocal statusline+=%2*

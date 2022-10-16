@@ -6,13 +6,13 @@ d    delete-            delete_to_end              window_down_half_screen  end_
 e    end_word           end_WORD                   window_down_one_line
 f    find               find_backwards             window_down_one_screen
 g    /modifier/         goto_last_line             show_buffer_info
-h    left               goto_top_of_screen         window_left
+h    left               goto_top_of_screen         window_left              open_CommandTHelp
 i    insert             insert_at_start_of_line    goto_next_jump_list
 j    down               join                       window_down
 k    up                 +                          window_up
 l    right              goto_bottom_of_screen      window_right
 m    mark               goto_middle_of_screen      +down
-n    repeat_search      repeat_search_backwards    +down
+n    repeat_search      repeat_search_backwards    +down                    toggle_relativelinenumber
 o    new_line_below     new_line_above             goto_prev_jump_list
 p    paste              paste_before_cursor        +up
 q    record_macro       execute_most_recent_macro  +visual_block_mode

@@ -1,6 +1,17 @@
 local path = require('lspconfig/util').path
 local helpers = require('dot_helpers')
 
+local diags_on = true
+toggleDiagnostics = function()
+    if diags_on then
+        vim.diagnostic.hide()
+        diags_on = false
+    else
+        vim.diagnostic.show()
+        diags_on = true
+    end
+end
+
 local on_attach = function ()
     vim.wo.signcolumn = 'yes'
     vim.keymap.set('n', 'K', "<cmd>lua vim.lsp.buf.hover()<CR>", 
@@ -12,6 +23,10 @@ local on_attach = function ()
     vim.keymap.set('n', '[d', "<cmd>lua vim.diagnostic.goto_prev()<CR>", 
         {buffer = true, silent = true})
     vim.keymap.set('n', ']d', "<cmd>lua vim.diagnostic.goto_next()<CR>", 
+        {buffer = true, silent = true})
+    vim.keymap.set('n', '<leader>d', "<cmd>lua vim.diagnostic.open_float()<CR>", 
+        {buffer = true, silent = true})
+    vim.keymap.set('n', '<leader>4', "<cmd>lua toggleDiagnostics()<CR>", 
         {buffer = true, silent = true})
 end
 
@@ -68,7 +83,7 @@ require'lspconfig'.pylsp.setup{
     },
 }
 
-_G.updateDiags = function()
+updateDiags = function()
     vim.diagnostic.setloclist({open = false})
     vim.b['diagnostic_counts'] = { 
         error = vim.fn.len(vim.diagnostic.get(0, {severity = 1})),
@@ -78,8 +93,10 @@ _G.updateDiags = function()
     }
 end
 
-vim.cmd('augroup diagnostics')
-vim.cmd('autocmd!')
-vim.cmd('autocmd DiagnosticChanged * lua updateDiags()')
-vim.cmd('augroup END')
+vim.api.nvim_create_augroup('diagnostics', {clear = true})
+vim.api.nvim_create_autocmd('DiagnosticChanged', {
+    group = 'diagnostics',
+    pattern = '*',
+    callback = updateDiags
+})
     

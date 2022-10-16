@@ -14,7 +14,9 @@ set tabstop=4                           " Spaces per tab
 set autoindent                          " maintain indent on new line
 set textwidth=80
 
-set fillchars=eob:\ 
+if has('nvim')
+    set fillchars=eob:\ 
+endif
 
 set switchbuf=usetab
 

@@ -23,7 +23,7 @@ function Start-Python {
 		return 0
 	}
 	$env:PYPROMPT = $envs[$choice].Name
-	$env:PYTHONSTARTUP = "C:/Users/frentzeh/dotfiles/python/startup.py"
+	$env:PYTHONSTARTUP = "~/dotfiles/python/startup.py"
 
 	Invoke-Expression $envs[$choice].Location
 	return $LASTEXITCODE
