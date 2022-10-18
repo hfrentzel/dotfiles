@@ -34,28 +34,36 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 local py_before_init = function(params, config)
-    local match = vim.fn.glob(path.join(config.root_dir, '*', 'pyvenv.cfg'))
-    if match ~= '' then
-        venv_dir = path.dirname(match)
-        version = helpers.get_python_major_version(match)
+    local jedi_args = {} -- object
+    local mypy_args = {"--namespace-packages"} -- array
+    local pylint_args = {} -- array
 
-        config.settings.pylsp.plugins.jedi = {environment = venv_dir}
-        config.settings.pylsp.plugins.pylsp_mypy.overrides =
-        {"--python-executable", path.join(venv_dir, 'bin', 'python'), 
-            "--python-version", version, "--namespace-packages", true}
+    local venv_cfg = vim.fn.glob(path.join(config.root_dir, '*', 'pyvenv.cfg'))
+    if venv_cfg ~= '' then
+        venv_dir = path.dirname(venv_cfg)
+        jedi_args.environment = venv_dir
+        table.insert(mypy_args, "--python-executable")
+        table.insert(mypy_args, path.join(venv_dir, 'bin', 'python'))
+
+        version = helpers.get_python_major_version(venv_cfg)
+        table.insert(mypy_args, "--python-version")
+        table.insert(mypy_args, version)
+        table.insert(pylint_args, '--py-version='..version)
+
+        local site_pkg_dir = vim.fn.glob(path.join(venv_dir, 'lib/*/site-packages/'))
+        if site_pkg_dir ~= '' then
+            table.insert(pylint_args, "--init-hook=\"import sys; sys.path.extend(['"
+                ..site_pkg_dir.."', '"..config.root_dir.."'])\"")
+        elseif config.root_dir then
+            table.insert(pylint_args, "--init-hook=\"import sys; sys.path.append('"
+                ..config.root_dir.."')\"")
+        end
     end
 
-    local pylint_match = vim.fn.glob(
-        path.join(config.root_dir, '*/lib/*', 'site-packages/'))
-    if pylint_match ~= '' then
-        config.settings.pylsp.plugins.pylint.args = {'--init-hook="import sys; sys.path.extend([\''
-        .. pylint_match
-        .. '\', \''
-        .. config.root_dir
-        .. '\'])"'}
-    elseif config.root_dir then
-        config.settings.pylsp.plugins.pylint.args = {'--init-hook="import sys; sys.path.append(\'' .. config.root_dir .. '\')"'}
-    end
+    table.insert(mypy_args, true) -- default args should also be passed in
+    config.settings.pylsp.plugins.jedi = jedi_args
+    config.settings.pylsp.plugins.pylint.args = pylint_args
+    config.settings.pylsp.plugins.pylsp_mypy.overrides = mypy_args
 end
 
 require'lspconfig'.pylsp.setup{
