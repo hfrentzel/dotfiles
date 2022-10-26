@@ -1,5 +1,12 @@
 [MAIN]
-disable=unused-variable,trailing-whitespace,unsubscriptable-object,missing-function-docstring,missing-module-docstring,missing-class-docstring
+disable=
+    unused-variable,
+    trailing-whitespace,
+    unsubscriptable-object,
+    logging-fstring-interpolation,
+    missing-function-docstring,
+    missing-module-docstring,
+    missing-class-docstring
 
 [BASIC]
 # allow 1 or 2 length variable names

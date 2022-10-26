@@ -27,3 +27,5 @@
 	autocrlf = input
 [diff]
 	compactionHeuristic = true
+[merge]
+    conflictstyle = diff3

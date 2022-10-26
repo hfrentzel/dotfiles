@@ -61,7 +61,9 @@ local py_before_init = function(params, config)
     end
 
     table.insert(mypy_args, true) -- default args should also be passed in
-    config.settings.pylsp.plugins.jedi = jedi_args
+    if next(jedi_args) ~= nil then
+        config.settings.pylsp.plugins.jedi = jedi_args
+    end
     config.settings.pylsp.plugins.pylint.args = pylint_args
     config.settings.pylsp.plugins.pylsp_mypy.overrides = mypy_args
 end
