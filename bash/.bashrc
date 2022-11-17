@@ -26,6 +26,9 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias tmuxl='tmux list-sessions'
+alias cddot='cd ~/dotfiles'
+alias :q='exit'
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
@@ -70,3 +73,4 @@ test -f $LOCAL_RC && source $LOCAL_RC
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+. "$HOME/.cargo/env"

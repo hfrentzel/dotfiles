@@ -1,7 +1,9 @@
 [include]
     path = ~/.gitconfig.local
 [alias]
+    alias = !git config --list | grep alias
     br = branch
+    bri = !git co $(changeBranch)
     co = checkout
     st = status -sb
     cm = commit -m

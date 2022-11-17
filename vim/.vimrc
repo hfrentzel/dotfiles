@@ -81,7 +81,7 @@ endfunction
 " Commands for formatting Json and tracebacks
 command -range=% Fnl :<line1>,<line2>s/\\n/\r/g
 command Fjson :%!jq . -
-command -bar PyToJson :silent %s/$\n//eg | silent s/'/"/eg | s/True/true/eg | s/False/false/eg | %!jq . -
+command -bar PyToJson :silent %s/$\n//eg | silent s/'/"/eg | s/True/true/eg | s/False/false/eg | s/None/null/eg | %!jq . -
 
 " Local overrides
 let s:vimrc_local=expand('~/.vimrc.local')

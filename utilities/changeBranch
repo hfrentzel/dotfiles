@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+import os
+import subprocess
+import termios
+from typing import List
+
+
+def query_terminfo_database(codename: str) -> str:
+    capname = CODENAME_TO_CAPNAME.get(codename, codename)
+    return subprocess.check_output(["tput", capname], universal_newlines=True)
+
+
+CODENAME_TO_CAPNAME = {
+    "cursor_down": "cud1",
+    "cursor_invisible": "civis",
+    "cursor_up": "cuu1",
+    "cursor_visible": "cnorm",
+    "delete_line": "dl1",
+    "down": "kcud1",
+    "enter_application_mode": "smkx",
+    "exit_application_mode": "rmkx",
+    "up": "kcuu1",
+}
+NAME_TO_CONTROL_CHARACTER = {
+    "enter": "\012",
+    "escape": "\033",
+}
+NAME_TO_TERM_CODE = {
+    codename: query_terminfo_database(codename)
+    for codename in tuple(CODENAME_TO_CAPNAME.keys())
+}
+NAME_TO_TERM_CODE.update(NAME_TO_CONTROL_CHARACTER)
+TERMINAL_CODE_TO_CODENAME = {
+    terminal_code: codename for codename, terminal_code in
+    NAME_TO_TERM_CODE.items()
+}
+
+
+def show(menu_entries: List[str]) -> str:
+    tty_in = open("/dev/tty", "r", encoding='utf-8')
+    tty_out = open("/dev/tty", "w", encoding='utf-8', errors="replace")
+    old_term = termios.tcgetattr(tty_in.fileno())
+    new_term = termios.tcgetattr(tty_in.fileno())
+    new_term[3] = new_term[3] & ~termios.ICANON & ~termios.ECHO
+    termios.tcsetattr(tty_in.fileno(), termios.TCSAFLUSH, new_term)
+
+    # Enter terminal application mode to get expected escape codes for arrow keys
+    tty_out.write(NAME_TO_TERM_CODE["enter_application_mode"])
+    tty_out.write(NAME_TO_TERM_CODE["cursor_invisible"])
+
+    choice = None
+    active_index = 0
+    try:
+        while True:
+            for menu_index, menu_entry in enumerate(menu_entries):
+                tty_out.write("* " if menu_index == active_index else "  ")
+                tty_out.write(menu_entry)
+                if menu_index < len(menu_entries) - 1:
+                    tty_out.write("\n")
+
+            tty_out.write("\r" + (len(menu_entries) - 1) *
+                          NAME_TO_TERM_CODE["cursor_up"])
+            tty_out.flush()
+            code = os.read(tty_in.fileno(), 80).decode("ascii", errors="ignore")
+            next_key = TERMINAL_CODE_TO_CODENAME.get(code, code)
+            if next_key in set(("up", "k")):
+                active_index = max(0, active_index - 1)
+            elif next_key in set(("down", "j")):
+                active_index = min(len(menu_entries) - 1, active_index + 1)
+            elif next_key in set(("enter",)):
+                choice = active_index
+                break
+            elif next_key in set(("escape", "q", "ctrl-g")):
+                break
+    except KeyboardInterrupt:
+        pass
+    finally:
+        tty_out.write(len(menu_entries) * NAME_TO_TERM_CODE["delete_line"])
+        tty_out.flush()
+        termios.tcsetattr(tty_out.fileno(), termios.TCSAFLUSH, old_term)
+        tty_out.write(NAME_TO_TERM_CODE["cursor_visible"])
+        tty_out.write(NAME_TO_TERM_CODE["exit_application_mode"])
+        tty_in.close()
+        tty_out.close()
+    return menu_entries[choice] if choice is not None else ''
+
+
+def main():
+    branches = subprocess.check_output(['git', 'branch']).decode('utf-8')
+    print(show([b[2:] for b in branches.split('\n')]))
+
+
+if __name__ == "__main__":
+    main()

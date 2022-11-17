@@ -12,6 +12,11 @@ local in_whitespace = function()
 end
 
 cmp.setup {
+    snippet = {
+        expand = function(args)
+            luasnip.lsp_expand(args.body)
+        end,
+    },
     mapping = {
         ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then 
@@ -41,11 +46,7 @@ cmp.setup {
 
         ['<Enter>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
-                if luasnip.expand_or_locally_jumpable() then
-                    luasnip.expand_or_jump()
-                else
-                    fallback()
-                end
+                cmp.confirm({select = true})
             else
                 fallback()
             end
