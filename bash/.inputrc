@@ -7,3 +7,5 @@ TAB: menu-complete
 "\C-a": beginning-of-line
 "\C-e": end-of-line
 
+"\eh": backward-char
+"\el": forward-char

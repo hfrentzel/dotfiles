@@ -41,7 +41,6 @@ if !empty($IS_WSL)
 endif
 
 nnoremap <leader>n :set rnu!<cr>
-nnoremap <leader>1 :NERDTreeFocus<cr>
 
 " Open current fold and only current fold
 nnoremap zB zMzO
@@ -94,7 +93,6 @@ if has('packages')
     packadd! base16-vim
     packadd! command-t
     packadd! fugitive
-    packadd! nerdtree
     packadd! vim-surround
     packadd! vim-tmux-navigator
 endif

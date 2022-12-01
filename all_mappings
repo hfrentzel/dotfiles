@@ -25,7 +25,7 @@ w    next_word          next_WORD                  /modifier/               next
 x    delete             delete_backwards           subtract_from_number
 y    yank-              yank_to_end_of_line        window_up_one_line
 z    /modifier/         +                          Suspend
-1    _                  _                          _                        open_nerdtree
+1    _                  _                          _                        open_nvim-tree
 2    _                  execute_macro              _
 3    _                  search_word_backwards      _                        open_problems_window
 4    _                  goto_end_of_line           _

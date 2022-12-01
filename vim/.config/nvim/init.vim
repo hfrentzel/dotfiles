@@ -1,6 +1,8 @@
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 let g:python3_host_prog = trim(system('which python'))
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
 source ~/.vimrc
 
 set completeopt=menu,menuone,noselect
@@ -9,6 +11,7 @@ set guicursor=n-v-c-sm:block-blinkon500-blinkwait200,i-ci-ve:ver25-blinkon500,r-
 
 packadd! nvim-cmp
 packadd! nvim-lspconfig
+packadd! nvim-tree.lua
 packadd! nvim-treesitter
 packadd! cmp-nvim-lsp
 packadd! cmp-nvim-lua
