@@ -4,6 +4,11 @@ stageBranch() {
         return
     fi
 
+    git diff --quiet
+    if [[ $? -ne 0 ]]; then
+        echo "Uncommitted changes on working tree. Commit and retry"
+        return
+    fi
 
     currBranch=$(git branch --show-current)
 

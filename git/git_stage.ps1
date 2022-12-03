@@ -1,12 +1,17 @@
 function stageBranch {
     $currBranch = git branch --show-current
 
+    git diff --quiet
+    if (-Not($?)) {
+        Read-Host "Uncommitted changes on working tree. Commit and retry"
+        return
+    }
+
     git pull origin $currBranch
     if (-Not($?)) {
         Read-Host "Conflicts while pulling $currBranch. Resolve and press enter to continue " 
         git commit -m "Merge origin"
     }
-
     git push origin $currBranch
 
     git checkout $env:stageBranch

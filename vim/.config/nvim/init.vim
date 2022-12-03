@@ -20,6 +20,7 @@ packadd! cmp-buffer
 packadd! gitsigns.nvim
 packadd! playground
 packadd! plenary.nvim
+packadd! telescope.nvim
 packadd! LuaSnip
 packadd! cmp_luasnip
 

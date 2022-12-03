@@ -73,3 +73,6 @@
 [submodule "vim/.vim/pack/vendor/opt/nvim-tree.lua"]
 	path = vim/.vim/pack/vendor/opt/nvim-tree.lua
 	url = git@github.com:nvim-tree/nvim-tree.lua
+[submodule "vim/.vim/pack/vendor/opt/telescope.nvim"]
+	path = vim/.vim/pack/vendor/opt/telescope.nvim
+	url = git@github.com:nvim-telescope/telescope.nvim
