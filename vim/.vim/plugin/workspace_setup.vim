@@ -10,6 +10,7 @@ for line in readfile(s:filename)
     let g:workspaces[s:array[1]] = s:array[0]
 endfor
 
+command Cddot :cd ~/dotfiles
 for workspace in items(g:workspaces)
     execute "command Cd".workspace[1]." :cd ".workspace[0]
 endfor
