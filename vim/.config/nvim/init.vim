@@ -9,6 +9,7 @@ set completeopt=menu,menuone,noselect
 let g:CommandTPreferredImplementation='lua'
 set guicursor=n-v-c-sm:block-blinkon500-blinkwait200,i-ci-ve:ver25-blinkon500,r-cr-o:hor20-blinkon500
 
+packadd! command-t
 packadd! nvim-cmp
 packadd! nvim-lspconfig
 packadd! nvim-tree.lua

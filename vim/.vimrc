@@ -91,10 +91,10 @@ endif
 if has('packages')
     packadd! CamelCaseMotion
     packadd! base16-vim
-    packadd! command-t
     packadd! fugitive
     packadd! vim-surround
     packadd! vim-tmux-navigator
+    packadd! vim-visual-multi
 endif
 
 filetype plugin indent on

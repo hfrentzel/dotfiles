@@ -1,4 +1,7 @@
-api = require("nvim-tree.api")
+has_nvim_tree, api = pcall(require, 'nvim-tree.api')
+if not has_nvim_tree then
+    return
+end
 
 -- Open an NvimTree window replacing the current buffer
 vinegar_open = function()

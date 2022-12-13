@@ -1,4 +1,23 @@
-require('telescope').setup({
+has_telescope, telescope = pcall(require, 'telescope')
+if not has_telescope then
+    return
+end
+
+function getVisualSelection()
+    vim.cmd('noau normal! "vy"')
+    local text = vim.fn.getreg('v')
+    vim.fn.setreg('v', {})
+
+    text = string.gsub(text, "\n", "")
+    if #text > 0 then
+        return text
+    else 
+        return ''
+    end
+end
+
+
+telescope.setup({
     defaults = {
         dynamic_preview_title = true,
         mappings = {
@@ -31,4 +50,8 @@ require('telescope').setup({
 })
 
 local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>f', builtin.live_grep)
+vim.keymap.set('n', '<leader>g', builtin.live_grep)
+vim.keymap.set('v', '<leader>g', function()
+    local text = getVisualSelection()
+    builtin.live_grep({default_text = text})
+end)

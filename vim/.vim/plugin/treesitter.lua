@@ -1,4 +1,8 @@
-require 'nvim-treesitter.configs'.setup {
+has_treesitter, treesitter = pcall(require, 'nvim-treesitter.configs')
+if not has_treesitter then
+    return
+end
+treesitter.setup {
     ensure_installed = {'lua', 'python', 'vim'},
     auto_installed = {'lua', 'python', 'vim'},
 

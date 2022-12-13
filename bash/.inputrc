@@ -9,3 +9,6 @@ TAB: menu-complete
 
 "\eh": backward-char
 "\el": forward-char
+
+"\eU": upcase-word
+"\eu": "\e-1\eU"

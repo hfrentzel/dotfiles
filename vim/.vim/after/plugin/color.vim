@@ -18,6 +18,7 @@ function s:setColor()
     endif
 
     execute 'color base16-' . s:scheme[0]
+    doautoall colorscheme
     execute 'highlight Comment ' . pinnacle#italicize('Comment')
     let l:bg = pinnacle#extract_bg('StatusLine')
     if has('nvim')
