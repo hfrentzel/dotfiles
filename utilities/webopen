@@ -12,19 +12,22 @@ subtools = webopen.add_subparsers()
 BASE_URL = 'https://www.github.com'
 
 
+def cmd_run(cmd: str):
+    return run(split(cmd), capture_output=True,
+               check=True).stdout.decode().rstrip('\n')
+
+
 def git(args):
     filename = path.abspath(args.filename)
     git_head = f'git -C "{path.dirname(filename)}"'
 
-    repo_base_dir = run(split(f'{git_head} rev-parse --show-toplevel'),
-                        capture_output=True, check=True).stdout.decode().rstrip('\n')
-    remote_url = run(split(f'{git_head} config --get remote.origin.url'),
-                     capture_output=True, check=True).stdout.decode().rstrip('\n')
-    branch = run(split(f'{git_head} rev-parse --abbrev-ref origin/HEAD'),
-                 capture_output=True,
-                 check=True).stdout.decode().rstrip('\n').split('/')[1]
+    repo_base_dir = cmd_run(f'{git_head} rev-parse --show-toplevel')
+    remote_url = cmd_run(f'{git_head} config --get remote.origin.url')
+    branch = cmd_run(f'{git_head} rev-parse --abbrev-ref origin/HEAD') \
+        .split('/')[1]
 
-    relative_path = re.search(f'{repo_base_dir}/(.*)', fr'{filename}').group(1).replace('\\', '/')
+    relative_path = re.search(f'{repo_base_dir}/(.*)',
+                              fr'{filename}').group(1).replace('\\', '/')
     remote_url = re.search(r':(.+?)(?=\.git|$)', remote_url).group(1)
 
     full_url = f'{BASE_URL}/{remote_url}/tree/{branch}/{relative_path}'

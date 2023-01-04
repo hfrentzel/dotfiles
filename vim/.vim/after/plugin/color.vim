@@ -21,6 +21,9 @@ function s:setColor()
     doautoall colorscheme
     execute 'highlight Comment ' . pinnacle#italicize('Comment')
     let l:bg = pinnacle#extract_bg('StatusLine')
+
+    highlight clear VertSplit
+    highlight link VertSplit LineNr
     if has('nvim')
         execute 'highlight User1 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticError'), 'bg': bg})
         execute 'highlight User2 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticWarn'), 'bg': bg})

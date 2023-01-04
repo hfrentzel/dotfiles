@@ -16,6 +16,7 @@ set textwidth=80
 
 if has('nvim')
     set fillchars=eob:\ 
+    set fillchars+=vert:┃ " U+2503
 endif
 
 set switchbuf=usetab

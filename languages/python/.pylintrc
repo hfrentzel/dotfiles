@@ -1,5 +1,6 @@
 [MAIN]
 disable=
+    undefined-variable,
     unused-import,
     unused-variable,
     trailing-whitespace,

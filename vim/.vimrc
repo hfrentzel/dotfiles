@@ -25,6 +25,9 @@ set visualbell
 let base16colorspace=256
 let mapleader = ","
 let g:camelcasemotion_key = '<leader>'
+let g:slime_target = 'tmux'
+let g:slime_default_config = {'socket_name': 'default',
+                            \ 'target_pane': '{right-of}' }
 
 " <c-_> maps <c-/> functions like other editors
 let g:tcomment_mapleader1 = ''
@@ -92,6 +95,7 @@ if has('packages')
     packadd! CamelCaseMotion
     packadd! base16-vim
     packadd! fugitive
+    packadd! vim-slime
     packadd! vim-surround
     packadd! vim-tmux-navigator
     packadd! vim-visual-multi
