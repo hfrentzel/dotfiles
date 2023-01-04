@@ -76,3 +76,9 @@
 [submodule "vim/.vim/pack/vendor/opt/telescope.nvim"]
 	path = vim/.vim/pack/vendor/opt/telescope.nvim
 	url = git@github.com:nvim-telescope/telescope.nvim
+[submodule "vim/.vim/pack/vendor/opt/nvim-dap"]
+	path = vim/.vim/pack/vendor/opt/nvim-dap
+	url = https://github.com/mfussenegger/nvim-dap.git
+[submodule "vim/.vim/pack/vendor/opt/vim-slime"]
+	path = vim/.vim/pack/vendor/opt/vim-slime
+	url = https://github.com/jpalardy/vim-slime.git
