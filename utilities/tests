@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import os
+import subprocess
+"""
+args =
+    -c run with coverage
+    -d run with debugpy
+    -l run with LOG_LEVEL=DEBUG
+    -p re run last run config
+    -v verbose output
+    -x fail right away
+"""
+
+config_file = os.path.expanduser('~/.test_configs')
+previous_file = os.path.expanduser('~/.most_recent_test')
+
+
+def main():
+    with open(config_file) as f:
+        configs = json.loads(f.read())
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('test_suite', nargs='?')
+    parser.add_argument('-l', '--log_all', action='store_true')
+    parser.add_argument('-p', '--rerun', action='store_true')
+    parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument('-x', '--fail_fast', action='store_true')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-c', '--coverage', action='store_true')
+    # TODO add functionality for debug
+    group.add_argument('-d', '--debug', action='store_true')
+
+    args = parser.parse_args()
+    if args.rerun:
+        if not os.path.isfile(previous_file):
+            print('Error, previous_test_file does not exist')
+            return
+        with open(previous_file) as f:
+            previous_config = json.loads(f.readline())
+        print(previous_config['cmd'])
+        subprocess.run(previous_config['cmd'],
+                       env={'LOG_LEVEL': previous_config['log']},
+                       cwd=previous_config['dir'], check=False,
+                       shell=True)
+        return
+
+    test_suite = configs.get(args.test_suite)
+    if test_suite is None:
+        print(f'Error, {args.test_suite} is not a defined test suite')
+        return
+
+    log_level = 'DEBUG' if args.log_all else 'WARNING'
+    command = (f'{test_suite["dir"]}/venv/bin/'
+               f'{"coverage run" if args.coverage else "python"}')
+
+    arg_string = ''
+    if args.fail_fast:
+        arg_string += '-x '
+    if args.verbose:
+        arg_string += '-vv '
+
+    full_command = (f'{command} -m pytest {arg_string} '
+                    f'{test_suite["arg"]}')
+
+    print(full_command)
+    with open(previous_file, 'w') as f:
+        f.write(json.dumps({'cmd': full_command, 'log': log_level,
+                'dir': test_suite['dir']}))
+
+    subprocess.run(full_command, env={'LOG_LEVEL': log_level},
+                   cwd=test_suite['dir'], check=False, shell=True)
+
+
+if __name__ == '__main__':
+    main()

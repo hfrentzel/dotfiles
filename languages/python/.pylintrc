@@ -1,14 +1,15 @@
 [MAIN]
 disable=
-    undefined-variable,
-    unused-import,
-    unused-variable,
-    trailing-whitespace,
-    unsubscriptable-object,
+    f-string-without-interpolation,
     logging-fstring-interpolation,
+    missing-class-docstring,
     missing-function-docstring,
     missing-module-docstring,
-    missing-class-docstring
+    trailing-whitespace,
+    undefined-variable,
+    unsubscriptable-object,
+    unused-import,
+    unused-variable
 
 [BASIC]
 # allow 1 or 2 length variable names
