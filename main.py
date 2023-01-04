@@ -4,6 +4,7 @@ import subprocess
 
 from setup_tools.installers import install_linux_package, async_proc
 from setup_tools.symlink import symlink, execute_symlinks
+from setup_tools.linux import linux_package, install_apt, install_all_packages
 from vim import install_neovim, install_command_t
 from languages.python import install_python
 
@@ -41,16 +42,18 @@ async def main():
     create_action('apt_update', async_proc('sudo apt update'))
 
     # Apt packages
-    create_action('dos2unix', install_linux_package('dos2unix'), ['apt_update'])
-    create_action('ripgrep', install_linux_package('ruby-dev'), ['apt_update'])
-    create_action('ruby', install_linux_package('ruby'), ['apt_update'])
-    create_action('ruby-dev', install_linux_package('ruby-dev'), ['apt_update'])
+    linux_package('dos2unix')
+    linux_package('jq')
+    linux_package('ripgrep')
+    linux_package('ruby')
+    linux_package('ruby-dev')
 
-    create_action('neovim', install_neovim(dotfiles_home))
-    create_action('python', install_python())
+    install_neovim()
+    install_python()
+    await install_all_packages()
+    await install_apt()
 
-    create_action('command_t', install_command_t(dotfiles_home),
-                  ['ruby', 'ruby-dev', 'submodules'])
+    # install_command_t()
 
     symlink('DOTROOT/bash/.bash', '~/.bash')
     symlink('DOTROOT/bash/.bashrc', '~/.bashrc')
