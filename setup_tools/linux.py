@@ -16,7 +16,7 @@ def linux_package(package_name, repo_name=None, depends_on=None):
         _apt_queued = True
 
 
-async def install_package(package_name, repo_name=None):
+async def _check_for_installed(package_name, repo_name=None):
     package_exists = await async_proc(f'dpkg -s {package_name}')
     if not package_exists['returncode']:
         print(f'{package_name} is already installed')
@@ -33,11 +33,12 @@ async def install_package(package_name, repo_name=None):
 
 
 async def install_apt():
-    tasks = (install_package(p[0], p[1]) for p in _requested_packages)
-    await asyncio.gather(*tasks)
-
     global _apt_queued
     _apt_queued = False
+
+    tasks = (_check_for_installed(p[0], p[1]) for p in _requested_packages)
+    await asyncio.gather(*tasks)
+
     if len(_apt_packages) == 0:
         print("No installs necessary")
         return True

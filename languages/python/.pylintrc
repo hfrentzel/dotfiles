@@ -5,6 +5,7 @@ disable=
     missing-class-docstring,
     missing-function-docstring,
     missing-module-docstring,
+    syntax-error,
     trailing-whitespace,
     undefined-variable,
     unsubscriptable-object,

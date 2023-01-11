@@ -7,7 +7,7 @@ from setup_tools.symlink import symlink, execute_symlinks
 from setup_tools.linux import linux_package
 from setup_tools.utils import run_tasks, add_job
 from vim import install_neovim, install_command_t
-from languages.python import install_python
+from languages.python import install_python, python_editing
 
 
 async def init_git():
@@ -37,6 +37,8 @@ async def main():
 
     install_neovim()
     install_python()
+    
+    python_editing()
 
     # install_command_t()
 

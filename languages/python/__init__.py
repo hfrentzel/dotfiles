@@ -17,5 +17,6 @@ def python_editing():
     pip_package('pylint')
     pip_package('pylsp-mypy')
     pip_package('python-lsp-server')
+    pip_package('debugpy')
 
     symlink('DOTROOT/languages/python/.pylintrc', '~/.pylintrc')
