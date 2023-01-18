@@ -11,6 +11,7 @@ set guicursor=n-v-c-sm:block-blinkon500-blinkwait200,i-ci-ve:ver25-blinkon500,r-
 
 packadd! command-t
 packadd! nvim-cmp
+packadd! nvim-dap
 packadd! nvim-lspconfig
 packadd! nvim-tree.lua
 packadd! nvim-treesitter
@@ -22,6 +23,7 @@ packadd! gitsigns.nvim
 packadd! playground
 packadd! plenary.nvim
 packadd! telescope.nvim
+packadd! tmux.nvim
 packadd! LuaSnip
 packadd! cmp_luasnip
 

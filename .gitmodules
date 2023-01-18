@@ -82,3 +82,6 @@
 [submodule "vim/.vim/pack/vendor/opt/vim-slime"]
 	path = vim/.vim/pack/vendor/opt/vim-slime
 	url = https://github.com/jpalardy/vim-slime.git
+[submodule "vim/.vim/pack/vendor/opt/tmux.nvim"]
+	path = vim/.vim/pack/vendor/opt/tmux.nvim
+	url = https://github.com/aserowy/tmux.nvim

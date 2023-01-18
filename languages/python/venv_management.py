@@ -105,15 +105,15 @@ def pykill(name):
     """
     existing_venvs = _get_existing()
     if name not in existing_venvs:
-        print("Could not find venv '{name}'")
+        print(f"Could not find venv '{name}'")
         return
 
     shutil.rmtree(existing_venvs[name])
     del existing_venvs[name]
 
     with open(venv_file, 'w', encoding='utf-8') as f:
-        for name, location in existing_venvs.items():
-            f.write(f'{name} {location}\n')
+        for n, location in existing_venvs.items():
+            f.write(f'{n} {location}\n')
 
     print(f"'{name}' deleted")
 

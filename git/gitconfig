@@ -21,6 +21,7 @@
     myll = log --oneline --first-parent --no-merges
     mylast = log -1 --stat --no-merges --first-parent
     last = log -1 --stat
+    showlast = !git show $(git log -1 --pretty=format:"%H")
 [blame]
     date = short
 [color "blame"]

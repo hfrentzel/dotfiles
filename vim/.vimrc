@@ -97,8 +97,10 @@ if has('packages')
     packadd! fugitive
     packadd! vim-slime
     packadd! vim-surround
-    packadd! vim-tmux-navigator
     packadd! vim-visual-multi
+    if !has('nvim')
+        packadd! vim-tmux-navigator
+    endif
 endif
 
 filetype plugin indent on

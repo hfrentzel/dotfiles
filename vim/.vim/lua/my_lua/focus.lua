@@ -13,6 +13,7 @@ local winhighlight_blurred = table.concat({
 }, ',')
 
 local number_blacklist = {
+    ['fugitiveblame'] = true,
     ['help'] = true,
     ['NvimTree'] = true,
     ['qf'] = true,
