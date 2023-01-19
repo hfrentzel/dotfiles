@@ -22,7 +22,7 @@ local number_blacklist = {
 focus.focus_window = function()
     local filetype = vim.bo.filetype
 
-    if filtype ~= '' and number_blacklist[filetype] ~= true then
+    if filetype ~= '' and number_blacklist[filetype] ~= true then
         vim.wo.number = true
         vim.wo.relativenumber = true
     end

@@ -3,6 +3,7 @@ if not has_telescope then
     return
 end
 
+-- https://github.com/nvim-telescope/telescope.nvim/issues/1923
 function getVisualSelection()
     vim.cmd('noau normal! "vy"')
     local text = vim.fn.getreg('v')

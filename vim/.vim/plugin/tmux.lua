@@ -1,4 +1,8 @@
-require('tmux').setup({
+local has_tmux, tmux = pcall(require, 'tmux')
+if not has_tmux then
+    return
+end
+tmux.setup({
     copy_sync = {
         enable = false
     },
@@ -14,6 +18,6 @@ require('tmux').setup({
     }
 })
 vim.keymap.set('n', '<c-right>', '<cmd>lua require("tmux").resize_right()<cr>')
-vim.keymap.set('n', '<c-up>', '<cmd>lua require("tmux").resize_up()<cr>')
+vim.keymap.set('n', '<c-up>', '<cmd>lua require("tmux").resize_top()<cr>')
 vim.keymap.set('n', '<c-left>', '<cmd>lua require("tmux").resize_left()<cr>')
-vim.keymap.set('n', '<c-down>', '<cmd>lua require("tmux").resize_down()<cr>')
+vim.keymap.set('n', '<c-down>', '<cmd>lua require("tmux").resize_bottom()<cr>')

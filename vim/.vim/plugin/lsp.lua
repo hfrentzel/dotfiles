@@ -1,22 +1,36 @@
-local path = require('lspconfig/util').path
+local has_path, util = pcall (require, 'lspconfig/util')
+if not has_path then
+    return
+end
+local path = util.path
 local helpers = require('dot_helpers')
 
 local diags_on = true
 toggleDiagnostics = function()
     if diags_on then
-        vim.diagnostic.hide()
         diags_on = false
+        vim.diagnostic.hide()
+        vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
+            vim.lsp.diagnostic.on_publish_diagnostics, 
+                {virtual_text = false, underline = false, signs = false})
     else
-        vim.diagnostic.show()
         diags_on = true
+        vim.diagnostic.show(nil, nil, nil, 
+            {virtual_text = true, underline = true, signs = true})
+        vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
+            vim.lsp.diagnostic.on_publish_diagnostics,
+                {virtual_text = true, underline = true, signs = true})
     end
 end
 
 local on_attach = function ()
+    vim.diagnostic.config({severity_sort = true})
     vim.wo.signcolumn = 'yes'
     vim.keymap.set('n', 'K', "<cmd>lua vim.lsp.buf.hover()<CR>", 
         {buffer = true, silent = true})
     vim.keymap.set('n', 'gd', "<cmd>lua vim.lsp.buf.definition()<CR>", 
+        {buffer = true, silent = true})
+    vim.keymap.set('n', 'gu', "<cmd>lua vim.lsp.buf.references()<CR>", 
         {buffer = true, silent = true})
     vim.keymap.set('n', '<leader>3', "<cmd>lua vim.diagnostic.setloclist()<CR>", 
         {buffer = true, silent = true})
