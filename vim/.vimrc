@@ -25,6 +25,10 @@ set visualbell
 let base16colorspace=256
 let mapleader = ","
 let g:camelcasemotion_key = '<leader>'
+
+let g:slime_no_mappings = 1
+xmap <leader><enter> <Plug>SlimeRegionSend
+nmap <leader><enter> <Plug>SlimeParagraphSend
 let g:slime_target = 'tmux'
 let g:slime_default_config = {'socket_name': 'default',
                             \ 'target_pane': '{right-of}' }
@@ -66,6 +70,10 @@ nnoremap gb :ls<CR>:b<Space>
 " UPPERCASE word
 nnoremap U mzviwUe`z
 inoremap <c-u> <esc>viwUea
+
+" Entire File text object
+onoremap <silent> ae :<C-U>normal! ggVG<CR>
+xnoremap <silent> ae :<C-U>normal! ggVG<CR>
 
 " Add relative line movements to jump list
 nnoremap <expr> k (v:count > 5 ? "m'" . v:count : '') . 'k'

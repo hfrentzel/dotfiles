@@ -25,8 +25,15 @@ endfor
 
 "Remove pair when backspacing inside empty pair
 function BracketBS()
-    let pair = getline('.')[col('.')-2 : col('.') -1]
-    return stridx('()[]{}', pair) % 2 == 0 ? "\<del>\<c-h>" : "\<bs>"
+    if col('.') == 1
+        return "\<bs>"
+    endif
+    let pair = getline('.')[col('.') - 2 : col('.') - 1]
+    echom pair
+    let result =  stridx('()[]{}', pair) % 2 == 0 
+    echom result
+    return result ? "\<del>\<c-h>" : "\<bs>"
+    " return 0 ? "\<del>\<c-h>" : "\<bs>"
 endfunction
 
 inoremap <silent> <expr> <BS> BracketBS()
