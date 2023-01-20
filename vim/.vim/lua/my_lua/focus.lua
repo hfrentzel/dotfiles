@@ -19,6 +19,10 @@ local number_blacklist = {
     ['qf'] = true,
 }
 
+local focus_full_window = {
+    ['qf'] = true,
+}
+
 focus.focus_window = function()
     local filetype = vim.bo.filetype
 
@@ -26,8 +30,13 @@ focus.focus_window = function()
         vim.wo.number = true
         vim.wo.relativenumber = true
     end
-    vim.wo.winhighlight = 'EndOfBuffer:ColorColumn'
-    vim.wo.colorcolumn = colorcolumns
+    if focus_full_window[filetype] == true then
+        vim.wo.winhighlight = ''
+        vim.wo.colorcolumn = ''
+    else
+        vim.wo.winhighlight = 'EndOfBuffer:ColorColumn'
+        vim.wo.colorcolumn = colorcolumns
+    end
 end
 
 focus.blur_window = function()

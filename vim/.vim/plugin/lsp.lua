@@ -114,6 +114,17 @@ nvim_lsp.rust_analyzer.setup({
     capabilities = capabilities,
 })
 
+nvim_lsp.eslint.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+})
+
+nvim_lsp.tsserver.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "typescript", "typescriptreact", "typescript.tsx" }
+})
+
 updateDiags = function()
     vim.diagnostic.setloclist({open = false})
     vim.b['diagnostic_counts'] = { 
