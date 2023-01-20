@@ -82,7 +82,9 @@ local py_before_init = function(params, config)
     config.settings.pylsp.plugins.pylsp_mypy.overrides = mypy_args
 end
 
-require'lspconfig'.pylsp.setup{
+local nvim_lsp = require'lspconfig'
+
+nvim_lsp.pylsp.setup{
     name = 'pylsp',
     on_attach = on_attach,
     before_init = py_before_init,
@@ -106,6 +108,11 @@ require'lspconfig'.pylsp.setup{
         }
     },
 }
+
+nvim_lsp.rust_analyzer.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+})
 
 updateDiags = function()
     vim.diagnostic.setloclist({open = false})
