@@ -9,6 +9,8 @@ def install_neovim():
     symlink('DOTROOT/vim/.vim', '~/.vim')
     symlink('DOTROOT/vim/.config/nvim/init.vim', '~/.config/nvim/init.vim')
 
+    # npm install -g vim-language-server
+
 
 # TODO handle new command-t installation
 def install_command_t():

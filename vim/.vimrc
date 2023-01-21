@@ -24,7 +24,6 @@ set visualbell
 
 let base16colorspace=256
 let mapleader = ","
-let g:camelcasemotion_key = '<leader>'
 
 let g:slime_no_mappings = 1
 xmap <leader><enter> <Plug>SlimeRegionSend
@@ -110,6 +109,9 @@ if has('packages')
         packadd! vim-tmux-navigator
     endif
 endif
+
+omap <silent> <leader>iw <Plug>CamelCaseMotion_iw
+xmap <silent> <leader>iw <Plug>CamelCaseMotion_iw
 
 filetype plugin indent on
 syntax on

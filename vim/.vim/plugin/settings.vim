@@ -24,6 +24,7 @@ set switchbuf=usetab
 if has('vertsplit')
     set splitright                      " Open splits to the right
 endif
+
 if has('windows')
     set splitbelow                      " Open splits below
 endif

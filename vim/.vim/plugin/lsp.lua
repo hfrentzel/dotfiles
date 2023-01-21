@@ -26,21 +26,21 @@ end
 local on_attach = function ()
     vim.diagnostic.config({severity_sort = true})
     vim.wo.signcolumn = 'yes'
-    vim.keymap.set('n', 'K', "<cmd>lua vim.lsp.buf.hover()<CR>", 
+    vim.keymap.set('n', 'K', "<cmd>lua vim.lsp.buf.hover()<CR>",
         {buffer = true, silent = true})
-    vim.keymap.set('n', 'gd', "<cmd>lua vim.lsp.buf.definition()<CR>", 
+    vim.keymap.set('n', 'gd', "<cmd>lua vim.lsp.buf.definition()<CR>",
         {buffer = true, silent = true})
-    vim.keymap.set('n', 'gu', "<cmd>lua vim.lsp.buf.references()<CR>", 
+    vim.keymap.set('n', 'gu', "<cmd>lua vim.lsp.buf.references()<CR>",
         {buffer = true, silent = true})
-    vim.keymap.set('n', '<leader>3', "<cmd>lua vim.diagnostic.setloclist()<CR>", 
+    vim.keymap.set('n', '<leader>3', "<cmd>lua vim.diagnostic.setloclist()<CR>",
         {buffer = true, silent = true})
-    vim.keymap.set('n', '[d', "<cmd>lua vim.diagnostic.goto_prev()<CR>", 
+    vim.keymap.set('n', '[d', "<cmd>lua vim.diagnostic.goto_prev()<CR>",
         {buffer = true, silent = true})
-    vim.keymap.set('n', ']d', "<cmd>lua vim.diagnostic.goto_next()<CR>", 
+    vim.keymap.set('n', ']d', "<cmd>lua vim.diagnostic.goto_next()<CR>",
         {buffer = true, silent = true})
-    vim.keymap.set('n', '<leader>d', "<cmd>lua vim.diagnostic.open_float()<CR>", 
+    vim.keymap.set('n', '<leader>d', "<cmd>lua vim.diagnostic.open_float()<CR>",
         {buffer = true, silent = true})
-    vim.keymap.set('n', '<leader>4', "<cmd>lua toggleDiagnostics()<CR>", 
+    vim.keymap.set('n', '<leader>4', "<cmd>lua toggleDiagnostics()<CR>",
         {buffer = true, silent = true})
 end
 
@@ -54,12 +54,12 @@ local py_before_init = function(params, config)
 
     local venv_cfg = vim.fn.glob(path.join(config.root_dir, '*', 'pyvenv.cfg'))
     if venv_cfg ~= '' then
-        venv_dir = path.dirname(venv_cfg)
+        local venv_dir = path.dirname(venv_cfg)
         jedi_args.environment = venv_dir
         table.insert(mypy_args, "--python-executable")
         table.insert(mypy_args, path.join(venv_dir, 'bin', 'python'))
 
-        version = helpers.get_python_major_version(venv_cfg)
+        local version = helpers.get_python_major_version(venv_cfg)
         table.insert(mypy_args, "--python-version")
         table.insert(mypy_args, version)
         table.insert(pylint_args, '--py-version='..version)
@@ -125,9 +125,30 @@ nvim_lsp.tsserver.setup({
     filetypes = { "typescript", "typescriptreact", "typescript.tsx" }
 })
 
+nvim_lsp.vimls.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+})
+
+nvim_lsp.sumneko_lua.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        Lua = {
+            diagnostics = {
+                globals = {"vim"}
+            },
+            runtime = {
+                path = vim.split(package.path, ';'),
+                version = 'LuaJIT'
+            }
+        }
+    }
+})
+
 updateDiags = function()
     vim.diagnostic.setloclist({open = false})
-    vim.b['diagnostic_counts'] = { 
+    vim.b['diagnostic_counts'] = {
         error = vim.fn.len(vim.diagnostic.get(0, {severity = 1})),
         warning = vim.fn.len(vim.diagnostic.get(0, {severity = 2})),
         info = vim.fn.len(vim.diagnostic.get(0, {severity = 3})),
@@ -141,4 +162,4 @@ vim.api.nvim_create_autocmd('DiagnosticChanged', {
     pattern = '*',
     callback = updateDiags
 })
-    
+
