@@ -53,7 +53,7 @@ def pymake(new_venv, directory):
             f.write(f'{name} {location}\n')
 
 
-def pyrun():
+def pyrun(venv_name=None):
     """
     Run a venv
     """
@@ -62,35 +62,42 @@ def pyrun():
         print('No available python environments')
         return
 
-    options = [(f'{idx}. {name}   ', location)
-               for idx, (name, location)
-               in enumerate(existing_venvs.items(), 1)]
+    if venv_name is not None:
+        if venv_name not in existing_venvs:
+            print(f'No venv named {venv_name} found')
+        cmd = existing_venvs[venv_name]
+        prompt = venv_name
+    else:
+        options = [(f'{idx}. {name}   ', location)
+                   for idx, (name, location)
+                   in enumerate(existing_venvs.items(), 1)]
 
-    col_length = max(len(x[0]) for x in options)
-    num_columns = int(80 / col_length)
+        col_length = max(len(x[0]) for x in options)
+        num_columns = int(80 / col_length)
 
-    for column in zip_longest(*[iter(options)] * num_columns):
-        for row in column:
-            if row:
-                print(row[0], end='')
-        print()
+        for column in zip_longest(*[iter(options)] * num_columns):
+            for row in column:
+                if row:
+                    print(row[0], end='')
+            print()
 
-    choice = input('Please select a venv: ')
-    try:
-        choice = int(choice)
-    except ValueError:
-        print('Error, input was not a number')
-        return
+        choice = input('Please select a venv: ')
+        try:
+            choice = int(choice)
+        except ValueError:
+            print('Error, input was not a number')
+            return
 
-    if choice > len(options) or choice < 1:
-        print('Error, invalid option')
-        return
+        if choice > len(options) or choice < 1:
+            print('Error, invalid option')
+            return
 
-    cmd = location = options[choice - 1][1]
+        cmd = location = options[choice - 1][1]
+        prompt = [a for a, b in existing_venvs.items()
+                  if b == location][0]
+
     if 'venv' in cmd:
         cmd = os.path.join(cmd, 'bin', 'python')
-
-    prompt = [a for a, b in existing_venvs.items() if b == location][0]
 
     os.environ['PYPROMPT'] = prompt
     os.environ['PYTHONSTARTUP'] = \
@@ -123,16 +130,17 @@ def main():
     Main
     """
     cmd = sys.argv[1]
+    arg = sys.argv[2] if len(sys.argv) > 2 else None
 
     if cmd == 'pymake':
-        if len(sys.argv) < 3:
+        if arg is None:
             print('Please enter a name for the new venv')
             return
         pymake(sys.argv[2], os.path.join(os.getcwd(), 'venv'))
     elif cmd == 'pyrun':
-        pyrun()
+        pyrun(arg)
     elif cmd == 'pykill':
-        if len(sys.argv) < 3:
+        if arg is None:
             print('Please enter a venv to be deleted')
             return
         pykill(sys.argv[2])

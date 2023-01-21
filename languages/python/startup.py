@@ -7,8 +7,17 @@ prompt = os.getenv('PYPROMPT', '>>')
 sys.ps1 = prompt + '> '
 
 
-def ch():
-    sys.exit(5)
+class Quitter:
+    def __init__(self, num=0):
+        self.num = num
+
+    def __repr__(self):
+        sys.exit(self.num)
+
+
+ch = Quitter(5)
+q = Quitter()
+exit = q
 
 
 class Pip(object):
