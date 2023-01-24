@@ -35,15 +35,13 @@ source ~/.bash/color.sh
     export $(tmux show-environment | grep ^USERPROFILE) && \
     export $(tmux show-environment | grep ^WSLENV)
 
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.bin:$PATH"
-
 test -f ~/dotfiles/git/git_stage.sh && source $HOME/dotfiles/git/git_stage.sh
     
 test -f ~/variables && source $HOME/.bash/var_setup.sh
 test -f ~/workspaces && source $HOME/.bash/workspace_setup.sh
 
 source $HOME/.bash/aliases.sh
+source $HOME/.bash/path.sh
 source $HOME/.bash/utilities.sh
 
 LOCAL_RC=$HOME/.bashrc.local
@@ -54,4 +52,3 @@ complete -W "$(jq -r 'keys[]' ~/.test_configs)" tests
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-. "$HOME/.cargo/env"

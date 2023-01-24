@@ -11,6 +11,7 @@ alias cddot='cd ~/dotfiles'
 alias grep='grep --color=auto'
 alias pytree="tree -I 'venv|__pycache__'"
 alias tmuxl='tmux list-sessions'
+alias path='echo $PATH | tr : "\n"'
 
 # Python venv management
 alias pymake="python ~/dotfiles/languages/python/venv_management.py pymake"
