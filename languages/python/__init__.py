@@ -1,4 +1,5 @@
-from setup_tools.installers import pip_package, command
+from setup_tools.installers import command
+from setup_tools.pip import pip_package
 from setup_tools.symlink import symlink
 from setup_tools.linux import linux_package
 
@@ -13,10 +14,10 @@ def install_python():
 
 
 def python_editing():
-    pip_package('flake8')
-    pip_package('pylint')
-    pip_package('pylsp-mypy')
-    pip_package('python-lsp-server')
-    pip_package('debugpy')
+    pip_package('flake8', '6.0.0')
+    pip_package('pylint', '2.15.4')
+    pip_package('pylsp-mypy', '0.6.5')
+    pip_package('python-lsp-server', '1.7.1')
+    pip_package('debugpy', '1.6.4')
 
     symlink('DOTROOT/languages/python/.pylintrc', '~/.pylintrc')

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import asyncio
 from typing import Awaitable, Set, List
+from setup_tools.config import config
 
 
 @dataclass(frozen=True)
@@ -9,11 +10,15 @@ class DependentJob:
     depends_on: str
 
 
-def add_dependent_job(job, depends_on):
+def add_dependent_job(job, depends_on, run_on_dry=False):
+    if config['dry_run'] and not run_on_dry:
+        return
     depends_on_others.add(DependentJob(item=job, depends_on=depends_on))
 
 
-def add_job(job):
+def add_job(job, run_on_dry=False):
+    if config['dry_run'] and not run_on_dry:
+        return
     ready_to_run.append(job)
 
 

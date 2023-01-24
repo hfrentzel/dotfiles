@@ -3,10 +3,12 @@ import os
 import subprocess
 
 from setup_tools.installers import async_proc, command
+from setup_tools.pip import check_up_to_date
 from setup_tools.symlink import symlink, execute_symlinks
+from setup_tools.config import config
 from setup_tools.linux import linux_package
 from setup_tools.utils import run_tasks, add_job
-from vim import install_neovim, install_command_t
+from vim import install_neovim
 from languages.python import install_python, python_editing
 
 
@@ -22,13 +24,12 @@ async def init_git():
 
 
 async def main():
+    config['dry_run'] = True
+    config['check'] = True
     subprocess.run(['sudo', 'pwd'], capture_output=True, check=True)
 
     dotfiles_home = os.path.dirname(os.path.abspath(__file__))
     os.chdir(dotfiles_home)
-
-    add_job(init_git())
-    command('sudo apt update')
 
     # Apt packages
     linux_package('dos2unix')
@@ -37,10 +38,8 @@ async def main():
 
     install_neovim()
     install_python()
-    
-    python_editing()
 
-    # install_command_t()
+    python_editing()
 
     symlink('DOTROOT/bash/.bash', '~/.bash')
     symlink('DOTROOT/bash/.bashrc', '~/.bashrc')
@@ -49,8 +48,14 @@ async def main():
     symlink('DOTROOT/git/gitconfig', '~/.gitconfig')
     symlink('DOTROOT/tmux/.tmux.conf', '~/.tmux.conf')
 
-    execute_symlinks(dotfiles_home)
+    if not config['check']:
+        execute_symlinks(dotfiles_home)
+        add_job(init_git())
+        command('sudo apt update')
+
     await run_tasks()
+    if config['check']:
+        await check_up_to_date()
 
 
 if __name__ == '__main__':
