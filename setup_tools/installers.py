@@ -4,7 +4,7 @@ from setup_tools.config import config
 
 
 def command(cmd, depends_on=None, run_on_dry=False):
-    if config['dry_run'] and not run_on_dry:
+    if config.dry_run and not run_on_dry:
         return
     if depends_on is not None:
         add_dependent_job(async_proc(cmd), depends_on)

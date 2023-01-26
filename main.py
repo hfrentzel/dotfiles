@@ -7,6 +7,7 @@ from setup_tools.pip import check_up_to_date
 from setup_tools.symlink import symlink, execute_symlinks
 from setup_tools.config import config
 from setup_tools.linux import linux_package
+from setup_tools.deb import deb_package
 from setup_tools.utils import run_tasks, add_job
 from vim import install_neovim
 from languages.python import install_python, python_editing
@@ -24,8 +25,8 @@ async def init_git():
 
 
 async def main():
-    config['dry_run'] = True
-    config['check'] = True
+    config.dry_run = True
+    # config.check = True
     subprocess.run(['sudo', 'pwd'], capture_output=True, check=True)
 
     dotfiles_home = os.path.dirname(os.path.abspath(__file__))
@@ -35,6 +36,12 @@ async def main():
     linux_package('dos2unix')
     linux_package('jq')
     linux_package('ripgrep')
+    deb_package(command='rg',
+                url='https://github.com/BurntSushi/ripgrep/releases/download/'
+                    '{version}/ripgrep_{version}_amd64.deb',
+                version_check="rg --version | head -1 | grep -o '[0-9\\.]\\+'",
+                version='13.0.0'
+                )
 
     install_neovim()
     install_python()
@@ -48,13 +55,13 @@ async def main():
     symlink('DOTROOT/git/gitconfig', '~/.gitconfig')
     symlink('DOTROOT/tmux/.tmux.conf', '~/.tmux.conf')
 
-    if not config['check']:
+    if not config.check:
         execute_symlinks(dotfiles_home)
         add_job(init_git())
         command('sudo apt update')
 
     await run_tasks()
-    if config['check']:
+    if config.check:
         await check_up_to_date()
 
 

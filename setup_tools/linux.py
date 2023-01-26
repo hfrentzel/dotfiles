@@ -21,7 +21,8 @@ def linux_package(package_name, repo_name=None, depends_on=None):
 async def _check_for_installed(package_name, repo_name=None):
     package_exists = await async_proc(f'dpkg -s {package_name}')
     if not package_exists['returncode']:
-        print(f'{package_name} is already installed')
+        if config.verbose:
+            print(f'{package_name} is already installed')
         successful.add(package_name)
         return True
 
@@ -41,10 +42,10 @@ async def install_apt():
     await asyncio.gather(*tasks)
 
     if len(apt_status['missing']) == 0:
-        print("No installs necessary")
+        print('No apt installs necessary')
         return True
 
-    if config['dry_run']:
+    if config.dry_run:
         print('Not installing apt because dry run')
         return True
 
