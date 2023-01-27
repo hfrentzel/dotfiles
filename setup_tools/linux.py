@@ -1,6 +1,6 @@
 import asyncio
 from setup_tools.installers import async_proc, add_apt_repo
-from setup_tools.utils import ready_to_run, successful
+from setup_tools.utils import successful, add_job
 from setup_tools.config import config
 
 apt_status = {
@@ -11,10 +11,10 @@ apt_status = {
 }
 
 
-def linux_package(package_name, repo_name=None, depends_on=None):
+def linux_package(package_name, repo_name=None):
     apt_status['requested'].add((package_name, repo_name))
     if not apt_status['queued']:
-        ready_to_run.append(install_apt())
+        add_job(install_apt(), run_on_dry=True)
         apt_status['queued'] = True
 
 

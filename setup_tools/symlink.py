@@ -1,11 +1,14 @@
 import os
-
 from setup_tools.config import config
 
 _symlinks = []
 
 
-def add_symlink(src: str, dest: str) -> bool:
+def symlink(src, dest):
+    _symlinks.append((src, dest))
+
+
+def _add_symlink(src: str, dest: str) -> bool:
     src = os.path.expanduser(src)
     dest = os.path.expanduser(dest)
     if os.path.isfile(dest) or os.path.isdir(dest):
@@ -25,11 +28,7 @@ def add_symlink(src: str, dest: str) -> bool:
     return False
 
 
-def symlink(src, dest):
-    _symlinks.append((src, dest))
-
-
 def execute_symlinks(dotfiles_home):
-    if all(add_symlink(src.replace('DOTROOT', dotfiles_home), dest) for
+    if all(_add_symlink(src.replace('DOTROOT', dotfiles_home), dest) for
            (src, dest) in _symlinks):
         print('All symlinks up to date')

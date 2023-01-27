@@ -1,7 +1,7 @@
 import asyncio
 import dataclasses
 import json
-from setup_tools.utils import ready_to_run, successful
+from setup_tools.utils import successful, add_job
 from setup_tools.installers import async_proc
 from setup_tools.config import config
 
@@ -28,7 +28,7 @@ pip_status = PipStatus()
 def pip_package(package_name: str, version: str):
     pip_status.requested.add(PipPackage(package_name, version))
     if not pip_status.queued and not config.check:
-        ready_to_run.append(install_pip_packages())
+        add_job(install_pip_packages(), run_on_dry=True)
         pip_status.queued = True
 
 

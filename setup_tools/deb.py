@@ -2,13 +2,13 @@ import shutil
 
 from setup_tools.config import config
 from setup_tools.installers import async_proc
-from setup_tools.utils import ready_to_run
+from setup_tools.utils import add_job
 
 
 def deb_package(command, url, version_check, version):
     if not config.check:
-        ready_to_run.append(install_deb(command, url, version,
-                                        version_check))
+        add_job(install_deb(command, url, version, version_check),
+                run_on_dry=True)
 
 
 async def install_deb(command: str, url: str, version: str,

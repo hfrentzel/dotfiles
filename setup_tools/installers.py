@@ -1,5 +1,5 @@
 import asyncio
-from setup_tools.utils import add_dependent_job, ready_to_run
+from setup_tools.utils import add_dependent_job, add_job
 from setup_tools.config import config
 
 
@@ -9,7 +9,7 @@ def command(cmd, depends_on=None, run_on_dry=False):
     if depends_on is not None:
         add_dependent_job(async_proc(cmd), depends_on)
     else:
-        ready_to_run.append(async_proc(cmd))
+        add_job(async_proc(cmd))
 
 
 async def async_proc(cmd, stdin=None):
