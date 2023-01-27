@@ -3,7 +3,7 @@ import os
 import subprocess
 
 from setup_tools.installers import async_proc, command
-from setup_tools.pip import check_up_to_date
+from setup_tools.pip import Pip
 from setup_tools.symlink import symlink, execute_symlinks
 from setup_tools.config import config
 from setup_tools.linux import linux_package
@@ -60,9 +60,10 @@ async def main():
         command('sudo apt update')
 
     add_job(Npm.update(), run_on_dry=True)
+    add_job(Pip.update(), run_on_dry=True)
     await run_tasks()
     if config.check:
-        await check_up_to_date()
+        await Pip.check()
 
 
 if __name__ == '__main__':

@@ -52,6 +52,6 @@ class Npm:
 
         print(f'Installing npm packages {cls._missing}')
         all_packages = ' '.join(str(p) for p in cls._missing)
-        await async_proc(f'/usr/bin/python -m pip install {all_packages}')
+        await async_proc(f'npm install -g {all_packages}')
 
         return True
