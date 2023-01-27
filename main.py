@@ -9,6 +9,7 @@ from setup_tools.config import config
 from setup_tools.linux import linux_package
 from setup_tools.deb import deb_package
 from setup_tools.utils import run_tasks, add_job
+from setup_tools.npm import Npm
 from vim import install_neovim
 from languages.python import install_python, python_editing
 
@@ -58,6 +59,7 @@ async def main():
         add_job(init_git())
         command('sudo apt update')
 
+    add_job(Npm.update(), run_on_dry=True)
     await run_tasks()
     if config.check:
         await check_up_to_date()
