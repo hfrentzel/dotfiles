@@ -1,6 +1,6 @@
 from setup_tools.symlink import symlink
 from setup_tools.deb import deb_package
-from setup_tools.npm import Npm
+from setup_tools.managers import Npm
 
 
 def install_neovim():

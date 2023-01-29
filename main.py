@@ -3,13 +3,11 @@ import os
 import subprocess
 
 from setup_tools.installers import async_proc, command
-from setup_tools.pip import Pip
+from setup_tools.managers import all_managers, Apt
 from setup_tools.symlink import symlink, execute_symlinks
 from setup_tools.config import config
-from setup_tools.linux import linux_package
 from setup_tools.deb import deb_package
 from setup_tools.utils import run_tasks, add_job
-from setup_tools.npm import Npm
 from vim import install_neovim
 from languages.python import install_python, python_editing
 
@@ -34,8 +32,8 @@ async def main():
     os.chdir(dotfiles_home)
 
     # Base tools
-    linux_package('dos2unix')
-    linux_package('jq')
+    Apt('dos2unix')
+    Apt('jq')
     deb_package(command='rg',
                 url='https://github.com/BurntSushi/ripgrep/releases/download/'
                     '{version}/ripgrep_{version}_amd64.deb',
@@ -59,11 +57,11 @@ async def main():
         add_job(init_git())
         command('sudo apt update')
 
-    add_job(Npm.update(), run_on_dry=True)
-    add_job(Pip.update(), run_on_dry=True)
+    for manager in all_managers.values():
+        add_job(manager.update(), run_on_dry=True)
     await run_tasks()
-    if config.check:
-        await Pip.check()
+    # if config.check:
+    #     await Pip.check()
 
 
 if __name__ == '__main__':

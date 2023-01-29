@@ -1,12 +1,11 @@
 from setup_tools.installers import command
-from setup_tools.pip import Pip
+from setup_tools.managers import Pip, Apt
 from setup_tools.symlink import symlink
-from setup_tools.linux import linux_package
 
 
 def install_python():
-    linux_package('python3.9', 'deadsnakes/ppa')
-    linux_package('python3-pip')
+    Apt('python3.9', 'deadsnakes/ppa')
+    Apt('python3-pip')
 
     command('sudo update-alternatives --install '
             '/usr/bin/python python /usr/bin/python3.9 2',

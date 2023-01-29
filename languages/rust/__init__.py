@@ -1,5 +1,3 @@
-from setup_tools.linux import linux_package
-
 
 def rust_editing():
     # rustup install

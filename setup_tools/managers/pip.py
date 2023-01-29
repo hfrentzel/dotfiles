@@ -4,12 +4,10 @@ import json
 from setup_tools.utils import successful
 from setup_tools.installers import async_proc
 from setup_tools.config import config
+from setup_tools.managers.manager import Manager
 
 
-class Pip:
-    _requested = set()
-    _missing = set()
-
+class Pip(Manager):
     def __init__(self, package_name: str, version: str):
         self.name = package_name
         self.version = version
