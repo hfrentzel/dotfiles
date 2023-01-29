@@ -6,6 +6,7 @@ class Config:
     dry_run: bool = False
     check: bool = False
     verbose: bool = False
+    dotfiles_home: str = ''
 
 
 config = Config()

@@ -1,12 +1,10 @@
-from setup_tools.symlink import symlink
-from setup_tools.deb import deb_package
-from setup_tools.managers import Npm
+from setup_tools.managers import Npm, Deb, Symlink
 
 
 def install_neovim():
-    symlink('DOTROOT/vim/.vimrc', '~/.vimrc')
-    symlink('DOTROOT/vim/.vim', '~/.vim')
-    symlink('DOTROOT/vim/.config/nvim/init.vim', '~/.config/nvim/init.vim')
+    Symlink('DOTROOT/vim/.vimrc', '~/.vimrc')
+    Symlink('DOTROOT/vim/.vim', '~/.vim')
+    Symlink('DOTROOT/vim/.config/nvim/init.vim', '~/.config/nvim/init.vim')
 
     src = {
         "command": "nvim",
@@ -14,7 +12,7 @@ def install_neovim():
         "version_check": "nvim --version | head -1 | grep -o '[0-9\\.]\\+'",
         "version": "0.8.2"
     }
-    deb_package(**src)
+    Deb(**src)
     Npm('vim-language-server', '2.3.0')
 
 

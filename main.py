@@ -3,10 +3,8 @@ import os
 import subprocess
 
 from setup_tools.installers import async_proc, command
-from setup_tools.managers import all_managers, Apt
-from setup_tools.symlink import symlink, execute_symlinks
+from setup_tools.managers import all_managers, Apt, Deb, Symlink
 from setup_tools.config import config
-from setup_tools.deb import deb_package
 from setup_tools.utils import run_tasks, add_job
 from vim import install_neovim
 from languages.python import install_python, python_editing
@@ -28,24 +26,24 @@ async def main():
     # config.check = True
     subprocess.run(['sudo', 'pwd'], capture_output=True, check=True)
 
-    dotfiles_home = os.path.dirname(os.path.abspath(__file__))
-    os.chdir(dotfiles_home)
+    config.dotfiles_home = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(config.dotfiles_home)
 
     # Base tools
     Apt('dos2unix')
     Apt('jq')
-    deb_package(command='rg',
-                url='https://github.com/BurntSushi/ripgrep/releases/download/'
-                    '{version}/ripgrep_{version}_amd64.deb',
-                version_check="rg --version | head -1 | grep -o '[0-9\\.]\\+'",
-                version='13.0.0'
-                )
-    symlink('DOTROOT/bash/.bash', '~/.bash')
-    symlink('DOTROOT/bash/.bashrc', '~/.bashrc')
-    symlink('DOTROOT/bash/.inputrc', '~/.inputrc')
-    symlink('DOTROOT/configs/.rgrc', '~/.rgrc')
-    symlink('DOTROOT/git/gitconfig', '~/.gitconfig')
-    symlink('DOTROOT/tmux/.tmux.conf', '~/.tmux.conf')
+    Deb(command='rg',
+        url='https://github.com/BurntSushi/ripgrep/releases/download/'
+            '{version}/ripgrep_{version}_amd64.deb',
+        version_check="rg --version | head -1 | grep -o '[0-9\\.]\\+'",
+        version='13.0.0'
+        )
+    Symlink('DOTROOT/bash/.bash', '~/.bash')
+    Symlink('DOTROOT/bash/.bashrc', '~/.bashrc')
+    Symlink('DOTROOT/bash/.inputrc', '~/.inputrc')
+    Symlink('DOTROOT/configs/.rgrc', '~/.rgrc')
+    Symlink('DOTROOT/git/gitconfig', '~/.gitconfig')
+    Symlink('DOTROOT/tmux/.tmux.conf', '~/.tmux.conf')
 
     # Additional components
     install_neovim()
@@ -53,7 +51,6 @@ async def main():
     python_editing()
 
     if not config.check:
-        execute_symlinks(dotfiles_home)
         add_job(init_git())
         command('sudo apt update')
 

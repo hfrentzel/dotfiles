@@ -35,7 +35,7 @@ class Apt(Manager):
         await asyncio.gather(*tasks)
 
         if len(cls._missing) == 0:
-            print('No apt installs necessary')
+            print('All apt packages installed')
             return True
 
         if config.dry_run:

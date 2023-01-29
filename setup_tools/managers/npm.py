@@ -41,7 +41,7 @@ class Npm(Manager):
         await asyncio.gather(*tasks)
 
         if len(cls._missing) == 0:
-            print('All npm packages up to date')
+            print('All npm packages installed and up to date')
             return True
 
         if config.dry_run:

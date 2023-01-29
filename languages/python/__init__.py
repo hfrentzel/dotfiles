@@ -1,6 +1,5 @@
 from setup_tools.installers import command
-from setup_tools.managers import Pip, Apt
-from setup_tools.symlink import symlink
+from setup_tools.managers import Pip, Apt, Symlink
 
 
 def install_python():
@@ -19,4 +18,4 @@ def python_editing():
     Pip('python-lsp-server', '1.7.1')
     Pip('debugpy', '1.6.4')
 
-    symlink('DOTROOT/languages/python/.pylintrc', '~/.pylintrc')
+    Symlink('DOTROOT/languages/python/.pylintrc', '~/.pylintrc')
