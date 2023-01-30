@@ -8,6 +8,7 @@ from setup_tools.config import config
 from setup_tools.utils import run_tasks, add_job
 from vim import install_neovim
 from languages.python import install_python, python_editing
+from languages.javascript import install_javascript
 
 
 async def init_git():
@@ -48,6 +49,7 @@ async def main():
     # Additional components
     install_neovim()
     install_python()
+    install_javascript()
     python_editing()
 
     if not config.check:

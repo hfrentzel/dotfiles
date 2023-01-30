@@ -5,11 +5,13 @@ from .pip import Pip
 from .npm import Npm
 from .deb import Deb
 from .symlink import Symlink
+from .tar import Tar
 
 all_managers: dict[str, Type[Manager]] = {
     'apt': Apt,
     'deb': Deb,
     'npm': Npm,
     'pip': Pip,
-    'symlink': Symlink
+    'symlink': Symlink,
+    'tar': Tar
 }

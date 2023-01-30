@@ -14,9 +14,13 @@ class Npm(Manager):
             self.version = version
             self._requested.add(self)
 
+    def __str__(self):
+        return f'{self.name}@{self.version}'
+
     @classmethod
     async def _check_for_installed(cls, package: Npm, pack_list):
         if package.name not in pack_list:
+            print(f'{package.name} npm package is not installed')
             cls._missing.add(package)
             return
         if pack_list[package.name] != package.version:
@@ -45,7 +49,7 @@ class Npm(Manager):
             return True
 
         if config.dry_run:
-            print('Not installing anything because dry run')
+            print('Not installing any node packages because dry run')
             return True
 
         print(f'Installing npm packages {cls._missing}')
