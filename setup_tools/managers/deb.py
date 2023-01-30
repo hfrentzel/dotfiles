@@ -30,8 +30,9 @@ class Deb(Manager):
 
     async def install(self):
 
+        print(f'Installing {self.command}...')
         full_url = self.url.format(version=self.version)
-        filename = f'{self.command}-{self.version}.deb'
+        filename = f'{config.sources_home}/{self.command}-{self.version}.deb'
 
         await async_proc(f'curl -L {full_url} -o {filename}')
         await async_proc(f'sudo apt install {filename}')

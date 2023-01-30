@@ -29,11 +29,11 @@ function BracketBS()
         return "\<bs>"
     endif
     let pair = getline('.')[col('.') - 2 : col('.') - 1]
-    echom pair
     let result =  stridx('()[]{}', pair) % 2 == 0 
-    echom result
+    if len(pair) != 2
+        return "\<bs>"
+    endif
     return result ? "\<del>\<c-h>" : "\<bs>"
-    " return 0 ? "\<del>\<c-h>" : "\<bs>"
 endfunction
 
 inoremap <silent> <expr> <BS> BracketBS()

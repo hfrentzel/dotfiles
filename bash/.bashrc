@@ -4,6 +4,11 @@ export EDITOR=vim
 export VISUAL=vim 
 export RIPGREP_CONFIG_PATH=$HOME/.rgrc
 
+# This should normally be set by terminal, I'm setting it manually because
+# it's not. May need to change this if I ever start using terminals that
+# don't support 24-bit color
+export COLORTERM=truecolor
+
 export IS_WSL=$(uname -a | grep WSL)
 
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then

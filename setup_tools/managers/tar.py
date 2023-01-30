@@ -31,7 +31,7 @@ class Tar(Manager):
     async def install(self):
 
         full_url = self.url.format(version=self.version)
-        filename = f'{self.command}-{self.version}.tar.xz'
+        filename = f'{config.sources_home}/{self.command}-{self.version}.tar.xz'
 
         await async_proc(f'curl -L {full_url} -o {filename}')
         await async_proc('sudo tar -C /usr/local --strip-components=1 '

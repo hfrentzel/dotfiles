@@ -25,6 +25,7 @@ async def init_git():
 async def main():
     config.dry_run = True
     # config.check = True
+    config.sources_home = '~/.pack_sources'
     subprocess.run(['sudo', 'pwd'], capture_output=True, check=True)
 
     config.dotfiles_home = os.path.dirname(os.path.abspath(__file__))
@@ -33,11 +34,15 @@ async def main():
     # Base tools
     Apt('dos2unix')
     Apt('jq')
-    Deb(command='rg',
+    Deb(command='delta', version='0.15.1',
+        url='https://github.com/dandavison/delta/releases/download/'
+            '{version}/git-delta-musl_{version}_amd64.deb',
+        version_check=" delta --version | head -1 | grep -o '[0-9\\.]\\+' | tail -1"
+        )
+    Deb(command='rg', version='13.0.0',
         url='https://github.com/BurntSushi/ripgrep/releases/download/'
             '{version}/ripgrep_{version}_amd64.deb',
-        version_check="rg --version | head -1 | grep -o '[0-9\\.]\\+'",
-        version='13.0.0'
+        version_check="rg --version | head -1 | grep -o '[0-9\\.]\\+' | head -1"
         )
     Symlink('DOTROOT/bash/.bash', '~/.bash')
     Symlink('DOTROOT/bash/.bashrc', '~/.bashrc')

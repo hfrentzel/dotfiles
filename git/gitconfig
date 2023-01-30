@@ -28,6 +28,35 @@
         highlightRecent = 237, 20 month ago, 238, 19 month ago, 239, 18 month ago, 240, 17 month ago, 241, 16 month ago, 242, 15 month ago, 243, 14 month ago, 244, 13 month ago, 245, 12 month ago, 246, 11 month ago, 247, 10 month ago, 248, 9 month ago, 249, 8 month ago, 250, 7 month ago, 251, 6 month ago, 252, 5 month ago, 253, 4 month ago, 254, 3 month ago, 231, 2 month ago, 230, 1 month ago, 229, 3 weeks ago, 228, 2 weeks ago, 227, 1 week ago, 226
 [core]
 	autocrlf = input
+    pager = delta
+[delta]
+    line-numbers = true
+    navigate = true
+
+    commit-decoration-style = none
+    file-added-label = [+]
+    file-copied-label = [C]
+    file-decoration-style = none
+    file-modified-label = [M]
+    file-removed-label = [-]
+    file-renamed-label = [R]
+    file-style = 232 bold 255
+    hunk-header-decoration-style = none
+    hunk-header-file-style = "#999999"
+    hunk-header-line-number-style = bold "#03a4ff"
+    hunk-header-style = file line-number
+    line-numbers-left-style = black
+    line-numbers-minus-style = "#B10036"
+    line-numbers-plus-style = "#03a4ff"
+    line-numbers-right-style = black
+    line-numbers-zero-style = "#999999"
+    minus-emph-style = syntax bold "#a00020"
+    minus-style = syntax "#601000"
+    plus-emph-style = syntax bold "#1d772d"
+    plus-style = syntax "#1c4428"
+    whitespace-error-style = "#280050" reverse
+    zero-style = syntax
+    syntax-theme = base16
 [diff]
 	compactionHeuristic = true
 [merge]

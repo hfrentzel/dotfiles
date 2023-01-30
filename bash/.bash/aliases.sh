@@ -13,6 +13,9 @@ alias pytree="tree -I 'venv|__pycache__'"
 alias tmuxl='tmux list-sessions'
 alias path='echo $PATH | tr : "\n"'
 
+# Use git-delta side-by-side iff the terminal is at least 160 characters wide
+alias git='$([ $(tput cols) -gt 160 ] && echo "git -c delta.side-by-side=true" || echo "git")'
+
 # Python venv management
 alias pymake="python ~/dotfiles/languages/python/venv_management.py pymake"
 alias pyrun="python ~/dotfiles/languages/python/venv_management.py pyrun"

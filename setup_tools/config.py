@@ -7,6 +7,7 @@ class Config:
     check: bool = False
     verbose: bool = False
     dotfiles_home: str = ''
+    sources_home: str = ''
 
 
 config = Config()
