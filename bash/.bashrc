@@ -43,6 +43,7 @@ test -f ~/workspaces && source $HOME/.bash/workspace_setup.sh
 source $HOME/.bash/aliases.sh
 source $HOME/.bash/path.sh
 source $HOME/.bash/utilities.sh
+source $HOME/.bash/colemak.sh
 
 LOCAL_RC=$HOME/.bashrc.local
 test -f $LOCAL_RC && source $LOCAL_RC

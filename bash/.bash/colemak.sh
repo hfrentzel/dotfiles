@@ -1,0 +1,41 @@
+set_colemak() {
+    bind 'e':'"f"'
+    bind 'f':'"t"'
+    bind 't':'"g"'
+    bind 'g':'"d"'
+    bind 'd':'"s"'
+    bind 's':'"r"'
+    bind 'r':'"p"'
+    bind 'p':'";"'
+    bind ';':'"o"'
+    bind 'o':'"y"'
+    bind 'y':'"j"'
+    bind 'j':'"n"'
+    bind 'n':'"k"'
+    bind 'k':'"e"'
+    
+    bind 'i':'"u"'
+    bind 'u':'"l"'
+    bind 'l':'"i"'
+
+    bind 'E':'"F"'
+    bind 'F':'"T"'
+    bind 'T':'"G"'
+    bind 'G':'"D"'
+    bind 'D':'"S"'
+    bind 'S':'"R"'
+    bind 'R':'"P"'
+    bind 'P':'":"'
+    bind ':':'"O"'
+    bind 'O':'"Y"'
+    bind 'Y':'"J"'
+    bind 'J':'"N"'
+    bind 'N':'"K"'
+    bind 'K':'"E"'
+    
+    bind 'I':'"U"'
+    bind 'U':'"L"'
+    bind 'L':'"I"'
+}
+
+# set_colemak
