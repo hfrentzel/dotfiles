@@ -11,6 +11,7 @@ args =
     -p re run last run config
     -v verbose output
     -x fail right away
+    -w print command, but don't execute
 """
 
 config_file = os.path.expanduser('~/.test_configs')
@@ -27,6 +28,7 @@ def main():
     parser.add_argument('-p', '--rerun', action='store_true')
     parser.add_argument('-v', '--verbose', action='store_true')
     parser.add_argument('-x', '--fail_fast', action='store_true')
+    parser.add_argument('-w', '--dry_run', action='store_true')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('-c', '--coverage', action='store_true')
     # TODO add functionality for debug
@@ -69,6 +71,8 @@ def main():
         f.write(json.dumps({'cmd': full_command, 'log': log_level,
                 'dir': test_suite['dir']}))
 
+    if args.dry_run:
+        return
     subprocess.run(full_command, env={'LOG_LEVEL': log_level},
                    cwd=test_suite['dir'], check=False, shell=True)
 

@@ -78,6 +78,8 @@ require('nvim-tree').setup({
         mappings = {
             list = {
                 { key = '-', action='xx', action_cb=close_tree},
+                { key = '<c-\\>', action='vsplit'},
+                { key = '<c-s>', action='split'},
                 { key = '<cr>', action='xxx', action_cb=open_or_replace},
                 { key = 'u', action='dir_up'},
             }

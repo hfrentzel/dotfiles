@@ -64,7 +64,7 @@ nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 
 " Quicker buffer selection. This gets mapped to CommandTBuffer in nvim
-nnoremap gb :ls<CR>:b<Space>
+nnoremap <leader>b :ls<CR>:b<Space>
 
 " UPPERCASE word
 nnoremap U mzviwUe`z

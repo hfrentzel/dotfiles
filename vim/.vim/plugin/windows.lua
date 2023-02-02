@@ -1,6 +1,6 @@
-split_and_alternate = function()
-    alt_file = vim.fn.expand('#')
-    this_file = vim.fn.expand('%')
+local split_and_alternate = function()
+    local alt_file = vim.fn.expand('#')
+    local this_file = vim.fn.expand('%')
     if alt_file == '' or this_file == alt_file then
         print('No alternate file available')
         return

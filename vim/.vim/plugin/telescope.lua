@@ -46,12 +46,21 @@ telescope.setup({
                 prompt_position = 'top',
                 width = 0.8,
             }
+        },
+        lsp_references = {
+            theme = "dropdown",
+            layout_config = {
+                anchor = 'N',
+                prompt_position = 'top',
+                width = 0.8,
+            }
         }
     }
 })
 
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<leader>g', builtin.live_grep)
+vim.keymap.set('n', 'gu', builtin.lsp_references)
 vim.keymap.set('v', '<leader>g', function()
     local text = getVisualSelection()
     builtin.live_grep({default_text = text})

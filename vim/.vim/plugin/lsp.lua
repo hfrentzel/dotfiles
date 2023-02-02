@@ -30,8 +30,6 @@ local on_attach = function ()
         {buffer = true, silent = true})
     vim.keymap.set('n', 'gd', "<cmd>lua vim.lsp.buf.definition()<CR>",
         {buffer = true, silent = true})
-    vim.keymap.set('n', 'gu', "<cmd>lua vim.lsp.buf.references()<CR>",
-        {buffer = true, silent = true})
     vim.keymap.set('n', '<leader>3', "<cmd>lua vim.diagnostic.setloclist()<CR>",
         {buffer = true, silent = true})
     vim.keymap.set('n', '[d', "<cmd>lua vim.diagnostic.goto_prev()<CR>",
