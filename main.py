@@ -9,6 +9,7 @@ from setup_tools.utils import run_tasks, add_job
 from vim import install_neovim
 from languages.python import install_python, python_editing
 from languages.javascript import install_javascript
+from clis.aws import install_aws
 
 
 async def init_git():
@@ -56,6 +57,7 @@ async def main():
     install_python()
     install_javascript()
     python_editing()
+    install_aws()
 
     if not config.check:
         add_job(init_git())

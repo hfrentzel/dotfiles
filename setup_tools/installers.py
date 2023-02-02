@@ -12,9 +12,10 @@ def command(cmd, depends_on=None, run_on_dry=False):
         add_job(async_proc(cmd))
 
 
-async def async_proc(cmd, stdin=None):
+async def async_proc(cmd, stdin=None, cwd=None):
     process = await asyncio.create_subprocess_shell(
         cmd,
+        cwd=cwd,
         stdin=asyncio.subprocess.PIPE if stdin else None,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE)

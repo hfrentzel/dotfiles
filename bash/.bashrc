@@ -18,6 +18,8 @@ else
     PS1='\w\$ '
 fi
 
+export GIT_COMPLETION_CHECKOUT_NO_GUESS=1
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -47,9 +49,8 @@ test -f ~/workspaces && source $HOME/.bash/workspace_setup.sh
 
 source $HOME/.bash/aliases.sh
 source $HOME/.bash/path.sh
+source $HOME/.bash/completions.sh
 source $HOME/.bash/utilities.sh
 
 LOCAL_RC=$HOME/.bashrc.local
 test -f $LOCAL_RC && source $LOCAL_RC
-
-complete -W "$(jq -r 'keys[]' ~/.test_configs)" tests
