@@ -102,6 +102,7 @@ if has('packages')
     packadd! CamelCaseMotion
     packadd! base16-vim
     packadd! fugitive
+    packadd! eunuch
     packadd! vim-slime
     packadd! vim-surround
     packadd! vim-visual-multi

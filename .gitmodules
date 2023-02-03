@@ -85,3 +85,6 @@
 [submodule "vim/.vim/pack/vendor/opt/tmux.nvim"]
 	path = vim/.vim/pack/vendor/opt/tmux.nvim
 	url = https://github.com/aserowy/tmux.nvim
+[submodule "vim/.vim/pack/vendor/opt/eunuch"]
+	path = vim/.vim/pack/vendor/opt/eunuch
+	url = https://tpope.io/vim/eunuch.git
