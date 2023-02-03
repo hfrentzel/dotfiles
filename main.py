@@ -9,6 +9,7 @@ from setup_tools.utils import run_tasks, add_job
 from vim import install_neovim
 from languages.python import install_python, python_editing
 from languages.javascript import install_javascript
+from languages.terraform import install_terraform
 from clis.aws import install_aws
 
 
@@ -26,7 +27,7 @@ async def init_git():
 async def main():
     config.dry_run = True
     # config.check = True
-    config.sources_home = '~/.pack_sources'
+    config.sources_home = os.path.expanduser('~/.pack_sources')
     subprocess.run(['sudo', 'pwd'], capture_output=True, check=True)
 
     config.dotfiles_home = os.path.dirname(os.path.abspath(__file__))
@@ -38,12 +39,11 @@ async def main():
     Deb(command='delta', version='0.15.1',
         url='https://github.com/dandavison/delta/releases/download/'
             '{version}/git-delta-musl_{version}_amd64.deb',
-        version_check=" delta --version | head -1 | grep -o '[0-9\\.]\\+' | tail -1"
+        version_check="delta --version | head -1 | grep -o '[0-9\\.]\\+' | tail -1"
         )
     Deb(command='rg', version='13.0.0',
         url='https://github.com/BurntSushi/ripgrep/releases/download/'
             '{version}/ripgrep_{version}_amd64.deb',
-        version_check="rg --version | head -1 | grep -o '[0-9\\.]\\+' | head -1"
         )
     Symlink('DOTROOT/bash/.bash', '~/.bash')
     Symlink('DOTROOT/bash/.bashrc', '~/.bashrc')
@@ -58,6 +58,7 @@ async def main():
     install_javascript()
     python_editing()
     install_aws()
+    install_terraform()
 
     if not config.check:
         add_job(init_git())

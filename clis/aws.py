@@ -1,6 +1,6 @@
 from setup_tools.config import config
 from setup_tools.utils import add_job
-from setup_tools.installers import async_proc
+from setup_tools.installers import async_proc, fetch_file
 
 
 def install_aws():
@@ -16,8 +16,7 @@ def install_aws():
 
         print('Installing aws cli')
         url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
-        filename = f'{config.sources_home}/awscli.zip'
-        await async_proc(f'curl -L "{url}" -o {filename}')
+        filename = await fetch_file('xx', url)
         await async_proc(f'unzip {filename}', cwd=config.sources_home)
         await async_proc('sudo ./aws/install', cwd=config.sources_home)
 

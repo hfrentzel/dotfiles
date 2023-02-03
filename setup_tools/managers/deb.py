@@ -1,14 +1,15 @@
 import asyncio
-import shutil
+from typing import Optional
 
 from setup_tools.config import config
-from setup_tools.installers import async_proc
+from setup_tools.installers import async_proc, check_version, \
+    fetch_file
 from setup_tools.managers.manager import Manager
 
 
 class Deb(Manager):
-    def __init__(self, command: str, url: str, version_check: str,
-                 version: str):
+    def __init__(self, command: str, url: str, version: str,
+                 version_check: Optional[str] = None):
         self.command = command
         self.url = url
         self.version_check = version_check
@@ -16,25 +17,14 @@ class Deb(Manager):
         self._requested.add(self)
 
     async def check_for_installed(self):
-        if not shutil.which(self.command):
-            print(f'{self.command} is not installed')
+        if not await check_version(self.command, self.version,
+                                   self.version_check):
             self._missing.add(self)
-        elif (curr_ver := (await async_proc(self.version_check))['stdout']) \
-                != self.version:
-            print(f'{self.command} ({curr_ver}) is not up to date. '
-                  f'Can be updated to {self.version}')
-            self._missing.add(self)
-        elif config.verbose:
-            print(f'{self.command} is installed and up to '
-                  f'date ({self.version})')
 
     async def install(self):
 
         print(f'Installing {self.command}...')
-        full_url = self.url.format(version=self.version)
-        filename = f'{config.sources_home}/{self.command}-{self.version}.deb'
-
-        await async_proc(f'curl -L {full_url} -o {filename}')
+        filename = await fetch_file(self.version, self.url)
         await async_proc(f'sudo apt install {filename}')
 
         return True

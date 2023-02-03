@@ -8,7 +8,6 @@ def install_neovim():
 
     Deb(command="nvim",
         url="https://github.com/neovim/neovim/releases/download/v{version}/nvim-linux64.deb",
-        version_check="nvim --version | head -1 | grep -o '[0-9\\.]\\+'",
         version="0.8.2"
         )
     Npm('vim-language-server', '2.3.0')

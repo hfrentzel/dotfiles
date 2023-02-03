@@ -1,4 +1,6 @@
 import asyncio
+import shutil
+from os import path
 from setup_tools.utils import add_dependent_job, add_job
 from setup_tools.config import config
 
@@ -41,3 +43,32 @@ async def add_apt_repo(repo_name):
 
     print('Running apt update')
     await async_proc('sudo apt update')
+
+
+async def check_version(cmd, desired_version, check_cmd=None) -> bool:
+    if check_cmd is None:
+        check_cmd = f"{cmd} --version | head -1 | grep -o '[0-9\\.]\\+' | head -1"
+    if not shutil.which(cmd):
+        print(f'{cmd} is not installed')
+        return False
+
+    curr_ver = (await async_proc(check_cmd))['stdout']
+    if curr_ver != desired_version:
+        print(f'{cmd} ({curr_ver}) is not up to date. '
+              f'Can be updated to {desired_version}')
+        return False
+
+    if config.verbose:
+        print(f'{cmd} is installed and up to date ({curr_ver})')
+    return True
+
+
+async def fetch_file(version, url):
+    full_url = url.format(version=version)
+    _, file = path.split(full_url)
+
+    filename = f'{config.sources_home}/{file}'
+
+    await async_proc(f'curl -L {full_url} -o {filename}')
+
+    return filename
