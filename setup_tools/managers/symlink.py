@@ -1,6 +1,7 @@
 import os
 from setup_tools.config import config
 from setup_tools.managers.manager import Manager
+from setup_tools.installers import vprint
 
 
 class Symlink(Manager):
@@ -15,8 +16,7 @@ class Symlink(Manager):
         dest = os.path.expanduser(dest)
         if os.path.isfile(dest) or os.path.isdir(dest):
             if os.path.islink(dest):
-                if config.verbose:
-                    print(f'{dest} already exists and is a link')
+                vprint(f'{dest} already exists and is a link')
                 return True
             print(f'Error. {dest} already exists')
             return False

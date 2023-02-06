@@ -5,7 +5,7 @@ import subprocess
 from setup_tools.installers import async_proc, command
 from setup_tools.managers import all_managers, Apt, Deb, Symlink
 from setup_tools.config import config
-from setup_tools.utils import run_tasks, add_job
+from setup_tools.jobs import run_tasks, add_job
 from vim import install_neovim
 from languages.python import install_python, python_editing
 from languages.javascript import install_javascript
@@ -22,6 +22,18 @@ async def init_git():
 
     print('Submodules updated')
     return True
+
+
+def report():
+    missing = False
+    for manager in all_managers.values():
+        for item in manager.get_missing():
+            missing = True
+            print(f'{item[0].name} expected: {item[0].version}, current: '
+                  f'{item[1]}')
+
+    if not missing:
+        print('All packages installed and up to date')
 
 
 async def main():
@@ -67,6 +79,7 @@ async def main():
     for manager in all_managers.values():
         add_job(manager.update(), run_on_dry=True)
     await run_tasks()
+    report()
     # if config.check:
     #     await Pip.check()
 

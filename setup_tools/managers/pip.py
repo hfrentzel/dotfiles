@@ -1,8 +1,8 @@
 from __future__ import annotations
 import asyncio
 import json
-from setup_tools.utils import successful
-from setup_tools.installers import async_proc
+from setup_tools.jobs import successful
+from setup_tools.installers import async_proc, vprint
 from setup_tools.config import config
 from setup_tools.managers.manager import Manager
 
@@ -19,16 +19,13 @@ class Pip(Manager):
     @classmethod
     async def _check_for_installed(cls, package: Pip, pack_list):
         if package.name not in pack_list:
-            cls._missing.add(package)
+            cls._missing.add((package, None))
             return
         if pack_list[package.name] != package.version:
-            print(f'{package.name} is not at correct version. Expected {package.version}. '
-                  f'Installed: {pack_list[package.name]}')
-            cls._missing.add(package)
+            cls._missing.add((package, pack_list[package.name]))
             return
 
-        if config.verbose:
-            print(f'{package.name} is installed and up to date ({package.version})')
+        vprint(f'{package.name} is installed and up to date ({package.version})')
         successful.add(package.name)
         return
 
@@ -42,7 +39,6 @@ class Pip(Manager):
         await asyncio.gather(*tasks)
 
         if len(cls._missing) == 0:
-            print('All pip packages installed and up to date')
             return True
 
         if config.dry_run:

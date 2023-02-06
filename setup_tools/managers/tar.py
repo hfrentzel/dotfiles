@@ -17,8 +17,9 @@ class Tar(Manager):
         self._requested.add(self)
 
     async def check_for_installed(self):
-        if not await check_version(self.command, self.version,
-                                   self.version_check):
+        version = await check_version(self.command, self.version,
+                                      self.version_check)
+        if version is None or isinstance(version, str):
             self._missing.add(self)
 
     async def install(self):
@@ -35,12 +36,12 @@ class Tar(Manager):
         await asyncio.gather(*tasks)
 
         if len(cls._missing) == 0:
-            print('All tar-installed packages are up to date')
-        elif config.dry_run:
+            return True
+        if config.dry_run:
             print('Not installing tar-packages because dry run')
             return True
-        else:
-            install_tasks = (pack.install() for pack in cls._missing)
-            await asyncio.gather(*install_tasks)
+
+        install_tasks = (pack.install() for pack in cls._missing)
+        await asyncio.gather(*install_tasks)
 
         return True

@@ -1,5 +1,5 @@
 from setup_tools.config import config
-from setup_tools.utils import add_job
+from setup_tools.jobs import add_job
 from setup_tools.installers import async_proc, fetch_file
 
 

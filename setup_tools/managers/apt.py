@@ -1,7 +1,7 @@
 from __future__ import annotations
 import asyncio
-from setup_tools.installers import async_proc, add_apt_repo
-from setup_tools.utils import successful
+from setup_tools.installers import async_proc, add_apt_repo, vprint
+from setup_tools.jobs import successful
 from setup_tools.config import config
 from setup_tools.managers.manager import Manager
 
@@ -16,8 +16,7 @@ class Apt(Manager):
     async def _check_for_installed(cls, package_name, repo_name=None):
         package_exists = await async_proc(f'dpkg -s {package_name}')
         if not package_exists['returncode']:
-            if config.verbose:
-                print(f'{package_name} is already installed')
+            vprint(f'{package_name} is already installed')
             successful.add(package_name)
             return True
 
@@ -26,7 +25,7 @@ class Apt(Manager):
             # installs all at once
             add_apt_repo(repo_name)
 
-        cls._missing.add(package_name)
+        cls._missing.add((package_name, None))
         return True
 
     @classmethod
@@ -35,7 +34,6 @@ class Apt(Manager):
         await asyncio.gather(*tasks)
 
         if len(cls._missing) == 0:
-            print('All apt packages installed')
             return True
 
         if config.dry_run:

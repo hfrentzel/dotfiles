@@ -10,3 +10,7 @@ class Manager(ABC):
     @abstractmethod
     async def update(cls):
         pass
+
+    @classmethod
+    def get_missing(cls):
+        return cls._missing
