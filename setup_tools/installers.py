@@ -56,13 +56,10 @@ async def check_version(cmd, desired_version, check_cmd=None) -> \
     if check_cmd is None:
         check_cmd = f"{cmd} --version | head -1 | grep -o '[0-9\\.]\\+' | head -1"
     if not shutil.which(cmd):
-        print(f'{cmd} is not installed')
         return None
 
     curr_ver = (await async_proc(check_cmd))['stdout']
     if curr_ver != desired_version:
-        print(f'{cmd} ({curr_ver}) is not up to date. '
-              f'Can be updated to {desired_version}')
         return curr_ver
 
     vprint(f'{cmd} is installed and up to date ({curr_ver})')

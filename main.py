@@ -11,6 +11,7 @@ from languages.python import install_python, python_editing
 from languages.javascript import install_javascript
 from languages.terraform import install_terraform
 from clis.aws import install_aws
+from clis.jira import install_jira
 
 
 async def init_git():
@@ -70,6 +71,7 @@ async def main():
     install_javascript()
     python_editing()
     install_aws()
+    install_jira()
     install_terraform()
 
     if not config.check:

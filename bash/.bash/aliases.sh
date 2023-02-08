@@ -21,3 +21,5 @@ alias pymake="python ~/dotfiles/languages/python/venv_management.py pymake"
 alias pyrun="python ~/dotfiles/languages/python/venv_management.py pyrun"
 alias pykill="python ~/dotfiles/languages/python/venv_management.py pykill"
 
+# JIRA
+alias jcurrent="jira issue list -a$(jira me) -s \"In Progress\""

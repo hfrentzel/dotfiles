@@ -46,7 +46,7 @@ class Pip(Manager):
             return True
 
         print(f'Installing python packages {cls._missing}')
-        all_packages = ' '.join(str(p) for p in cls._missing)
+        all_packages = ' '.join(str(p[0]) for p in cls._missing)
         await async_proc(f'/usr/bin/python -m pip install {all_packages}')
 
         return True

@@ -10,23 +10,27 @@ from setup_tools.managers.manager import Manager
 class Tar(Manager):
     def __init__(self, command: str, url: str, version: str,
                  version_check: Optional[str] = None):
-        self.command = command
+        self.name = command
         self.url = url
         self.version_check = version_check
         self.version = version
         self._requested.add(self)
 
     async def check_for_installed(self):
-        version = await check_version(self.command, self.version,
+        version = await check_version(self.name, self.version,
                                       self.version_check)
         if version is None or isinstance(version, str):
-            self._missing.add(self)
+            self._missing.add((self, version))
 
     async def install(self):
 
         filename = await fetch_file(self.version, self.url)
-        await async_proc('sudo tar -C /usr/local --strip-components=1 '
-                         f'-xf {filename}')
+        if filename.endswith('.gz'):
+            await async_proc('sudo tar -C /usr/local --strip-components=1 '
+                             f'-xf {filename}')
+        elif filename.endswith('.xz'):
+            await async_proc('sudo tar -C /usr/local --strip-components=1 '
+                             f'-zxf {filename}')
 
         return True
 
@@ -41,7 +45,7 @@ class Tar(Manager):
             print('Not installing tar-packages because dry run')
             return True
 
-        install_tasks = (pack.install() for pack in cls._missing)
+        install_tasks = (pack[0].install() for pack in cls._missing)
         await asyncio.gather(*install_tasks)
 
         return True
