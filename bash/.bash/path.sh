@@ -9,3 +9,9 @@ add_to_path() {
 add_to_path "$HOME/.local/bin"
 add_to_path "$HOME/.bin"
 add_to_path "$HOME/.cargo/bin"
+
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+
+add_to_path "$GOPATH/bin:$GOROOT/bin"
+
