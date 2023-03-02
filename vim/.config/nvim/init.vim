@@ -10,6 +10,7 @@ let g:CommandTPreferredImplementation='lua'
 set guicursor=n-v-c-sm:block-blinkon500-blinkwait200,i-ci-ve:ver25-blinkon500,r-cr-o:hor20-blinkon500
 
 packadd! command-t
+packadd! markdown-preview.nvim
 packadd! nvim-cmp
 packadd! nvim-dap
 packadd! nvim-lspconfig

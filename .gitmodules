@@ -88,3 +88,6 @@
 [submodule "vim/.vim/pack/vendor/opt/eunuch"]
 	path = vim/.vim/pack/vendor/opt/eunuch
 	url = https://tpope.io/vim/eunuch.git
+[submodule "vim/.vim/pack/vendor/opt/markdown-preview.nvim"]
+	path = vim/.vim/pack/vendor/opt/markdown-preview.nvim
+	url = https://github.com/iamcco/markdown-preview.nvim
