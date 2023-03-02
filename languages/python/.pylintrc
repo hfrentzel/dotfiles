@@ -12,7 +12,8 @@ disable=
     undefined-variable,
     unsubscriptable-object,
     unused-import,
-    unused-variable
+    unused-variable,
+    wildcard-import
 
 [BASIC]
 # allow 1 or 2 length variable names

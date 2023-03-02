@@ -8,3 +8,7 @@ fi
 if [[ -x $(which jira) ]]; then
     source <(jira completion bash)
 fi
+
+if [[ -x $(which gh) ]]; then
+    eval "$(gh completion -s bash)"
+fi
