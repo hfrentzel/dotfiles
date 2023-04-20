@@ -65,6 +65,7 @@ async def main():
     Symlink('DOTROOT/configs/.rgrc', '~/.rgrc')
     Symlink('DOTROOT/git/gitconfig', '~/.gitconfig')
     Symlink('DOTROOT/tmux/.tmux.conf', '~/.tmux.conf')
+    Symlink('DOTROOT/tmux/.tmux', '~/.tmux')
 
     # Additional components
     install_neovim()

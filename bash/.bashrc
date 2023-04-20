@@ -39,6 +39,7 @@ BASE16_SHELL="$HOME/.bash/base16-shell/"
 source ~/.bash/color.sh
 
 [ -n "$TMUX" ] && \
+    tmux show-environment | grep ^USERPROFILE > /dev/null && \
     export $(tmux show-environment | grep ^USERPROFILE) && \
     export $(tmux show-environment | grep ^WSLENV)
 

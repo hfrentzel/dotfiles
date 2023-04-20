@@ -6,6 +6,8 @@ alias l='ls -CF'
 alias la='ls -A'
 alias ll='ls -alF'
 
+alias vi='nvim'
+
 alias activate=". ./venv/bin/activate"
 alias cddot='cd ~/dotfiles'
 alias grep='grep --color=auto'
@@ -22,4 +24,6 @@ alias pyrun="python ~/dotfiles/languages/python/venv_management.py pyrun"
 alias pykill="python ~/dotfiles/languages/python/venv_management.py pykill"
 
 # JIRA
-alias jcurrent="jira issue list -a$(jira me) -s \"In Progress\""
+alias jcurrent="jira issue list -a$(which jira && jira me) -s \"In Progress\""
+
+alias kb='kubectl'

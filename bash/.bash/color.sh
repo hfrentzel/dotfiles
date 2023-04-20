@@ -24,3 +24,5 @@ color() {
         command tmux set -a pane-border-style "bg=#$ws"
     fi
 }
+
+test -f $BASE16_CONFIG && color $(cat $BASE16_CONFIG)
