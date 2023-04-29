@@ -3,7 +3,7 @@ import os
 import subprocess
 
 from setup_tools.installers import async_proc, command
-from setup_tools.managers import all_managers, Apt, Deb, Symlink
+from setup_tools.managers import all_managers, Apt, Deb, Symlink, Tar
 from setup_tools.config import config
 from setup_tools.jobs import run_tasks, add_job, add_dependent_job, successful
 from vim import install_neovim
@@ -13,6 +13,7 @@ from languages.terraform import install_terraform
 from clis.aws import install_aws
 from clis.jira import install_jira
 from clis.github import install_gh
+from clis.fzf import fzf
 
 
 async def init_git():
@@ -63,10 +64,20 @@ async def main():
         url='https://github.com/BurntSushi/ripgrep/releases/download/'
             '{version}/ripgrep_{version}_amd64.deb',
         )
+    Deb(command='bat', version='0.23.0',
+        url='https://github.com/sharkdp/bat/releases/download/'
+            'v{version}/bat-musl_{version}_amd64.deb',
+        )
+    Deb(command='zoxide', version='0.9.0',
+        url='https://github.com/ajeetdsouza/zoxide/releases/download/'
+            'v{version}/zoxide_{version}_amd64.deb',
+        )
+    fzf()
     Symlink('DOTROOT/bash/.bash', '~/.bash')
     Symlink('DOTROOT/bash/.bashrc', '~/.bashrc')
     Symlink('DOTROOT/bash/.inputrc', '~/.inputrc')
     Symlink('DOTROOT/configs/.rgrc', '~/.rgrc')
+    Symlink('DOTROOT/configs/batconfig', '~/.config/bat/config')
     Symlink('DOTROOT/git/gitconfig', '~/.gitconfig')
     Symlink('DOTROOT/tmux/.tmux.conf', '~/.tmux.conf')
     Symlink('DOTROOT/tmux/.tmux', '~/.tmux')

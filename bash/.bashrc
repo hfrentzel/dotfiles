@@ -2,6 +2,7 @@ export HISTSIZE=100000
 
 export EDITOR=vim
 export VISUAL=vim 
+export PAGER='less --mouse --wheel-lines=3 -RF'
 export RIPGREP_CONFIG_PATH=$HOME/.rgrc
 
 # This should normally be set by terminal, I'm setting it manually because
@@ -10,6 +11,7 @@ export RIPGREP_CONFIG_PATH=$HOME/.rgrc
 export COLORTERM=truecolor
 
 export IS_WSL=$(uname -a | grep WSL)
+export GIT_COMPLETION_CHECKOUT_NO_GUESS=1
 
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
     # Color prompt
@@ -18,7 +20,7 @@ else
     PS1='\w\$ '
 fi
 
-export GIT_COMPLETION_CHECKOUT_NO_GUESS=1
+eval "$(zoxide init bash)"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -53,6 +55,7 @@ source $HOME/.bash/aliases.sh
 source $HOME/.bash/path.sh
 source $HOME/.bash/completions.sh
 source $HOME/.bash/utilities.sh
+source $HOME/.config/fzf/fzf.bash
 
 LOCAL_RC=$HOME/.bashrc.local
 test -f $LOCAL_RC && source $LOCAL_RC

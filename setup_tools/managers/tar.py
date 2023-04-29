@@ -10,11 +10,13 @@ from setup_tools.managers.manager import Manager
 
 class Tar(Manager):
     def __init__(self, command: str, url: str, version: str,
+                 includes: str = 'bundle',
                  version_check: Optional[str] = None):
         self.name = command
         self.url = url
         self.version_check = version_check
         self.version = version
+        self.tarball_type = includes
         self._requested.add(self)
 
     async def check_for_installed(self):
@@ -29,9 +31,13 @@ class Tar(Manager):
 
         filename = await fetch_file(self.version, self.url)
         flags = 'zxf' if filename.endswith('gz') else 'xf'
+        if self.tarball_type == 'bin':
+            dest = '/usr/local/bin'
+        elif self.tarball_type == 'bundle':
+            dest = '/usr/local --strip-components=1'
 
-        result = await async_proc('sudo tar -C /usr/local --strip-components=1 '
-                                 f'-{flags} {filename}')
+        result = await async_proc(f'sudo tar -C {dest} '
+                                  f'-{flags} {filename}')
         if result['returncode'] != 0:
             print(f'Tar {self.name} failed to install')
             return True

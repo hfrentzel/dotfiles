@@ -6,7 +6,10 @@ alias l='ls -CF'
 alias la='ls -A'
 alias ll='ls -alF'
 
-alias vi='nvim'
+alias t='tmux'
+alias v='nvim'
+alias kb='kubectl'
+alias tf='terraform'
 
 alias activate=". ./venv/bin/activate"
 alias cddot='cd ~/dotfiles'
@@ -26,4 +29,3 @@ alias pykill="python ~/dotfiles/languages/python/venv_management.py pykill"
 # JIRA
 alias jcurrent="jira issue list -a$(which jira && jira me) -s \"In Progress\""
 
-alias kb='kubectl'
