@@ -8,6 +8,7 @@ from setup_tools.managers.manager import Manager
 
 
 class Pip(Manager):
+    requires = 'python'
     def __init__(self, package_name: str, version: str):
         self.name = package_name
         self.version = version
@@ -39,14 +40,15 @@ class Pip(Manager):
         await asyncio.gather(*tasks)
 
         if len(cls._missing) == 0:
+            print('All pip packages already installed')
             return True
 
         if config.dry_run:
             print('Not installing anything because dry run')
             return True
 
-        print(f'Installing python packages {cls._missing}')
         all_packages = ' '.join(str(p[0]) for p in cls._missing)
+        print(f'Installing python packages {all_packages}')
         await async_proc(f'/usr/bin/python -m pip install {all_packages}')
 
         return True

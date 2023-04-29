@@ -13,15 +13,12 @@
 [submodule "bash/.bash/base16-shell"]
 	path = bash/.bash/base16-shell
 	url = https://github.com/chriskempson/base16-shell.git
-[submodule "vim/.vim/pack/vendor/start/VimKib"]
-	path = vim/.vim/pack/vendor/start/VimKib
-	url = git@github.com:hfrentzel/VimKib.git
 [submodule "vim/.vim/pack/vendor/start/command-t"]
 	path = vim/.vim/pack/vendor/opt/command-t
 	url = https://github.com/wincent/command-t.git
 [submodule "vim/.vim/pack/vendor/start/vim-tmux-navigator"]
 	path = vim/.vim/pack/vendor/opt/vim-tmux-navigator
-	url = git@github.com:christoomey/vim-tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator
 [submodule "vim/.vim/pack/vendor/start/vim-python-pep8-indent"]
 	path = vim/.vim/pack/vendor/start/vim-python-pep8-indent
 	url = https://github.com/vimjas/vim-python-pep8-indent
@@ -72,10 +69,10 @@
 	url = https://github.com/saadparwaiz1/cmp_luasnip
 [submodule "vim/.vim/pack/vendor/opt/nvim-tree.lua"]
 	path = vim/.vim/pack/vendor/opt/nvim-tree.lua
-	url = git@github.com:nvim-tree/nvim-tree.lua
+	url = https://github.com/nvim-tree/nvim-tree.lua
 [submodule "vim/.vim/pack/vendor/opt/telescope.nvim"]
 	path = vim/.vim/pack/vendor/opt/telescope.nvim
-	url = git@github.com:nvim-telescope/telescope.nvim
+	url = https://github.com/nvim-telescope/telescope.nvim
 [submodule "vim/.vim/pack/vendor/opt/nvim-dap"]
 	path = vim/.vim/pack/vendor/opt/nvim-dap
 	url = https://github.com/mfussenegger/nvim-dap.git

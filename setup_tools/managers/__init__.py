@@ -7,7 +7,7 @@ from .deb import Deb
 from .symlink import Symlink
 from .tar import Tar
 
-all_managers: dict[str, Type[Manager]] = {
+all_managers: dict = {
     'apt': Apt,
     'deb': Deb,
     'npm': Npm,

@@ -36,6 +36,16 @@ async def run_tasks():
                 ready_to_run.append(item.item)
                 no_longer_dependent.add(item)
         depends_on_others.difference_update(no_longer_dependent)
+        if len(depends_on_others) != 0 and len(ready_to_run) == 0:
+            if config.dry_run:
+                for dependent in depends_on_others:
+                    print(f'Not running {dependent.item} because {dependent.depends_on} '
+                           'is not installed')
+            else:
+                print('Cannot complete the following dependents, likely '
+                      'because other actions failed')
+                print(depends_on_others)
+            break
         if len(ready_to_run) != 0:
             results = await asyncio.gather(*ready_to_run)
             for i, result in reversed(list(enumerate(results))):

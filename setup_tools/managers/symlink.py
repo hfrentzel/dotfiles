@@ -31,7 +31,11 @@ class Symlink(Manager):
 
     @classmethod
     async def update(cls):
-        if all(cls._add_symlink(sym.src.replace('DOTROOT', config.dotfiles_home),
-                                sym.dest) for sym in cls._requested):
+        success = True
+        for sym in cls._requested:
+            success = cls._add_symlink(
+                    sym.src.replace('DOTROOT', config.dotfiles_home),
+                    sym.dest) and success
+        if success:
             print('All symlinks up to date')
         return True

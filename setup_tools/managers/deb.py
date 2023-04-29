@@ -4,6 +4,7 @@ from typing import Optional
 from setup_tools.config import config
 from setup_tools.installers import async_proc, check_version, \
     fetch_file
+from setup_tools.jobs import successful
 from setup_tools.managers.manager import Manager
 
 
@@ -21,13 +22,20 @@ class Deb(Manager):
                                       self.version_check)
         if version is None or isinstance(version, str):
             self._missing.add((self, version))
+        else:
+            successful.add(self.name)
 
     async def install(self):
 
         print(f'Installing {self.name}...')
         filename = await fetch_file(self.version, self.url)
-        await async_proc(f'sudo apt install {filename}')
+        output = await async_proc(f'sudo apt install {filename}')
+        if output['returncode'] != 0:
+            print(f'Deb {self.name} failed to install')
+            return True
 
+        print(f'Deb {self.name} installed successfully')
+        successful.add(self.name)
         return True
 
     @classmethod

@@ -2,7 +2,7 @@ import asyncio
 import shutil
 from typing import Union, Optional
 from os import path
-from setup_tools.jobs import add_dependent_job, add_job
+from setup_tools.jobs import add_dependent_job, add_job, successful
 from setup_tools.config import config
 
 
@@ -11,16 +11,27 @@ def vprint(msg: str):
         print(msg)
 
 
-def command(cmd, depends_on=None, run_on_dry=False):
+def command(cmd, depends_on=None, run_on_dry=False, name=None, cwd=None):
+    async def job():
+        result = await async_proc(cmd, cwd=cwd)
+        if result['returncode'] != 0:
+            print(f'Command {name} failed')
+            print(result['stderr'])
+        elif name is not None:
+            successful.add(name)
+        return True
+
     if config.dry_run and not run_on_dry:
         return
     if depends_on is not None:
-        add_dependent_job(async_proc(cmd), depends_on)
+        add_dependent_job(job(), depends_on)
     else:
-        add_job(async_proc(cmd))
+        add_job(job())
 
 
 async def async_proc(cmd, stdin=None, cwd=None):
+    if isinstance(stdin, str):
+        stdin = stdin.encode()
     process = await asyncio.create_subprocess_shell(
         cmd,
         cwd=cwd,
@@ -46,9 +57,6 @@ async def add_apt_repo(repo_name):
     print(f'Adding {repo_name}')
     await async_proc(f'sudo add-apt-repository --yes {repo_name}')
     print(f'{repo_name} successfully added')
-
-    print('Running apt update')
-    await async_proc('sudo apt update')
 
 
 async def check_version(cmd, desired_version, check_cmd=None) -> \

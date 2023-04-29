@@ -8,7 +8,7 @@ def install_python():
 
     command('sudo update-alternatives --install '
             '/usr/bin/python python /usr/bin/python3.9 2',
-            depends_on='python3.9')
+            depends_on='python3.9', name='python')
 
 
 def python_editing():

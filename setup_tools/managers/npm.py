@@ -8,6 +8,7 @@ from setup_tools.managers.manager import Manager
 
 
 class Npm(Manager):
+    requires = 'node'
     def __init__(self, package_name: str, version: str):
         if not config.check:
             self.name = package_name
@@ -32,7 +33,7 @@ class Npm(Manager):
 
     @classmethod
     async def update(cls):
-        install_list = await async_proc('npm --location=global -j list')
+        install_list = await async_proc('npm -g -j list')
         better = json.loads(install_list['stdout'])['dependencies']
         packages = {p[0]: p[1]['version'] for p in better.items()}
 
@@ -47,8 +48,8 @@ class Npm(Manager):
             print('Not installing any node packages because dry run')
             return True
 
-        print(f'Installing npm packages {cls._missing}')
         all_packages = ' '.join(str(p[0]) for p in cls._missing)
-        await async_proc(f'npm install -g {all_packages}')
+        print(f'Installing npm packages {all_packages}')
+        await async_proc(f'sudo npm install -g {all_packages}')
 
         return True
