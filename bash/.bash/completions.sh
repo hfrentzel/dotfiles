@@ -13,5 +13,5 @@ if [[ -x $(which gh) ]]; then
     eval "$(gh completion -s bash)"
 fi
 
-command -v kubectl && source <(kubectl completion bash) \
+command -v kubectl &> /dev/null && source <(kubectl completion bash) \
     && complete -o default -F __start_kubectl kb

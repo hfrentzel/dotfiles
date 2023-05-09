@@ -3,9 +3,10 @@ import os
 import subprocess
 
 from setup_tools.installers import async_proc, command
-from setup_tools.managers import all_managers, Apt, Deb, Symlink, Tar
+from setup_tools.managers import all_managers, Apt, Symlink
 from setup_tools.config import config
 from setup_tools.jobs import run_tasks, add_job, add_dependent_job, successful
+from setup_tools.github import github
 from vim import install_neovim
 from languages.python import install_python, python_editing
 from languages.javascript import javascript_editing, install_node
@@ -55,23 +56,10 @@ async def main():
     # Base tools
     Apt('dos2unix')
     Apt('jq')
-    Deb(command='delta', version='0.15.1',
-        url='https://github.com/dandavison/delta/releases/download/'
-            '{version}/git-delta-musl_{version}_amd64.deb',
-        version_check="delta --version | head -1 | grep -o '[0-9\\.]\\+' | tail -1"
-        )
-    Deb(command='rg', version='13.0.0',
-        url='https://github.com/BurntSushi/ripgrep/releases/download/'
-            '{version}/ripgrep_{version}_amd64.deb',
-        )
-    Deb(command='bat', version='0.23.0',
-        url='https://github.com/sharkdp/bat/releases/download/'
-            'v{version}/bat-musl_{version}_amd64.deb',
-        )
-    Deb(command='zoxide', version='0.9.0',
-        url='https://github.com/ajeetdsouza/zoxide/releases/download/'
-            'v{version}/zoxide_{version}_amd64.deb',
-        )
+    github('dandavison/delta', '0.15.1')
+    github('BurntSushi/ripgrep', '13.0.0', name='rg')
+    github('sharkdp/bat', 'v0.23.0')
+    github('ajeetdsouza/zoxide', 'v0.9.0')
     fzf()
     Symlink('DOTROOT/bash/.bash', '~/.bash')
     Symlink('DOTROOT/bash/.bashrc', '~/.bashrc')

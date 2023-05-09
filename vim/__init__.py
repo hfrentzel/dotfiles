@@ -1,6 +1,7 @@
-from setup_tools.managers import Npm, Deb, Symlink, Pip
+from setup_tools.managers import Npm, Symlink, Pip
 from setup_tools.installers import command
 from setup_tools.config import config
+from setup_tools.github import github
 
 
 def install_neovim():
@@ -8,10 +9,7 @@ def install_neovim():
     Symlink('DOTROOT/vim/.vim', '~/.vim')
     Symlink('DOTROOT/vim/.config/nvim/init.vim', '~/.config/nvim/init.vim')
 
-    Deb(command="nvim",
-        url="https://github.com/neovim/neovim/releases/download/v{version}/nvim-linux64.deb",
-        version="0.8.2"
-        )
+    github('neovim/neovim', 'v0.8.2', name='nvim')
     Pip('pynvim', '0.4.3')
     Npm('vim-language-server', '2.3.0')
 
