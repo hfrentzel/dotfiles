@@ -51,11 +51,11 @@ test -f ~/variables && source $HOME/.bash/var_setup.sh
 test -f ~/workspaces && source $HOME/.bash/workspace_setup.sh
 test -f ~/.secrets && source ~/.secrets
 
-source $HOME/.bash/aliases.sh
 source $HOME/.bash/path.sh
 source $HOME/.bash/completions.sh
 source $HOME/.bash/utilities.sh
 source $HOME/.config/fzf/fzf.bash
+source $HOME/.bash/aliases.sh
 
 LOCAL_RC=$HOME/.bashrc.local
 test -f $LOCAL_RC && source $LOCAL_RC

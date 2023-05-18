@@ -69,6 +69,8 @@ async def main():
     Symlink('DOTROOT/git/gitconfig', '~/.gitconfig')
     Symlink('DOTROOT/tmux/.tmux.conf', '~/.tmux.conf')
     Symlink('DOTROOT/tmux/.tmux', '~/.tmux')
+    Symlink('DOTROOT/clis/completion/kubectl',
+            '~/.local/share/bash-completion/completions/kubectl')
 
     # Additional components
     install_neovim()
