@@ -22,6 +22,7 @@
     mylast = log -1 --stat --no-merges --first-parent
     last = log -1 --stat
     showlast = !git show $(git log -1 --pretty=format:"%H")
+    view = !git diff $1^
 [blame]
     date = short
 [color "blame"]

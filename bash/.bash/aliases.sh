@@ -31,6 +31,7 @@ compalias() {
             compfile="$dir/$compfile"
 
             if [[ -f "$compfile" ]]; then
+                mkdir -p "$HOME/.local/share/bash-completion/completions/"
                 cat <<EOF > "$HOME/.local/share/bash-completion/completions/$alias"
 main_command_completion=\$(complete -p $cmd)
 
@@ -59,7 +60,7 @@ compalias b bat
 alias t='tmux'
 compalias v nvim
 compalias kb kubectl
-alias tf='terraform'
+compalias tf 'terraform'
 
 alias activate=". ./venv/bin/activate"
 alias cddot='cd ~/dotfiles'
