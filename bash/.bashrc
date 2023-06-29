@@ -1,3 +1,5 @@
+[ -z "PS1" ] && return
+
 export HISTSIZE=100000
 
 export EDITOR=vim
@@ -19,8 +21,6 @@ if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
 else
     PS1='\w\$ '
 fi
-
-eval "$(zoxide init bash)"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -56,6 +56,9 @@ source $HOME/.bash/completions.sh
 source $HOME/.bash/utilities.sh
 source $HOME/.config/fzf/fzf.bash
 source $HOME/.bash/aliases.sh
+
+eval "$(zoxide init bash)"
+export _ZO_FZF_OPTS='--height 40% --layout=reverse'
 
 LOCAL_RC=$HOME/.bashrc.local
 test -f $LOCAL_RC && source $LOCAL_RC

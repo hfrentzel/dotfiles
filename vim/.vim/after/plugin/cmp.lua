@@ -47,13 +47,14 @@ cmp.setup {
             end
         end, {'i', 's'}),
 
-        ['<Enter>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.confirm({select = true})
-            else
-                fallback()
-            end
-        end, {'i', 's'})
+        -- Leaving for now, reevaluate when I properly use snippets
+        -- ['<Enter>'] = cmp.mapping(function(fallback)
+        --     if cmp.visible() then
+        --         cmp.confirm({select = true})
+        --     else
+        --         fallback()
+        --     end
+        -- end, {'i', 's'})
     },
 
     sources = cmp.config.sources({
