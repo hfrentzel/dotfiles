@@ -8,6 +8,7 @@ if !has('nvim')
 
     set ttyfast
     set ttymouse=xterm2
+    set viminfofile=~/.local/state/vim/viminfo
 endif
 
 if has('mouse')

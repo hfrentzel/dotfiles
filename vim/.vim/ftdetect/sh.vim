@@ -1,1 +1,1 @@
-autocmd BufNewfile,BufRead .bashrc.local set filetype=sh
+autocmd BufNewfile,BufRead bashrc.local set filetype=sh

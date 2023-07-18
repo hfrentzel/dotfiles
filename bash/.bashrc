@@ -5,7 +5,7 @@ export HISTSIZE=100000
 export EDITOR=vim
 export VISUAL=vim 
 export PAGER='less --mouse --wheel-lines=3 -RF'
-export RIPGREP_CONFIG_PATH=$HOME/.rgrc
+export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/config
 
 # This should normally be set by terminal, I'm setting it manually because
 # it's not. May need to change this if I ever start using terminals that
@@ -56,9 +56,10 @@ source $HOME/.bash/completions.sh
 source $HOME/.bash/utilities.sh
 source $HOME/.config/fzf/fzf.bash
 source $HOME/.bash/aliases.sh
+source $HOME/.bash/env.sh
 
 eval "$(zoxide init bash)"
 export _ZO_FZF_OPTS='--height 40% --layout=reverse'
 
-LOCAL_RC=$HOME/.bashrc.local
+LOCAL_RC=$HOME/.config/bash/bashrc.local
 test -f $LOCAL_RC && source $LOCAL_RC
