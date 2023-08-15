@@ -2,12 +2,10 @@ import argparse
 import asyncio
 import os
 
-from . import dir
 from . import exe
 from . import sym
 from .conf import conf
 
-Dir = dir.Dir
 Exe = exe.Exe
 Sym = sym.Sym
 
@@ -16,23 +14,18 @@ def show_desired():
     for t in conf.types:
         print(t.desired_printout(), end="")
 
-async def get_current_status():
-    await asyncio.gather(*[t.get_statuses() for t in conf.types])
+async def get_current_status(show_all):
+    sym.get_statuses()
+    await exe.get_statuses()
 
-    if not conf.args.run and not conf.args.list_jobs:
+    if not conf.args.run:
         for t in conf.types:
-            print(t.status_printout(conf.args.show_all), end="")
+            print(t.status_printout(show_all), end="")
         return
 
     complete, jobs = sym.create_jobs()
-    comp2, job2 = dir.create_jobs()
-    complete.extend(comp2)
-    jobs = {**jobs, **job2}
-
-    if conf.args.list_jobs:
-        print([j for j in jobs])
-        return
-
+    print(complete)
+    print(jobs)
     if len(jobs) == 0:
         return
 
@@ -46,8 +39,7 @@ async def get_current_status():
 def run():
     parser = argparse.ArgumentParser( prog = 'EnvSetup')
     parser.add_argument('--show-all', action='store_true')
-    parser.add_argument('--desired', action='store_true')
-    parser.add_argument('--list-jobs', action='store_true')
+    parser.add_argument('--show-desired', action='store_true')
     parser.add_argument('--run', action='store_true')
     parser.add_argument('--symlinks-only', action='store_true')
 
@@ -56,10 +48,10 @@ def run():
 
     conf.types = [sym]
     if not conf.args.symlinks_only:
-        conf.types.extend([dir, exe])
+        conf.types.append(exe)
 
-    if conf.args.desired:
+    if conf.args.show_desired:
         show_desired()
         return
 
-    asyncio.run(get_current_status())
+    asyncio.run(get_current_status(conf.args.show_all))

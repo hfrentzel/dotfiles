@@ -47,7 +47,7 @@ def desired_printout():
     return out
 
 
-async def get_statuses():
+def get_statuses():
     tasks = []
     for sym in desired_syms:
         check_results.append(check_job(sym))
