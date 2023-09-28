@@ -27,6 +27,7 @@ let base16colorspace=256
 let mapleader = ","
 
 let g:slime_no_mappings = 1
+let g:slime_paste_file = tempname()
 xmap <leader><enter> <Plug>SlimeRegionSend
 nmap <leader><enter> <Plug>SlimeParagraphSend
 let g:slime_target = 'tmux'

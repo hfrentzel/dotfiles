@@ -1,2 +1,4 @@
 # Enable mouse scrolling
 --pager='less --mouse --wheel-lines=3 -RF'
+
+--map-syntax='*bashrc*:Bourne Again Shell (bash)'
