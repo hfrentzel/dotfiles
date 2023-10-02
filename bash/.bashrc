@@ -17,7 +17,10 @@ export GIT_COMPLETION_CHECKOUT_NO_GUESS=1
 
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
     # Color prompt
-    PS1='\[\033[01;96m\]$(__git_ps1 "[%s]") \[\033[01;34m\]\w\[\033[00m\]$ '
+    if [[ -n "$SSH_TTY" ]]; then
+        USER_NAME="\u@\h:"
+    fi
+    PS1='\[\033[01;96m\]$(__git_ps1 "[%s] ")\[\033[01;32m\]'$USER_NAME'\[\033[01;34m\]\w\[\033[00m\]$ '
 else
     PS1='\w\$ '
 fi
