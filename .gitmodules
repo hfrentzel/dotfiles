@@ -1,90 +1,90 @@
 [submodule "vim/.vim/pack/vendor/start/vim-surround"]
-	path = vim/.vim/pack/vendor/opt/vim-surround
+	path = vim/nvim/pack/vendor/opt/vim-surround
 	url = https://tpope.io/vim/surround.git
 [submodule "vim/.vim/pack/vendor/start/CamelCaseMotion"]
-	path = vim/.vim/pack/vendor/opt/CamelCaseMotion
+	path = vim/nvim/pack/vendor/opt/CamelCaseMotion
 	url = https://github.com/bkad/CamelCaseMotion
 [submodule "vim/.vim/pack/vendor/start/vim-visual-multi"]
-	path = vim/.vim/pack/vendor/opt/vim-visual-multi
+	path = vim/nvim/pack/vendor/opt/vim-visual-multi
 	url = https://github.com/mg979/vim-visual-multi
 [submodule "vim/.vim/pack/vendor/start/tcomment_vim"]
-	path = vim/.vim/pack/vendor/start/tcomment_vim
+	path = vim/nvim/pack/vendor/start/tcomment_vim
 	url = https://github.com/tomtom/tcomment_vim
 [submodule "bash/.bash/base16-shell"]
-	path = bash/.bash/base16-shell
+	path = bash/plugins/base16-shell
 	url = https://github.com/chriskempson/base16-shell.git
 [submodule "vim/.vim/pack/vendor/start/command-t"]
-	path = vim/.vim/pack/vendor/opt/command-t
+	path = vim/nvim/pack/vendor/opt/command-t
 	url = https://github.com/wincent/command-t.git
 [submodule "vim/.vim/pack/vendor/start/vim-tmux-navigator"]
-	path = vim/.vim/pack/vendor/opt/vim-tmux-navigator
+	path = vim/nvim/pack/vendor/opt/vim-tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator
 [submodule "vim/.vim/pack/vendor/start/vim-python-pep8-indent"]
-	path = vim/.vim/pack/vendor/start/vim-python-pep8-indent
+	path = vim/nvim/pack/vendor/start/vim-python-pep8-indent
 	url = https://github.com/vimjas/vim-python-pep8-indent
 [submodule "vim/.vim/pack/vendor/start/pinnacle"]
-	path = vim/.vim/pack/vendor/start/pinnacle
+	path = vim/nvim/pack/vendor/start/pinnacle
 	url = https://github.com/wincent/pinnacle.git
 [submodule "vim/.vim/pack/vendor/start/nvim-lspconfig"]
-	path = vim/.vim/pack/vendor/opt/nvim-lspconfig
+	path = vim/nvim/pack/vendor/opt/nvim-lspconfig
 	url = https://github.com/neovim/nvim-lspconfig
 [submodule "vim/.vim/pack/vendor/opt/base16-vim"]
-	path = vim/.vim/pack/vendor/opt/base16-vim
+	path = vim/nvim/pack/vendor/opt/base16-vim
 	url = https://github.com/chriskempson/base16-vim.git
 [submodule "vim/.vim/pack/vendor/opt/nvim-cmp"]
-	path = vim/.vim/pack/vendor/opt/nvim-cmp
+	path = vim/nvim/pack/vendor/opt/nvim-cmp
 	url = https://github.com/hrsh7th/nvim-cmp
 [submodule "vim/.vim/pack/vendor/opt/cmp-nvim-lsp"]
-	path = vim/.vim/pack/vendor/opt/cmp-nvim-lsp
+	path = vim/nvim/pack/vendor/opt/cmp-nvim-lsp
 	url = https://github.com/hrsh7th/cmp-nvim-lsp
 [submodule "vim/.vim/pack/vendor/opt/cmp-path"]
-	path = vim/.vim/pack/vendor/opt/cmp-path
+	path = vim/nvim/pack/vendor/opt/cmp-path
 	url = https://github.com/hrsh7th/cmp-path
 [submodule "vim/.vim/pack/vendor/opt/cmp-buffer"]
-	path = vim/.vim/pack/vendor/opt/cmp-buffer
+	path = vim/nvim/pack/vendor/opt/cmp-buffer
 	url = https://github.com/hrsh7th/cmp-buffer
 [submodule "vim/.vim/pack/vendor/opt/cmp-nvim-lua"]
-	path = vim/.vim/pack/vendor/opt/cmp-nvim-lua
+	path = vim/nvim/pack/vendor/opt/cmp-nvim-lua
 	url = https://github.com/hrsh7th/cmp-nvim-lua
 [submodule "vim/.vim/pack/vendor/opt/fugitive"]
-	path = vim/.vim/pack/vendor/opt/fugitive
+	path = vim/nvim/pack/vendor/opt/fugitive
 	url = https://tpope.io/vim/fugitive.git
 [submodule "vim/.vim/pack/vendor/opt/gitsigns.nvim"]
-	path = vim/.vim/pack/vendor/opt/gitsigns.nvim
+	path = vim/nvim/pack/vendor/opt/gitsigns.nvim
 	url = https://github.com/lewis6991/gitsigns.nvim
 [submodule "vim/.vim/pack/vendor/opt/nvim-treesitter"]
-	path = vim/.vim/pack/vendor/opt/nvim-treesitter
+	path = vim/nvim/pack/vendor/opt/nvim-treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter
 [submodule "vim/.vim/pack/vendor/opt/playground"]
-	path = vim/.vim/pack/vendor/opt/playground
+	path = vim/nvim/pack/vendor/opt/playground
 	url = https://github.com/nvim-treesitter/playground
 [submodule "vim/.vim/pack/vendor/opt/plenary.nvim"]
-	path = vim/.vim/pack/vendor/opt/plenary.nvim
+	path = vim/nvim/pack/vendor/opt/plenary.nvim
 	url = https://github.com/nvim-lua/plenary.nvim
 [submodule "vim/.vim/pack/vendor/opt/LuaSnip"]
-	path = vim/.vim/pack/vendor/opt/LuaSnip
+	path = vim/nvim/pack/vendor/opt/LuaSnip
 	url = https://github.com/L3MON4D3/LuaSnip
 [submodule "vim/.vim/pack/vendor/opt/cmp_luasnip"]
-	path = vim/.vim/pack/vendor/opt/cmp_luasnip
+	path = vim/nvim/pack/vendor/opt/cmp_luasnip
 	url = https://github.com/saadparwaiz1/cmp_luasnip
 [submodule "vim/.vim/pack/vendor/opt/nvim-tree.lua"]
-	path = vim/.vim/pack/vendor/opt/nvim-tree.lua
+	path = vim/nvim/pack/vendor/opt/nvim-tree.lua
 	url = https://github.com/nvim-tree/nvim-tree.lua
 [submodule "vim/.vim/pack/vendor/opt/telescope.nvim"]
-	path = vim/.vim/pack/vendor/opt/telescope.nvim
+	path = vim/nvim/pack/vendor/opt/telescope.nvim
 	url = https://github.com/nvim-telescope/telescope.nvim
 [submodule "vim/.vim/pack/vendor/opt/nvim-dap"]
-	path = vim/.vim/pack/vendor/opt/nvim-dap
+	path = vim/nvim/pack/vendor/opt/nvim-dap
 	url = https://github.com/mfussenegger/nvim-dap.git
 [submodule "vim/.vim/pack/vendor/opt/vim-slime"]
-	path = vim/.vim/pack/vendor/opt/vim-slime
+	path = vim/nvim/pack/vendor/opt/vim-slime
 	url = https://github.com/jpalardy/vim-slime.git
 [submodule "vim/.vim/pack/vendor/opt/tmux.nvim"]
-	path = vim/.vim/pack/vendor/opt/tmux.nvim
+	path = vim/nvim/pack/vendor/opt/tmux.nvim
 	url = https://github.com/aserowy/tmux.nvim
 [submodule "vim/.vim/pack/vendor/opt/eunuch"]
-	path = vim/.vim/pack/vendor/opt/eunuch
+	path = vim/nvim/pack/vendor/opt/eunuch
 	url = https://tpope.io/vim/eunuch.git
 [submodule "vim/.vim/pack/vendor/opt/markdown-preview.nvim"]
-	path = vim/.vim/pack/vendor/opt/markdown-preview.nvim
+	path = vim/nvim/pack/vendor/opt/markdown-preview.nvim
 	url = https://github.com/iamcco/markdown-preview.nvim

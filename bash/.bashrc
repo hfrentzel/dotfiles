@@ -37,11 +37,11 @@ if ! shopt -oq posix; then
 fi
 
 # Base16 Shell
-BASE16_SHELL="$HOME/.bash/base16-shell/"
+BASE16_SHELL="$HOME/.config/bash/plugins/base16-shell/"
 [ -n "$PS1" ] && \
     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
         eval "$("$BASE16_SHELL/profile_helper.sh")"
-source ~/.bash/color.sh
+source ~/.config/bash/plugins/color.sh
 
 [ -n "$TMUX" ] && \
     tmux show-environment | grep ^USERPROFILE > /dev/null && \
@@ -50,16 +50,16 @@ source ~/.bash/color.sh
 
 test -f ~/dotfiles/git/git_stage.sh && source $HOME/dotfiles/git/git_stage.sh
     
-test -f ~/variables && source $HOME/.bash/var_setup.sh
-test -f ~/workspaces && source $HOME/.bash/workspace_setup.sh
+test -f ~/variables && source $HOME/.config/bash/plugins/var_setup.sh
+test -f ~/workspaces && source $HOME/.config/bash/plugins/workspace_setup.sh
 test -f ~/.secrets && source ~/.secrets
 
-source $HOME/.bash/path.sh
-source $HOME/.bash/completions.sh
-source $HOME/.bash/utilities.sh
+source $HOME/.config/bash/plugins/path.sh
+source $HOME/.config/bash/plugins/completions.sh
+source $HOME/.config/bash/plugins/utilities.sh
 source $HOME/.config/fzf/fzf.bash
-source $HOME/.bash/aliases.sh
-source $HOME/.bash/env.sh
+source $HOME/.config/bash/plugins/aliases.sh
+source $HOME/.config/bash/plugins/env.sh
 
 eval "$(zoxide init bash)"
 export _ZO_FZF_OPTS='--height 40% --layout=reverse'

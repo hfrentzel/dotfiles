@@ -1,4 +1,4 @@
-let g:base16_shell_path=expand('~/.bash/base16-shell/scripts')
+let g:base16_shell_path=expand('~/.config/bash/plugins/base16-shell/scripts')
 
 function s:setColor()
     if !has('termguicolors')
@@ -13,7 +13,7 @@ function s:setColor()
 
     let s:scheme = readfile(s:color_file, '', 1)
 
-    if !filereadable(expand('~/.vim/pack/vendor/opt/base16-vim/colors/base16-' . s:scheme[0] . '.vim'))
+    if !filereadable(expand('~/.config/nvim/pack/vendor/opt/base16-vim/colors/base16-' . s:scheme[0] . '.vim'))
         echoerr 'Bad scheme ' . s:scheme[0]
     endif
 

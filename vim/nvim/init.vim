@@ -1,4 +1,3 @@
-set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 let g:python3_host_prog = trim(system('which python'))
 let g:loaded_netrw       = 1
