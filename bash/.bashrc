@@ -2,8 +2,8 @@
 
 export HISTSIZE=100000
 
-export EDITOR=vim
-export VISUAL=vim 
+export EDITOR=nvim
+export VISUAL=nvim 
 export PAGER='less --mouse --wheel-lines=3 -RF'
 export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/config
 
