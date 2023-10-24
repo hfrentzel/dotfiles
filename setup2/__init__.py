@@ -1,28 +1,65 @@
 import argparse
 import asyncio
+import os
 
-from .exe import Exe, exe_desired_printout, exe_status_printout
-from .sym import Sym, sym_desired_printout, sym_status_printout
+from . import dir
+from . import exe
+from . import sym
+from .conf import conf
 
-def show_desired(symlinks_only):
-    print(sym_desired_printout(), end="")
-    if symlinks_only:
+Dir = dir.Dir
+Exe = exe.Exe
+Sym = sym.Sym
+
+
+def show_desired():
+    for t in conf.types:
+        print(t.desired_printout(), end="")
+
+async def get_current_status():
+    await asyncio.gather(*[t.get_statuses() for t in conf.types])
+
+    if not conf.args.run and not conf.args.list_jobs:
+        for t in conf.types:
+            print(t.status_printout(conf.args.show_all), end="")
         return
-    print(exe_desired_printout(), end="")
 
-async def show_current_status(show_all):
-    print(sym_status_printout(show_all), end="")
-    print(await exe_status_printout(show_all), end="")
+    complete, jobs = sym.create_jobs()
+    comp2, job2 = dir.create_jobs()
+    complete.extend(comp2)
+    jobs = {**jobs, **job2}
+
+    if conf.args.list_jobs:
+        print([j for j in jobs])
+        return
+
+    if len(jobs) == 0:
+        return
+
+    runners = []
+    for job in jobs.values():
+        runners.append(job.run())
+    results = await asyncio.gather(*runners)
+    print(results)
+
 
 def run():
     parser = argparse.ArgumentParser( prog = 'EnvSetup')
     parser.add_argument('--show-all', action='store_true')
-    parser.add_argument('--show-desired', action='store_true')
-    parser.add_argument('--status', action='store_true')
+    parser.add_argument('--desired', action='store_true')
+    parser.add_argument('--list-jobs', action='store_true')
+    parser.add_argument('--run', action='store_true')
     parser.add_argument('--symlinks-only', action='store_true')
-    args = parser.parse_args()
 
-    if args.show_desired:
-        show_desired(args.symlinks_only)
-    elif args.status:
-        asyncio.run(show_current_status(args.show_all))
+    conf.args = parser.parse_args()
+    conf.dotfiles_home = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    conf.types = [sym]
+    if not conf.args.symlinks_only:
+        conf.types.extend([dir, exe])
+
+    if conf.args.desired:
+        show_desired()
+        return
+
+    asyncio.run(get_current_status())

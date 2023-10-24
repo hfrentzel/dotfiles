@@ -1,5 +1,5 @@
 #! /usr/bin/python
-from setup2 import run, Exe, Sym
+from setup2 import run, Exe, Sym, Dir
 
 Exe('jq')
 Exe('dos2unix')
@@ -17,5 +17,6 @@ Sym('batconfig', 'DOT/configs/batconfig', '~/.config/bat/config')
 Sym('startup.py', 'DOT/languages/python/gen_startup.py', '~/.config/python/startup.py')
 Sym('gitconfig', 'DOT/git/gitconfig', '~/.config/git/config')
 Sym('nvimconfig', 'DOT/vim/nvim', '~/.config/nvim')
+Dir('python_data', '~/.local/share/python')
 
 run()
