@@ -17,6 +17,9 @@ Sym('batconfig', 'DOT/configs/batconfig', '~/.config/bat/config')
 Sym('startup.py', 'DOT/languages/python/gen_startup.py', '~/.config/python/startup.py')
 Sym('gitconfig', 'DOT/git/gitconfig', '~/.config/git/config')
 Sym('nvimconfig', 'DOT/vim/nvim', '~/.config/nvim')
+
 Dir('python_data', '~/.local/share/python')
+Dir('less_data', '~/.local/share/less')
+Dir('bash_data', '~/.local/share/bash')
 
 run()
