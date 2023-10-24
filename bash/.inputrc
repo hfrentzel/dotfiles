@@ -17,6 +17,6 @@ TAB: menu-complete
 "\eU": upcase-word
 "\eu": "\e-1\eU"
 
-"\C-g": " **\C-i"
+"\C-o": " **\C-i"
 
 "\e.": yank-last-arg

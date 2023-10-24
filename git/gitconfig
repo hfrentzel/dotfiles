@@ -8,6 +8,9 @@
     st = status -sb
     cm = commit -m
 
+    # Go to main/master branch, whatever the name is
+    home = !git checkout $(git remote show origin | sed -n '/HEAD branch/s/.*: //p')
+
     # Stage all changed files
     A = add -A
 
@@ -17,7 +20,7 @@
     # Get list of changes on working branch
     changes = diff HEAD --stat
 
-    ll = log --oneline --first-parent
+    ll = log --oneline
     myll = log --oneline --first-parent --no-merges
     mylast = log -1 --stat --no-merges --first-parent
     last = log -1 --stat
