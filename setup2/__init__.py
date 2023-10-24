@@ -24,10 +24,12 @@ async def get_current_status():
             print(t.status_printout(conf.args.show_all), end='')
         return
 
-    complete, jobs = sym.create_jobs()
-    comp2, job2 = dir.create_jobs()
-    complete.extend(comp2)
-    jobs = {**jobs, **job2}
+    complete = []
+    jobs = {}
+    for t in conf.types:
+        c, j = t.create_jobs()
+        complete.extend(c)
+        jobs.update(j)
 
     if conf.args.list_jobs:
         [print(j.description) for j in jobs.values()]

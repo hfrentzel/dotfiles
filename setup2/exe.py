@@ -3,6 +3,7 @@ import re
 import shutil
 from operator import itemgetter
 
+from .apt import Apt
 from .jobs import async_proc
 from .output import print_grid
 
@@ -11,12 +12,18 @@ VERSION_REGEX = re.compile(r'\d+\.\d+\.\d+', re.M)
 desired_exes =[]
 check_results = []
 
-def Exe(command_name, version=None):
+"""
+Installers:
+Apt, Deb, Pip, Npm, Tar
+#TODO validate elements of installers list are valid
+"""
+def Exe(command_name, installers=None, version=None):
     desired_exes.append(
         {
             "name": command_name,
             "version": version or "ANY",
-            "command_name": command_name
+            "command_name": command_name,
+            "installers": installers
         })
 
 def ver_greater_than(current, target):
@@ -69,4 +76,36 @@ def status_printout(show_all):
         lines.append((exe['name'], exe['version'], exe['curr_ver']))
     return print_grid(('COMMAND', 'DESIRED', 'CURRENT'), lines)
 
-    return '\nCOMMAND       DESIRED       CURRENT\n' + out if out != '' else ''
+def xxx():
+    pass
+
+JOB_BUILDERS = {
+    'Apt': Apt.apt_builder,
+    'Deb': xxx,
+    'Pip': xxx,
+    'Tar': xxx,
+    'Npm': xxx,
+}
+
+def create_jobs():
+    pass
+    """
+    Determine which installers are available
+        - Apt and Deb require root permissions
+        - Pip and Npm require those exes
+        - Tar requires gh for github discovery
+    """
+    no_action_needed = []
+    jobs = {}
+    for exe in check_results:
+        if exe['complete']:
+            no_action_needed.append(exe['name'])
+            continue
+        for t in exe['installers']:
+            settled = JOB_BUILDERS[t](exe)
+            if settled:
+                break
+    if len(Apt.all_apts) != 0:
+        jobs['apt_install'] = Apt.apt_job()
+
+    return no_action_needed, jobs
