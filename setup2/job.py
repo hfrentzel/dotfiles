@@ -1,19 +1,21 @@
 from dataclasses import dataclass
+from typing import List
 
 @dataclass
 class Job:
-    names: list[str]
+    names: List[str]
     job: callable
-    depends_on: list[str] = None
-    children: list['Job'] = None
+    description: str
+    depends_on: List[str] = None
+    children: List['Job'] = None
 
     async def run(self):
         try:
             result = await self.job()
-            return result
         except Exception as e:
             print(e)
-            return False
+            result = False
+        return result
 
     def __repr__(self):
         return f"{self.names}, {self.job}"

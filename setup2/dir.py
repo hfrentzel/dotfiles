@@ -1,6 +1,7 @@
 import os
 from operator import itemgetter
 from .job import Job
+from .output import print_grid
 
 desired_dirs = []
 check_results = []
@@ -35,12 +36,10 @@ def check_job(dir):
         }
 
 def desired_printout():
-    out = ""
-    out += 'SUB-DIRECTORIES\n'
+    lines = []
     for dir in sorted(desired_dirs, key=itemgetter('path')):
-        out += f'{dir["path"]}\n'
-
-    return out
+        lines.append((dir['path'],))
+    return print_grid(('SUB-DIRECTORIES',), lines)
 
 async def get_statuses():
     tasks = []
@@ -48,13 +47,12 @@ async def get_statuses():
         check_results.append(check_job(dir))
 
 def status_printout(show_all):
-    out = ""
+    lines = []
     for dir in sorted(check_results, key=itemgetter('path')):
         if not show_all and dir['complete']:
             continue
-        out += f"{dir['path']: <18} {dir['status']: <13}\n"
-
-    return 'SUB-DIRECTORIES    STATUS\n' + out if out != "" else ""
+        lines.append((dir['path'], dir['status']))
+    return print_grid(('SUB-DIRECTORIES', 'STATUS'), lines)
 
 def create_jobs():
     no_action_needed = []
@@ -68,6 +66,7 @@ def create_jobs():
         else:
             jobs[dir['name']] = Job(
                 names=[dir['name']],
+                description=f'Create directory at {dir["path"]}',
                 job=create_directory(dir['path'])
             )
     

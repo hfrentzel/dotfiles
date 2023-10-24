@@ -2,6 +2,7 @@ import os
 from operator import itemgetter
 from .job import Job
 from .conf import conf
+from .output import print_grid
 
 
 desired_syms = []
@@ -39,12 +40,10 @@ def check_job(sym):
     }
 
 def desired_printout():
-    out = ""
-    out += 'SYMLINKED FILES\n'
+    lines = []
     for sym in sorted(desired_syms, key=itemgetter('target')):
-        out += f'{sym["target"]}\n'
-
-    return out
+        lines.append((sym['target'],))
+    return print_grid(('SYMLINKED FILES',), lines)
 
 
 async def get_statuses():
@@ -54,13 +53,12 @@ async def get_statuses():
 
 
 def status_printout(show_all):
-    out = ""
+    lines = []
     for sym in sorted(check_results, key=itemgetter('name')):
         if not show_all and sym['complete']:
             continue
-        out += f"{sym['name']: <13} {sym['status']: <13}\n"
-
-    return 'SYMLINK       STATUS\n' + out if out != "" else ""
+        lines.append((sym['name'], sym['status']))
+    return print_grid(('SYMLINK', 'STATUS'), lines)
 
 def create_jobs():
     no_action_needed = []
@@ -74,6 +72,7 @@ def create_jobs():
         else:
             jobs[sym['name']] = Job(
                 names=[sym['name']],
+                description=f'Generate symlink at {sym["target"]}',
                 job=create_symlink(sym['source'], sym['target'])
             )
     

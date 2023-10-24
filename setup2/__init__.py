@@ -14,14 +14,14 @@ Sym = sym.Sym
 
 def show_desired():
     for t in conf.types:
-        print(t.desired_printout(), end="")
+        print(t.desired_printout(), end='')
 
 async def get_current_status():
     await asyncio.gather(*[t.get_statuses() for t in conf.types])
 
     if not conf.args.run and not conf.args.list_jobs:
         for t in conf.types:
-            print(t.status_printout(conf.args.show_all), end="")
+            print(t.status_printout(conf.args.show_all), end='')
         return
 
     complete, jobs = sym.create_jobs()
@@ -30,7 +30,7 @@ async def get_current_status():
     jobs = {**jobs, **job2}
 
     if conf.args.list_jobs:
-        print([j for j in jobs])
+        [print(j.description) for j in jobs.values()]
         return
 
     if len(jobs) == 0:

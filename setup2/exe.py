@@ -4,6 +4,7 @@ import shutil
 from operator import itemgetter
 
 from .jobs import async_proc
+from .output import print_grid
 
 VERSION_REGEX = re.compile(r'\d+\.\d+\.\d+', re.M)
 
@@ -49,12 +50,10 @@ async def check_job(exe):
     return {**exe, 'complete': False, 'curr_ver': 'UNKNOWN'}
 
 def desired_printout():
-    out = ""
-    out += '\nCOMMAND       VERSION\n'
+    lines = []
     for exe in sorted(desired_exes, key=itemgetter('name')):
-        out += f"{exe['name']: <13} {exe['version']}\n"
-
-    return out
+        lines.append((exe['name'], exe['version']))
+    return print_grid(('COMMAND', 'VERSION'), lines)
 
 async def get_statuses():
     tasks = []
@@ -63,10 +62,11 @@ async def get_statuses():
     check_results.extend(await asyncio.gather(*tasks))
 
 def status_printout(show_all):
-    out = ""
+    lines = []
     for exe in sorted(check_results, key=itemgetter('name')):
         if not show_all and exe['complete']:
             continue
-        out += f"{exe['name']: <13} {exe['version']: <13} {exe['curr_ver']}\n"
+        lines.append((exe['name'], exe['version'], exe['curr_ver']))
+    return print_grid(('COMMAND', 'DESIRED', 'CURRENT'), lines)
 
     return '\nCOMMAND       DESIRED       CURRENT\n' + out if out != '' else ''
