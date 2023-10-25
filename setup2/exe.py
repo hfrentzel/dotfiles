@@ -4,6 +4,7 @@ import shutil
 from operator import itemgetter
 
 from .apt import Apt
+from .pip import Pip
 from .jobs import async_proc
 from .output import print_grid
 
@@ -17,12 +18,12 @@ Installers:
 Apt, Deb, Pip, Npm, Tar
 #TODO validate elements of installers list are valid
 """
-def Exe(command_name, installers=None, version=None):
+def Exe(name, version=None, installers=None, command_name=None):
     desired_exes.append(
         {
-            "name": command_name,
+            "name": name,
             "version": version or "ANY",
-            "command_name": command_name,
+            "command_name": command_name or name,
             "installers": installers
         })
 
@@ -82,7 +83,7 @@ def xxx():
 JOB_BUILDERS = {
     'Apt': Apt.apt_builder,
     'Deb': xxx,
-    'Pip': xxx,
+    'Pip': Pip.pip_builder,
     'Tar': xxx,
     'Npm': xxx,
 }
@@ -107,5 +108,7 @@ def create_jobs():
                 break
     if len(Apt.all_apts) != 0:
         jobs['apt_install'] = Apt.apt_job()
+    if len(Pip.all_pips) != 0:
+        jobs['pip_install'] = Pip.pip_job()
 
     return no_action_needed, jobs
