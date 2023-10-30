@@ -95,7 +95,7 @@ command Fjson :%!jq . -
 command -bar PyToJson :silent %s/$\n//eg | silent s/'/"/eg | s/True/true/eg | s/False/false/eg | s/None/null/eg | %!jq . -
 
 " Local overrides
-let s:vimrc_local=expand('~/.vimrc.local')
+let s:vimrc_local=expand('~/.config/nvim/vimrc.local')
 if filereadable(s:vimrc_local)
     execute 'source ' . s:vimrc_local
 endif

@@ -16,6 +16,7 @@ Sym('rgconfig', 'DOT/configs/rgrc', '~/.config/ripgrep/config')
 Sym('batconfig', 'DOT/configs/batconfig', '~/.config/bat/config')
 Sym('startup.py', 'DOT/languages/python/gen_startup.py', '~/.config/python/startup.py')
 Sym('gitconfig', 'DOT/git/gitconfig', '~/.config/git/config')
+Sym('vimrc', 'DOT/vim/vimrc', '~/.config/vim/vimrc')
 Sym('nvimconfig', 'DOT/vim/nvim', '~/.config/nvim')
 
 Dir('python_data', '~/.local/share/python')

@@ -2,7 +2,7 @@ let &packpath = &runtimepath
 let g:python3_host_prog = trim(system('which python'))
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
-source ~/.vimrc
+source ~/.config/vim/vimrc
 
 set completeopt=menu,menuone,noselect
 let g:CommandTPreferredImplementation='lua'
