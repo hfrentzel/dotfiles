@@ -2,7 +2,7 @@ import os
 from operator import itemgetter
 from .job import Job
 from .conf import conf
-from .output import print_grid
+from .output import print_grid, red, green
 
 
 desired_syms = []
@@ -25,18 +25,18 @@ def check_job(sym):
             return {
                 **sym,
                 'complete': True,
-                'status': 'LINKED'
+                'status': green('LINKED')
             }
         return {
             **sym,
             'complete': False,
-            'status': 'BLOCKED'
+            'status': red('BLOCKED')
         }
 
     return {
         **sym,
         'complete': False,
-        'status': 'MISSING'
+        'status': red('MISSING')
     }
 
 def desired_printout():
@@ -83,6 +83,7 @@ def create_symlink(source, target):
         src = source.replace('DOT', conf.dotfiles_home)
         src = os.path.expanduser(src)
         dest = os.path.expanduser(target)
+        print(f'Creating symlink at {dest}...')
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         os.symlink(src, dest)
 

@@ -12,3 +12,9 @@ def print_grid(header, rows):
                              for i, r in enumerate(row)]) + '\n'
     line += '\n'
     return line
+
+def red(text: str):
+    return f'\033[91m{text}\033[0m'
+
+def green(text: str):
+    return f'\033[92m{text}\033[0m'

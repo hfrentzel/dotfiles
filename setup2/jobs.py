@@ -10,6 +10,7 @@ class JobOutput:
 async def async_proc(cmd, stdin=None, cwd=None):
     if isinstance(stdin, str):
         stdin = stdin.encode()
+    #TODO Log stdout and stderr if command fails
     process = await asyncio.create_subprocess_shell(
         cmd,
         cwd=cwd,

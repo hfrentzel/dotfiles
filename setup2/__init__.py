@@ -7,6 +7,7 @@ from . import exe
 from . import sym
 from .job import print_job_tree
 from .conf import conf
+from .output import red, green
 
 Dir = dir.Dir
 Exe = exe.Exe
@@ -63,7 +64,10 @@ async def handle_jobs():
     for job in root_jobs:
         runners.append(job.run())
     results = await asyncio.gather(*runners)
-    print(results)
+    if all(results):
+        print(green('All items setup successfully'))
+    else:
+        print(red('Not all jobs were successful. Check logs for details'))
 
 
 def run():

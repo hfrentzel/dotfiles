@@ -1,7 +1,7 @@
 import os
 from operator import itemgetter
 from .job import Job
-from .output import print_grid
+from .output import print_grid, red, green
 
 desired_dirs = []
 check_results = []
@@ -20,19 +20,19 @@ def check_job(dir):
         return {
             **dir,
             'complete': True,
-            'status': 'EXISTS'
+            'status': green('EXISTS')
         }
     elif os.path.exists(path):
         return {
             **dir,
             'complete': False,
-            'status': 'BLOCKED'
+            'status': red('BLOCKED')
         }
     else:
         return {
             **dir,
             'complete': False,
-            'status': 'MISSING'
+            'status': red('MISSING')
         }
 
 def desired_printout():
@@ -75,6 +75,7 @@ def create_jobs():
 def create_directory(path):
     async def inner():
         full_path = os.path.expanduser(path)
+        print(f'Creating directory at {full_path}...')
         os.makedirs(full_path)
 
         return True

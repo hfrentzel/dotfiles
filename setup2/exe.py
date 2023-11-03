@@ -6,7 +6,7 @@ from operator import itemgetter
 from .apt import Apt
 from .pip import Pip
 from .jobs import async_proc
-from .output import print_grid
+from .output import print_grid, red, green
 
 VERSION_REGEX = re.compile(r'\d+\.\d+\.\d+', re.M)
 
@@ -39,9 +39,9 @@ def ver_greater_than(current, target):
 async def check_job(exe):
     command = shutil.which(exe['command_name'])
     if command is None:
-        return {**exe, 'complete': False, 'curr_ver': 'MISSING'}
+        return {**exe, 'complete': False, 'curr_ver': red('MISSING')}
     if exe['version'] == 'ANY':
-        return {**exe, 'complete': True, 'curr_ver': 'ANY'}
+        return {**exe, 'complete': True, 'curr_ver': green('ANY')}
 
     subcommands = ["--version", "version", "-V", "-v"]
     for cmd in subcommands:
@@ -50,12 +50,14 @@ async def check_job(exe):
             break
 
     if version.returncode != 0:
-        return {**exe, 'complete': False, 'curr_ver': 'UNKNOWN'}
+        return {**exe, 'complete': False, 'curr_ver': red('UNKNOWN')}
 
     if string := VERSION_REGEX.search(version.stdout):
         curr_ver = string.group(0)
-        return {**exe, 'complete': ver_greater_than(curr_ver, exe['version']), 'curr_ver': curr_ver}
-    return {**exe, 'complete': False, 'curr_ver': 'UNKNOWN'}
+        success = ver_greater_than(curr_ver, exe['version'])
+        color = green if success else red
+        return {**exe, 'complete': success, 'curr_ver': color(curr_ver)}
+    return {**exe, 'complete': False, 'curr_ver': red('UNKNOWN')}
 
 def desired_printout():
     lines = []
