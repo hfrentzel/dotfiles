@@ -1,4 +1,4 @@
-BASE16_CONFIG="$HOME/.base16"
+BASE16_CONFIG="$HOME/.local/share/dotfiles/base16"
 
 color() {
     theme=$1

@@ -5,7 +5,7 @@ function s:setColor()
         let g:base16colorspace=256
     endif
 
-    let s:color_file = expand('~/.base16')
+    let s:color_file = expand('~/.local/share/dotfiles/base16')
 
     if !filereadable(s:color_file)
         return
