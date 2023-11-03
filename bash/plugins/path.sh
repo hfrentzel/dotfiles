@@ -8,7 +8,7 @@ add_to_path() {
 
 add_to_path "$HOME/.local/bin"
 add_to_path "$HOME/.bin"
-add_to_path "$HOME/.cargo/bin"
+add_to_path "$HOME/.local/share/cargo/bin"
 
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go

@@ -8,3 +8,6 @@ export HISTFILE="$HOME/.local/share/bash/history"
 export INPUTRC="$HOME/.config/readline/inputrc"
 
 export PYTHONSTARTUP="$HOME/.config/python/startup.py"
+
+export RUSTUP_HOME="$HOME/.local/share/rustup"
+export CARGO_HOME="$HOME/.local/share/cargo"

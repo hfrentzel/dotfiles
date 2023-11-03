@@ -18,6 +18,7 @@ Sym('startup.py', 'DOT/languages/python/gen_startup.py', '~/.config/python/start
 Sym('gitconfig', 'DOT/git/gitconfig', '~/.config/git/config')
 Sym('vimrc', 'DOT/vim/vimrc', '~/.config/vim/vimrc')
 Sym('nvimconfig', 'DOT/vim/nvim', '~/.config/nvim')
+Sym('cargoconfig', 'DOT/languages/rust/config.toml', '~/.local/share/cargo/config.toml')
 
 Dir('dotfiles_data', '~/.local/share/dotfiles')
 Dir('python_data', '~/.local/share/python')
