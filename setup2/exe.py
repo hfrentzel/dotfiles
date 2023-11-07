@@ -6,6 +6,7 @@ from operator import itemgetter
 from .apt import Apt
 from .cargo import Cargo
 from .pip import Pip
+from .npm import Npm
 from .job import Job
 from .jobs import async_proc
 from .output import print_grid, red, green
@@ -90,7 +91,7 @@ JOB_BUILDERS = {
     'Deb': xxx,
     'Pip': Pip.pip_builder,
     'Tar': xxx,
-    'Npm': xxx,
+    'Npm': Npm.npm_builder,
 }
 
 def create_jobs():
@@ -117,5 +118,7 @@ def create_jobs():
         jobs['apt_install'] = Apt.apt_job()
     if len(Pip.all_pips) != 0:
         jobs['pip_install'] = Pip.pip_job()
+    if len(Npm.all_packages) != 0:
+        jobs['npm_install'] = Npm.npm_job()
 
     return no_action_needed, jobs

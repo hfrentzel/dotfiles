@@ -23,7 +23,7 @@ class Pip():
             success = not result.returncode
             if success:
                 print(green('The following apps were successfully installed '
-                           f'with pip: {",".join(p[0] for p in cls_all_pips)}'))
+                           f'with pip: {",".join(p[0] for p in cls.all_pips)}'))
             else:
                 print(red('pip installation failed'))
                 # TODO try installing packages one at a time
