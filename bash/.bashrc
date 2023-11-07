@@ -61,8 +61,10 @@ source $HOME/.config/fzf/fzf.bash
 source $HOME/.config/bash/plugins/aliases.sh
 source $HOME/.config/bash/plugins/env.sh
 
-eval "$(zoxide init bash)"
-export _ZO_FZF_OPTS='--height 40% --layout=reverse'
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init bash)"
+    export _ZO_FZF_OPTS='--height 40% --layout=reverse'
+fi
 
 LOCAL_RC=$HOME/.config/bash/bashrc.local
 test -f $LOCAL_RC && source $LOCAL_RC
