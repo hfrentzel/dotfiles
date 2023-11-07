@@ -4,7 +4,9 @@ import shutil
 from operator import itemgetter
 
 from .apt import Apt
+from .cargo import Cargo
 from .pip import Pip
+from .job import Job
 from .jobs import async_proc
 from .output import print_grid, red, green
 
@@ -84,6 +86,7 @@ def xxx():
 
 JOB_BUILDERS = {
     'Apt': Apt.apt_builder,
+    'Cargo': Cargo.cargo_builder,
     'Deb': xxx,
     'Pip': Pip.pip_builder,
     'Tar': xxx,
@@ -106,6 +109,8 @@ def create_jobs():
             continue
         for t in exe['installers']:
             settled = JOB_BUILDERS[t](exe)
+            if isinstance(settled, Job):
+                jobs[exe['name']] = settled
             if settled:
                 break
     if len(Apt.all_apts) != 0:

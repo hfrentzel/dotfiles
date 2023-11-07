@@ -17,7 +17,6 @@ class Pip():
 
         pip_string = " ".join([f'{p[0]}=={p[1]}' for p in cls.all_pips])
         async def inner():
-            #TODO add output and proper error handling
             print('Running pip install...')
             result = await async_proc(
                 f'/usr/bin/python -m pip install {pip_string}')
