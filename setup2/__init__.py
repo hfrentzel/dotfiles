@@ -5,6 +5,7 @@ import os
 from . import dir
 from . import exe
 from . import sym
+from . import command
 from .job import print_job_tree
 from .conf import conf
 from .output import red, green
@@ -12,6 +13,7 @@ from .output import red, green
 Dir = dir.Dir
 Exe = exe.Exe
 Sym = sym.Sym
+Command = command.Command
 
 
 def show_desired():
@@ -26,7 +28,6 @@ def build_tree(jobs, complete):
         elif job.depends_on in complete:
             root_jobs.append(job)
         else:
-            print(job.depends_on)
             parent = next(j for j in jobs.values() if job.depends_on in j.names)
             parent.children.append(job)
 
@@ -89,7 +90,7 @@ def run():
 
     conf.types = [sym]
     if not conf.args.symlinks_only:
-        conf.types.extend([dir, exe])
+        conf.types.extend([dir, exe, command])
 
     if conf.args.desired:
         show_desired()

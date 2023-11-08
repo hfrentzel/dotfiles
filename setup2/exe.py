@@ -95,7 +95,6 @@ JOB_BUILDERS = {
 }
 
 def create_jobs():
-    pass
     """
     Determine which installers are available
         - Apt and Deb require root permissions
