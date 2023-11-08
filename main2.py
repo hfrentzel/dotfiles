@@ -1,9 +1,16 @@
 #! /usr/bin/python
-from setup2 import run, Exe, Sym, Dir
+from os.path import expanduser
 
+from setup2 import run, Exe, Sym, Dir, Command
+
+Command('submodules', 'git submodule update', cwd='DOT') 
+Command('cargo', 'curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path', 
+        check_script='cargo --version',
+        depends_on='cargoconfig',
+        env={'CARGO_HOME': expanduser('~/.local/share/cargo'), 
+             'RUSTUP_HOME': expanduser('~/.local/share/rustup')}) 
 Exe('jq')
 Exe('dos2unix')
-Exe('cargo')
 Exe('node')
 Exe('ripgrep', '13.0.0', command_name='rg', installers=['Cargo'])
 Exe('tree', installers=['Apt'])
