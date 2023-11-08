@@ -11,7 +11,8 @@ Command('cargo', 'curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path'
              'RUSTUP_HOME': expanduser('~/.local/share/rustup')}) 
 Exe('jq')
 Exe('dos2unix')
-Exe('node')
+Exe('node', '18.18.2', url='https://nodejs.org/dist/v{version}/node-v{version}-linux-x64.tar.xz',
+    installers=['Tar'])
 Exe('ripgrep', '13.0.0', command_name='rg', installers=['Cargo'])
 Exe('tree', installers=['Apt'])
 Exe('hehe', installers=['Apt'])
