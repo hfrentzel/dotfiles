@@ -7,6 +7,7 @@ from .apt import Apt
 from .cargo import Cargo
 from .pip import Pip
 from .npm import Npm
+from .tar import Tar
 from .job import Job
 from .jobs import async_proc
 from .output import print_grid, red, green
@@ -21,12 +22,13 @@ Installers:
 Apt, Deb, Pip, Npm, Tar
 #TODO validate elements of installers list are valid
 """
-def Exe(name, version=None, installers=None, command_name=None):
+def Exe(name, version=None, installers=None, command_name=None, url=None):
     desired_exes.append(
         {
             "name": name,
             "version": version or "ANY",
             "command_name": command_name or name,
+            "url": url,
             "installers": installers
         })
 
@@ -90,7 +92,7 @@ JOB_BUILDERS = {
     'Cargo': Cargo.cargo_builder,
     'Deb': xxx,
     'Pip': Pip.pip_builder,
-    'Tar': xxx,
+    'Tar': Tar.tar_builder,
     'Npm': Npm.npm_builder,
 }
 
