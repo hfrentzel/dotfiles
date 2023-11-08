@@ -20,3 +20,18 @@ except FileNotFoundError:
     pass
 
 atexit.register(readline.write_history_file, histfile)
+
+sys.ps1 = f'py{sys.version_info[0]}.{sys.version_info[1]}> '
+sys.ps2 = '.' * (len(sys.ps1) - 1) + ' '
+
+class Quitter:
+    def __init__(self, num=0):
+        self.num = num
+
+    def __repr__(self):
+        sys.exit(self.num)
+
+
+ch = Quitter(5)
+q = Quitter()
+exit = q
