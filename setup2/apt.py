@@ -1,5 +1,6 @@
 from .jobs import async_proc
 from .job import Job
+from .output import red, green
 
 class Apt():
     all_apts = []
@@ -15,10 +16,17 @@ class Apt():
             return None
 
         async def inner():
-            #TODO add output and proper error handling
+            print('Running apt install...')
             await async_proc('sudo apt update')
             result = await async_proc(f'sudo apt install --yes {" ".join(cls.all_apts)}')
-            return not result['returncode']
+            success = not result.returncode
+            if success:
+                print(green('The following apps were successfully installed '
+                           f'with apt: {",".join(p[0] for p in cls.all_apts)}'))
+            else:
+                print(red('apt installation failed'))
+                # TODO try installing packages one at a time
+            return success
 
         return Job(names=cls.all_apts,
                    description=f'Install {", ".join(cls.all_apts)} with Apt',
