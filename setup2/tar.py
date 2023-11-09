@@ -1,5 +1,5 @@
 import tarfile
-from os import path
+from os import path, makedirs
 
 from .conf import conf
 from .jobs import async_proc
@@ -13,9 +13,9 @@ class Tar():
         async def inner():
             try:
                 print(f'Installing {spec["name"]} from tarball...' )
-                filename = await fetch_file(spec['url'], spec['version'])
+                archive_file = await fetch_file(spec['url'], spec['version'])
 
-                tar = tarfile.open(filename)
+                tar = tarfile.open(archive_file)
                 all_files = [t for t in tar.getmembers() if not t.isdir()]
                 # TODO handle when there's just one file
 
@@ -32,10 +32,31 @@ class Tar():
                     if any(name.startswith(p) for p in ['bin', 'lib', 'share', 'include']):
                         t.path = name
                         tar.extract(t, path.expanduser('~/.local'))
+                        continue
+
+                    filename = path.split(name)[1]
+                    extension = path.splitext(filename)[1]
+                    t.path = filename
+                    if extension in ['.ps1', '.zsh', '.fish']:
+                        continue
+                    elif extension == '.bash':
+                        dir = path.expanduser(f'~/.local/share/bash-completion/completions')
+                    elif extension in ['.1', '.5']:
+                        man = extension.replace('.', 'man')
+                        dir = path.expanduser(f'~/.local/share/man/{man}')
+                    elif extension in ['.md', '.txt']:
+                        dir = path.expanduser(f'~/.local/share/doc/{spec["name"]}')
+                    elif extension is '':
+                        if t.mode & 0b1001001: 
+                            dir = path.expanduser(f'~/.local/bin')
+                        else:
+                            dir = path.expanduser(f'~/.local/share/doc/{spec["name"]}')
                     else:
-                        pass
-                        # TODO handle cases where files are organized in standard
-            except:
+                        continue
+                    makedirs(dir, exist_ok=True)
+                    tar.extract(t, dir)
+
+            except Exception as e:
                 print(red(f'Failed to install {spec["name"]} from tarball'))
                 return False
 
