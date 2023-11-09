@@ -1,6 +1,6 @@
 if command -v node &> /dev/null; then
     export NODE_REPL_HISTORY=""
-    export NPM_CONFIG_CACHE="$HOME/.local/cache/npm"
+    export NPM_CONFIG_USERCONFIG="$HOME/.config/npm/npmrc"
 fi
 
 export LESSHISTFILE="$HOME/.local/share/less/history"
