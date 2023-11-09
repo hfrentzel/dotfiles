@@ -1,3 +1,4 @@
+from os.path import expanduser
 from .jobs import async_proc
 from .job import Job
 from .output import red, green
@@ -18,9 +19,9 @@ class Npm():
         npm_string = " ".join([p[0] for p in cls.all_packages])
         async def inner():
             print('Running npm install...')
-            await async_proc("npm config set prefix '~/.local'")
-            result = await async_proc(
-                f'npm install -g {npm_string}')
+            result = await async_proc(f'npm install -g {npm_string}',
+                                      env={"NPM_CONFIG_USERCONFIG": 
+                                            expanduser('~/.config/npm/npmrc')})
             success = not result.returncode
             if success:
                 print(green('The following apps were successfully installed '
