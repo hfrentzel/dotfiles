@@ -23,6 +23,8 @@ Exe('fd-find', '8.7.0', command_name='fd', installers=['Cargo'])
 Exe('eslint', '8.32.0', installers=['Npm'])
 Exe('python3.9', '3.9.5', installers=['Apt'])
 Exe('python-lsp-server', '1.7.1', command_name='pylsp', installers=['Pip'])
+Exe('terraform', '1.6.3', url='https://releases.hashicorp.com/terraform/{version}/terraform_{version}_linux_amd64.zip',
+    installers=['Zip'])
 Sym('bashrc', 'DOT/bash/.bashrc', '~/.bashrc')
 Sym('bash', 'DOT/bash/plugins', '~/.config/bash/plugins')
 Sym('inputrc', 'DOT/bash/.inputrc', '~/.config/readline/inputrc')
