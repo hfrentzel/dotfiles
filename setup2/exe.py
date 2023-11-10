@@ -8,6 +8,7 @@ from .cargo import Cargo
 from .pip import Pip
 from .npm import Npm
 from .tar import Tar
+from .zip import Zip
 from .job import Job
 from .jobs import async_proc
 from .output import print_grid, red, green
@@ -94,6 +95,7 @@ JOB_BUILDERS = {
     'Pip': Pip.pip_builder,
     'Tar': Tar.tar_builder,
     'Npm': Npm.npm_builder,
+    'Zip': Zip.zip_builder,
 }
 
 def create_jobs():
