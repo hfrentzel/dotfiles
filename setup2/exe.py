@@ -5,6 +5,7 @@ from operator import itemgetter
 
 from .apt import Apt
 from .cargo import Cargo
+from .deb import Deb
 from .pip import Pip
 from .npm import Npm
 from .tar import Tar
@@ -91,7 +92,7 @@ def xxx():
 JOB_BUILDERS = {
     'Apt': Apt.apt_builder,
     'Cargo': Cargo.cargo_builder,
-    'Deb': xxx,
+    'Deb': Deb.deb_builder,
     'Pip': Pip.pip_builder,
     'Tar': Tar.tar_builder,
     'Npm': Npm.npm_builder,
