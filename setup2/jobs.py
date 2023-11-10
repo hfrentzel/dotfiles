@@ -1,5 +1,8 @@
 from dataclasses import dataclass
+from os import path
 import asyncio
+
+from .conf import conf
 
 @dataclass
 class JobOutput:
@@ -35,3 +38,12 @@ async def async_proc(cmd, stdin=None, cwd=None, env=None):
         returncode=process.returncode
     )
 
+
+async def fetch_file(url, version):
+    full_url = url.format(version=version)
+    _, file = path.split(full_url)
+
+    filename = f'{conf.sources_dir}/{file}'
+    await async_proc(f'curl -L {full_url} -o {filename}')
+
+    return filename

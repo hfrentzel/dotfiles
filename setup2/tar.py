@@ -1,8 +1,7 @@
 import tarfile
 from os import path, makedirs
 
-from .conf import conf
-from .jobs import async_proc
+from .jobs import fetch_file
 from .job import Job
 from .output import red, green
 
@@ -17,7 +16,12 @@ class Tar():
 
                 tar = tarfile.open(archive_file)
                 all_files = [t for t in tar.getmembers() if not t.isdir()]
-                # TODO handle when there's just one file
+
+                if len(all_files) == 1 and all_files[0].mode & 0b001001001:
+                    dir = path.expanduser(f'~/.local/bin')
+                    tar.extract(all_files[0], dir)
+                    print(green(f'{spec["name"]} has been installed successfully'))
+                    return True
 
                 # Remove common prefix from all filenames
                 # TODO Use removeprefix() when python3.9 is made min version
@@ -40,17 +44,17 @@ class Tar():
                     if extension in ['.ps1', '.zsh', '.fish']:
                         continue
                     elif extension == '.bash':
-                        dir = path.expanduser(f'~/.local/share/bash-completion/completions')
+                        dir = path.expanduser('~/.local/share/bash-completion/completions')
                     elif extension in ['.1', '.5']:
                         man = extension.replace('.', 'man')
                         dir = path.expanduser(f'~/.local/share/man/{man}')
                     elif extension in ['.md', '.txt']:
-                        dir = path.expanduser(f'~/.local/share/doc/{spec["name"]}')
-                    elif extension is '':
-                        if t.mode & 0b1001001: 
-                            dir = path.expanduser(f'~/.local/bin')
+                        dir = path.expanduser(f'~/.local/share/doc/{spec["command_name"]}')
+                    elif extension == '':
+                        if t.mode & 0b001001001: 
+                            dir = path.expanduser('~/.local/bin')
                         else:
-                            dir = path.expanduser(f'~/.local/share/doc/{spec["name"]}')
+                            dir = path.expanduser(f'~/.local/share/doc/{spec["command_name"]}')
                     else:
                         continue
                     makedirs(dir, exist_ok=True)
@@ -59,6 +63,8 @@ class Tar():
             except Exception as e:
                 print(red(f'Failed to install {spec["name"]} from tarball'))
                 return False
+            finally: 
+                tar.close()
 
             print(green(f'{spec["name"]} has been installed successfully'))
             return True
@@ -66,13 +72,3 @@ class Tar():
         return Job(names=[spec['name']],
                    description=f'Install {spec["name"]} from tarball',
                    job=inner)
-
-
-async def fetch_file(url, version):
-    full_url = url.format(version=version)
-    _, file = path.split(full_url)
-
-    filename = f'{conf.sources_dir}/{file}'
-    await async_proc(f'curl -L {full_url} -o {filename}')
-
-    return filename
