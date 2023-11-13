@@ -16,7 +16,7 @@ Exe('node', '18.18.2', url='https://nodejs.org/dist/v{version}/node-v{version}-l
 Exe('ripgrep', '13.0.0', command_name='rg', installers=['Cargo'])
 Exe('tree', installers=['Apt'])
 Exe('hehe', installers=['Apt'])
-Exe('bat', '0.24.0', installers=['Tar', 'Cargo'], url='https://github.com/sharkdp/bat/releases/download/v{version}/bat-v{version}-x86_64-unknown-linux-musl.tar.gz')
+Exe('bat', '0.24.0', installers=['Github', 'Cargo'], repo='sharkdp/bat')
 Exe('delta', '0.15.1', installers=['Cargo'])
 Exe('zoxide', '0.9.0', installers=['Cargo'])
 Exe('fd-find', '8.7.0', command_name='fd', installers=['Cargo'])
