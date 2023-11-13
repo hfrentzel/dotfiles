@@ -86,7 +86,7 @@ def run():
                         const='run_jobs', dest='stopping_point')
 
     conf.dotfiles_home = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    os.makedirs('~/.cache/env_setup', exist_ok=True)
+    os.makedirs(os.path.expanduser('~/.cache/env_setup'), exist_ok=True)
     conf.sources_dir = os.path.expanduser('~/.cache/env_setup')
     conf.args = parser.parse_args()
 

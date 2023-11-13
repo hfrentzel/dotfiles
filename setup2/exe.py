@@ -6,6 +6,7 @@ from operator import itemgetter
 from .apt import Apt
 from .cargo import Cargo
 from .deb import Deb
+from .github import Github
 from .pip import Pip
 from .npm import Npm
 from .tar import Tar
@@ -24,13 +25,15 @@ Installers:
 Apt, Deb, Pip, Npm, Tar
 #TODO validate elements of installers list are valid
 """
-def Exe(name, version=None, installers=None, command_name=None, url=None):
+def Exe(name, version=None, installers=None, command_name=None, url=None,
+        repo=None):
     desired_exes.append(
         {
             "name": name,
             "version": version or "ANY",
             "command_name": command_name or name,
             "url": url,
+            "repo": repo,
             "installers": installers
         })
 
@@ -93,6 +96,7 @@ JOB_BUILDERS = {
     'Apt': Apt.apt_builder,
     'Cargo': Cargo.cargo_builder,
     'Deb': Deb.deb_builder,
+    'Github': Github.github_builder,
     'Pip': Pip.pip_builder,
     'Tar': Tar.tar_builder,
     'Npm': Npm.npm_builder,
