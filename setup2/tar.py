@@ -10,6 +10,10 @@ class Tar():
     @classmethod
     def tar_builder(cls, spec):
         async def inner():
+            if conf.root_access:
+                install_home = '/usr/local'
+            else:
+                install_home = path.expanduser('~/.local')
             try:
                 print(f'Installing {spec["name"]} from tarball...' )
                 archive_file = await fetch_file(spec['url'], spec['version'])
@@ -18,7 +22,7 @@ class Tar():
                 all_files = [t for t in tar.getmembers() if not t.isdir()]
 
                 if len(all_files) == 1 and all_files[0].mode & 0b001001001:
-                    dir = path.expanduser(f'~/.local/bin')
+                    dir = f'{install_home}/bin')
                     tar.extract(all_files[0], dir)
                     print(green(f'{spec["name"]} has been installed successfully'))
                     return True
@@ -35,7 +39,7 @@ class Tar():
 
                     if any(name.startswith(p) for p in ['bin', 'lib', 'share', 'include']):
                         t.path = name
-                        tar.extract(t, path.expanduser('~/.local'))
+                        tar.extract(t, path.expanduser(install_home))
                         continue
 
                     filename = path.split(name)[1]
@@ -44,17 +48,17 @@ class Tar():
                     if extension in ['.ps1', '.zsh', '.fish']:
                         continue
                     elif extension == '.bash':
-                        dir = path.expanduser('~/.local/share/bash-completion/completions')
+                        dir = f'{install_home}/share/bash-completion/completions'
                     elif extension in ['.1', '.5']:
                         man = extension.replace('.', 'man')
-                        dir = path.expanduser(f'~/.local/share/man/{man}')
+                        dir = f'{install_home}/share/man/{man}'
                     elif extension in ['.md', '.txt']:
-                        dir = path.expanduser(f'~/.local/share/doc/{spec["command_name"]}')
+                        dir = f'{install_home}/share/doc/{spec["command_name"]}'
                     elif extension == '':
                         if t.mode & 0b001001001: 
-                            dir = path.expanduser('~/.local/bin')
+                            dir = f'{install_home}/bin'
                         else:
-                            dir = path.expanduser(f'~/.local/share/doc/{spec["command_name"]}')
+                            dir = f'{install_home}/share/doc/{spec["command_name"]}'
                     else:
                         continue
                     makedirs(dir, exist_ok=True)
