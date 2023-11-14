@@ -1,3 +1,4 @@
+import asyncio
 from dataclasses import dataclass, field
 from typing import List
 
@@ -12,6 +13,9 @@ class Job:
     async def run(self):
         try:
             result = await self.job()
+            if result and len(self.children) != 0:
+                runners = [job.run() for job in self.children]
+                result = all(await asyncio.gather(*runners))
         except Exception as e:
             print(e)
             result = False
