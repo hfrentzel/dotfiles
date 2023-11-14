@@ -1,9 +1,14 @@
-from .jobs import async_proc
+import json
+import shlex
+import subprocess
+
+from .jobs import async_proc, ver_greater_than
 from .job import Job
 from .output import red, green
 
 class Pip():
     all_pips = []
+    curr_installed = None
 
     @classmethod
     def pip_builder(cls, spec):
@@ -19,7 +24,7 @@ class Pip():
         async def inner():
             print('Running pip install...')
             result = await async_proc(
-                f'/usr/bin/python -m pip install {pip_string}')
+                f'/usr/bin/python3.9 -m pip install {pip_string}')
             success = not result.returncode
             if success:
                 print(green('The following apps were successfully installed '
@@ -33,3 +38,17 @@ class Pip():
                    description=f'Install {pip_string} with pip',
                    depends_on='python3.9',
                    job=inner)
+
+    @classmethod
+    def check_install(cls, package):
+        if cls.curr_installed is None:
+            results = json.loads(
+                subprocess.run(shlex.split('/usr/bin/python3.9 -m pip list --format=json'), 
+                               capture_output=True).stdout.decode())
+            cls.curr_installed = {r['name']: r['version'] for r in results}
+        if cls.curr_installed.get(package['name']) is None:
+            return {**package, 'complete': False, 'curr_ver': red('MISSING')}
+
+        success = ver_greater_than(cls.curr_installed[package['name']], package['version'])
+        color = green if success else red
+        return {**package, 'complete': success, 'curr_ver': color(cls.curr_installed[package['name']])}

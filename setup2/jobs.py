@@ -10,6 +10,14 @@ class JobOutput:
     stderr: str
     returncode: int
 
+def ver_greater_than(current, target):
+    curr_major, curr_minor, curr_patch = current.split(".")
+    tar_major, tar_minor, tar_patch = target.split(".")
+    return (
+        curr_major > tar_major or
+        (curr_major == tar_major and curr_minor > tar_minor) or 
+        (curr_major == tar_major and curr_minor == tar_minor and curr_patch >= tar_patch))
+
 async def async_proc(cmd, stdin=None, cwd=None, env=None):
     if '|' in cmd:
         parts = cmd.split('|')

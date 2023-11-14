@@ -5,6 +5,7 @@ import os
 from . import dir
 from . import exe
 from . import sym
+from . import lib
 from . import command
 from .job import print_job_tree
 from .conf import conf
@@ -12,6 +13,7 @@ from .output import red, green
 
 Dir = dir.Dir
 Exe = exe.Exe
+Lib = lib.Lib
 Sym = sym.Sym
 Command = command.Command
 
@@ -92,7 +94,7 @@ def run():
 
     conf.types = [sym]
     if not conf.args.symlinks_only:
-        conf.types.extend([dir, exe, command])
+        conf.types.extend([dir, lib, exe, command])
 
     if conf.args.desired:
         show_desired()

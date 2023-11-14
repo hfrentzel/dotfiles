@@ -12,12 +12,12 @@ from .npm import Npm
 from .tar import Tar
 from .zip import Zip
 from .job import Job
-from .jobs import async_proc
+from .jobs import async_proc, ver_greater_than
 from .output import print_grid, red, green
 
 VERSION_REGEX = re.compile(r'\d+\.\d+\.\d+', re.M)
 
-desired_exes =[]
+desired_exes = []
 check_results = []
 
 """
@@ -36,15 +36,6 @@ def Exe(name, version=None, installers=None, command_name=None, url=None,
             "repo": repo,
             "installers": installers
         })
-
-def ver_greater_than(current, target):
-    curr_major, curr_minor, curr_patch = current.split(".")
-    tar_major, tar_minor, tar_patch = target.split(".")
-    return (
-        curr_major > tar_major or
-        (curr_major == tar_major and curr_minor > tar_minor) or 
-        (curr_major == tar_major and curr_minor == tar_minor and curr_patch >= tar_patch))
-
 
 async def check_job(exe):
     command = shutil.which(exe['command_name'])
@@ -88,9 +79,6 @@ def status_printout(show_all):
             continue
         lines.append((exe['name'], exe['version'], exe['curr_ver']))
     return print_grid(('COMMAND', 'DESIRED', 'CURRENT'), lines)
-
-def xxx():
-    pass
 
 JOB_BUILDERS = {
     'Apt': Apt.apt_builder,

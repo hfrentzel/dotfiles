@@ -42,7 +42,7 @@ async def get_statuses():
 def desired_printout():
     lines = []
     for command in sorted(desired_commands, key=itemgetter('name')):
-        lines.append((command['name']))
+        lines.append((command['name'],))
     return print_grid(('SCRIPTS',), lines)
 
 def status_printout(show_all):

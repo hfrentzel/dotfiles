@@ -1,4 +1,4 @@
-from setup2 import Sym, Exe, Command
+from setup2 import Sym, Exe, Command, Lib
 
 def install_neovim():
     Sym('vimrc', 'DOT/vim/vimrc', '~/.config/vim/vimrc')
@@ -8,7 +8,7 @@ def install_neovim():
         command_name='nvim')
 
     # Exe('vim-language-server', '2.3.0', installers=['Npm'])
-    # Lib('pynvim', '0.4.3', type='pip')
+    Lib('pynvim', '0.4.3', 'pip')
     Command('command-t', 'make',
             check_script='test -f commandt.so',
             cwd=f'DOT/vim/nvim/pack/vendor/opt/command-t/lua/wincent/commandt/lib')
