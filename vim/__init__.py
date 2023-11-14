@@ -1,19 +1,16 @@
-from setup_tools.managers import Npm, Symlink, Pip
-from setup_tools.installers import command
-from setup_tools.config import config
-from setup_tools.github import github
-
+from setup2 import Sym, Exe, Command
 
 def install_neovim():
-    Symlink('DOTROOT/vim/.vimrc', '~/.vimrc')
-    Symlink('DOTROOT/vim/.vim', '~/.vim')
-    Symlink('DOTROOT/vim/.config/nvim/init.vim', '~/.config/nvim/init.vim')
+    Sym('vimrc', 'DOT/vim/vimrc', '~/.config/vim/vimrc')
+    Sym('nvimconfig', 'DOT/vim/nvim', '~/.config/nvim')
 
-    github('neovim/neovim', 'v0.8.2', name='nvim')
-    Pip('pynvim', '0.4.3')
-    Npm('vim-language-server', '2.3.0')
+    Exe('neovim', '0.8.2', installers=['Github'], repo='neovim/neovim', 
+        command_name='nvim')
 
-    command('make',
-            cwd=f'{config.dotfiles_home}/vim/.vim/pack/vendor/opt/command-t/lua/wincent/commandt/lib',
-            depends_on='submodules')
+    # Exe('vim-language-server', '2.3.0', installers=['Npm'])
+    # Lib('pynvim', '0.4.3', type='pip')
+    Command('command-t', 'make',
+            check_script='test -f commandt.so',
+            cwd=f'DOT/vim/nvim/pack/vendor/opt/command-t/lua/wincent/commandt/lib')
+            # depends_on='submodules')
 

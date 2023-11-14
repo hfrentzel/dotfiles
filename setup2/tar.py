@@ -22,7 +22,7 @@ class Tar():
                 all_files = [t for t in tar.getmembers() if not t.isdir()]
 
                 if len(all_files) == 1 and all_files[0].mode & 0b001001001:
-                    dir = f'{install_home}/bin')
+                    dir = f'{install_home}/bin'
                     tar.extract(all_files[0], dir)
                     print(green(f'{spec["name"]} has been installed successfully'))
                     return True
