@@ -40,15 +40,23 @@ class Pip():
                    job=inner)
 
     @classmethod
-    def check_install(cls, package):
+    def get_version(cls, package):
         if cls.curr_installed is None:
             results = json.loads(
                 subprocess.run(shlex.split('/usr/bin/python3.9 -m pip list --format=json'), 
                                capture_output=True).stdout.decode())
             cls.curr_installed = {r['name']: r['version'] for r in results}
         if cls.curr_installed.get(package['name']) is None:
+            return None
+        return cls.curr_installed[package['name']]
+
+
+    @classmethod
+    def check_install(cls, package):
+        curr_ver = cls.get_version(package)
+        if curr_ver is None:
             return {**package, 'complete': False, 'curr_ver': red('MISSING')}
 
-        success = ver_greater_than(cls.curr_installed[package['name']], package['version'])
+        success = ver_greater_than(curr_ver, package['version'])
         color = green if success else red
-        return {**package, 'complete': success, 'curr_ver': color(cls.curr_installed[package['name']])}
+        return {**package, 'complete': success, 'curr_ver': color(curr_ver)}

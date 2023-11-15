@@ -51,7 +51,16 @@ async def check_job(exe):
             break
 
     if version.returncode != 0:
-        return {**exe, 'complete': False, 'curr_ver': red('UNKNOWN')}
+        if set(exe['installers']) & {'Pip', 'Npm'}:
+            if 'Pip' in exe['installers']:
+                curr_ver = Pip.get_version(exe)
+            elif 'Npm' in exe['installers']:
+                curr_ver = Npm.get_version(exe)
+            success = ver_greater_than(curr_ver, exe['version'])
+            color = green if success else red
+            return {**exe, 'complete': success, 'curr_ver': color(curr_ver)}
+        else:
+            return {**exe, 'complete': False, 'curr_ver': red('UNKNOWN')}
 
     if string := VERSION_REGEX.search(version.stdout):
         curr_ver = string.group(0)

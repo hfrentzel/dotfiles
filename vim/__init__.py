@@ -7,7 +7,7 @@ def install_neovim():
     Exe('neovim', '0.8.2', installers=['Github'], repo='neovim/neovim', 
         command_name='nvim')
 
-    # Exe('vim-language-server', '2.3.0', installers=['Npm'])
+    Exe('vim-language-server', '2.3.0', installers=['Npm'])
     Lib('pynvim', '0.4.3', 'pip')
     Command('command-t', 'make',
             check_script='test -f commandt.so',
