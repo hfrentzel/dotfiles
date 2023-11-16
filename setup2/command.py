@@ -1,5 +1,6 @@
 import asyncio
 from operator import itemgetter
+import os
 
 from .conf import conf
 from .job import Job
@@ -9,21 +10,19 @@ from .output import print_grid, red, green
 desired_commands = []
 check_results = []
 
-def Command(name, run_script, check_script=None, depends_on=None, cwd=None,
-            env=None):
+def Command(name, run_script, check_script=None, depends_on=None, cwd=None):
     desired_commands.append(
         {
             "name": name,
             "run_script": run_script,
             "check_script": check_script,
             "cwd": cwd,
-            "env": env,
             "depends_on": depends_on
         })
 
 async def check_job(command):
     if isinstance(command['cwd'], str):
-        command['cwd'] = command['cwd'].replace('DOT', conf.dotfiles_home)
+        command['cwd'] = os.path.expanduser(command['cwd'].replace('DOT', conf.dotfiles_home))
 
     if command['check_script'] is None:
         return {**command, 'complete': False, 'status': 'CANT VERIFY'}
@@ -66,15 +65,15 @@ def create_jobs():
                 description=f'Run the {command["name"]} script',
                 depends_on=command['depends_on'],
                 job=run_script(command['name'], command['run_script'],
-                               command['cwd'], command['env'])
+                               command['cwd'])
             )
 
     return no_action_needed, jobs
 
-def run_script(name, script, cwd, env):
+def run_script(name, script, cwd):
     async def inner():
         print(f'Running the {name} script...')
-        result = await async_proc(script, cwd=cwd, env=env)
+        result = await async_proc(script, cwd=cwd)
         success = not result.returncode
         if success:
             print(green(f'{name} script ran successfully'))

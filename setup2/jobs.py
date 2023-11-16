@@ -18,24 +18,13 @@ def ver_greater_than(current, target):
         (curr_major == tar_major and curr_minor > tar_minor) or 
         (curr_major == tar_major and curr_minor == tar_minor and curr_patch >= tar_patch))
 
-async def async_proc(cmd, stdin=None, cwd=None, env=None):
-    if '|' in cmd:
-        parts = cmd.split('|')
-        for part in parts:
-            intermediate = await async_proc(part.strip(), stdin=stdin, cwd=cwd,
-                                            env=env)
-            if intermediate.returncode != 0:
-                return intermediate
-            stdin = intermediate.stdout
-        return intermediate
-
+async def async_proc(cmd, stdin=None, cwd=None):
     if isinstance(stdin, str):
         stdin = stdin.encode()
     #TODO Log stdout and stderr if command fails
     process = await asyncio.create_subprocess_shell(
         cmd,
         cwd=cwd,
-        env=env,
         stdin=asyncio.subprocess.PIPE if stdin else None,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE)

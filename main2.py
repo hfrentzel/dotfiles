@@ -1,7 +1,15 @@
 #! /usr/bin/python
-from setup2 import run, Exe, Sym, Dir
+from setup2 import run, Exe, Sym, Dir, Command
 from vim import install_neovim
+from languages.python import install_python, python_editing
+from languages.javascript import install_node, javascript_editing
+from languages.terraform import install_terraform
+from clis.fzf import fzf
 
+Command('submodules',
+        cwd='DOT',
+        check_script="! git submodule status | grep -qv '^ '",
+        run_script='git submodule update --init')
 # Basic tools for working in the terminal
 Sym('bashrc', 'DOT/bash/.bashrc', '~/.bashrc')
 Sym('bash', 'DOT/bash/plugins', '~/.config/bash/plugins')
@@ -20,7 +28,7 @@ Dir('less_data', '~/.local/share/less')
 Exe('delta', '0.15.1', installers=['Github'], repo='dandavision/delta')
 Sym('gitconfig', 'DOT/git/gitconfig', '~/.config/git/config')
 
-Exe('ripgrep', '13.0.0', installers=['Github'], repo='BurntSushi/ripgrep', 
+Exe('ripgrep', '13.0.0', installers=['Github'], repo='BurntSushi/ripgrep',
     command_name='rg')
 Sym('rgconfig', 'DOT/configs/rgrc', '~/.config/ripgrep/config')
 
@@ -31,7 +39,14 @@ Sym('startup.py', 'DOT/languages/python/gen_startup.py', '~/.config/python/start
 Sym('npmrc', 'DOT/configs/npmrc', '~/.config/npm/npmrc')
 Sym('cargoconfig', 'DOT/languages/rust/config.toml', '~/.local/share/cargo/config.toml')
 Dir('python_data', '~/.local/share/python')
+Exe('node')
 
 install_neovim()
+install_python()
+python_editing()
+install_node()
+javascript_editing()
+install_terraform()
+fzf()
 
 run()

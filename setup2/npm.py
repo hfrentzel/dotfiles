@@ -24,9 +24,7 @@ class Npm():
         npm_string = " ".join([f'{p[0]}@{p[1]}' for p in cls.all_packages])
         async def inner():
             print('Running npm install...')
-            result = await async_proc(f'npm install -g {npm_string}',
-                                      env={"NPM_CONFIG_USERCONFIG": 
-                                            expanduser('~/.config/npm/npmrc')})
+            result = await async_proc(f'npm install -g {npm_string}')
             success = not result.returncode
             if success:
                 print(green('The following apps were successfully installed '

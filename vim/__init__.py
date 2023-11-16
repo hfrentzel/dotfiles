@@ -11,6 +11,6 @@ def install_neovim():
     Lib('pynvim', '0.4.3', 'pip')
     Command('command-t', 'make',
             check_script='test -f commandt.so',
-            cwd=f'DOT/vim/nvim/pack/vendor/opt/command-t/lua/wincent/commandt/lib')
-            # depends_on='submodules')
+            cwd=f'DOT/vim/nvim/pack/vendor/opt/command-t/lua/wincent/commandt/lib',
+            depends_on='submodules')
 

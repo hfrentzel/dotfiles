@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import os
+import sys
 
 from . import dir
 from . import exe
@@ -91,6 +92,7 @@ def run():
     os.makedirs(os.path.expanduser('~/.cache/env_setup'), exist_ok=True)
     conf.sources_dir = os.path.expanduser('~/.cache/env_setup')
     conf.args = parser.parse_args()
+    os.environ['NPM_CONFIG_USERCONFIG'] = os.path.expanduser('~/.config/npm/npmrc')
 
     conf.types = [sym]
     if not conf.args.symlinks_only:
