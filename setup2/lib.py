@@ -57,11 +57,7 @@ def create_jobs():
         if lib['complete']:
             no_action_needed.append(lib['name'])
             continue
-        settled = JOB_BUILDERS[lib['type']](lib)
-        if isinstance(settled, Job):
-            jobs[lib['name']] = settled
-        if settled:
-            break
+        JOB_BUILDERS[lib['type']](lib)
     if len(Pip.all_pips) != 0:
         jobs['pip_install'] = Pip.pip_job()
     if len(Npm.all_packages) != 0:
