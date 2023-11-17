@@ -1,83 +1,84 @@
 import asyncio
-from operator import itemgetter
 import os
+from typing import Tuple, Callable, Dict, Coroutine, List, ClassVar, Optional
+from dataclasses import dataclass
 
 from .conf import conf
 from .job import Job
 from .jobs import async_proc
 from .output import print_grid, red, green
 
-desired_commands = []
-check_results = []
+
+@dataclass
+class Command():
+    desired: ClassVar[List['Command']] = []
+    name: str
+    run_script: str
+    check_script: Optional[str] = None
+    depends_on: Optional[str] = None
+    cwd: Optional[str] = None
 
 
-def Command(name, run_script, check_script=None, depends_on=None, cwd=None):
-    desired_commands.append(
-        {
-            "name": name,
-            "run_script": run_script,
-            "check_script": check_script,
-            "cwd": cwd,
-            "depends_on": depends_on
-        })
+check_results: List[Tuple[Command, bool, str]] = []
 
 
-async def check_job(command):
-    if isinstance(command['cwd'], str):
-        command['cwd'] = os.path.expanduser(command['cwd'].replace('DOT', conf.dotfiles_home))
+async def check_job(command: Command) -> Tuple[bool, str]:
+    if isinstance(command.cwd, str):
+        command.cwd = os.path.expanduser(command.cwd.replace('DOT', conf.dotfiles_home))
 
-    if command['check_script'] is None:
-        return {**command, 'complete': False, 'status': 'CANT VERIFY'}
-    result = await async_proc(command['check_script'], cwd=command['cwd'])
+    if command.check_script is None:
+        return (False, 'CANT VERIFY')
+    result = await async_proc(command.check_script, cwd=command.cwd)
     if result.returncode == 0:
-        return {**command, 'complete': True, 'status': green('DONE')}
+        return (True, green('DONE'))
 
-    return {**command, 'complete': False, 'status': red('INCOMPLETE')}
+    return (False, red('INCOMPLETE'))
 
 
-async def get_statuses():
+async def get_statuses() -> None:
     tasks = []
-    for command in desired_commands:
+    for command in Command.desired:
         tasks.append(check_job(command))
     check_results.extend(await asyncio.gather(*tasks))
 
 
-def desired_printout():
+def desired_printout() -> str:
     lines = []
-    for command in sorted(desired_commands, key=itemgetter('name')):
-        lines.append((command['name'],))
+    for command in sorted(Command.desired, key=(lambda c: c.name)):
+        lines.append((command.name,))
     return print_grid(('SCRIPTS',), lines)
 
 
-def status_printout(show_all):
+def status_printout(show_all: bool) -> str:
     lines = []
-    for command in sorted(check_results, key=itemgetter('name')):
-        if not show_all and command['complete']:
+    for command, complete, status in sorted(check_results, key=(lambda c: c[0].name)):
+        if not show_all and complete:
             continue
-        lines.append((command['name'], command['status']))
+        lines.append((command.name, status))
     return print_grid(('SCRIPT', 'STATUS'), lines)
 
 
-def create_jobs():
+def create_jobs() -> Tuple[List[str], Dict[str, Job]]:
     no_action_needed = []
     jobs = {}
-    for command in check_results:
-        if command['complete']:
-            no_action_needed.append(command['name'])
+    for command, complete, status in check_results:
+        if complete:
+            no_action_needed.append(command.name)
             continue
-        jobs[command['name']] = Job(
-            names=[command['name']],
-            description=f'Run the {command["name"]} script',
-            depends_on=command['depends_on'],
-            job=run_script(command['name'], command['run_script'],
-                           command['cwd'])
+        jobs[command.name] = Job(
+            names=[command.name],
+            description=f'Run the {command.name} script',
+            depends_on=command.depends_on,
+            job=run_script(command.name, command.run_script,
+                           command.cwd)
         )
 
     return no_action_needed, jobs
 
 
-def run_script(name, script, cwd):
-    async def inner():
+def run_script(name: str, script: str, cwd: Optional[str]) -> \
+        Callable[[], Coroutine[None, None, bool]]:
+    async def inner() -> bool:
         print(f'Running the {name} script...')
         result = await async_proc(script, cwd=cwd)
         success = not result.returncode

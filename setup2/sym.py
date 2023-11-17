@@ -1,89 +1,76 @@
 import os
-from operator import itemgetter
+from dataclasses import dataclass
+from typing import ClassVar, List, Tuple, Dict, Coroutine, Callable
 from .job import Job
 from .conf import conf
 from .output import print_grid, red, green
 
 
-desired_syms = []
-check_results = []
+@dataclass
+class Sym:
+    desired: ClassVar[List['Sym']] = []
+    name: str
+    source: str
+    target: str
+
+    def __post_init__(self) -> None:
+        self.desired.append(self)
 
 
-def Sym(name, source, target):
-    desired_syms.append(
-        {
-            "name": name,
-            "source": source,
-            "target": target
-        }
-    )
+check_results: List[Tuple[Sym, bool, str]] = []
 
 
-def check_job(sym):
-    src = os.path.expanduser(sym['source'])
-    dest = os.path.expanduser(sym['target'])
+def check_job(sym: Sym) -> Tuple[bool, str]:
+    dest = os.path.expanduser(sym.target)
     if os.path.isfile(dest) or os.path.isdir(dest):
         if os.path.islink(dest):
-            return {
-                **sym,
-                'complete': True,
-                'status': green('LINKED')
-            }
-        return {
-            **sym,
-            'complete': False,
-            'status': red('BLOCKED')
-        }
-
-    return {
-        **sym,
-        'complete': False,
-        'status': red('MISSING')
-    }
+            return (True, green('LINKED'))
+        return (False, red('BLOCKED'))
+    return (False, red('MISSING'))
 
 
-def desired_printout():
+def desired_printout() -> str:
     lines = []
-    for sym in sorted(desired_syms, key=itemgetter('target')):
-        lines.append((sym['target'],))
+    for sym in sorted(Sym.desired, key=lambda s: s.target):
+        lines.append((sym.target,))
     return print_grid(('SYMLINKED FILES',), lines)
 
 
-async def get_statuses():
-    for sym in desired_syms:
-        check_results.append(check_job(sym))
+async def get_statuses() -> None:
+    for sym in Sym.desired:
+        check_results.append((sym, *check_job(sym)))
 
 
-def status_printout(show_all):
+def status_printout(show_all: bool) -> str:
     lines = []
-    for sym in sorted(check_results, key=itemgetter('name')):
-        if not show_all and sym['complete']:
+    for sym, complete, status in sorted(check_results, key=(lambda s: s[0].name)):
+        if not show_all and complete:
             continue
-        lines.append((sym['name'], sym['status']))
+        lines.append((sym.name, status))
     return print_grid(('SYMLINK', 'STATUS'), lines)
 
 
-def create_jobs():
+def create_jobs() -> Tuple[List[str], Dict[str, Job]]:
     no_action_needed = []
     jobs = {}
-    for sym in check_results:
-        if sym['complete']:
-            no_action_needed.append(sym['name'])
-        elif sym['status'] == 'BLOCKED':
+    for sym, complete, status in check_results:
+        if complete:
+            no_action_needed.append(sym.name)
+        elif status == 'BLOCKED':
             # TODO Add unblocking job
             pass
         else:
-            jobs[sym['name']] = Job(
-                names=[sym['name']],
-                description=f'Generate symlink at {sym["target"]}',
-                job=create_symlink(sym['source'], sym['target'])
+            jobs[sym.name] = Job(
+                names=[sym.name],
+                description=f'Generate symlink at {sym.target}',
+                job=create_symlink(sym.source, sym.target)
             )
 
     return no_action_needed, jobs
 
 
-def create_symlink(source, target):
-    async def inner():
+def create_symlink(source: str, target: str) -> Callable[[], Coroutine[None, None, bool]]:
+    async def inner() -> bool:
         src = source.replace('DOT', conf.dotfiles_home)
         src = os.path.expanduser(src)
         dest = os.path.expanduser(target)

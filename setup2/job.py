@@ -1,17 +1,17 @@
 import asyncio
 from dataclasses import dataclass, field
-from typing import List, Callable, Optional
+from typing import List, Callable, Optional, Awaitable
 
 
 @dataclass
 class Job:
     names: List[str]
-    job: Callable
+    job: Callable[[], Awaitable[bool]]
     description: str
     depends_on: Optional[str] = None
     children: List['Job'] = field(default_factory=list)
 
-    async def run(self):
+    async def run(self) -> bool:
         try:
             result = await self.job()
             if result and len(self.children) != 0:
@@ -22,11 +22,11 @@ class Job:
             result = False
         return result
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.names}, {self.job}"
 
 
-def print_job_tree(jobs: List[Job], level=0, layers=True):
+def print_job_tree(jobs: List[Job], level: int = 0, layers: bool = True) -> None:
     for i, job in enumerate(jobs):
         front = ('│  ' if layers else '   ') * level
         if i != len(jobs) - 1:

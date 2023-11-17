@@ -35,11 +35,8 @@ Sym('rgconfig', 'DOT/configs/rgrc', '~/.config/ripgrep/config')
 Exe('bat', '0.23.0', installers=['Github'], repo='sharkdp/bat')
 Sym('batconfig', 'DOT/configs/batconfig', '~/.config/bat/config')
 
-Sym('startup.py', 'DOT/languages/python/gen_startup.py', '~/.config/python/startup.py')
 Sym('npmrc', 'DOT/configs/npmrc', '~/.config/npm/npmrc')
 Sym('cargoconfig', 'DOT/languages/rust/config.toml', '~/.local/share/cargo/config.toml')
-Dir('python_data', '~/.local/share/python')
-Exe('node')
 
 install_neovim()
 install_python()

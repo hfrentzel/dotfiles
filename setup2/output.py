@@ -1,4 +1,7 @@
-def print_grid(header, rows) -> str:
+from typing import Tuple, List
+
+
+def print_grid(header: Tuple[str, ...], rows: List[Tuple[str, ...]]) -> str:
     if len(rows) == 0:
         return ""
     max_lengths = [0] * len(header)
@@ -14,9 +17,9 @@ def print_grid(header, rows) -> str:
     return line
 
 
-def red(text: str):
+def red(text: str) -> str:
     return f'\033[91m{text}\033[0m'
 
 
-def green(text: str):
+def green(text: str) -> str:
     return f'\033[92m{text}\033[0m'
