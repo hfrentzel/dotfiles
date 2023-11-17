@@ -8,6 +8,7 @@ from .output import print_grid, red, green
 desired_syms = []
 check_results = []
 
+
 def Sym(name, source, target):
     desired_syms.append(
         {
@@ -16,6 +17,7 @@ def Sym(name, source, target):
             "target": target
         }
     )
+
 
 def check_job(sym):
     src = os.path.expanduser(sym['source'])
@@ -39,6 +41,7 @@ def check_job(sym):
         'status': red('MISSING')
     }
 
+
 def desired_printout():
     lines = []
     for sym in sorted(desired_syms, key=itemgetter('target')):
@@ -47,7 +50,6 @@ def desired_printout():
 
 
 async def get_statuses():
-    tasks = []
     for sym in desired_syms:
         check_results.append(check_job(sym))
 
@@ -60,6 +62,7 @@ def status_printout(show_all):
         lines.append((sym['name'], sym['status']))
     return print_grid(('SYMLINK', 'STATUS'), lines)
 
+
 def create_jobs():
     no_action_needed = []
     jobs = {}
@@ -67,7 +70,7 @@ def create_jobs():
         if sym['complete']:
             no_action_needed.append(sym['name'])
         elif sym['status'] == 'BLOCKED':
-            #TODO Add unblocking job
+            # TODO Add unblocking job
             pass
         else:
             jobs[sym['name']] = Job(
@@ -75,8 +78,9 @@ def create_jobs():
                 description=f'Generate symlink at {sym["target"]}',
                 job=create_symlink(sym['source'], sym['target'])
             )
-    
+
     return no_action_needed, jobs
+
 
 def create_symlink(source, target):
     async def inner():

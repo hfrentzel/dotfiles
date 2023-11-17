@@ -1,13 +1,13 @@
 import asyncio
 from operator import itemgetter
 
-from .job import Job
 from .pip import Pip
 from .npm import Npm
-from .output import print_grid
+from .output import print_grid, red
 
-desired_libs = [] 
+desired_libs = []
 check_results = []
+
 
 def Lib(name, version, l_type):
     desired_libs.append(
@@ -17,13 +17,15 @@ def Lib(name, version, l_type):
             "type": l_type
         })
 
+
 async def check_job(lib):
     if lib['type'] == 'pip':
         return Pip.check_install(lib)
-    elif lib['type'] == 'npm':
+    if lib['type'] == 'npm':
         return Npm.check_install(lib)
-    else:
-        return {**lib, 'complete': False, 'curr_ver': red('UNKNOWN')}
+
+    return {**lib, 'complete': False, 'curr_ver': red('UNKNOWN')}
+
 
 def desired_printout():
     lines = []
@@ -31,11 +33,13 @@ def desired_printout():
         lines.append((lib['name'], lib['version']))
     return print_grid(('LIBRARY', 'VERSION'), lines)
 
+
 async def get_statuses():
     tasks = []
     for lib in desired_libs:
         tasks.append(check_job(lib))
     check_results.extend(await asyncio.gather(*tasks))
+
 
 def status_printout(show_all):
     lines = []
@@ -45,10 +49,12 @@ def status_printout(show_all):
         lines.append((lib['name'], lib['version'], lib['curr_ver']))
     return print_grid(('LIBRARY', 'DESIRED', 'CURRENT'), lines)
 
+
 JOB_BUILDERS = {
     'pip': Pip.pip_builder,
     'npm': Npm.npm_builder
 }
+
 
 def create_jobs():
     no_action_needed = []

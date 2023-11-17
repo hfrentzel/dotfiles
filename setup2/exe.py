@@ -1,7 +1,9 @@
 import asyncio
+from dataclasses import dataclass
 import re
 import shutil
 from operator import itemgetter
+from typing import Optional, List
 
 from .apt import Apt
 from .cargo import Cargo
@@ -25,6 +27,23 @@ Installers:
 Apt, Deb, Pip, Npm, Tar
 #TODO validate elements of installers list are valid
 """
+
+
+@dataclass
+class exe():
+    name: str
+    installers: List[str]
+    command_name: str = ''
+    version: Optional[str] = None
+    url: Optional[str] = None
+    repo: Optional[str] = None
+
+    def __post_init__(self):
+        if self.command_name == '':
+            self.command_name = self.name
+        desired_exes.append(self)
+
+
 def Exe(name, version=None, installers=None, command_name=None, url=None,
         repo=None):
     desired_exes.append(
@@ -36,6 +55,7 @@ def Exe(name, version=None, installers=None, command_name=None, url=None,
             "repo": repo,
             "installers": installers
         })
+
 
 async def check_job(exe):
     command = shutil.which(exe['command_name'])
@@ -59,8 +79,7 @@ async def check_job(exe):
             success = ver_greater_than(curr_ver, exe['version'])
             color = green if success else red
             return {**exe, 'complete': success, 'curr_ver': color(curr_ver)}
-        else:
-            return {**exe, 'complete': False, 'curr_ver': red('UNKNOWN')}
+        return {**exe, 'complete': False, 'curr_ver': red('UNKNOWN')}
 
     if string := VERSION_REGEX.search(version.stdout):
         curr_ver = string.group(0)
@@ -69,17 +88,20 @@ async def check_job(exe):
         return {**exe, 'complete': success, 'curr_ver': color(curr_ver)}
     return {**exe, 'complete': False, 'curr_ver': red('UNKNOWN')}
 
+
 def desired_printout():
     lines = []
     for exe in sorted(desired_exes, key=itemgetter('name')):
         lines.append((exe['name'], exe['version']))
     return print_grid(('COMMAND', 'VERSION'), lines)
 
+
 async def get_statuses():
     tasks = []
     for exe in desired_exes:
         tasks.append(check_job(exe))
     check_results.extend(await asyncio.gather(*tasks))
+
 
 def status_printout(show_all):
     lines = []
@@ -88,6 +110,7 @@ def status_printout(show_all):
             continue
         lines.append((exe['name'], exe['version'], exe['curr_ver']))
     return print_grid(('COMMAND', 'DESIRED', 'CURRENT'), lines)
+
 
 JOB_BUILDERS = {
     'Apt': Apt.apt_builder,
@@ -99,6 +122,7 @@ JOB_BUILDERS = {
     'Npm': Npm.npm_builder,
     'Zip': Zip.zip_builder,
 }
+
 
 def create_jobs():
     """

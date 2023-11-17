@@ -1,11 +1,12 @@
 import json
 import subprocess
 import shlex
+import shutil
 
-from os.path import expanduser
 from .jobs import async_proc, ver_greater_than
 from .job import Job
 from .output import red, green
+
 
 class Npm():
     all_packages = []
@@ -22,13 +23,14 @@ class Npm():
             return None
 
         npm_string = " ".join([f'{p[0]}@{p[1]}' for p in cls.all_packages])
+
         async def inner():
             print('Running npm install...')
             result = await async_proc(f'npm install -g {npm_string}')
             success = not result.returncode
             if success:
                 print(green('The following apps were successfully installed '
-                           f'with npm: {",".join(p[0] for p in cls.all_packages)}'))
+                            f'with npm: {",".join(p[0] for p in cls.all_packages)}'))
             else:
                 print(red('npm installation failed'))
                 # TODO try installing packages one at a time
@@ -42,8 +44,11 @@ class Npm():
     @classmethod
     def get_version(cls, package):
         if cls.curr_installed is None:
+            if not shutil.which('npm'):
+                cls.curr_installed = {}
+                return None
             results = json.loads(
-                subprocess.run(shlex.split('npm -g -j list'), 
+                subprocess.run(shlex.split('npm -g -j list'),
                                capture_output=True).stdout.decode())
             cls.curr_installed = {k: v['version'] for (k, v) in results['dependencies'].items()}
         if cls.curr_installed.get(package['name']) is None:

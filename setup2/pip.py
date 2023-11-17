@@ -6,6 +6,7 @@ from .jobs import async_proc, ver_greater_than
 from .job import Job
 from .output import red, green
 
+
 class Pip():
     all_pips = []
     curr_installed = None
@@ -21,6 +22,7 @@ class Pip():
             return None
 
         pip_string = " ".join([f'{p[0]}=={p[1]}' for p in cls.all_pips])
+
         async def inner():
             print('Running pip install...')
             result = await async_proc(
@@ -28,7 +30,7 @@ class Pip():
             success = not result.returncode
             if success:
                 print(green('The following apps were successfully installed '
-                           f'with pip: {",".join(p[0] for p in cls.all_pips)}'))
+                            f'with pip: {",".join(p[0] for p in cls.all_pips)}'))
             else:
                 print(red('pip installation failed'))
                 # TODO try installing packages one at a time
@@ -43,13 +45,12 @@ class Pip():
     def get_version(cls, package):
         if cls.curr_installed is None:
             results = json.loads(
-                subprocess.run(shlex.split('/usr/bin/python3.9 -m pip list --format=json'), 
+                subprocess.run(shlex.split('/usr/bin/python3.9 -m pip list --format=json'),
                                capture_output=True).stdout.decode())
             cls.curr_installed = {r['name']: r['version'] for r in results}
         if cls.curr_installed.get(package['name']) is None:
             return None
         return cls.curr_installed[package['name']]
-
 
     @classmethod
     def check_install(cls, package):

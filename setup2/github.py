@@ -3,10 +3,11 @@ import os
 
 from .job import Job
 from .jobs import async_proc
-from .output import red, green
+from .output import red
 from .deb import Deb
 from .tar import Tar
 from .zip import Zip
+
 
 class Github():
     token = None
@@ -23,11 +24,12 @@ class Github():
 
             asset = cls.filter_assets(available_assets)
             spec['url'] = f'https://github.com/{repo}/releases/download/{tag}/{asset}'
-                
+
             if asset is None:
                 print(red(f'Failed to install {spec["name"]} from Github release'))
                 return False
-            elif asset.endswith('.deb'):
+
+            if asset.endswith('.deb'):
                 await Deb.deb_builder(spec).run()
             elif asset.endswith('.zip'):
                 await Zip.zip_builder(spec).run()
@@ -45,32 +47,32 @@ class Github():
         response = await cls.gh_api_call(f'repos/{repo}/releases')
         releases = [r['tag_name'] for r in response]
         return next(r for r in releases if version in r)
-                
+
     @staticmethod
     def filter_assets(asset_list):
         # TODO Infer these values from environment and handle other
         # possibilities
-        os = 'linux'
+        system_os = 'linux'
         hardware = 'x86_64'
         hardware_alt = 'amd64'
         if False and any(a.endwiths('.deb') for a in asset_list):
             # TODO handle deb files when sudo permissions are available
-            pass 
+            pass
 
-        if any(os in a for a in asset_list):
-            asset_list = [a for a in asset_list if os in a]
+        if any(system_os in a for a in asset_list):
+            asset_list = [a for a in asset_list if system_os in a]
         if any(hardware in a for a in asset_list):
             asset_list = [a for a in asset_list if hardware in a]
         if any(hardware_alt in a for a in asset_list):
             asset_list = [a for a in asset_list if hardware_alt in a]
 
-        if os == 'linux' and hardware == 'x86_64' and len(asset_list) == 2:
+        if system_os == 'linux' and hardware == 'x86_64' and len(asset_list) == 2:
             asset_list = [a for a in asset_list if 'musl' in a]
 
         if len(asset_list) == 1:
             return asset_list[0]
         return None
-            
+
     @classmethod
     async def gh_api_call(cls, path):
         token = cls.get_token()

@@ -5,6 +5,7 @@ from .jobs import fetch_file
 from .job import Job
 from .output import red, green
 
+
 class Tar():
 
     @classmethod
@@ -47,7 +48,8 @@ class Tar():
                     t.path = filename
                     if extension in ['.ps1', '.zsh', '.fish']:
                         continue
-                    elif extension == '.bash':
+
+                    if extension == '.bash':
                         dir = f'{install_home}/share/bash-completion/completions'
                     elif extension in ['.1', '.5']:
                         man = extension.replace('.', 'man')
@@ -55,7 +57,7 @@ class Tar():
                     elif extension in ['.md', '.txt']:
                         dir = f'{install_home}/share/doc/{spec["command_name"]}'
                     elif extension == '':
-                        if t.mode & 0b001001001: 
+                        if t.mode & 0b001001001:
                             dir = f'{install_home}/bin'
                         else:
                             dir = f'{install_home}/share/doc/{spec["command_name"]}'
@@ -64,10 +66,10 @@ class Tar():
                     makedirs(dir, exist_ok=True)
                     tar.extract(t, dir)
 
-            except Exception as e:
+            except Exception:
                 print(red(f'Failed to install {spec["name"]} from tarball'))
                 return False
-            finally: 
+            finally:
                 tar.close()
 
             print(green(f'{spec["name"]} has been installed successfully'))

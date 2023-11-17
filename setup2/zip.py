@@ -6,6 +6,7 @@ from .jobs import fetch_file
 from .job import Job
 from .output import red, green
 
+
 class Zip():
 
     @classmethod
@@ -16,7 +17,7 @@ class Zip():
             else:
                 install_home = path.expanduser('~/.local')
             try:
-                print(f'Installing {spec["name"]} from zip file...' )
+                print(f'Installing {spec["name"]} from zip file...')
                 archive_file = await fetch_file(spec['url'], spec['version'])
 
                 zip = ZipFile(archive_file)
@@ -52,7 +53,8 @@ class Zip():
                     z.filename = filename
                     if extension in ['.ps1', '.zsh', '.fish']:
                         continue
-                    elif extension == '.bash':
+
+                    if extension == '.bash':
                         dir = f'{install_home}/share/bash-completion/completions'
                     elif extension in ['.1', '.5']:
                         man = extension.replace('.', 'man')
@@ -71,9 +73,8 @@ class Zip():
                     makedirs(dir, exist_ok=True)
                     zip.extract(z, dir)
 
-            except Exception as e:
+            except Exception:
                 print(red(f'Failed to install {spec["name"]} from zip file'))
-                print(e)
                 return False
             finally:
                 zip.close()

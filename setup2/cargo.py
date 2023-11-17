@@ -2,13 +2,14 @@ from .jobs import async_proc
 from .job import Job
 from .output import red, green
 
+
 class Cargo():
     all_crates = []
 
     @classmethod
     def cargo_builder(cls, spec):
         async def inner():
-            print(f'Installing {spec["name"]} with cargo...' )
+            print(f'Installing {spec["name"]} with cargo...')
             result = await async_proc(
                 f'cargo install --version {spec["version"]} {spec["name"]}')
             success = not result.returncode

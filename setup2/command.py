@@ -10,6 +10,7 @@ from .output import print_grid, red, green
 desired_commands = []
 check_results = []
 
+
 def Command(name, run_script, check_script=None, depends_on=None, cwd=None):
     desired_commands.append(
         {
@@ -20,6 +21,7 @@ def Command(name, run_script, check_script=None, depends_on=None, cwd=None):
             "depends_on": depends_on
         })
 
+
 async def check_job(command):
     if isinstance(command['cwd'], str):
         command['cwd'] = os.path.expanduser(command['cwd'].replace('DOT', conf.dotfiles_home))
@@ -29,8 +31,9 @@ async def check_job(command):
     result = await async_proc(command['check_script'], cwd=command['cwd'])
     if result.returncode == 0:
         return {**command, 'complete': True, 'status': green('DONE')}
-    else:
-        return {**command, 'complete': False, 'status': red('INCOMPLETE')}
+
+    return {**command, 'complete': False, 'status': red('INCOMPLETE')}
+
 
 async def get_statuses():
     tasks = []
@@ -38,11 +41,13 @@ async def get_statuses():
         tasks.append(check_job(command))
     check_results.extend(await asyncio.gather(*tasks))
 
+
 def desired_printout():
     lines = []
     for command in sorted(desired_commands, key=itemgetter('name')):
         lines.append((command['name'],))
     return print_grid(('SCRIPTS',), lines)
+
 
 def status_printout(show_all):
     lines = []
@@ -52,6 +57,7 @@ def status_printout(show_all):
         lines.append((command['name'], command['status']))
     return print_grid(('SCRIPT', 'STATUS'), lines)
 
+
 def create_jobs():
     no_action_needed = []
     jobs = {}
@@ -59,16 +65,16 @@ def create_jobs():
         if command['complete']:
             no_action_needed.append(command['name'])
             continue
-        else:
-            jobs[command['name']] = Job(
-                names=[command['name']],
-                description=f'Run the {command["name"]} script',
-                depends_on=command['depends_on'],
-                job=run_script(command['name'], command['run_script'],
-                               command['cwd'])
-            )
+        jobs[command['name']] = Job(
+            names=[command['name']],
+            description=f'Run the {command["name"]} script',
+            depends_on=command['depends_on'],
+            job=run_script(command['name'], command['run_script'],
+                           command['cwd'])
+        )
 
     return no_action_needed, jobs
+
 
 def run_script(name, script, cwd):
     async def inner():

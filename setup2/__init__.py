@@ -1,7 +1,6 @@
 import argparse
 import asyncio
 import os
-import sys
 
 from . import dir
 from . import exe
@@ -23,10 +22,11 @@ def show_desired():
     for t in conf.types:
         print(t.desired_printout(), end='')
 
+
 def build_tree(jobs, complete):
     root_jobs = []
     for job_name, job in jobs.items():
-        if job.depends_on == None:
+        if job.depends_on is None:
             root_jobs.append(job)
         elif job.depends_on in complete:
             root_jobs.append(job)
@@ -35,6 +35,7 @@ def build_tree(jobs, complete):
             parent.children.append(job)
 
     return root_jobs
+
 
 async def handle_jobs():
     await asyncio.gather(*[t.get_statuses() for t in conf.types])
@@ -56,7 +57,8 @@ async def handle_jobs():
         return
 
     if conf.args.stopping_point == 'job_generation':
-        [print(j.description) for j in jobs.values()]
+        for j in jobs.values():
+            print(j.description)
         return
 
     root_jobs = build_tree(jobs, complete)
@@ -74,18 +76,18 @@ async def handle_jobs():
         print(red('Not all jobs were successful. Check logs for details'))
 
 
-def run():
-    parser = argparse.ArgumentParser( prog = 'EnvSetup')
+def run() -> None:
+    parser = argparse.ArgumentParser(prog='EnvSetup')
     parser.add_argument('--symlinks-only', action='store_true')
     stages = parser.add_mutually_exclusive_group()
     stages.add_argument('--desired', action='store_true')
-    stages.add_argument('--show-all', action='store_const', 
+    stages.add_argument('--show-all', action='store_const',
                         const='all_status', dest='stopping_point')
-    stages.add_argument('--list-jobs', action='store_const', 
+    stages.add_argument('--list-jobs', action='store_const',
                         const='job_generation', dest='stopping_point')
-    stages.add_argument('--job-tree', action='store_const', 
+    stages.add_argument('--job-tree', action='store_const',
                         const='job_tree', dest='stopping_point')
-    stages.add_argument('--run', action='store_const', 
+    stages.add_argument('--run', action='store_const',
                         const='run_jobs', dest='stopping_point')
 
     conf.dotfiles_home = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

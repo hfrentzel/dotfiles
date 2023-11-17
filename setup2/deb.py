@@ -1,16 +1,14 @@
-from os import path, makedirs
-
-from .conf import conf
 from .jobs import async_proc, fetch_file
 from .job import Job
 from .output import red, green
+
 
 class Deb():
 
     @classmethod
     def deb_builder(cls, spec):
         async def inner():
-            print(f'Installing {spec["name"]} from debian archive...' )
+            print(f'Installing {spec["name"]} from debian archive...')
             archive_file = await fetch_file(spec['url'], spec['version'])
             result = await async_proc(f'sudo apt install {archive_file}')
             success = not result.returncode

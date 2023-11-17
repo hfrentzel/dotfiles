@@ -1,9 +1,11 @@
+from typing import List
 from .jobs import async_proc
 from .job import Job
 from .output import red, green
 
+
 class Apt():
-    all_apts = []
+    all_apts: List[str] = []
 
     @classmethod
     def apt_builder(cls, spec):
@@ -22,7 +24,7 @@ class Apt():
             success = not result.returncode
             if success:
                 print(green('The following apps were successfully installed '
-                           f'with apt: {",".join(p[0] for p in cls.all_apts)}'))
+                            f'with apt: {",".join(p[0] for p in cls.all_apts)}'))
             else:
                 print(red('apt installation failed'))
                 # TODO try installing packages one at a time

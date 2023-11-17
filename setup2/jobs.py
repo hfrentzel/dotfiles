@@ -4,24 +4,27 @@ import asyncio
 
 from .conf import conf
 
+
 @dataclass
 class JobOutput:
     stdout: str
     stderr: str
     returncode: int
 
+
 def ver_greater_than(current, target):
     curr_major, curr_minor, curr_patch = current.split(".")
     tar_major, tar_minor, tar_patch = target.split(".")
     return (
         curr_major > tar_major or
-        (curr_major == tar_major and curr_minor > tar_minor) or 
+        (curr_major == tar_major and curr_minor > tar_minor) or
         (curr_major == tar_major and curr_minor == tar_minor and curr_patch >= tar_patch))
+
 
 async def async_proc(cmd, stdin=None, cwd=None):
     if isinstance(stdin, str):
         stdin = stdin.encode()
-    #TODO Log stdout and stderr if command fails
+    # TODO Log stdout and stderr if command fails
     process = await asyncio.create_subprocess_shell(
         cmd,
         cwd=cwd,
