@@ -13,8 +13,8 @@ from setup2.managers.package_types.deb import deb_builder
 from setup2.managers.package_types.github import Github
 from setup2.managers.package_types.pip import Pip
 from setup2.managers.package_types.npm import Npm
-from setup2.managers.package_types.tar import Tar
-from setup2.managers.package_types.zip import Zip
+from setup2.managers.package_types.tar import tar_builder
+from setup2.managers.package_types.zip import zip_builder
 
 VERSION_REGEX = re.compile(r'\d+\.\d+\.\d+', re.M)
 
@@ -90,8 +90,8 @@ JOB_BUILDERS: Dict[str, Callable[[Exe], Union[bool, Job]]] = {
     'Github': Github.github_builder,
     'Npm': Npm.npm_builder,
     'Pip': Pip.pip_builder,
-    'Tar': Tar.tar_builder,
-    'Zip': Zip.zip_builder,
+    'Tar': tar_builder,
+    'Zip': zip_builder,
 }
 
 

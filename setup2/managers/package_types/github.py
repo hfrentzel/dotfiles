@@ -7,8 +7,8 @@ from setup2.output import red
 from setup2.process import async_proc
 from setup2.managers.exe_class import Exe
 from setup2.managers.package_types.deb import deb_builder
-from setup2.managers.package_types.tar import Tar
-from setup2.managers.package_types.zip import Zip
+from setup2.managers.package_types.tar import tar_builder
+from setup2.managers.package_types.zip import zip_builder
 
 
 class Github():
@@ -33,9 +33,9 @@ class Github():
             if asset.endswith('.deb'):
                 await deb_builder(spec).run()
             elif asset.endswith('.zip'):
-                await Zip.zip_builder(spec).run()
+                await zip_builder(spec).run()
             elif '.tar.' in asset:
-                await Tar.tar_builder(spec).run()
+                await tar_builder(spec).run()
 
             return True
 

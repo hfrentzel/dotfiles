@@ -5,8 +5,9 @@ from typing import Optional, List, Tuple, Dict
 
 from setup2.job import Job
 from setup2.output import red, green
-from setup2.process import async_proc, ver_greater_than
+from setup2.process import async_proc
 from setup2.managers.manager import Package
+from setup2.managers.package_types.versioning import check_install
 
 
 class Pip():
@@ -57,9 +58,4 @@ class Pip():
     @classmethod
     def check_install(cls, package: Package) -> Tuple[bool, str]:
         curr_ver = cls.get_version(package)
-        if curr_ver is None:
-            return (False, red('MISSING'))
-
-        success = ver_greater_than(curr_ver, package.version)
-        color = green if success else red
-        return (success, color(curr_ver))
+        return check_install(curr_ver, package)
