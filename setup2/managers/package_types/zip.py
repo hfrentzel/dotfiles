@@ -1,11 +1,11 @@
-from zipfile import ZipFile
 from os import path, makedirs, chmod
+from zipfile import ZipFile
 
-from .conf import conf
-from .jobs import fetch_file
-from .job import Job
-from .output import red, green
-from .exe_class import Exe
+from setup2.conf import conf
+from setup2.job import Job
+from setup2.output import red, green
+from setup2.process import fetch_file
+from setup2.managers.exe_class import Exe
 
 
 class Zip():

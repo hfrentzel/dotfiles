@@ -1,7 +1,7 @@
-from .jobs import async_proc, fetch_file
-from .job import Job
-from .output import red, green
-from .exe_class import Exe
+from setup2.job import Job
+from setup2.output import red, green
+from setup2.process import async_proc, fetch_file
+from setup2.managers.exe_class import Exe
 
 
 def deb_builder(spec: Exe) -> Job:

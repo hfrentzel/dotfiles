@@ -1,8 +1,9 @@
 from typing import List
-from .jobs import async_proc
-from .job import Job
-from .output import red, green
-from .exe_class import Exe
+
+from setup2.job import Job
+from setup2.output import red, green
+from setup2.process import async_proc
+from setup2.managers.exe_class import Exe
 
 
 class Apt():

@@ -1,9 +1,10 @@
 import os
 from dataclasses import dataclass
 from typing import ClassVar, List, Tuple, Dict, Coroutine, Callable
-from .job import Job
-from .conf import conf
-from .output import print_grid, red, green
+
+from setup2.conf import conf
+from setup2.job import Job
+from setup2.output import print_grid, red, green
 
 
 @dataclass

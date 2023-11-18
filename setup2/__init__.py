@@ -3,17 +3,17 @@ import asyncio
 import os
 from typing import List, Dict
 
-from . import dir
-from . import exe_class
-from . import exe
-from . import sym
-from . import lib
-from . import command
+from .managers import directory
+from .managers import exe_class
+from .managers import exe
+from .managers import sym
+from .managers import lib
+from .managers import command
 from .job import print_job_tree, Job
 from .conf import conf
 from .output import red, green
 
-Dir = dir.Dir
+Dir = directory.Dir
 Exe = exe_class.Exe
 Lib = lib.Lib
 Sym = sym.Sym
@@ -102,7 +102,7 @@ def run() -> None:
 
     conf.types = [sym]
     if not conf.args.symlinks_only:
-        conf.types.extend([dir, lib, exe, command])
+        conf.types.extend([directory, lib, exe, command])
 
     if conf.args.desired:
         show_desired()

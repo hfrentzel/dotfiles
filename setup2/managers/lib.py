@@ -2,10 +2,10 @@ import asyncio
 from dataclasses import dataclass
 from typing import Tuple, ClassVar, List, Dict
 
-from .pip import Pip
-from .npm import Npm
-from .output import print_grid, red
-from .job import Job
+from setup2.job import Job
+from setup2.output import print_grid, red
+from setup2.managers.package_types.pip import Pip
+from setup2.managers.package_types.npm import Npm
 
 
 @dataclass

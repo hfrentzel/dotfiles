@@ -1,7 +1,6 @@
-# from abc import ABC
-from typing import Protocol, Tuple, List, Dict, Coroutine, Any
 from dataclasses import dataclass
-from .job import Job
+from typing import Protocol, Tuple, List, Dict, Coroutine, Any
+from setup2.job import Job
 
 
 @dataclass

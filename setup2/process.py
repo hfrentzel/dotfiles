@@ -1,6 +1,6 @@
+import asyncio
 from dataclasses import dataclass
 from os import path
-import asyncio
 from typing import Optional
 
 from .conf import conf

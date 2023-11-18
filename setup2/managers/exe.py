@@ -3,18 +3,18 @@ import re
 import shutil
 from typing import List, Tuple, Dict, Callable, Union
 
-from .exe_class import Exe
-from .apt import Apt
-from .cargo import cargo_builder
-from .deb import deb_builder
-from .github import Github
-from .pip import Pip
-from .npm import Npm
-from .tar import Tar
-from .zip import Zip
-from .job import Job
-from .jobs import async_proc, ver_greater_than
-from .output import print_grid, red, green
+from setup2.job import Job
+from setup2.process import async_proc, ver_greater_than
+from setup2.output import print_grid, red, green
+from setup2.managers.exe_class import Exe
+from setup2.managers.package_types.apt import Apt
+from setup2.managers.package_types.cargo import cargo_builder
+from setup2.managers.package_types.deb import deb_builder
+from setup2.managers.package_types.github import Github
+from setup2.managers.package_types.pip import Pip
+from setup2.managers.package_types.npm import Npm
+from setup2.managers.package_types.tar import Tar
+from setup2.managers.package_types.zip import Zip
 
 VERSION_REGEX = re.compile(r'\d+\.\d+\.\d+', re.M)
 

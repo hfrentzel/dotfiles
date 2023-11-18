@@ -2,13 +2,13 @@ import json
 import os
 from typing import List, Optional, Any, Dict
 
-from .job import Job
-from .jobs import async_proc
-from .output import red
-from .deb import deb_builder
-from .tar import Tar
-from .zip import Zip
-from .exe_class import Exe
+from setup2.job import Job
+from setup2.output import red
+from setup2.process import async_proc
+from setup2.managers.exe_class import Exe
+from setup2.managers.package_types.deb import deb_builder
+from setup2.managers.package_types.tar import Tar
+from setup2.managers.package_types.zip import Zip
 
 
 class Github():

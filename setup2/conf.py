@@ -1,7 +1,8 @@
+from argparse import Namespace
 from dataclasses import dataclass, field
 from typing import List
-from argparse import Namespace
-from .package import Manager
+
+from .managers.manager import Manager
 
 
 @dataclass

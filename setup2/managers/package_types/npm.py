@@ -1,13 +1,13 @@
 import json
-import subprocess
 import shlex
 import shutil
+import subprocess
 from typing import List, Tuple, Optional, Dict
 
-from .jobs import async_proc, ver_greater_than
-from .job import Job
-from .output import red, green
-from .package import Package
+from setup2.job import Job
+from setup2.output import red, green
+from setup2.process import async_proc, ver_greater_than
+from setup2.managers.manager import Package
 
 
 class Npm():
