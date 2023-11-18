@@ -1,14 +1,15 @@
-from dataclasses import dataclass
-from typing import Optional, List
+from dataclasses import dataclass, field
+from typing import List
 from argparse import Namespace
+from .package import Manager
 
 
 @dataclass
 class Conf:
-    args: Optional[Namespace] = None
+    args: Namespace = Namespace()
     dotfiles_home: str = ''
-    types: Optional[List[str]] = None
-    sources_dir: Optional[str] = None
+    types: List[Manager] = field(default_factory=list)
+    sources_dir: str = ''
     root_access: bool = False
 
 

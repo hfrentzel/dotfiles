@@ -18,21 +18,24 @@ class Command():
     depends_on: Optional[str] = None
     cwd: Optional[str] = None
 
+    def __post_init__(self) -> None:
+        self.desired.append(self)
+
 
 check_results: List[Tuple[Command, bool, str]] = []
 
 
-async def check_job(command: Command) -> Tuple[bool, str]:
+async def check_job(command: Command) -> Tuple[Command, bool, str]:
     if isinstance(command.cwd, str):
         command.cwd = os.path.expanduser(command.cwd.replace('DOT', conf.dotfiles_home))
 
     if command.check_script is None:
-        return (False, 'CANT VERIFY')
+        return (command, False, 'CANT VERIFY')
     result = await async_proc(command.check_script, cwd=command.cwd)
     if result.returncode == 0:
-        return (True, green('DONE'))
+        return (command, True, green('DONE'))
 
-    return (False, red('INCOMPLETE'))
+    return (command, False, red('INCOMPLETE'))
 
 
 async def get_statuses() -> None:

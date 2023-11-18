@@ -41,8 +41,10 @@ async def async_proc(cmd: str, stdin: Optional[bytes] = None,
     )
 
 
-async def fetch_file(url: str, version: str) -> str:
-    full_url = url.format(version=version)
+async def fetch_file(url: str, version: Optional[str]) -> str:
+    full_url = url
+    if version is not None:
+        full_url = url.format(version=version)
     _, file = path.split(full_url)
 
     filename = f'{conf.sources_dir}/{file}'

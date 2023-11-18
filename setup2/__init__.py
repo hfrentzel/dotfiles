@@ -1,29 +1,33 @@
 import argparse
 import asyncio
 import os
+from typing import List, Dict
 
 from . import dir
+from . import exe_class
 from . import exe
 from . import sym
 from . import lib
 from . import command
-from .job import print_job_tree
+from .job import print_job_tree, Job
 from .conf import conf
 from .output import red, green
 
 Dir = dir.Dir
-Exe = exe.Exe
+Exe = exe_class.Exe
 Lib = lib.Lib
 Sym = sym.Sym
 Command = command.Command
 
 
-def show_desired():
+def show_desired() -> None:
+    if conf.types is None:
+        return
     for t in conf.types:
         print(t.desired_printout(), end='')
 
 
-def build_tree(jobs, complete):
+def build_tree(jobs: Dict[str, Job], complete: List[str]) -> List[Job]:
     root_jobs = []
     for job_name, job in jobs.items():
         if job.depends_on is None:
@@ -37,7 +41,7 @@ def build_tree(jobs, complete):
     return root_jobs
 
 
-async def handle_jobs():
+async def handle_jobs() -> None:
     await asyncio.gather(*[t.get_statuses() for t in conf.types])
 
     if conf.args.stopping_point in [None, 'all_status']:
@@ -57,8 +61,8 @@ async def handle_jobs():
         return
 
     if conf.args.stopping_point == 'job_generation':
-        for j in jobs.values():
-            print(j.description)
+        for m in jobs.values():
+            print(m.description)
         return
 
     root_jobs = build_tree(jobs, complete)

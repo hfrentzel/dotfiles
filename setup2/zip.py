@@ -5,32 +5,32 @@ from .conf import conf
 from .jobs import fetch_file
 from .job import Job
 from .output import red, green
+from .exe_class import Exe
 
 
 class Zip():
 
     @classmethod
-    def zip_builder(cls, spec):
-        async def inner():
+    def zip_builder(cls, spec: Exe) -> Job:
+        async def inner() -> bool:
             if conf.root_access:
                 install_home = '/usr/local'
             else:
                 install_home = path.expanduser('~/.local')
-            try:
-                print(f'Installing {spec["name"]} from zip file...')
-                archive_file = await fetch_file(spec['url'], spec['version'])
 
-                zip = ZipFile(archive_file)
-                all_files = [z for z in zip.infolist() if not z.is_dir()]
+            print(f'Installing {spec.name} from zip file...')
+            archive_file = await fetch_file(spec.url, spec.version)
+            with ZipFile(archive_file) as archive:
+                all_files = [z for z in archive.infolist() if not z.is_dir()]
 
                 if len(all_files) == 1 and all_files[0].external_attr & (0o111 << 16):
                     mode = (all_files[0].external_attr >> 16) & 0o777
-                    dir = f'{install_home}/bin'
+                    extract_path = f'{install_home}/bin'
 
-                    zip.extract(all_files[0], dir)
-                    chmod(f'{dir}/{all_files[0].filename}', mode)
+                    archive.extract(all_files[0], extract_path)
+                    chmod(f'{extract_path}/{all_files[0].filename}', mode)
 
-                    print(green(f'{spec["name"]} has been installed successfully'))
+                    print(green(f'{spec.name} has been installed successfully'))
                     return True
 
                 # Remove common prefix from all filenames
@@ -45,7 +45,7 @@ class Zip():
 
                     if any(name.startswith(p) for p in ['bin', 'lib', 'share', 'include']):
                         z.filename = name
-                        zip.extract(z, install_home)
+                        archive.extract(z, install_home)
                         continue
 
                     filename = path.split(name)[1]
@@ -55,33 +55,30 @@ class Zip():
                         continue
 
                     if extension == '.bash':
-                        dir = f'{install_home}/share/bash-completion/completions'
+                        extract_path = f'{install_home}/share/bash-completion/completions'
                     elif extension in ['.1', '.5']:
                         man = extension.replace('.', 'man')
-                        dir = f'{install_home}/share/man/{man}'
+                        extract_path = f'{install_home}/share/man/{man}'
                     elif extension in ['.md', '.txt']:
-                        dir = f'{install_home}/share/doc/{spec["command_name"]}'
+                        extract_path = f'{install_home}/share/doc/{spec.command_name}'
                     elif extension == '':
                         filemode = (z.external_attr >> 16) & 0o777
-                        if filemode & 0o111: 
-                            dir = f'{install_home}/bin'
-                            chmod(f'{dir}/{filename}', filemode)
+                        if filemode & 0o111:
+                            extract_path = f'{install_home}/bin'
+                            chmod(f'{extract_path}/{filename}', filemode)
                         else:
-                            dir = f'{install_home}/share/doc/{spec["command_name"]}'
+                            extract_path = f'{install_home}/share/doc/{spec.command_name}'
                     else:
                         continue
-                    makedirs(dir, exist_ok=True)
-                    zip.extract(z, dir)
+                    makedirs(extract_path, exist_ok=True)
+                    archive.extract(z, extract_path)
 
-            except Exception:
-                print(red(f'Failed to install {spec["name"]} from zip file'))
-                return False
-            finally:
-                zip.close()
+                print(green(f'{spec.name} has been installed successfully'))
+                return True
 
-            print(green(f'{spec["name"]} has been installed successfully'))
-            return True
+            print(red(f'Failed to install {spec.name} from zip file'))
+            return False
 
-        return Job(names=[spec['name']],
-                   description=f'Install {spec["name"]} from zip file',
+        return Job(names=[spec.name],
+                   description=f'Install {spec.name} from zip file',
                    job=inner)

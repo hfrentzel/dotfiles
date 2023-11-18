@@ -1,31 +1,32 @@
 import tarfile
 from os import path, makedirs
 
+from .exe_class import Exe
 from .jobs import fetch_file
 from .job import Job
 from .output import red, green
+from .conf import conf
 
 
 class Tar():
 
     @classmethod
-    def tar_builder(cls, spec):
-        async def inner():
+    def tar_builder(cls, spec: Exe) -> Job:
+        async def inner() -> bool:
             if conf.root_access:
                 install_home = '/usr/local'
             else:
                 install_home = path.expanduser('~/.local')
-            try:
-                print(f'Installing {spec["name"]} from tarball...' )
-                archive_file = await fetch_file(spec['url'], spec['version'])
 
-                tar = tarfile.open(archive_file)
+            print(f'Installing {spec.name} from tarball...')
+            archive_file = await fetch_file(spec.url, spec.version)
+            with tarfile.open(archive_file) as tar:
                 all_files = [t for t in tar.getmembers() if not t.isdir()]
 
                 if len(all_files) == 1 and all_files[0].mode & 0b001001001:
-                    dir = f'{install_home}/bin'
-                    tar.extract(all_files[0], dir)
-                    print(green(f'{spec["name"]} has been installed successfully'))
+                    extract_path = f'{install_home}/bin'
+                    tar.extract(all_files[0], extract_path)
+                    print(green(f'{spec.name} has been installed successfully'))
                     return True
 
                 # Remove common prefix from all filenames
@@ -50,31 +51,28 @@ class Tar():
                         continue
 
                     if extension == '.bash':
-                        dir = f'{install_home}/share/bash-completion/completions'
+                        extract_path = f'{install_home}/share/bash-completion/completions'
                     elif extension in ['.1', '.5']:
                         man = extension.replace('.', 'man')
-                        dir = f'{install_home}/share/man/{man}'
+                        extract_path = f'{install_home}/share/man/{man}'
                     elif extension in ['.md', '.txt']:
-                        dir = f'{install_home}/share/doc/{spec["command_name"]}'
+                        extract_path = f'{install_home}/share/doc/{spec.command_name}'
                     elif extension == '':
                         if t.mode & 0b001001001:
-                            dir = f'{install_home}/bin'
+                            extract_path = f'{install_home}/bin'
                         else:
-                            dir = f'{install_home}/share/doc/{spec["command_name"]}'
+                            extract_path = f'{install_home}/share/doc/{spec.command_name}'
                     else:
                         continue
-                    makedirs(dir, exist_ok=True)
-                    tar.extract(t, dir)
+                    makedirs(extract_path, exist_ok=True)
+                    tar.extract(t, extract_path)
 
-            except Exception:
-                print(red(f'Failed to install {spec["name"]} from tarball'))
-                return False
-            finally:
-                tar.close()
+                print(green(f'{spec.name} has been installed successfully'))
+                return True
 
-            print(green(f'{spec["name"]} has been installed successfully'))
-            return True
+            print(red(f'Failed to install {spec.name} from tarball'))
+            return False
 
-        return Job(names=[spec['name']],
-                   description=f'Install {spec["name"]} from tarball',
+        return Job(names=[spec.name],
+                   description=f'Install {spec.name} from tarball',
                    job=inner)

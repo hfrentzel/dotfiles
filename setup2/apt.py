@@ -2,22 +2,23 @@ from typing import List
 from .jobs import async_proc
 from .job import Job
 from .output import red, green
+from .exe_class import Exe
 
 
 class Apt():
     all_apts: List[str] = []
 
     @classmethod
-    def apt_builder(cls, spec):
-        cls.all_apts.append(spec['name'])
+    def apt_builder(cls, spec: Exe) -> bool:
+        cls.all_apts.append(spec.name)
         return True
 
     @classmethod
-    def apt_job(cls):
-        if len(cls.all_apts) == 0:
-            return None
+    def apt_job(cls) -> Job:
 
-        async def inner():
+        async def inner() -> bool:
+            if len(cls.all_apts) == 0:
+                return True
             print('Running apt install...')
             await async_proc('sudo apt update')
             result = await async_proc(f'sudo apt install --yes {" ".join(cls.all_apts)}')

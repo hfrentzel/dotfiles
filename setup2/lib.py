@@ -1,52 +1,56 @@
 import asyncio
-from operator import itemgetter
+from dataclasses import dataclass
+from typing import Tuple, ClassVar, List, Dict
 
 from .pip import Pip
 from .npm import Npm
 from .output import print_grid, red
+from .job import Job
 
-desired_libs = []
+
+@dataclass
+class Lib:
+    desired: ClassVar[List['Lib']] = []
+    name: str
+    version: str
+    type: str
+
+    def __post_init__(self) -> None:
+        self.desired.append(self)
+
+
 check_results = []
 
 
-def Lib(name, version, l_type):
-    desired_libs.append(
-        {
-            "name": name,
-            "version": version,
-            "type": l_type
-        })
+async def check_job(lib: Lib) -> Tuple[Lib, bool, str]:
+    if lib.type == 'pip':
+        return (lib, *Pip.check_install(lib))
+    if lib.type == 'npm':
+        return (lib, *Npm.check_install(lib))
+
+    return (lib, False, red('UNKNOWN'))
 
 
-async def check_job(lib):
-    if lib['type'] == 'pip':
-        return Pip.check_install(lib)
-    if lib['type'] == 'npm':
-        return Npm.check_install(lib)
-
-    return {**lib, 'complete': False, 'curr_ver': red('UNKNOWN')}
-
-
-def desired_printout():
+def desired_printout() -> str:
     lines = []
-    for lib in sorted(desired_libs, key=itemgetter('name')):
-        lines.append((lib['name'], lib['version']))
+    for lib in sorted(Lib.desired, key=(lambda b: b.name)):
+        lines.append((lib.name, lib.version))
     return print_grid(('LIBRARY', 'VERSION'), lines)
 
 
-async def get_statuses():
+async def get_statuses() -> None:
     tasks = []
-    for lib in desired_libs:
+    for lib in Lib.desired:
         tasks.append(check_job(lib))
     check_results.extend(await asyncio.gather(*tasks))
 
 
-def status_printout(show_all):
+def status_printout(show_all: bool) -> str:
     lines = []
-    for lib in sorted(check_results, key=itemgetter('name')):
-        if not show_all and lib['complete']:
+    for lib, complete, curr_ver in sorted(check_results, key=(lambda b: b[0].name)):
+        if not show_all and complete:
             continue
-        lines.append((lib['name'], lib['version'], lib['curr_ver']))
+        lines.append((lib.name, lib.version, curr_ver))
     return print_grid(('LIBRARY', 'DESIRED', 'CURRENT'), lines)
 
 
@@ -56,14 +60,14 @@ JOB_BUILDERS = {
 }
 
 
-def create_jobs():
+def create_jobs() -> Tuple[List[str], Dict[str, Job]]:
     no_action_needed = []
     jobs = {}
-    for lib in check_results:
-        if lib['complete']:
-            no_action_needed.append(lib['name'])
+    for lib, complete, curr_ver in check_results:
+        if complete:
+            no_action_needed.append(lib.name)
             continue
-        JOB_BUILDERS[lib['type']](lib)
+        JOB_BUILDERS[lib.type](lib)
     if len(Pip.all_pips) != 0:
         jobs['pip_install'] = Pip.pip_job()
     if len(Npm.all_packages) != 0:

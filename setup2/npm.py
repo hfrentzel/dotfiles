@@ -2,29 +2,31 @@ import json
 import subprocess
 import shlex
 import shutil
+from typing import List, Tuple, Optional, Dict
 
 from .jobs import async_proc, ver_greater_than
 from .job import Job
 from .output import red, green
+from .package import Package
 
 
 class Npm():
-    all_packages = []
-    curr_installed = None
+    all_packages: List[Tuple[str, str]] = []
+    curr_installed: Optional[Dict[str, str]] = None
 
     @classmethod
-    def npm_builder(cls, spec):
-        cls.all_packages.append((spec['name'], spec['version']))
+    def npm_builder(cls, spec: Package) -> bool:
+        cls.all_packages.append((spec.name, spec.version))
         return True
 
     @classmethod
-    def npm_job(cls):
-        if len(cls.all_packages) == 0:
-            return None
-
+    def npm_job(cls) -> Job:
         npm_string = " ".join([f'{p[0]}@{p[1]}' for p in cls.all_packages])
 
-        async def inner():
+        async def inner() -> bool:
+            if len(cls.all_packages) == 0:
+                return True
+
             print('Running npm install...')
             result = await async_proc(f'npm install -g {npm_string}')
             success = not result.returncode
@@ -42,25 +44,25 @@ class Npm():
                    job=inner)
 
     @classmethod
-    def get_version(cls, package):
+    def get_version(cls, package: Package) -> Optional[str]:
         if cls.curr_installed is None:
             if not shutil.which('npm'):
                 cls.curr_installed = {}
                 return None
             results = json.loads(
-                subprocess.run(shlex.split('npm -g -j list'),
+                subprocess.run(shlex.split('npm -g -j list'), check=False,
                                capture_output=True).stdout.decode())
             cls.curr_installed = {k: v['version'] for (k, v) in results['dependencies'].items()}
-        if cls.curr_installed.get(package['name']) is None:
+        if cls.curr_installed.get(package.name) is None:
             return None
-        return cls.curr_installed[package['name']]
+        return cls.curr_installed[package.name]
 
     @classmethod
-    def check_install(cls, package):
+    def check_install(cls, package: Package) -> Tuple[bool, str]:
         curr_ver = cls.get_version(package)
         if curr_ver is None:
-            return {**package, 'complete': False, 'curr_ver': red('MISSING')}
+            return (False, red('MISSING'))
 
-        success = ver_greater_than(curr_ver, package['version'])
+        success = ver_greater_than(curr_ver, package.version)
         color = green if success else red
-        return {**package, 'complete': success, 'curr_ver': color(curr_ver)}
+        return (success, color(curr_ver))

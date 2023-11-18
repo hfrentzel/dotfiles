@@ -1,7 +1,7 @@
-from typing import Tuple, List
+from typing import Tuple, Sequence
 
 
-def print_grid(header: Tuple[str, ...], rows: List[Tuple[str, ...]]) -> str:
+def print_grid(header: Tuple[str, ...], rows: Sequence[Tuple[str, ...]]) -> str:
     if len(rows) == 0:
         return ""
     max_lengths = [0] * len(header)
