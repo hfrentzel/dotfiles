@@ -1,0 +1,112 @@
+{
+    "resources": {
+        "submodules": {
+            "type": "command",
+            "cwd": "DOT",
+            "check_script": "! git submodule status | grep -qv '^ '",
+            "run_script": "git submodule update --init"
+        },
+        "bashrc": {
+            "type": "symlink",
+            "source": "DOT/bash/.bashrc",
+            "target": "~/.bashrc"
+        },
+        "bash": {
+            "type": "symlink",
+            "source": "DOT/bash/plugins",
+            "target": "~/.config/bash/plugins"
+        },
+        "inputrc": {
+            "type": "symlink",
+            "source": "DOT/bash/.inputrc",
+            "target": "~/.config/readline/inputrc"
+        },
+        "bash_data": {
+            "type": "directory",
+            "path": "~/.local/share/bash"
+        },
+        "dotfiles_data": {
+            "type": "directory",
+            "path": "~/.local/share/dotfiles"
+        },
+        "tmux.conf": {
+            "type": "symlink",
+            "source": "DOT/tmux/.tmux.conf",
+            "target": "~/.config/tmux/tmux.conf"
+        },
+        "tmux_dir": {
+            "type": "symlink",
+            "source": "DOT/tmux/.tmux",
+            "target": "~/.config/tmux/plugins"
+        },
+        "jq": {
+            "type": "exe",
+            "installers": ["Apt"]
+        },
+        "dos2unix": {
+            "type": "exe",
+            "installers": ["Apt"]
+        },
+        "zoxide": {
+            "type": "exe",
+            "version": "0.9.0",
+            "installers": ["Github"],
+            "repo": "ajeetdsouza/zoxide"
+        },
+        "less_data": {
+            "type": "directory",
+            "path": "~/.local/share/less"
+        },
+        "delta": {
+            "type": "exe",
+            "version": "0.15.1",
+            "installers": ["Github"],
+            "repo": "dandavision/delta"
+        },
+        "gitconfig": {
+            "type": "symlink",
+            "source": "DOT/git/gitconfig",
+            "target": "~/.config/git/config"
+        },
+        "ripgrep": {
+            "type": "exe",
+            "command_name": "rg",
+            "version": "13.0.0",
+            "installers": ["Github"],
+            "repo": "BurntSushi/ripgrep"
+        },
+        "rgconfig": {
+            "type": "symlink",
+            "source": "DOT/configs/rgrc",
+            "target": "~/.config/ripgrep/config"
+        },
+        "bat": {
+            "type": "exe",
+            "version": "0.23.0",
+            "installers": ["Github"],
+            "repo": "sharkdp/bat"
+        },
+        "batconfig": {
+            "type": "symlink",
+            "source": "DOT/configs/batconfig",
+            "target": "~/.config/bat/config"
+        },
+        "npmrc": {
+            "type": "symlink",
+            "source": "DOT/configs/npmrc",
+            "target": "~/.config/npm/npmrc"
+        },
+        "cargoconfig": {
+            "type": "symlink",
+            "source": "DOT/languages/rust/config.toml",
+            "target": "~/.local/share/cargo/config.toml"
+        }
+    },
+    "addons": {
+        "fzf": "clis/fzf/spec.json",
+        "javascript": "languages/javascript/spec.json",
+        "python": "languages/python/spec.json",
+        "terraform": "languages/terraform.json",
+        "vim": "vim/spec.json"
+    }
+}

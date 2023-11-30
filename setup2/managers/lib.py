@@ -13,7 +13,7 @@ class Lib:
     desired: ClassVar[List['Lib']] = []
     name: str
     version: str
-    type: str
+    manager: str
 
     def __post_init__(self) -> None:
         self.desired.append(self)
@@ -23,9 +23,9 @@ check_results = []
 
 
 async def check_job(lib: Lib) -> Tuple[Lib, bool, str]:
-    if lib.type == 'pip':
+    if lib.manager == 'pip':
         return (lib, *Pip.check_install(lib))
-    if lib.type == 'npm':
+    if lib.manager == 'npm':
         return (lib, *Npm.check_install(lib))
 
     return (lib, False, red('UNKNOWN'))
@@ -67,7 +67,7 @@ def create_jobs() -> Tuple[List[str], Dict[str, Job]]:
         if complete:
             no_action_needed.append(lib.name)
             continue
-        JOB_BUILDERS[lib.type](lib)
+        JOB_BUILDERS[lib.manager](lib)
     if len(Pip.all_pips) != 0:
         jobs['pip_install'] = Pip.pip_job()
     if len(Npm.all_packages) != 0:

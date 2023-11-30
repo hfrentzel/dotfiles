@@ -1,0 +1,46 @@
+{
+    "python3.9": {
+        "type": "exe",
+        "installers": ["Apt"]
+    },
+    "flake8": {
+        "type": "exe",
+        "version": "6.0.0",
+        "installers": ["Pip"]
+    },
+    "pylint": {
+        "type": "exe",
+        "version": "2.15.4",
+        "installers": ["Pip"]
+    },
+    "python-lsp-server": {
+        "type": "exe",
+        "command_name": "pylsp",
+        "version": "1.7.1",
+        "installers": ["Pip"]
+    },
+    "pylsp-mypy": {
+        "type": "library",
+        "version": "0.6.5",
+        "manager": "pip"
+    },
+    "debugpy": {
+        "type": "library",
+        "version": "1.6.4",
+        "manager": "pip"
+    },
+    "python_data": {
+        "type": "directory",
+        "path": "~/.local/share/python"
+    },
+    "startup.py": {
+        "type": "symlink",
+        "source": "DOT/languages/python/gen_startup.py",
+        "target": "~/.config/python/startup.py"
+    },
+    "pylintrc": {
+        "type": "symlink",
+        "source": "DOT/languages/python/pylintrc",
+        "target": "~/.config/pylint/pylintrc"
+    }
+}

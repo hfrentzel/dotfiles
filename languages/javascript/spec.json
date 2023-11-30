@@ -1,0 +1,29 @@
+{
+    "node": {
+        "type": "exe",
+        "version": "18.13.0",
+        "installers": ["Tar"],
+        "url": "https://nodejs.org/dist/v{version}/node-v{version}-linux-x64.tar.xz"
+    },
+    "typescript": {
+        "type": "library",
+        "version": "4.9.4",
+        "manager": "npm"
+    },
+    "eslint": {
+        "type": "exe",
+        "version": "8.32.0",
+        "installers": ["Npm"]
+    },
+    "typescript-language-server": {
+        "type": "exe",
+        "version": "3.0.2",
+        "installers": ["Npm"]
+    },
+    "vscode-langservers-extracted": {
+        "type": "exe",
+        "command_name": "vscode-eslint-language-server",
+        "version": "4.5.0",
+        "installers": ["Npm"]
+    }
+}

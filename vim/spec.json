@@ -1,0 +1,36 @@
+{
+    "vimrc": {
+        "type": "symlink",
+        "source": "DOT/vim/vimrc",
+        "target": "~/.config/vim/vimrc"
+    },
+    "nvimconfig": {
+        "type": "symlink",
+        "source": "DOT/vim/nvim",
+        "target": "~/.config/nvim"
+    },
+    "neovim": {
+        "type": "exe",
+        "command_name": "nvim",
+        "version": "0.8.2",
+        "installers": ["Github"],
+        "repo": "neovim/neovim"
+    },
+    "vim-language-server": {
+        "type": "exe",
+        "version": "2.3.0",
+        "installers": ["Npm"]
+    },
+    "pynvim": {
+        "type": "library",
+        "version": "0.4.3",
+        "manager": "pip"
+    },
+    "command-t": {
+        "type": "command",
+        "cwd": "DOT/vim/nvim/pack/vendor/opt/command-t/lua/wincent/commandt/lib",
+        "run_script": "make",
+        "check_script": "test -f commandt.so",
+        "depends_on": "submodules"
+    }
+}
