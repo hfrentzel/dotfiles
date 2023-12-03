@@ -19,5 +19,9 @@
         "command_name": "vscode-eslint-language-server",
         "version": "4.5.0",
         "installers": ["Npm"]
+    },
+    "ts-javascript": {
+        "type": "parser",
+        "language": "javascript"
     }
 }

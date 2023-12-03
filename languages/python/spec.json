@@ -42,5 +42,9 @@
         "type": "symlink",
         "source": "DOT/languages/python/pylintrc",
         "target": "~/.config/pylint/pylintrc"
+    },
+    "ts-python": {
+        "type": "parser",
+        "language": "python"
     }
 }

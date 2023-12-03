@@ -16,6 +16,10 @@
         "installers": ["Github"],
         "repo": "neovim/neovim"
     },
+    "ts-vim": {
+        "type": "parser",
+        "language": "vim"
+    },
     "vim-language-server": {
         "type": "exe",
         "version": "2.3.0",

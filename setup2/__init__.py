@@ -9,6 +9,7 @@ from .managers import exe
 from .managers import sym
 from .managers import lib
 from .managers import command
+from .managers import parser
 from .job import print_job_tree, Job
 from .conf import conf
 from .output import red, green
@@ -18,6 +19,10 @@ Exe = exe_class.Exe
 Lib = lib.Lib
 Sym = sym.Sym
 Command = command.Command
+Parser = parser.Parser
+
+Parser('ts-python', language='python')
+Parser('ts-json', language='json')
 
 
 def show_desired() -> None:
@@ -83,9 +88,9 @@ async def handle_jobs() -> None:
 
 
 def run() -> None:
-    parser = argparse.ArgumentParser(prog='EnvSetup')
-    parser.add_argument('--symlinks-only', action='store_true')
-    stages = parser.add_mutually_exclusive_group()
+    argparser = argparse.ArgumentParser(prog='EnvSetup')
+    argparser.add_argument('--symlinks-only', action='store_true')
+    stages = argparser.add_mutually_exclusive_group()
     stages.add_argument('--desired', action='store_true')
     stages.add_argument('--show-all', action='store_const',
                         const='all_status', dest='stopping_point')
@@ -99,12 +104,12 @@ def run() -> None:
     conf.dotfiles_home = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.makedirs(os.path.expanduser('~/.cache/env_setup'), exist_ok=True)
     conf.sources_dir = os.path.expanduser('~/.cache/env_setup')
-    conf.args = parser.parse_args()
+    conf.args = argparser.parse_args()
     os.environ['NPM_CONFIG_USERCONFIG'] = os.path.expanduser('~/.config/npm/npmrc')
 
     conf.types = [sym]
     if not conf.args.symlinks_only:
-        conf.types.extend([directory, lib, exe, command])
+        conf.types.extend([directory, lib, exe, parser, command])
 
     if conf.args.desired:
         show_desired()

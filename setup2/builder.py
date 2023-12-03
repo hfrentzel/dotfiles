@@ -1,7 +1,7 @@
 import json
 import os
 
-from setup2 import Exe, Sym, Command, Dir, Lib
+from setup2 import Exe, Sym, Command, Dir, Lib, Parser
 
 
 TYPE_MAP = {
@@ -9,6 +9,7 @@ TYPE_MAP = {
     "directory": Dir,
     "exe": Exe,
     "library": Lib,
+    "parser": Parser,
     "symlink": Sym
 }
 
