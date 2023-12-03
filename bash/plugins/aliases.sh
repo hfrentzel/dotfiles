@@ -57,6 +57,7 @@ alias ll='ls -hlAF'
 
 compalias g git
 compalias b bat
+alias delta='delta --side-by-side'
 alias t='tmux'
 compalias v nvim
 compalias kb kubectl

@@ -11,7 +11,7 @@ conf() {
         return
     fi
 
-    FILES="$(find "$DIR" -mindepth 1)"
+    FILES="$(find "$DIR" -follow -mindepth 1)"
     NUM_FILES=$(echo "$FILES" | wc -l)
     if [[ $NUM_FILES -gt 1 ]]; then
         # nvim $(echo "$FILES" | fzf)

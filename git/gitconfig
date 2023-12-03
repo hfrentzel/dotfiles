@@ -4,6 +4,7 @@
     alias = !git config --list | grep alias
     br = branch
     bri = !git checkout $(git branch | fzf | tr -d '[:space:]')
+    brim = !git checkout $(git branch -r | fzf | sed 's/origin\\///')
     co = checkout
     st = status -sb
     cm = commit -m
