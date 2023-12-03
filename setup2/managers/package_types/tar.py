@@ -61,4 +61,5 @@ def tar_builder(spec: Exe) -> Job:
 
     return Job(names=[spec.name],
                description=f'Install {spec.name} from tarball',
+               on_demand=spec.on_demand,
                job=inner)

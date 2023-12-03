@@ -30,6 +30,8 @@ def show_desired() -> None:
 def build_tree(jobs: Dict[str, Job], complete: List[str]) -> List[Job]:
     root_jobs = []
     for job_name, job in jobs.items():
+        if job.on_demand and not any(j.depends_on in job.names for j in jobs.values()):
+            continue
         if job.depends_on is None:
             root_jobs.append(job)
         elif job.depends_on in complete:

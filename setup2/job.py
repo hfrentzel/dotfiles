@@ -9,6 +9,7 @@ class Job:
     job: Callable[[], Awaitable[bool]]
     description: str
     depends_on: Optional[str] = None
+    on_demand: bool = False
     children: List['Job'] = field(default_factory=list)
 
     async def run(self) -> bool:

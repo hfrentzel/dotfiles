@@ -8,6 +8,7 @@ class Exe():
     name: str
     version: str = ''
     installers: Optional[List[str]] = None
+    on_demand: bool = False
     command_name: str = ''
     url: str = ''
     repo: str = ''
