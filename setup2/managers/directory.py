@@ -4,6 +4,7 @@ from typing import Tuple, List, ClassVar, Callable, Dict, Coroutine
 
 from setup2.job import Job
 from setup2.output import print_grid, red, green
+from setup2.managers.manager import mark_resource
 
 
 @dataclass
@@ -13,6 +14,7 @@ class Dir():
     path: str
 
     def __post_init__(self) -> None:
+        mark_resource(self.name)
         self.desired.append(self)
 
 

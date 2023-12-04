@@ -4,6 +4,7 @@ from typing import Tuple, ClassVar, List, Dict
 
 from setup2.job import Job
 from setup2.output import print_grid, red
+from setup2.managers.manager import mark_resource
 from setup2.managers.package_types.pip import Pip
 from setup2.managers.package_types.npm import Npm
 
@@ -16,6 +17,7 @@ class Lib:
     manager: str
 
     def __post_init__(self) -> None:
+        mark_resource(self.name)
         self.desired.append(self)
 
 

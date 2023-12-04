@@ -1,0 +1,17 @@
+{
+    "go": {
+        "type": "exe",
+        "override": true,
+        "on_demand": false
+    },
+    "gopls": {
+        "type": "exe",
+        "version": "0.14.0",
+        "installers": ["Go"],
+        "url": "golang.org/x/tools/gopls"
+    },
+    "ts-go": {
+        "type": "parser",
+        "language": "go"
+    }
+}

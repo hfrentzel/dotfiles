@@ -9,6 +9,7 @@ from setup2.output import print_grid, red, green
 from setup2.managers.exe_class import Exe
 from setup2.managers.package_types.apt import Apt
 from setup2.managers.package_types.cargo import cargo_builder
+from setup2.managers.package_types.go import go_builder
 from setup2.managers.package_types.deb import deb_builder
 from setup2.managers.package_types.github import Github
 from setup2.managers.package_types.pip import Pip
@@ -88,6 +89,7 @@ JOB_BUILDERS: Dict[str, Callable[[Exe], Union[bool, Job]]] = {
     'Cargo': cargo_builder,
     'Deb': deb_builder,
     'Github': Github.github_builder,
+    'Go': go_builder,
     'Npm': Npm.npm_builder,
     'Pip': Pip.pip_builder,
     'Tar': tar_builder,

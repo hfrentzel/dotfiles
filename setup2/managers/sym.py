@@ -5,6 +5,7 @@ from typing import ClassVar, List, Tuple, Dict, Coroutine, Callable
 from setup2.conf import conf
 from setup2.job import Job
 from setup2.output import print_grid, red, green
+from setup2.managers.manager import mark_resource
 
 
 @dataclass
@@ -15,6 +16,7 @@ class Sym:
     target: str
 
     def __post_init__(self) -> None:
+        mark_resource(self.name)
         self.desired.append(self)
 
 

@@ -7,6 +7,7 @@ from setup2.conf import conf
 from setup2.job import Job
 from setup2.process import async_proc
 from setup2.output import print_grid, red, green
+from setup2.managers.manager import mark_resource
 
 
 @dataclass
@@ -19,6 +20,7 @@ class Command():
     cwd: Optional[str] = None
 
     def __post_init__(self) -> None:
+        mark_resource(self.name)
         self.desired.append(self)
 
 

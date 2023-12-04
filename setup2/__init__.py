@@ -21,9 +21,6 @@ Sym = sym.Sym
 Command = command.Command
 Parser = parser.Parser
 
-Parser('ts-python', language='python')
-Parser('ts-json', language='json')
-
 
 def show_desired() -> None:
     if conf.types is None:

@@ -9,8 +9,14 @@ add_to_path() {
 add_to_path "$HOME/.local/bin"
 add_to_path "$HOME/.local/share/cargo/bin"
 
-export GOROOT=/usr/local/go
-export GOPATH=$HOME/go
+export GOBIN="$HOME/.local/bin"
+export GOMODCACHE="$HOME/.cache/go/mod"
+export GOPATH="$HOME/.local/share/go"
 
-add_to_path "$GOPATH/bin:$GOROOT/bin"
+if command -v $HOME/.local/go/bin/go &> /dev/null; then
+    export GOROOT="$HOME/.local/go"
+else
+    export GOROOT="usr/local/go"
+fi
 
+add_to_path "$GOROOT/bin"

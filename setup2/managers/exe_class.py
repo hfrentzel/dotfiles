@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import ClassVar, List, Optional
+from setup2.managers.manager import mark_resource
 
 
 @dataclass
@@ -9,11 +10,14 @@ class Exe():
     version: str = ''
     installers: Optional[List[str]] = None
     on_demand: bool = False
+    override: bool = False
     command_name: str = ''
+    extract_all: bool = False
     url: str = ''
     repo: str = ''
 
     def __post_init__(self) -> None:
+        mark_resource(self.name, self.override)
         if self.command_name == '':
             self.command_name = self.name
         self.desired.append(self)

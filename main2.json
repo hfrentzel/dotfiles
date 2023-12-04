@@ -105,6 +105,7 @@
     "addons": {
         "fzf": "clis/fzf/spec.json",
         "javascript": "languages/javascript/spec.json",
+        "go": "languages/go.json",
         "python": "languages/python/spec.json",
         "terraform": "languages/terraform.json",
         "vim": "vim/spec.json"

@@ -34,5 +34,12 @@ def build_resources() -> None:
             specs.update(json.loads(f.read()))
 
     for name, spec in specs.items():
+        if spec.get('override'):
+            del spec['override']
+            old_value = next(e for e in TYPE_MAP[spec.pop("type")].desired
+                             if e.name == name)
+            for key, value in spec.items():
+                setattr(old_value, key, value)
+            continue
         resource_type = TYPE_MAP[spec.pop("type")]
         resource_type(name, **spec)
