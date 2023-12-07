@@ -1,7 +1,8 @@
 import json
 import os
 
-from setup2 import Exe, Sym, Command, Dir, Lib, Parser
+from setup2.managers import Exe, Sym, Command, Dir, Lib, Parser
+from setup2.conf import conf
 
 
 TYPE_MAP = {
@@ -15,7 +16,7 @@ TYPE_MAP = {
 
 
 def build_resources() -> None:
-    with open('main2.json', encoding='utf-8') as f:
+    with open(os.path.join(conf.dotfiles_home, 'main2.json'), encoding='utf-8') as f:
         config = json.loads(f.read())
 
     choices = {}
@@ -30,7 +31,7 @@ def build_resources() -> None:
     for name, file in addons.items():
         if not choices.get(name, True):
             continue
-        with open(file, encoding='utf-8') as f:
+        with open(os.path.join(conf.dotfiles_home, file), encoding='utf-8') as f:
             specs.update(json.loads(f.read()))
 
     for name, spec in specs.items():

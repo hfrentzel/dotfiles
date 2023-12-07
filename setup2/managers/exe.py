@@ -5,7 +5,7 @@ from typing import List, Tuple, Dict, Callable, Union
 
 from setup2.job import Job
 from setup2.process import async_proc, ver_greater_than
-from setup2.output import print_grid, red, green
+from setup2.output import print_grid, red, green, yellow
 from setup2.managers.exe_class import Exe
 from setup2.managers.package_types.apt import Apt
 from setup2.managers.package_types.cargo import cargo_builder
@@ -31,9 +31,10 @@ check_results: List[Tuple[Exe, bool, str]] = []
 
 
 async def check_job(exe: Exe) -> Tuple[Exe, bool, str]:
+    fail_color = yellow if exe.on_demand else red
     command = shutil.which(exe.command_name)
     if command is None:
-        return (exe, False, red('MISSING'))
+        return (exe, False, fail_color('MISSING'))
     if exe.version == '':
         return (exe, True, green('ANY'))
 
@@ -55,10 +56,10 @@ async def check_job(exe: Exe) -> Tuple[Exe, bool, str]:
 
     if curr_ver is not None:
         success = ver_greater_than(curr_ver, exe.version)
-        color = green if success else red
+        color = green if success else fail_color
         return (exe, success, color(curr_ver))
 
-    return (exe, False, red('UNKNOWN'))
+    return (exe, False, fail_color('UNKNOWN'))
 
 
 def desired_printout() -> str:
@@ -78,7 +79,7 @@ async def get_statuses() -> None:
 def status_printout(show_all: bool) -> str:
     lines = []
     for exe, complete, curr_ver in sorted(check_results, key=(lambda e: e[0].name)):
-        if not show_all and complete:
+        if not show_all and (complete or exe.on_demand):
             continue
         lines.append((exe.name, exe.version, curr_ver))
     return print_grid(('COMMAND', 'DESIRED', 'CURRENT'), lines)

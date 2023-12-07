@@ -8,7 +8,7 @@ NAMESPACE="$(kubectl config view --minify --output 'jsonpath={..namespace}' 2>/d
 NAMESPACE="${NAMESPACE:-default}"
 
 local MSG
-MSG+="#[fg-blue]$(echo $'\u2388 ')"
+MSG+="#[fg=black]$(echo $'\u2388 ')"
 MSG+="#[fg=black]$CONTEXT:$NAMESPACE"
 
 echo "$MSG"

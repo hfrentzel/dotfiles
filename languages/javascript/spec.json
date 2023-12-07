@@ -1,4 +1,9 @@
 {
+    "node": {
+        "type": "exe",
+        "on_demand": false,
+        "override": true
+    },
     "typescript": {
         "type": "library",
         "version": "4.9.4",

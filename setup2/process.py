@@ -14,8 +14,8 @@ class JobOutput:
 
 
 def ver_greater_than(current: str, target: str) -> bool:
-    curr_major, curr_minor, curr_patch = current.split(".")
-    tar_major, tar_minor, tar_patch = target.split(".")
+    curr_major, curr_minor, curr_patch = [int(t) for t in current.split(".")]
+    tar_major, tar_minor, tar_patch = [int(t) for t in target.split(".")]
     return (
         curr_major > tar_major or
         (curr_major == tar_major and curr_minor > tar_minor) or

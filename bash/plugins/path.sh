@@ -16,7 +16,7 @@ export GOPATH="$HOME/.local/share/go"
 if command -v $HOME/.local/go/bin/go &> /dev/null; then
     export GOROOT="$HOME/.local/go"
 else
-    export GOROOT="usr/local/go"
+    export GOROOT="/usr/local/go"
 fi
 
 add_to_path "$GOROOT/bin"
