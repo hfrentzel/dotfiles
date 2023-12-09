@@ -1,0 +1,8 @@
+{
+    "glab": {
+        "type": "exe",
+        "version": "1.35.0",
+        "installers": ["Go"],
+        "url": "gitlab.com/gitlab-org/cli/cmd/glab"
+    }
+}

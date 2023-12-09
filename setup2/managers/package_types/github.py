@@ -60,19 +60,24 @@ class Github():
             # TODO handle deb files when sudo permissions are available
             pass
 
+        asset_list = [a for a in asset_list if a.endswith('.zip') or '.tar.' in a]
+
         if any(system_os in a for a in asset_list):
             asset_list = [a for a in asset_list if system_os in a]
+        print(asset_list)
         if any(hardware in a for a in asset_list):
             asset_list = [a for a in asset_list if hardware in a]
+        print(asset_list)
         if any(hardware_alt in a for a in asset_list):
             asset_list = [a for a in asset_list if hardware_alt in a]
+        print(asset_list)
 
         if system_os == 'linux' and hardware == 'x86_64' and len(asset_list) == 2:
             asset_list = [a for a in asset_list if 'musl' in a] or asset_list
-            asset_list = [a for a in asset_list if '.tar.' in a]
 
         if len(asset_list) == 1:
             return asset_list[0]
+        print(asset_list)
         return None
 
     @classmethod

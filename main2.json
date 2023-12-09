@@ -109,6 +109,8 @@
         "go": "languages/go.json",
         "python": "languages/python/spec.json",
         "terraform": "languages/terraform.json",
-        "vim": "vim/spec.json"
+        "vim": "vim/spec.json",
+        "gh": "clis/gh.json",
+        "glab": "clis/glab.json"
     }
 }
