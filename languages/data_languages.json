@@ -1,0 +1,28 @@
+{
+    "ts-json": {
+        "type": "parser",
+        "language": "json"
+    },
+    "vscode-langservers-extracted": {
+        "type": "exe",
+        "command_name": "vscode-json-language-server",
+        "version": "4.5.0",
+        "installers": ["Npm"]
+    },
+    "ts-yaml": {
+        "type": "parser",
+        "language": "yaml"
+    },
+    "yaml-language-server": {
+        "type": "exe",
+        "version": "1.14.0",
+        "installers": ["Npm"]
+    },
+    "yq": {
+        "type": "exe",
+        "version": "4.40.4",
+        "installers": ["Github", "Go"],
+        "repo": "mikefarah/yq",
+        "url": "github.com/mikefarah/yq"
+    }
+}

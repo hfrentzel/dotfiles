@@ -80,6 +80,24 @@ local py_before_init = function(params, config)
     config.settings.pylsp.plugins.pylsp_mypy.overrides = mypy_args
 end
 
+local yaml_before_init = function(params, config)
+    filename = vim.fn.expand('~/.config/vim/schemas.json')
+    if vim.fn.filereadable(filename) == 0 then
+        return
+    end
+    schema_file = io.open(filename)
+    schema_overrides = vim.fn.json_decode(schema_file:read('*a'))
+    schema_file:close()
+
+    config.settings.yaml.schemas = schema_overrides.all
+    for dir, schemas in pairs(schema_overrides) do
+        if dir == config.root_dir then
+            config.settings.yaml.schemas = 
+                vim.tbl_extend('force', config.settings.yaml.schemas, schemas)
+        end
+    end
+end
+
 local nvim_lsp = require'lspconfig'
 
 nvim_lsp.pylsp.setup{
@@ -122,6 +140,11 @@ nvim_lsp.eslint.setup({
     capabilities = capabilities,
 })
 
+nvim_lsp.jsonls.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+})
+
 nvim_lsp.tsserver.setup({
     on_attach = on_attach,
     capabilities = capabilities,
@@ -145,6 +168,17 @@ nvim_lsp.sumneko_lua.setup({
                 path = vim.split(package.path, ';'),
                 version = 'LuaJIT'
             }
+        }
+    }
+})
+
+nvim_lsp.yamlls.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    before_init = yaml_before_init,
+    settings = {
+        yaml = {
+            schemas = {}
         }
     }
 })

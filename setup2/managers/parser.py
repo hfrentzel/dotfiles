@@ -62,7 +62,7 @@ def create_jobs() -> Tuple[List[str], Dict[str, Job]]:
             jobs[parser.name] = Job(
                 names=[parser.name],
                 description=f'Install TS parser for {parser.language}',
-                depends_on='nvim',
+                depends_on='neovim',
                 job=install_ts_parser(parser.language)
             )
 

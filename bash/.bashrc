@@ -6,6 +6,9 @@ export EDITOR=nvim
 export VISUAL=nvim 
 export PAGER='less --mouse --wheel-lines=3 -RF'
 export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/config
+if command -v bat &> /dev/null; then
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+fi
 
 # This should normally be set by terminal, I'm setting it manually because
 # it's not. May need to change this if I ever start using terminals that

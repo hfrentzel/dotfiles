@@ -103,6 +103,7 @@
         }
     },
     "addons": {
+        "data_languages": "languages/data_languages.json",
         "fzf": "clis/fzf/spec.json",
         "javascript": "languages/javascript/spec.json",
         "go": "languages/go.json",

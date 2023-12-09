@@ -10,6 +10,12 @@
         "installers": ["Go"],
         "url": "golang.org/x/tools/gopls"
     },
+    "golangci-lint": {
+        "type": "exe",
+        "version": "1.55.2",
+        "installers": ["Go"],
+        "url": "github.com/golangci/golangci-lint/cmd/golangci-lint"
+    },
     "ts-go": {
         "type": "parser",
         "language": "go"
