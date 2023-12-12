@@ -3,6 +3,7 @@ if not has_treesitter then
     return
 end
 treesitter.setup {
+    parser_install_dir = vim.fn.stdpath('data')..'/site',
     ensure_installed = {'lua', 'python', 'vim'},
     auto_installed = {'lua', 'python', 'vim'},
 

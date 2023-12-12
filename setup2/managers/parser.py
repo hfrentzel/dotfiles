@@ -25,7 +25,7 @@ check_results: List[Tuple[Parser, bool, str]] = []
 
 def check_job(parser: Parser) -> Tuple[bool, str]:
     file = f'{parser.language}.so'
-    parser_dir = f'{conf.dotfiles_home}/vim/nvim/pack/vendor/opt/nvim-treesitter/parser'
+    parser_dir = os.path.expanduser('~/.local/share/nvim/site/parser')
     if os.path.exists(f'{parser_dir}/{file}'):
         return (True, green('INSTALLED'))
     return (False, red('MISSING'))
