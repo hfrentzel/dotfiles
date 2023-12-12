@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import ClassVar, List, Optional
 from setup2.managers.manager import mark_resource
 
@@ -15,6 +15,7 @@ class Exe():
     extract_all: bool = False
     url: str = ''
     repo: str = ''
+    steps: List[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         mark_resource(self.name, self.override)

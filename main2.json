@@ -110,6 +110,7 @@
         "python": "languages/python/spec.json",
         "terraform": "languages/terraform.json",
         "vim": "vim/spec.json",
+        "kubernetes": "clis/kubernetes/spec.json",
         "gh": "clis/gh.json",
         "glab": "clis/glab.json"
     }

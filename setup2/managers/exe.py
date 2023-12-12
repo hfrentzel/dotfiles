@@ -13,6 +13,7 @@ from setup2.managers.package_types.go import go_builder
 from setup2.managers.package_types.deb import deb_builder
 from setup2.managers.package_types.github import Github
 from setup2.managers.package_types.pip import Pip
+from setup2.managers.package_types.sequence import sequence_builder
 from setup2.managers.package_types.npm import Npm
 from setup2.managers.package_types.tar import tar_builder
 from setup2.managers.package_types.zip import zip_builder
@@ -93,6 +94,7 @@ JOB_BUILDERS: Dict[str, Callable[[Exe], Union[bool, Job]]] = {
     'Go': go_builder,
     'Npm': Npm.npm_builder,
     'Pip': Pip.pip_builder,
+    'Sequence': sequence_builder,
     'Tar': tar_builder,
     'Zip': zip_builder,
 }

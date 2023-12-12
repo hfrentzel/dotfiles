@@ -1,0 +1,9 @@
+hotKey:
+  shift-1:
+    shortCut: Shift-1
+    description: View Pods
+    command: pods
+  shift-2:
+    shortCut: Shift-2
+    description: View Deployments
+    command: dp

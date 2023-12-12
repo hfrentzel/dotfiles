@@ -1,0 +1,15 @@
+k9s:
+  body:
+    bgColor: default
+  frame:
+    title:
+      bgColor: default
+  views:
+    table:
+      bgColor: default
+      header:
+        bgColor: default
+    logs:
+      bgColor: default
+      indicator:
+        bgColor: default
