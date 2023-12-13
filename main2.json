@@ -16,6 +16,12 @@
             "source": "DOT/bash/plugins",
             "target": "~/.config/bash/plugins"
         },
+        "clean_profile": {
+            "type": "command",
+            "cwd": "~",
+            "check_script": "! grep -q \"private bin if it exists\" .profile",
+            "run_script": "sed -i '/private bin if it exists/,/f1/d' .profile"
+        },
         "inputrc": {
             "type": "symlink",
             "source": "DOT/bash/.inputrc",
