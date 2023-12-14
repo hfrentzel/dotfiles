@@ -10,7 +10,7 @@
     },
     "helm": {
         "type": "exe",
-        "version": "3.12.13",
+        "version": "3.12.3",
         "installers": ["Github"],
         "repo": "helm/helm"
     },

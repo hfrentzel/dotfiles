@@ -39,14 +39,17 @@ def build_tree(jobs: Dict[str, Job], complete: List[str]) -> List[Job]:
         elif job.depends_on in complete:
             root_jobs.append(job)
         else:
-            parent = next(j for j in jobs.values() if job.depends_on in j.names)
+            try:
+                parent = next(j for j in jobs.values() if job.depends_on in j.names)
+            except StopIteration:
+                print(f"The dependency '{job.depends_on}' for job '{job_name}' is missing")
             parent.children.append(job)
 
     return root_jobs
 
 
 async def handle_jobs() -> None:
-    await asyncio.gather(*[t.get_statuses() for t in conf.types])
+    await asyncio.gather(*[t.get_statuses() for t in TYPE_MAP.values()])
 
     if conf.args.stage in [None, 'show_all']:
         for t in conf.types:
@@ -55,10 +58,11 @@ async def handle_jobs() -> None:
 
     complete = []
     jobs = {}
-    for t in conf.types:
+    for t in TYPE_MAP.values():
         c, j = t.create_jobs()
         complete.extend(c)
-        jobs.update(j)
+        if t in conf.types:
+            jobs.update(j)
 
     if len(jobs) == 0:
         print('All items are satisfied')
