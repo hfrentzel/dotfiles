@@ -19,8 +19,8 @@ def tar_builder(spec: Exe) -> Job:
         print(f'Installing {spec.name} from tarball...')
         archive_file = await fetch_file(spec.url, spec.version)
         with tarfile.open(archive_file) as tar:
-            if spec.extract_all:
-                tar.extractall(install_home)
+            if spec.extract_path:
+                tar.extractall(path.expanduser(spec.extract_path))
                 print(green(f'{spec.name} has been installed successfully'))
                 return True
 

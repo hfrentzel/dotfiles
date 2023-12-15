@@ -12,6 +12,7 @@ from setup2.managers.package_types.cargo import cargo_builder
 from setup2.managers.package_types.go import go_builder
 from setup2.managers.package_types.deb import deb_builder
 from setup2.managers.package_types.github import Github
+from setup2.managers.package_types.gitlab import Gitlab
 from setup2.managers.package_types.pip import Pip
 from setup2.managers.package_types.sequence import sequence_builder
 from setup2.managers.package_types.npm import Npm
@@ -91,6 +92,7 @@ JOB_BUILDERS: Dict[str, Callable[[Exe], Union[bool, Job]]] = {
     'Cargo': cargo_builder,
     'Deb': deb_builder,
     'Github': Github.github_builder,
+    'Gitlab': Gitlab.gitlab_builder,
     'Go': go_builder,
     'Npm': Npm.npm_builder,
     'Pip': Pip.pip_builder,
