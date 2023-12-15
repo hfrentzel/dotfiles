@@ -1,0 +1,18 @@
+{
+    "lua-language-server": {
+        "type": "exe",
+        "version": "3.7.3",
+        "installers": ["Github"],
+        "repo": "LuaLS/lua-language-server",
+        "extract_path": "~/.local/share/lua"
+    },
+    "luals-symlink": {
+        "type": "symlink",
+        "source": "DOT/languages/lua/call_luals.sh",
+        "target": "~/.local/bin/lua-language-server"
+    },
+    "ts-lua": {
+        "type": "parser",
+        "language": "lua"
+    }
+}

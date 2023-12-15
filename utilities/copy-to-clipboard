@@ -1,0 +1,7 @@
+#! /usr/bin/env bash
+if [[ -f /proc/sys/fs/binfmt_misc/WSLInterop ]]; then
+    clip.exe
+elif command -v xclip &> /dev/null; then
+    xclip -sel clipboard
+fi
+    

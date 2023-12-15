@@ -1,0 +1,6 @@
+#! /usr/bin/env bash
+if [[ -f /proc/sys/fs/binfmt_misc/WSLInterop ]]; then
+    powershell.exe -c Get-Clipboard
+elif command -v xclip &> /dev/null; then
+    xclip -out -sel clipboard
+fi

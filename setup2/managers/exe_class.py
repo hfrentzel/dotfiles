@@ -9,10 +9,11 @@ class Exe():
     name: str
     version: str = ''
     installers: Optional[List[str]] = None
+    depends_on: Optional[str] = None
     on_demand: bool = False
     override: bool = False
     command_name: str = ''
-    extract_all: bool = False
+    extract_path: Optional[str] = None
     url: str = ''
     repo: str = ''
     steps: List[str] = field(default_factory=list)

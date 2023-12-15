@@ -7,7 +7,7 @@ Exe('go',
     version='1.20.11',
     # on_demand=True,
     installers=['Tar'],
-    extract_all=True,
+    extract_path='~/.local',
     url='https://go.dev/dl/go{version}.linux-amd64.tar.gz')
 
 

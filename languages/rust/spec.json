@@ -1,0 +1,19 @@
+{
+    "rust": {
+        "type": "exe",
+        "command_name": "rustc",
+        "version": "1.74.0",
+        "installers": ["Sequence"],
+        "steps": ["curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path"],
+        "depends_on": "cargoconfig"
+    },
+    "cargoconfig": {
+        "type": "symlink",
+        "source": "DOT/languages/rust/config.toml",
+        "target": "~/.local/share/cargo/config.toml"
+    },
+    "ts-rust": {
+        "type": "parser",
+        "language": "rust"
+    }
+}

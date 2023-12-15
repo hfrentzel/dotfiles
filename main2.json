@@ -102,18 +102,25 @@
             "source": "DOT/configs/npmrc",
             "target": "~/.config/npm/npmrc"
         },
-        "cargoconfig": {
+        "clipin": {
             "type": "symlink",
-            "source": "DOT/languages/rust/config.toml",
-            "target": "~/.local/share/cargo/config.toml"
+            "source": "DOT/utilities/copy-to-clipboard",
+            "target": "~/.local/bin/clipin"
+        },
+        "clipout": {
+            "type": "symlink",
+            "source": "DOT/utilities/paste-from-clipboard",
+            "target": "~/.local/bin/clipout"
         }
     },
     "addons": {
         "data_languages": "languages/data_languages.json",
         "fzf": "clis/fzf/spec.json",
         "javascript": "languages/javascript/spec.json",
+        "lua": "languages/lua/spec.json",
         "go": "languages/go.json",
         "python": "languages/python/spec.json",
+        "rust": "languages/rust/spec.json",
         "terraform": "languages/terraform.json",
         "vim": "vim/spec.json",
         "kubernetes": "clis/kubernetes/spec.json",
