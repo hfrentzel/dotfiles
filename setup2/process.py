@@ -1,5 +1,6 @@
 import asyncio
 from dataclasses import dataclass
+import platform
 from os import path
 from typing import Optional, List
 
@@ -55,10 +56,9 @@ async def fetch_file(url: str, version: Optional[str]) -> str:
 
 
 def filter_assets(asset_list: List[str]) -> Optional[str]:
-    # TODO Infer these values from environment and handle other
-    # possibilities
-    system_os = 'linux'
-    hardware = ['x86_64', 'amd64', 'x64']
+    system = platform.uname()
+    system_os = system.system.lower()
+    hardware = set_hardware(system.machine.lower())
     if False and any(a.endwiths('.deb') for a in asset_list):
         # TODO handle deb files when sudo permissions are available
         pass
@@ -76,3 +76,13 @@ def filter_assets(asset_list: List[str]) -> Optional[str]:
     if len(asset_list) == 1:
         return asset_list[0]
     return None
+
+
+def set_hardware(machine):
+    if machine in ['amd64', 'x86_64']:
+        return ['amd64', 'x86_64', 'x64']
+    if machine == 'aarch64' and platform.architecture()[0] == '64bit':
+        return ['aarch64', 'arm64']
+    if machine == 'aarch64' and platform.architecture()[0] == '32bit':
+        return ['armv7', 'arm-']
+    return ['']
