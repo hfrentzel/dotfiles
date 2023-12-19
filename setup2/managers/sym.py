@@ -1,10 +1,10 @@
 import os
 from dataclasses import dataclass
-from typing import ClassVar, List, Tuple, Dict, Coroutine, Callable
+from typing import ClassVar, List, Tuple, Coroutine, Callable
 
 from setup2.conf import conf
 from setup2.job import Job
-from setup2.output import print_grid, red, green
+from setup2.output import print_grid
 from setup2.managers.manager import mark_resource
 
 
@@ -23,13 +23,13 @@ class Sym:
 check_results: List[Tuple[Sym, bool, str]] = []
 
 
-def check_job(sym: Sym) -> Tuple[bool, str]:
+def current_status(sym: Sym) -> Tuple[bool, str]:
     dest = os.path.expanduser(sym.target)
     if os.path.isfile(dest) or os.path.isdir(dest):
         if os.path.islink(dest):
-            return (True, green('LINKED'))
-        return (False, red('BLOCKED'))
-    return (False, red('MISSING'))
+            return (True, 'LINKED')
+        return (False, 'BLOCKED')
+    return (False, 'MISSING')
 
 
 def desired_printout() -> str:
@@ -39,9 +39,14 @@ def desired_printout() -> str:
     return print_grid(('SYMLINKED FILES',), lines)
 
 
-async def get_statuses() -> None:
+async def get_statuses() -> List[str]:
+    complete = []
     for sym in Sym.desired:
-        check_results.append((sym, *check_job(sym)))
+        result = current_status(sym)
+        if result[0]:
+            complete.append(sym.name)
+        check_results.append((sym, *result))
+    return complete
 
 
 def status_printout(show_all: bool) -> str:
@@ -49,27 +54,16 @@ def status_printout(show_all: bool) -> str:
     for sym, complete, status in sorted(check_results, key=(lambda s: s[0].name)):
         if not show_all and complete:
             continue
-        lines.append((sym.name, status))
+        lines.append((sym.name, (status, complete)))
     return print_grid(('SYMLINK', 'STATUS'), lines)
 
 
-def create_jobs() -> Tuple[List[str], Dict[str, Job]]:
-    no_action_needed = []
-    jobs = {}
-    for sym, complete, status in check_results:
-        if complete:
-            no_action_needed.append(sym.name)
-        elif status == 'BLOCKED':
-            # TODO Add unblocking job
-            pass
-        else:
-            jobs[sym.name] = Job(
-                names=[sym.name],
-                description=f'Generate symlink at {sym.target}',
-                job=create_symlink(sym.source, sym.target)
-            )
-
-    return no_action_needed, jobs
+def create_job(sym: Sym) -> Job:
+    return Job(
+        names=[sym.name],
+        description=f'Generate symlink at {sym.target}',
+        job=create_symlink(sym.source, sym.target)
+    )
 
 
 def create_symlink(source: str, target: str) -> Callable[[], Coroutine[None, None, bool]]:

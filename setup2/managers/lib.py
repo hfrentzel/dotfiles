@@ -1,9 +1,8 @@
 import asyncio
 from dataclasses import dataclass
-from typing import Tuple, ClassVar, List, Dict
+from typing import Tuple, ClassVar, List
 
-from setup2.job import Job
-from setup2.output import print_grid, red
+from setup2.output import print_grid
 from setup2.managers.manager import mark_resource
 from setup2.managers.package_types.pip import Pip
 from setup2.managers.package_types.npm import Npm
@@ -24,13 +23,13 @@ class Lib:
 check_results = []
 
 
-async def check_job(lib: Lib) -> Tuple[Lib, bool, str]:
+async def current_status(lib: Lib) -> Tuple[Lib, bool, str]:
     if lib.manager == 'pip':
         return (lib, *Pip.check_install(lib))
     if lib.manager == 'npm':
         return (lib, *Npm.check_install(lib))
 
-    return (lib, False, red('UNKNOWN'))
+    return (lib, False, 'UNKNOWN')
 
 
 def desired_printout() -> str:
@@ -40,11 +39,17 @@ def desired_printout() -> str:
     return print_grid(('LIBRARY', 'VERSION'), lines)
 
 
-async def get_statuses() -> None:
+async def get_statuses() -> List[str]:
+    complete = []
     tasks = []
     for lib in Lib.desired:
-        tasks.append(check_job(lib))
-    check_results.extend(await asyncio.gather(*tasks))
+        tasks.append(current_status(lib))
+    results = await asyncio.gather(*tasks)
+    check_results.extend(results)
+    for result in results:
+        if result[1]:
+            complete.append(result[0].name)
+    return complete
 
 
 def status_printout(show_all: bool) -> str:
@@ -52,7 +57,7 @@ def status_printout(show_all: bool) -> str:
     for lib, complete, curr_ver in sorted(check_results, key=(lambda b: b[0].name)):
         if not show_all and complete:
             continue
-        lines.append((lib.name, lib.version, curr_ver))
+        lines.append((lib.name, lib.version, (curr_ver, complete)))
     return print_grid(('LIBRARY', 'DESIRED', 'CURRENT'), lines)
 
 
@@ -62,17 +67,5 @@ JOB_BUILDERS = {
 }
 
 
-def create_jobs() -> Tuple[List[str], Dict[str, Job]]:
-    no_action_needed = []
-    jobs = {}
-    for lib, complete, curr_ver in check_results:
-        if complete:
-            no_action_needed.append(lib.name)
-            continue
-        JOB_BUILDERS[lib.manager](lib)
-    if len(Pip.all_pips) != 0:
-        jobs['pip_install'] = Pip.pip_job()
-    if len(Npm.all_packages) != 0:
-        jobs['npm_install'] = Npm.npm_job()
-
-    return no_action_needed, jobs
+def create_job(lib: Lib) -> None:
+    JOB_BUILDERS[lib.manager](lib)

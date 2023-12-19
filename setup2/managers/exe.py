@@ -1,11 +1,11 @@
 import asyncio
 import re
 import shutil
-from typing import List, Tuple, Dict, Callable, Union
+from typing import List, Tuple, Dict, Callable, Union, Optional
 
 from setup2.job import Job
 from setup2.process import async_proc, ver_greater_than
-from setup2.output import print_grid, red, green, yellow
+from setup2.output import print_grid
 from setup2.managers.exe_class import Exe
 from setup2.managers.package_types.apt import Apt
 from setup2.managers.package_types.cargo import cargo_builder
@@ -32,13 +32,12 @@ Apt, Deb, Pip, Npm, Tar
 check_results: List[Tuple[Exe, bool, str]] = []
 
 
-async def check_job(exe: Exe) -> Tuple[Exe, bool, str]:
-    fail_color = yellow if exe.on_demand else red
+async def current_status(exe: Exe) -> Tuple[Exe, bool, str]:
     command = shutil.which(exe.command_name)
     if command is None:
-        return (exe, False, fail_color('MISSING'))
+        return (exe, False, 'MISSING')
     if exe.version == '':
-        return (exe, True, green('ANY'))
+        return (exe, True, 'ANY')
 
     subcommands = ["--version", "version", "-V", "-v"]
     for cmd in subcommands:
@@ -58,10 +57,9 @@ async def check_job(exe: Exe) -> Tuple[Exe, bool, str]:
 
     if curr_ver is not None:
         success = ver_greater_than(curr_ver, exe.version)
-        color = green if success else fail_color
-        return (exe, success, color(curr_ver))
+        return (exe, success, curr_ver)
 
-    return (exe, False, fail_color('UNKNOWN'))
+    return (exe, False, 'UNKNOWN')
 
 
 def desired_printout() -> str:
@@ -71,11 +69,17 @@ def desired_printout() -> str:
     return print_grid(('COMMAND', 'VERSION'), lines)
 
 
-async def get_statuses() -> None:
+async def get_statuses() -> List[str]:
+    complete = []
     tasks = []
     for exe in Exe.desired:
-        tasks.append(check_job(exe))
-    check_results.extend(await asyncio.gather(*tasks))
+        tasks.append(current_status(exe))
+    results = await asyncio.gather(*tasks)
+    check_results.extend(results)
+    for result in results:
+        if result[1]:
+            complete.append(result[0].name)
+    return complete
 
 
 def status_printout(show_all: bool) -> str:
@@ -83,7 +87,7 @@ def status_printout(show_all: bool) -> str:
     for exe, complete, curr_ver in sorted(check_results, key=(lambda e: e[0].name)):
         if not show_all and (complete or exe.on_demand):
             continue
-        lines.append((exe.name, exe.version, curr_ver))
+        lines.append((exe.name, exe.version, (curr_ver, complete)))
     return print_grid(('COMMAND', 'DESIRED', 'CURRENT'), lines)
 
 
@@ -102,32 +106,22 @@ JOB_BUILDERS: Dict[str, Callable[[Exe], Union[bool, Job]]] = {
 }
 
 
-def create_jobs() -> Tuple[List[str], Dict[str, Job]]:
-    """
-    Determine which installers are available
-        - Apt and Deb require root permissions
-        - Pip and Npm require those exes
-        - Tar requires gh for github discovery
-    """
-    no_action_needed = []
-    jobs = {}
-    for exe, complete, curr_verr in check_results:
-        if complete:
-            no_action_needed.append(exe.name)
-            continue
-        if exe.installers is None:
+def create_job(exe: Exe) -> Optional[Job]:
+    for t in exe.installers:
+        settled = JOB_BUILDERS[t](exe)
+        if isinstance(settled, Job):
+            return settled
+        if settled:
             break
-        for t in exe.installers:
-            settled = JOB_BUILDERS[t](exe)
-            if isinstance(settled, Job):
-                jobs[exe.name] = settled
-            if settled:
-                break
+    return None
+
+
+def create_bonus_jobs() -> Dict[str, Job]:
+    jobs = {}
     if len(Apt.all_apts) != 0:
         jobs['apt_install'] = Apt.apt_job()
     if len(Pip.all_pips) != 0:
         jobs['pip_install'] = Pip.pip_job()
     if len(Npm.all_packages) != 0:
         jobs['npm_install'] = Npm.npm_job()
-
-    return no_action_needed, jobs
+    return jobs

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Protocol, Tuple, List, Dict, Coroutine, Any
+from typing import Protocol, List, Dict, Coroutine, Any, Tuple, Optional
 from setup2.job import Job
 
 _all_resources: List[str] = []
@@ -19,15 +19,22 @@ class Package(Protocol):
     version: str
 
 
+@dataclass
+class Resource(Protocol):
+    name: str
+
+
 class Manager(Protocol):
+    check_results: List[Tuple[Any, bool, str]]
+
     def desired_printout(self) -> str:
         ...
 
     def status_printout(self, show_all: bool) -> str:
         ...
 
-    def create_jobs(self) -> Tuple[List[str], Dict[str, Job]]:
+    def create_job(self, resource: Any) -> Optional[Job]:
         ...
 
-    def get_statuses(self) -> Coroutine[Any, Any, None]:
+    def get_statuses(self) -> Coroutine[Any, Any, List[str]]:
         ...

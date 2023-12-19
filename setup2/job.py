@@ -1,6 +1,6 @@
 import asyncio
 from dataclasses import dataclass, field
-from typing import List, Callable, Optional, Awaitable
+from typing import List, Callable, Optional, Awaitable, Dict
 
 
 @dataclass
@@ -40,3 +40,22 @@ def print_job_tree(jobs: List[Job], level: int = 0,
 
         if len(job.children) != 0:
             print_job_tree(job.children, level+1, is_last_item)
+
+
+def build_tree(jobs: Dict[str, Job], complete: List[str]) -> List[Job]:
+    root_jobs = []
+    for job_name, job in jobs.items():
+        if job.on_demand and not any(j.depends_on in job.names for j in jobs.values()):
+            continue
+        if job.depends_on is None:
+            root_jobs.append(job)
+        elif job.depends_on in complete:
+            root_jobs.append(job)
+        else:
+            try:
+                parent = next(j for j in jobs.values() if job.depends_on in j.names)
+            except StopIteration:
+                print(f"The dependency '{job.depends_on}' for job '{job_name}' is missing")
+            parent.children.append(job)
+
+    return root_jobs

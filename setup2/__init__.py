@@ -1,20 +1,23 @@
 import argparse
 import asyncio
 import os
-from typing import List, Dict
+import itertools
+from typing import Dict
 
 from .builder import build_resources
+from .managers import create_jobs
 from .managers import directory
 from .managers import exe
 from .managers import sym
 from .managers import lib
 from .managers import command
 from .managers import parser
-from .job import print_job_tree, Job
+from .job import print_job_tree, build_tree
 from .conf import conf
 from .output import red, green
+from .managers.manager import Manager
 
-TYPE_MAP = {
+TYPE_MAP: Dict[str, Manager] = {
     'sym': sym,
     'directory': directory,
     'lib': lib,
@@ -24,45 +27,20 @@ TYPE_MAP = {
 }
 
 
-def show_desired() -> None:
-    for t in conf.types:
-        print(t.desired_printout(), end='')
-
-
-def build_tree(jobs: Dict[str, Job], complete: List[str]) -> List[Job]:
-    root_jobs = []
-    for job_name, job in jobs.items():
-        if job.on_demand and not any(j.depends_on in job.names for j in jobs.values()):
-            continue
-        if job.depends_on is None:
-            root_jobs.append(job)
-        elif job.depends_on in complete:
-            root_jobs.append(job)
-        else:
-            try:
-                parent = next(j for j in jobs.values() if job.depends_on in j.names)
-            except StopIteration:
-                print(f"The dependency '{job.depends_on}' for job '{job_name}' is missing")
-            parent.children.append(job)
-
-    return root_jobs
-
-
 async def handle_jobs() -> None:
-    await asyncio.gather(*[t.get_statuses() for t in TYPE_MAP.values()])
+    if conf.args.stage == 'desired':
+        for t in conf.types:
+            print(t.desired_printout(), end='')
+        return
 
+    all_complete = await asyncio.gather(*[t.get_statuses() for t in TYPE_MAP.values()])
+    complete = list(itertools.chain.from_iterable(all_complete))
     if conf.args.stage in [None, 'show_all']:
         for t in conf.types:
             print(t.status_printout(bool(conf.args.stage)), end='')
         return
 
-    complete = []
-    jobs = {}
-    for t in TYPE_MAP.values():
-        c, j = t.create_jobs()
-        complete.extend(c)
-        if t in conf.types:
-            jobs.update(j)
+    jobs = create_jobs()
 
     if len(jobs) == 0:
         print('All items are satisfied')
@@ -86,7 +64,9 @@ async def handle_jobs() -> None:
 
 def run() -> None:
     argparser = argparse.ArgumentParser(prog='EnvSetup')
-    argparser.add_argument('-t', '--types', choices=TYPE_MAP.keys(), nargs='+')
+    resources = argparser.add_mutually_exclusive_group()
+    resources.add_argument('-t', '--types', choices=TYPE_MAP.keys(), nargs='+')
+    resources.add_argument('-o', '--only')
     stages = argparser.add_mutually_exclusive_group()
     stages.add_argument('-s', '--stage', choices=['desired', 'show_all',
                         'jobs', 'tree', 'run'], default=None)
@@ -96,8 +76,6 @@ def run() -> None:
                         const='run', dest='stage')
 
     os.environ['NPM_CONFIG_USERCONFIG'] = os.path.expanduser('~/.config/npm/npmrc')
-    os.makedirs(os.path.expanduser('~/.cache/env_setup'), exist_ok=True)
-    conf.sources_dir = os.path.expanduser('~/.cache/env_setup')
 
     conf.dotfiles_home = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     conf.args = argparser.parse_args()
@@ -108,8 +86,4 @@ def run() -> None:
             conf.types.append(TYPE_MAP[t])
 
     build_resources()
-    if conf.args.stage == 'desired':
-        show_desired()
-        return
-
     asyncio.run(handle_jobs())

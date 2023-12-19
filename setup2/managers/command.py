@@ -27,7 +27,7 @@ class Command():
 check_results: List[Tuple[Command, bool, str]] = []
 
 
-async def check_job(command: Command) -> Tuple[Command, bool, str]:
+async def current_status(command: Command) -> Tuple[Command, bool, str]:
     if isinstance(command.cwd, str):
         command.cwd = os.path.expanduser(command.cwd.replace('DOT', conf.dotfiles_home))
 
@@ -35,16 +35,22 @@ async def check_job(command: Command) -> Tuple[Command, bool, str]:
         return (command, False, 'CANT VERIFY')
     result = await async_proc(command.check_script, cwd=command.cwd)
     if result.returncode == 0:
-        return (command, True, green('DONE'))
+        return (command, True, 'DONE')
 
-    return (command, False, red('INCOMPLETE'))
+    return (command, False, 'INCOMPLETE')
 
 
-async def get_statuses() -> None:
+async def get_statuses() -> List[str]:
+    complete = []
     tasks = []
     for command in Command.desired:
-        tasks.append(check_job(command))
-    check_results.extend(await asyncio.gather(*tasks))
+        tasks.append(current_status(command))
+    results = await asyncio.gather(*tasks)
+    check_results.extend(results)
+    for result in results:
+        if results[1]:
+            complete.append(result[0].name)
+    return complete
 
 
 def desired_printout() -> str:
@@ -59,26 +65,18 @@ def status_printout(show_all: bool) -> str:
     for command, complete, status in sorted(check_results, key=(lambda c: c[0].name)):
         if not show_all and complete:
             continue
-        lines.append((command.name, status))
+        lines.append((command.name, (status, complete)))
     return print_grid(('SCRIPT', 'STATUS'), lines)
 
 
-def create_jobs() -> Tuple[List[str], Dict[str, Job]]:
-    no_action_needed = []
-    jobs = {}
-    for command, complete, status in check_results:
-        if complete:
-            no_action_needed.append(command.name)
-            continue
-        jobs[command.name] = Job(
-            names=[command.name],
-            description=f'Run the {command.name} script',
-            depends_on=command.depends_on,
-            job=run_script(command.name, command.run_script,
-                           command.cwd)
-        )
-
-    return no_action_needed, jobs
+def create_job(command: Command) -> Job:
+    return Job(
+        names=[command.name],
+        description=f'Run the {command.name} script',
+        depends_on=command.depends_on,
+        job=run_script(command.name, command.run_script,
+                       command.cwd)
+    )
 
 
 def run_script(name: str, script: str, cwd: Optional[str]) -> \

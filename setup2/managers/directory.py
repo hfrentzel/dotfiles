@@ -1,9 +1,9 @@
 import os
 from dataclasses import dataclass
-from typing import Tuple, List, ClassVar, Callable, Dict, Coroutine
+from typing import Tuple, List, ClassVar, Callable, Coroutine
 
 from setup2.job import Job
-from setup2.output import print_grid, red, green
+from setup2.output import print_grid
 from setup2.managers.manager import mark_resource
 
 
@@ -21,13 +21,13 @@ class Dir():
 check_results: List[Tuple[Dir, bool, str]] = []
 
 
-def check_job(directory: Dir) -> Tuple[bool, str]:
+def current_status(directory: Dir) -> Tuple[bool, str]:
     path = os.path.expanduser(directory.path)
     if os.path.isdir(path):
-        return (True, green('Exists'))
+        return (True, 'Exists')
     if os.path.exists(path):
-        return (False, red('BLOCKED'))
-    return (False, red('MISSING'))
+        return (False, 'BLOCKED')
+    return (False, 'MISSING')
 
 
 def desired_printout() -> str:
@@ -37,9 +37,14 @@ def desired_printout() -> str:
     return print_grid(('SUB-DIRECTORIES',), lines)
 
 
-async def get_statuses() -> None:
+async def get_statuses() -> List[str]:
+    complete = []
     for directory in Dir.desired:
-        check_results.append((directory, *check_job(directory)))
+        result = current_status(directory)
+        if result[0]:
+            complete.append(directory.name)
+        check_results.append((directory, *result))
+    return complete
 
 
 def status_printout(show_all: bool) -> str:
@@ -47,27 +52,16 @@ def status_printout(show_all: bool) -> str:
     for directory, complete, status in sorted(check_results, key=(lambda d: d[0].path)):
         if not show_all and complete:
             continue
-        lines.append((directory.path, status))
+        lines.append((directory.path, (status, complete)))
     return print_grid(('SUB-DIRECTORIES', 'STATUS'), lines)
 
 
-def create_jobs() -> Tuple[List[str], Dict[str, Job]]:
-    no_action_needed = []
-    jobs = {}
-    for directory, complete, status in check_results:
-        if complete:
-            no_action_needed.append(directory.name)
-        elif status == 'BLOCKED':
-            # TODO Add unblocking job
-            pass
-        else:
-            jobs[directory.name] = Job(
-                names=[directory.name],
-                description=f'Create directory at {directory.path}',
-                job=create_directory(directory.path)
-            )
-
-    return no_action_needed, jobs
+def create_job(directory: Dir) -> Job:
+    return Job(
+        names=[directory.name],
+        description=f'Create directory at {directory.path}',
+        job=create_directory(directory.path)
+    )
 
 
 def create_directory(path: str) -> Callable[[], Coroutine[None, None, bool]]:

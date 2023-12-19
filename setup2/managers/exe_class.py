@@ -8,7 +8,7 @@ class Exe():
     desired: ClassVar[List['Exe']] = []
     name: str
     version: str = ''
-    installers: Optional[List[str]] = None
+    installers: List[str] = field(default_factory=list)
     depends_on: Optional[str] = None
     on_demand: bool = False
     override: bool = False

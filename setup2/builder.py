@@ -6,7 +6,7 @@ from setup2.managers import Exe, Sym, Command, Dir, Lib, Parser
 from setup2.conf import conf
 from setup2.menu import show
 
-
+CONFIG_FILE = os.path.expanduser('~/.config/env_setup/config.json')
 TYPE_MAP = {
     "command": Command,
     "directory": Dir,
@@ -24,22 +24,19 @@ def build_resources() -> None:
     specs = config['resources']
 
     choices = {}
-    config_file = os.path.expanduser('~/.config/env_setup/config.json')
-    if os.path.exists(config_file):
-        with open(config_file, encoding='utf-8') as f:
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, encoding='utf-8') as f:
             choices = json.loads(f.read())['addons']
         if missing_addons := set(addons) - set(choices):
             print('There are new addons that are not tracked on this machine')
             for addon in missing_addons:
                 response = input(f'Do you want to manage addon "{addon}" [y/n]?: ')
                 choices[addon] = response.lower().startswith('y')
-            with open(config_file, 'w', encoding='utf-8') as f:
-                f.write(json.dumps({'addons': choices}, indent=4))
+            write_config(choices)
     else:
         print('No env config file found. Creating one...')
         choices = select_addons(addons)
-        with open(config_file, 'w', encoding='utf-8') as f:
-            f.write(json.dumps({'addons': choices}, indent=4))
+        write_config(choices)
 
     for name, file in addons.items():
         if not choices.get(name, True):
@@ -57,6 +54,11 @@ def build_resources() -> None:
             continue
         resource_type = TYPE_MAP[spec.pop("type")]
         resource_type(name, **spec)
+
+
+def write_config(choices: Dict):
+    with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
+        f.write(json.dumps({'addons': choices}, indent=4))
 
 
 def select_addons(addons: Dict[str, str]) -> Dict[str, bool]:
