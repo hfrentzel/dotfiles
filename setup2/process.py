@@ -78,7 +78,7 @@ def filter_assets(asset_list: List[str]) -> Optional[str]:
     return None
 
 
-def set_hardware(machine):
+def set_hardware(machine: str) -> List[str]:
     if machine in ['amd64', 'x86_64']:
         return ['amd64', 'x86_64', 'x64']
     if machine == 'aarch64' and platform.architecture()[0] == '64bit':

@@ -51,7 +51,7 @@ def zip_builder(spec: Exe) -> Job:
                 z.filename = filename
                 mode = (z.external_attr >> 16) & 0o777
 
-                extract_path = find_extract_path(filename, mode, install_home,
+                extract_path = find_extract_path(filename, mode,
                                                  spec.command_name)
                 if extract_path is None:
                     continue

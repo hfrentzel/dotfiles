@@ -1,5 +1,5 @@
 import json
-from typing import Any
+from typing import Any, List
 
 from setup2.job import Job
 from setup2.output import red
@@ -45,7 +45,7 @@ class Gitlab():
     @classmethod
     async def get_release(cls, repo: str, version: str) -> str:
         response = await cls.glab_api_call(f'{repo.replace("/", "%2F")}/releases')
-        releases = [r['tag_name'] for r in response]
+        releases: List[str] = [r['tag_name'] for r in response]
         return next(r for r in releases if version in r)
 
     @classmethod

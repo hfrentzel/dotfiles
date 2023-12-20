@@ -1,7 +1,8 @@
 import os
 import subprocess
 import termios
-from typing import List, Tuple
+from io import TextIOWrapper
+from typing import List, Tuple, Iterator
 import contextlib
 
 from setup2.output import red, green
@@ -12,7 +13,7 @@ class XX():
         self.size = size
 
     @contextlib.contextmanager
-    def tty_handler(self):
+    def tty_handler(self) -> Iterator[Tuple[TextIOWrapper, TextIOWrapper]]:
         tty_in = open("/dev/tty", "r", encoding='utf-8')
         tty_out = open("/dev/tty", "w", encoding='utf-8', errors="replace")
         old_term = termios.tcgetattr(tty_in.fileno())
@@ -62,7 +63,7 @@ DECODE_RAW_INPUT = {
 }
 
 
-def read_input(tty):
+def read_input(tty: TextIOWrapper) -> str:
     code = os.read(tty.fileno(), 80).decode('ascii', errors='ignore')
     next_key = DECODE_RAW_INPUT.get(code, code)
     return next_key
@@ -98,7 +99,7 @@ def show(menu_entries: List[str]) -> List[Tuple[str, bool]]:
     return list(zip(menu_entries, included))
 
 
-def main():
+def main() -> None:
     branches = subprocess.check_output(['git', 'branch']).decode('utf-8')
     print(show([b[2:] for b in branches.split('\n')]))
 
