@@ -36,6 +36,7 @@ def build_resources(resource: Optional[str]) -> Optional[Tuple[Any, str]]:
     else:
         print('No env config file found. Creating one...')
         choices = select_addons(addons)
+        os.makedirs(os.path.dirname(USER_CONFIG), exist_ok=True)
         write_config(choices)
 
     for name, file in addons.items():
@@ -63,7 +64,7 @@ def build_resources(resource: Optional[str]) -> Optional[Tuple[Any, str]]:
 
 
 def write_config(choices: Dict[str, bool]) -> None:
-    with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
+    with open(USER_CONFIG, 'w', encoding='utf-8') as f:
         f.write(json.dumps({'addons': choices}, indent=4))
 
 
