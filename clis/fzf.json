@@ -10,10 +10,5 @@
         "cwd": "~/.local",
         "check_script": "test -f shell/fzf.sh",
         "run_script": "mkdir -p shell; curl -s https://raw.githubusercontent.com/junegunn/fzf/0.39.0/shell/completion.bash -o shell/fzf.sh"
-    },
-    "fzf_setup": {
-        "type": "symlink",
-        "source": "DOT/clis/fzf/fzf.sh",
-        "target": "~/.config/fzf/fzf.bash"
     }
 }

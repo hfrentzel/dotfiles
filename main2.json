@@ -115,7 +115,7 @@
     },
     "addons": {
         "data_languages": "languages/data_languages.json",
-        "fzf": "clis/fzf/spec.json",
+        "fzf": "clis/fzf.json",
         "javascript": "languages/javascript/spec.json",
         "lua": "languages/lua/spec.json",
         "go": "languages/go.json",
