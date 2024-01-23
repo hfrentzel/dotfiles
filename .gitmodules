@@ -19,9 +19,6 @@
 [submodule "vim/.vim/pack/vendor/start/vim-tmux-navigator"]
 	path = vim/nvim/pack/vendor/opt/vim-tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator
-[submodule "vim/.vim/pack/vendor/start/vim-python-pep8-indent"]
-	path = vim/nvim/pack/vendor/start/vim-python-pep8-indent
-	url = https://github.com/vimjas/vim-python-pep8-indent
 [submodule "vim/.vim/pack/vendor/start/pinnacle"]
 	path = vim/nvim/pack/vendor/start/pinnacle
 	url = https://github.com/wincent/pinnacle.git
