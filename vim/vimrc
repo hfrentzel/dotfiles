@@ -113,8 +113,8 @@ if has('packages')
     endif
 endif
 
-omap <silent> <leader>iw <Plug>CamelCaseMotion_iw
-xmap <silent> <leader>iw <Plug>CamelCaseMotion_iw
+omap <silent> i<leader>w <Plug>CamelCaseMotion_iw
+xmap <silent> i<leader>w <Plug>CamelCaseMotion_iw
 
 filetype plugin indent on
 syntax on

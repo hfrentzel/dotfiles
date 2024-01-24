@@ -25,3 +25,8 @@ _fzf_conf_completion() {
     _fzf_complete -- "$@" < <(ls ~/.config/)
 }
 complete -F _fzf_conf_completion conf
+
+bn() {
+    offset=${3:-5};
+    bat --line-range $(($2-$offset)):$(($2+$offset)) --highlight-line $2 $1
+}

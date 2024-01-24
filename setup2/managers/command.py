@@ -48,7 +48,7 @@ async def get_statuses() -> List[str]:
     results = await asyncio.gather(*tasks)
     check_results.extend(results)
     for result in results:
-        if results[1]:
+        if result[1]:
             complete.append(result[0].name)
     return complete
 

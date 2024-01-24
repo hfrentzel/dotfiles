@@ -1,2 +1,2 @@
 # Ignore vim plugins
-vim/.vim/pack/vendor/opt/*
+vim/nvim/pack/vendor/
