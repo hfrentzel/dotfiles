@@ -85,3 +85,6 @@
 [submodule "vim/.vim/pack/vendor/opt/markdown-preview.nvim"]
 	path = vim/nvim/pack/vendor/opt/markdown-preview.nvim
 	url = https://github.com/iamcco/markdown-preview.nvim
+[submodule "vim/nvim/pack/vendor/opt/vimwiki"]
+	path = vim/nvim/pack/vendor/opt/vimwiki
+	url = https://github.com/vimwiki/vimwiki
