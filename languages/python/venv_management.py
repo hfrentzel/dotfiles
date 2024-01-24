@@ -11,7 +11,7 @@ import shutil
 
 from itertools import zip_longest
 
-venv_file = os.path.expanduser('~/.python_venvs')
+venv_file = os.path.expanduser('~/.local/share/python/python_venvs')
 
 
 def _get_existing() -> dict:
@@ -100,9 +100,6 @@ def pyrun(venv_name=None):
         cmd = os.path.join(cmd, 'bin', 'python')
 
     os.environ['PYPROMPT'] = prompt
-    os.environ['PYTHONSTARTUP'] = \
-        os.path.expanduser('~/dotfiles/languages/python/startup.py')
-
     subprocess.run(cmd, check=False)
 
 
@@ -132,6 +129,7 @@ def main():
     cmd = sys.argv[1]
     arg = sys.argv[2] if len(sys.argv) > 2 else None
 
+    os.makedirs(os.path.expanduser('~/.local/share/python'), exist_ok=True)
     if cmd == 'pymake':
         if arg is None:
             print('Please enter a name for the new venv')

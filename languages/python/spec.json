@@ -35,7 +35,7 @@
     },
     "startup.py": {
         "type": "symlink",
-        "source": "DOT/languages/python/gen_startup.py",
+        "source": "DOT/languages/python/startup.py",
         "target": "~/.config/python/startup.py"
     },
     "pylintrc": {
