@@ -4,9 +4,9 @@ if not has_commandt then
 end
 vim.g.CommandTCancelMap = { '<esc>', '<C-c>'}
 
-vim.keymap.set('n', '<leader>b', '<Plug>(CommandTBuffer)', { remap = true})
-vim.keymap.set('n', '<leader>t', '<Plug>(CommandTRipgrep)', { remap = true})
-vim.keymap.set('n', '<leader>h', '<Plug>(CommandTHelp)', { remap = true})
+vim.keymap.set('n', '<leader>b', '<Plug>(CommandTBuffer)')
+vim.keymap.set('n', '<leader>t', '<Plug>(CommandTRipgrep)')
+vim.keymap.set('n', '<leader>h', '<Plug>(CommandTHelp)')
 
 commandt.setup({
     always_show_dot_files = true,
