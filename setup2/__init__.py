@@ -69,8 +69,8 @@ async def handle_single_resource(resource: Spec, resource_type: str) -> None:
         print(f'{resource.name} is already set up')
         return
 
-    if (dependencies := getattr(resource, 'depends_on', [])) and \
-            (remaining := set(dependencies) - set(complete)):
+    if (dependencies := getattr(resource, 'depends_on', '')) and \
+            (remaining := {dependencies} - set(complete)):
         print(f'Can\'t set up {resource.name} because it has unsatisfied dependencies: {remaining}')
         return
 
