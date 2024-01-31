@@ -20,13 +20,15 @@ function s:setColor()
     execute 'color base16-' . s:scheme[0]
     doautoall colorscheme
     execute 'highlight Comment ' . pinnacle#italicize('Comment')
-    let l:bg = pinnacle#extract_bg('StatusLine')
+    let l:bg = synIDattr(synIDtrans(hlID('StatusLine')), 'bg', 'cterm')
 
     highlight clear VertSplit
     highlight link VertSplit LineNr
     if has('nvim')
-        execute 'highlight User1 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticError'), 'bg': bg})
-        execute 'highlight User2 ' . pinnacle#highlight({'fg': pinnacle#extract_fg('DiagnosticWarn'), 'bg': bg})
+        let l:error = synIDattr(synIDtrans(hlID('DiagnosticError')), 'fg', 'cterm')
+        execute 'highlight User1 ' . pinnacle#highlight({'fg': l:error, 'bg': bg})
+        let l:warning = synIDattr(synIDtrans(hlID('DiagnosticWarn')), 'fg', 'cterm')
+        execute 'highlight User2 ' . pinnacle#highlight({'fg': l:warning, 'bg': bg})
         execute 'highlight User3 ' . pinnacle#embolden('StatusLine')
     endif
 endfunction
