@@ -11,11 +11,11 @@ conf() {
         return
     fi
 
-    FILES="$(find "$DIR" -follow -mindepth 1)"
+    FILES="$(find "$DIR" -follow -type f -mindepth 1)"
     NUM_FILES=$(echo "$FILES" | wc -l)
     if [[ $NUM_FILES -gt 1 ]]; then
         # nvim $(echo "$FILES" | fzf)
-        echo "$FILES" | fzf --bind 'enter:become(nvim {}),ctrl-o:become(bat {})'
+        echo "$FILES" | fzf --bind 'enter:become(nvim {}),ctrl-o:become(echo {}),ctrl-p:become(bat {})'
     else
         nvim $FILES
     fi
