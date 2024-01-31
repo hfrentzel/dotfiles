@@ -37,12 +37,12 @@
         },
         "tmux.conf": {
             "type": "symlink",
-            "source": "DOT/tmux/.tmux.conf",
+            "source": "DOT/tmux/tmux.conf",
             "target": "~/.config/tmux/tmux.conf"
         },
         "tmux_dir": {
             "type": "symlink",
-            "source": "DOT/tmux/.tmux",
+            "source": "DOT/tmux/plugins",
             "target": "~/.config/tmux/plugins"
         },
         "jq": {
