@@ -16,19 +16,19 @@
     },
     "k9s": {
         "type": "exe",
-        "version": "0.27.4",
+        "version": "0.30.7",
         "installers": ["Github", "Go"],
         "repo": "derailed/k9s",
         "url": "github.com/derailed/k9s"
     },
     "k9s-hotkeys": {
         "type": "symlink",
-        "source": "DOT/clis/kubernetes/hotkey.yml",
-        "target": "~/.config/k9s/hotkey.yml"
+        "source": "DOT/clis/kubernetes/hotkeys.yaml",
+        "target": "~/.config/k9s/hotkeys.yaml"
     },
     "k9s-skin": {
         "type": "symlink",
-        "source": "DOT/clis/kubernetes/skin.yml",
-        "target": "~/.config/k9s/skin.yml"
+        "source": "DOT/clis/kubernetes/skin.yaml",
+        "target": "~/.config/k9s/skins/default.yaml"
     }
 }

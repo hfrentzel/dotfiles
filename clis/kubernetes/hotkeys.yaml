@@ -1,4 +1,4 @@
-hotKey:
+hotKeys:
   shift-1:
     shortCut: Shift-1
     description: View Pods
