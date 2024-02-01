@@ -1,4 +1,4 @@
--- search.lau
+-- search.lua
 -- Implements File and Text Search using nvim-telescope and command-t
 
 -- https://github.com/nvim-telescope/telescope.nvim/issues/1923
