@@ -8,7 +8,7 @@
 	path = vim/nvim/pack/vendor/opt/vim-visual-multi
 	url = https://github.com/mg979/vim-visual-multi
 [submodule "vim/.vim/pack/vendor/start/tcomment_vim"]
-	path = vim/nvim/pack/vendor/start/tcomment_vim
+	path = vim/nvim/pack/vendor/opt/tcomment_vim
 	url = https://github.com/tomtom/tcomment_vim
 [submodule "bash/.bash/base16-shell"]
 	path = bash/plugins/base16-shell
@@ -20,7 +20,7 @@
 	path = vim/nvim/pack/vendor/opt/vim-tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator
 [submodule "vim/.vim/pack/vendor/start/pinnacle"]
-	path = vim/nvim/pack/vendor/start/pinnacle
+	path = vim/nvim/pack/vendor/opt/pinnacle
 	url = https://github.com/wincent/pinnacle.git
 [submodule "vim/.vim/pack/vendor/start/nvim-lspconfig"]
 	path = vim/nvim/pack/vendor/opt/nvim-lspconfig
@@ -88,3 +88,6 @@
 [submodule "vim/nvim/pack/vendor/opt/vimwiki"]
 	path = vim/nvim/pack/vendor/opt/vimwiki
 	url = https://github.com/vimwiki/vimwiki
+[submodule "vim/nvim/pack/vendor/opt/lazy.nvim"]
+	path = vim/nvim/pack/vendor/opt/lazy.nvim
+	url = https://github.com/folke/lazy.nvim

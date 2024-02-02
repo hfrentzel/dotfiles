@@ -11,29 +11,49 @@ vim.g.CommandTPreferredImplementation='lua'
 vim.g.vimwiki_global_ext = 0
 vim.g.vimwiki_list = {{path = '~/vimwiki/', syntax = 'markdown', ext = '.md'}}
 
-vim.cmd.packadd({'command-t', bang = true})
-vim.cmd.packadd({'markdown-preview.nvim', bang = true})
-vim.cmd.packadd({'nvim-cmp', bang = true})
-vim.cmd.packadd({'nvim-dap', bang = true})
-vim.cmd.packadd({'nvim-lspconfig', bang = true})
-vim.cmd.packadd({'nvim-tree.lua', bang = true})
-vim.cmd.packadd({'nvim-treesitter', bang = true})
-vim.cmd.packadd({'cmp-nvim-lsp', bang = true})
-vim.cmd.packadd({'cmp-nvim-lua', bang = true})
-vim.cmd.packadd({'cmp-path', bang = true})
-vim.cmd.packadd({'cmp-buffer', bang = true})
-vim.cmd.packadd({'gitsigns.nvim', bang = true})
-vim.cmd.packadd({'playground', bang = true})
-vim.cmd.packadd({'plenary.nvim', bang = true})
-vim.cmd.packadd({'telescope.nvim', bang = true})
-vim.cmd.packadd({'tmux.nvim', bang = true})
-vim.cmd.packadd({'LuaSnip', bang = true})
-vim.cmd.packadd({'cmp_luasnip', bang = true})
-vim.cmd.packadd({'vimwiki', bang = true})
-
 vim.o.foldmethod = 'expr'
 vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
--- local lazypath = '/home/htfrentzel/.config/nvim/pack/vendor/opt/lazy.nvim'
--- vim.opt.rtp:prepend(lazypath)
---
--- require('lazy').setup('plugins', { defaults = {lazy=true }})
+
+local lazypath = '~/.config/nvim/pack/vendor/opt/lazy.nvim'
+vim.opt.rtp:prepend(lazypath)
+
+local function build_list(packages)
+    local result = {}
+    for _, package in ipairs(packages) do
+        table.insert(result, {package, dir = '~/.config/nvim/pack/vendor/opt/'..package})
+    end
+    return result
+end
+
+require('lazy').setup(build_list{
+'command-t',
+'markdown-preview.nvim',
+'nvim-cmp',
+'nvim-dap',
+'nvim-lspconfig',
+'nvim-tree.lua',
+'nvim-treesitter',
+'cmp-nvim-lsp',
+'cmp-nvim-lua',
+'cmp-path',
+'cmp-buffer',
+'gitsigns.nvim',
+'playground',
+'plenary.nvim',
+'telescope.nvim',
+'tmux.nvim',
+'LuaSnip',
+'cmp_luasnip',
+'vimwiki',
+
+'CamelCaseMotion',
+'base16-vim',
+'fugitive',
+'eunuch',
+'vim-slime',
+'vim-surround',
+'vim-visual-multi',
+
+'pinnacle',
+'tcomment_vim',
+})

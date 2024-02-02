@@ -100,7 +100,7 @@ if filereadable(s:vimrc_local)
     execute 'source ' . s:vimrc_local
 endif
 
-if has('packages')
+if has('packages') && !has('nvim')
     packadd! CamelCaseMotion
     packadd! base16-vim
     packadd! fugitive
@@ -108,9 +108,9 @@ if has('packages')
     packadd! vim-slime
     packadd! vim-surround
     packadd! vim-visual-multi
-    if !has('nvim')
-        packadd! vim-tmux-navigator
-    endif
+    packadd! vim-tmux-navigator
+    packadd! tcomment_vim
+    packadd! pinnacle
 endif
 
 omap <silent> i<leader>w <Plug>CamelCaseMotion_iw
