@@ -22,11 +22,11 @@ local function build_list(packages)
     for _, package in ipairs(packages) do
         table.insert(result, {package, dir = '~/.config/nvim/pack/vendor/opt/'..package})
     end
+    table.insert(result, {import = 'plugins'})
     return result
 end
 
 require('lazy').setup(build_list{
-'command-t',
 'markdown-preview.nvim',
 'nvim-cmp',
 'nvim-dap',
@@ -40,7 +40,6 @@ require('lazy').setup(build_list{
 'gitsigns.nvim',
 'playground',
 'plenary.nvim',
-'telescope.nvim',
 'tmux.nvim',
 'LuaSnip',
 'cmp_luasnip',

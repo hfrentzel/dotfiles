@@ -4,3 +4,4 @@ python/.pyvenvs
 py310venv
 
 vim/.vim/.netrwhist
+vim/nvim/lazy-lock.json
