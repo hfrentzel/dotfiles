@@ -49,7 +49,6 @@ require('lazy').setup(build_list{
 'base16-vim',
 'fugitive',
 'eunuch',
-'vim-slime',
 'vim-surround',
 'vim-visual-multi',
 

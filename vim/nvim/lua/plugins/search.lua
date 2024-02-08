@@ -1,3 +1,6 @@
+-- search.lua
+-- Implements File and Text Search using nvim-telescope and commant-t
+
 -- https://github.com/nvim-telescope/telescope.nvim/issues/1923
 local function getVisualSelection()
     vim.cmd('noau normal! "vy"')
