@@ -34,14 +34,6 @@ let g:slime_target = 'tmux'
 let g:slime_default_config = {'socket_name': 'default',
                             \ 'target_pane': '{right-of}' }
 
-" <c-_> maps <c-/> functions like other editors
-let g:tcomment_mapleader1 = ''
-let g:tcomment_mapleader2 = ''
-let g:tcomment_mapleader_comment_anyway = ''
-let g:tcomment_textobject_inlinecomment = ''
-nnoremap <silent> <c-_> :TComment<cr>
-vnoremap <silent> <c-_> :TCommentMaybeInline<cr>
-
 " Copy to system clipboard
 if !empty($IS_WSL)
     vnoremap <silent> <C-c> "+y:call system("clip.exe", getreg("+"))<CR>
@@ -101,6 +93,12 @@ if filereadable(s:vimrc_local)
 endif
 
 if has('packages') && !has('nvim')
+    " <c-_> maps <c-/> functions like other editors
+    let g:tcomment_maps = 0
+    let g:tcomment_opleader = ''
+    nnoremap <silent> <c-_> :TComment<cr>
+    vnoremap <silent> <c-_> :TCommentMaybeInline<cr>
+
     packadd! CamelCaseMotion
     packadd! base16-vim
     packadd! fugitive

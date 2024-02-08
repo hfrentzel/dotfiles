@@ -54,5 +54,4 @@ require('lazy').setup(build_list{
 'vim-visual-multi',
 
 'pinnacle',
-'tcomment_vim',
 })
