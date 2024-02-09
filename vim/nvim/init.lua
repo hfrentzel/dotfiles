@@ -28,21 +28,14 @@ end
 
 require('lazy').setup(build_list{
 'markdown-preview.nvim',
-'nvim-cmp',
 'nvim-dap',
 'nvim-lspconfig',
 'nvim-tree.lua',
 'nvim-treesitter',
-'cmp-nvim-lsp',
-'cmp-nvim-lua',
-'cmp-path',
-'cmp-buffer',
 'gitsigns.nvim',
 'playground',
 'plenary.nvim',
 'tmux.nvim',
-'LuaSnip',
-'cmp_luasnip',
 'vimwiki',
 
 'CamelCaseMotion',
