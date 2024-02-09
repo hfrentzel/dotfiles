@@ -26,14 +26,6 @@ set visualbell
 let base16colorspace=256
 let mapleader = ","
 
-let g:slime_no_mappings = 1
-let g:slime_paste_file = tempname()
-xmap <leader><enter> <Plug>SlimeRegionSend
-nmap <leader><enter> <Plug>SlimeParagraphSend
-let g:slime_target = 'tmux'
-let g:slime_default_config = {'socket_name': 'default',
-                            \ 'target_pane': '{right-of}' }
-
 " Copy to system clipboard
 if !empty($IS_WSL)
     vnoremap <silent> <C-c> "+y:call system("clip.exe", getreg("+"))<CR>
@@ -93,6 +85,14 @@ if filereadable(s:vimrc_local)
 endif
 
 if has('packages') && !has('nvim')
+    let g:slime_no_mappings = 1
+    let g:slime_paste_file = tempname()
+    xmap <leader><enter> <Plug>SlimeRegionSend
+    nmap <leader><enter> <Plug>SlimeParagraphSend
+    let g:slime_target = 'tmux'
+    let g:slime_default_config = {'socket_name': 'default',
+                            \ 'target_pane': '{right-of}' }
+
     " <c-_> maps <c-/> functions like other editors
     let g:tcomment_maps = 0
     let g:tcomment_opleader = ''
