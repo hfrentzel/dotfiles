@@ -40,7 +40,6 @@ require('lazy').setup(build_list{
 
 'base16-vim',
 'fugitive',
-'vim-visual-multi',
 
 'pinnacle',
 })
