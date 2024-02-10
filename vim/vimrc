@@ -78,30 +78,36 @@ if filereadable(s:vimrc_local)
     execute 'source ' . s:vimrc_local
 endif
 
-if has('packages') && !has('nvim')
-    let g:slime_no_mappings = 1
-    let g:slime_paste_file = tempname()
-    xmap <leader><enter> <Plug>SlimeRegionSend
-    nmap <leader><enter> <Plug>SlimeParagraphSend
-    let g:slime_target = 'tmux'
-    let g:slime_default_config = {'socket_name': 'default',
-                            \ 'target_pane': '{right-of}' }
+if !has('nvim')
+    filetype plugin indent on
+    syntax on
+    finish
+end
 
-    " <c-_> maps <c-/> functions like other editors
-    let g:tcomment_maps = 0
-    let g:tcomment_opleader = ''
-    nnoremap <silent> <c-_> :TComment<cr>
-    vnoremap <silent> <c-_> :TCommentMaybeInline<cr>
+let g:slime_no_mappings = 1
+let g:slime_paste_file = tempname()
+xmap <leader><enter> <Plug>SlimeRegionSend
+nmap <leader><enter> <Plug>SlimeParagraphSend
+let g:slime_target = 'tmux'
+let g:slime_default_config = {'socket_name': 'default',
+                        \ 'target_pane': '{right-of}' }
 
-    omap <silent> i<leader>w <Plug>CamelCaseMotion_iw
-    xmap <silent> i<leader>w <Plug>CamelCaseMotion_iw
+" <c-_> maps <c-/> functions like other editors
+let g:tcomment_maps = 0
+let g:tcomment_opleader = ''
+nnoremap <silent> <c-_> :TComment<cr>
+vnoremap <silent> <c-_> :TCommentMaybeInline<cr>
 
-    " Easier window movement
-    nnoremap <C-H> <C-W>h
-    nnoremap <C-J> <C-W>j
-    nnoremap <C-K> <C-W>k
-    nnoremap <C-L> <C-W>l
+omap <silent> i<leader>w <Plug>CamelCaseMotion_iw
+xmap <silent> i<leader>w <Plug>CamelCaseMotion_iw
 
+" Easier window movement
+nnoremap <C-H> <C-W>h
+nnoremap <C-J> <C-W>j
+nnoremap <C-K> <C-W>k
+nnoremap <C-L> <C-W>l
+
+if has('packages')
     packadd! CamelCaseMotion
     packadd! base16-vim
     packadd! fugitive
