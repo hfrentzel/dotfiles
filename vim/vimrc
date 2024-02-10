@@ -99,6 +99,9 @@ if has('packages') && !has('nvim')
     nnoremap <silent> <c-_> :TComment<cr>
     vnoremap <silent> <c-_> :TCommentMaybeInline<cr>
 
+    omap <silent> i<leader>w <Plug>CamelCaseMotion_iw
+    xmap <silent> i<leader>w <Plug>CamelCaseMotion_iw
+
     packadd! CamelCaseMotion
     packadd! base16-vim
     packadd! fugitive
@@ -110,9 +113,6 @@ if has('packages') && !has('nvim')
     packadd! tcomment_vim
     packadd! pinnacle
 endif
-
-omap <silent> i<leader>w <Plug>CamelCaseMotion_iw
-xmap <silent> i<leader>w <Plug>CamelCaseMotion_iw
 
 filetype plugin indent on
 syntax on

@@ -38,11 +38,8 @@ require('lazy').setup(build_list{
 'tmux.nvim',
 'vimwiki',
 
-'CamelCaseMotion',
 'base16-vim',
 'fugitive',
-'eunuch',
-'vim-surround',
 'vim-visual-multi',
 
 'pinnacle',
