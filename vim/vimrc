@@ -43,12 +43,6 @@ inoremap <c-j> <down>
 inoremap <c-k> <up>
 inoremap <c-l> <right>
 
-" Easier window movement
-nnoremap <C-H> <C-W>h
-nnoremap <C-J> <C-W>j
-nnoremap <C-K> <C-W>k
-nnoremap <C-L> <C-W>l
-
 " Quicker buffer selection. This gets mapped to CommandTBuffer in nvim
 nnoremap <leader>b :ls<CR>:b<Space>
 
@@ -101,6 +95,12 @@ if has('packages') && !has('nvim')
 
     omap <silent> i<leader>w <Plug>CamelCaseMotion_iw
     xmap <silent> i<leader>w <Plug>CamelCaseMotion_iw
+
+    " Easier window movement
+    nnoremap <C-H> <C-W>h
+    nnoremap <C-J> <C-W>j
+    nnoremap <C-K> <C-W>k
+    nnoremap <C-L> <C-W>l
 
     packadd! CamelCaseMotion
     packadd! base16-vim

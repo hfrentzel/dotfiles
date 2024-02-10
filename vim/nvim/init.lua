@@ -35,7 +35,6 @@ require('lazy').setup(build_list{
 'gitsigns.nvim',
 'playground',
 'plenary.nvim',
-'tmux.nvim',
 'vimwiki',
 
 'base16-vim',
