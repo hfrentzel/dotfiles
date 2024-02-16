@@ -52,9 +52,6 @@
 [submodule "vim/.vim/pack/vendor/opt/nvim-treesitter"]
 	path = vim/nvim/pack/vendor/opt/nvim-treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter
-[submodule "vim/.vim/pack/vendor/opt/playground"]
-	path = vim/nvim/pack/vendor/opt/playground
-	url = https://github.com/nvim-treesitter/playground
 [submodule "vim/.vim/pack/vendor/opt/plenary.nvim"]
 	path = vim/nvim/pack/vendor/opt/plenary.nvim
 	url = https://github.com/nvim-lua/plenary.nvim

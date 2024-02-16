@@ -11,9 +11,6 @@ vim.g.CommandTPreferredImplementation='lua'
 vim.g.vimwiki_global_ext = 0
 vim.g.vimwiki_list = {{path = '~/vimwiki/', syntax = 'markdown', ext = '.md'}}
 
-vim.o.foldmethod = 'expr'
-vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
-
 local lazypath = '~/.config/nvim/pack/vendor/opt/lazy.nvim'
 vim.opt.rtp:prepend(lazypath)
 
@@ -31,9 +28,7 @@ require('lazy').setup(build_list{
 'nvim-dap',
 'nvim-lspconfig',
 'nvim-tree.lua',
-'nvim-treesitter',
 'gitsigns.nvim',
-'playground',
 'plenary.nvim',
 'vimwiki',
 
