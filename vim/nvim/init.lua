@@ -29,11 +29,8 @@ require('lazy').setup(build_list{
 'nvim-lspconfig',
 'nvim-tree.lua',
 'gitsigns.nvim',
-'plenary.nvim',
 'vimwiki',
 
 'base16-vim',
 'fugitive',
-
-'pinnacle',
 })

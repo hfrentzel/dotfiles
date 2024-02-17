@@ -14,6 +14,7 @@ set tabstop=4                           " Spaces per tab
 set autoindent                          " maintain indent on new line
 set textwidth=80
 set formatoptions-=t                    " Don't autowrap text
+set termguicolors
 
 if has('nvim')
     set fillchars=eob:\ 
