@@ -24,7 +24,6 @@ local function build_list(packages)
 end
 
 require('lazy').setup(build_list{
-'markdown-preview.nvim',
 'nvim-dap',
 'nvim-lspconfig',
 'nvim-tree.lua',
