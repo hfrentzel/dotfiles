@@ -28,12 +28,6 @@ return {
 
                 indent = {
                     enable = true
-                },
-
-                playground = {
-                    enable = true,
-                    persist_queries = false,
-                    updatetime = 25,
                 }
             }
 
