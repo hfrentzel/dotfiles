@@ -19,7 +19,7 @@ local vinegar_open = function()
         })
         require"nvim-tree.renderer".draw()
     else
-        require"nvim-tree".open_replacing_current_buffer()
+        require"nvim-tree.api".tree.open({current_window=true})
     end
     vim.b.curr_file = vim.g.curr_file
 end
@@ -63,6 +63,17 @@ return {
                 end
             end
 
+            local on_attach = function(bufnr)
+                local opts = {buffer = bufnr, noremap = true, silent = true,
+                    nowait = true }
+
+                vim.keymap.set('n', '-', close_tree, opts)
+                vim.keymap.set('n', '<c-\\>', api.node.open.vertical, opts)
+                vim.keymap.set('n', '<c-s>', api.node.open.horizontal, opts)
+                vim.keymap.set('n', '<cr>', open_or_replace, opts)
+                vim.keymap.set('n', 'u', api.tree.change_root_to_parent, opts)
+            end
+
             require('nvim-tree').setup({
                 actions = {
                     open_file = {
@@ -86,17 +97,7 @@ return {
                         }
                     },
                 },
-                view = {
-                    mappings = {
-                        list = {
-                            { key = '-', action='xx', action_cb=close_tree},
-                            { key = '<c-\\>', action='vsplit'},
-                            { key = '<c-s>', action='split'},
-                            { key = '<cr>', action='xxx', action_cb=open_or_replace},
-                            { key = 'u', action='dir_up'},
-                        }
-                    }
-                }
+                on_attach=on_attach
             })
         end
     }
