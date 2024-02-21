@@ -26,7 +26,6 @@ end
 require('lazy').setup(build_list{
 'nvim-dap',
 'nvim-lspconfig',
-'nvim-tree.lua',
 'gitsigns.nvim',
 'vimwiki',
 
