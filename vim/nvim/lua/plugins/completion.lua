@@ -56,6 +56,11 @@ return {
                                 'nt', true)
                         else
                             cmp.complete()
+                            if #cmp.get_entries() == 0 then
+                                vim.api.nvim_feedkeys(
+                                    vim.api.nvim_replace_termcodes('<Tab>', true, true, true),
+                                    'nt', true)
+                            end
                         end
                     end, {'i', 's'}),
 
