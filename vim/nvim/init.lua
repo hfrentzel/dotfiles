@@ -8,8 +8,6 @@ vim.o.completeopt='menu,menuone,noselect'
 vim.o.guicursor='n-v-c-sm:block-blinkon500-blinkwait200,i-ci-ve:ver25-blinkon500,r-cr-o:hor20-blinkon500'
 
 vim.g.CommandTPreferredImplementation='lua'
-vim.g.vimwiki_global_ext = 0
-vim.g.vimwiki_list = {{path = '~/vimwiki/', syntax = 'markdown', ext = '.md'}}
 
 local lazypath = '~/.config/nvim/pack/vendor/opt/lazy.nvim'
 vim.opt.rtp:prepend(lazypath)
@@ -26,7 +24,6 @@ end
 require('lazy').setup(build_list{
 'nvim-dap',
 'nvim-lspconfig',
-'vimwiki',
 
 'base16-vim',
 })
