@@ -1,38 +1,11 @@
-local diagnostics = function()
-    local output = ""
-    local no_problems = true
-    if vim.b.diagnostic_counts == nil then
-        return ""
-    end
-    if vim.b.diagnostic_counts.error > 0 then
-        output = string.format("%%1*E %s", vim.b.diagnostic_counts.error)
-        no_problems = false
-    end
-    if vim.b.diagnostic_counts.warning > 0 then
-        output = string.format("%s %%2*W %s", output, vim.b.diagnostic_counts.warning)
-        no_problems = false
-    end
-    if no_problems then
-        return "✓"
-    else
-        return string.format('%s%%*', output)
-    end
-end
-
-local status_rhs = function()
-    return string.format('%s/%s, %s', vim.fn.line('.'), vim.fn.line('$'),
-        vim.fn.virtcol('.'))
-end
-
 StandardStatusLine = function()
-    vim.o.laststatus = 2
     return table.concat {
-        vim.b.adjusted_path,
+        '%{get(b:,"adjusted_path","")}',
         "%3*%t%* %y",  -- filename and filetype
         "%=",
-        diagnostics(),
-        vim.b.git_branch or "",
-        status_rhs(),
+        "%{%v:lua.require('my_lua.statusline').diagnostics()%}",
+        ' (%{get(b:,"git_branch","")}) ',
+        "%{v:lua.require('my_lua.statusline').status_rhs()}",
     }
 end
 
@@ -50,8 +23,7 @@ local get_git_data = function()
 
     local is_git_dir = run(git_prefix .. ' rev-parse --is-inside-work-tree')
     if is_git_dir == 'true' then
-        local branch = run(git_prefix .. ' branch --show-current')
-        vim.b.git_branch = string.format(' (%s) ', branch)
+        vim.b.git_branch = run(git_prefix .. ' branch --show-current')
 
         if root_path == nil then
             root_path = run(git_prefix .. ' rev-parse --show-toplevel')
@@ -79,6 +51,6 @@ vim.api.nvim_create_augroup('FileTypes', {clear = true})
 vim.api.nvim_create_autocmd('filetype', {
     group = 'FileTypes',
     pattern = '*',
-    callback = function() vim.wo.statusline = string.format('%%!v:lua.StandardStatusLine()') end
+    callback = function() vim.wo.statusline = StandardStatusLine() end
 })
 
