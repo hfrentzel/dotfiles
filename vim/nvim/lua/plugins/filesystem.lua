@@ -19,7 +19,10 @@ local vinegar_open = function()
         })
         require"nvim-tree.renderer".draw()
     else
-        require"nvim-tree.api".tree.open({current_window=true})
+        require"nvim-tree.api".tree.open({
+            current_window=true,
+            find_file=true,
+            path=vim.fn.expand('%:h')})
     end
     vim.b.curr_file = vim.g.curr_file
 end
