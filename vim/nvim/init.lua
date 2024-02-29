@@ -1,13 +1,8 @@
 vim.o.packpath = vim.o.runtimepath
 vim.g.python3_host_prog = vim.fn.trim(vim.fn.system('which python'))
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
 vim.cmd.source('~/.config/vim/vimrc')
 
-vim.o.completeopt='menu,menuone,noselect'
 vim.o.guicursor='n-v-c-sm:block-blinkon500-blinkwait200,i-ci-ve:ver25-blinkon500,r-cr-o:hor20-blinkon500'
-
-vim.g.CommandTPreferredImplementation='lua'
 
 local lazypath = '~/.config/nvim/pack/vendor/opt/lazy.nvim'
 vim.opt.rtp:prepend(lazypath)

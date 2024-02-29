@@ -22,6 +22,9 @@ return {
             {'cmp_luasnip', dir = '~/.config/nvim/pack/vendor/opt/cmp_luasnip'},
             {'LuaSnip', dir = '~/.config/nvim/pack/vendor/opt/LuaSnip'},
         },
+        init = function()
+            vim.o.completeopt='menu,menuone,noselect'
+        end,
         opts = function()
             local cmp = require('cmp')
             local luasnip = require('luasnip')

@@ -37,6 +37,10 @@ return {
             {'<leader>1', ':NvimTreeFocus<CR>'},
             {'-', vinegar_open}
         },
+        init = function()
+            vim.g.loaded_netrw = 1
+            vim.g.loaded_netrwPlugin = 1
+        end,
         config = function()
             local api = require('nvim-tree.api')
 
