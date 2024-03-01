@@ -17,6 +17,7 @@ end
 
 return {
     {'fugitive', dir='~/.config/nvim/pack/vendor/opt/fugitive/',
+        ft = 'gitcommit',
         cmd = {'G', 'Git', 'Gvdiffsplit'},
         keys = {'<c-b>'},
         config = function()
