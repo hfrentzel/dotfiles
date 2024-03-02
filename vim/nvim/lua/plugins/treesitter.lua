@@ -4,7 +4,6 @@
 
 return {
     { 'nvim-treesitter', dir='~/.config/nvim/pack/vendor/opt/nvim-treesitter',
-        event='VeryLazy',
         config = function()
             local treesitter = require('nvim-treesitter.configs')
             treesitter.setup {

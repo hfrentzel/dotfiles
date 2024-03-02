@@ -8,6 +8,7 @@
     co = checkout
     st = status -sb
     cm = commit -m
+    mt = mergetool
 
     # Go to main/master branch, whatever the name is
     home = !git checkout $(git remote show origin | sed -n '/HEAD branch/s/.*: //p')
@@ -62,7 +63,10 @@
     whitespace-error-style = "#280050" reverse
     zero-style = syntax
     syntax-theme = base16
+[mergetool "fugitive"]
+    cmd = nvim -f -c \"Resolve\" \"$MERGED\"
 [diff]
     compactionHeuristic = true
 [merge]
+    tool = fugitive
     conflictstyle = diff3

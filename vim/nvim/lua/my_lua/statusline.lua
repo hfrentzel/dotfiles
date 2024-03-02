@@ -29,9 +29,17 @@ end
 
 statusline.determine_side = function()
     if vim.regex('//2'):match_str(vim.fn.expand('%')) then
-        return string.format("Branch '%s' being merged onto", vim.g.merge_head)
+        if vim.g.merge_type == 'MERGING' then
+            return string.format("Branch '%s' being merged onto", vim.g.merge_head)
+        else
+            return string.format("New Parent commit")
+        end
     else
-        return string.format("Branch '%s' trying to be merged", vim.g.merging_branch)
+        if vim.g.merge_type == 'MERGING' then
+            return string.format("Branch '%s' trying to be merged", vim.g.merging_branch)
+        else
+            return string.format("Commit being rebased")
+        end
     end
 end
 

@@ -5,6 +5,7 @@ set backupdir=~/.temp/backups//
 set backupdir+=.
 set directory=~/.temp/swaps//
 set directory+=.
+set diffopt+=linematch:60
 
 
 set backspace=indent,eol,start          " Normal backspacing

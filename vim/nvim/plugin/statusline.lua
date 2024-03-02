@@ -9,6 +9,15 @@ StandardStatusLine = function()
     }
 end
 
+FugitiveStatusLine = function()
+    return table.concat {
+        "%3*%t%* %y ",  -- filename and filetype
+        "%{v:lua.require('my_lua.statusline').determine_side()}",
+        "%=",
+        "%{v:lua.require('my_lua.statusline').status_rhs()}",
+    }
+end
+
 local get_git_data = function()
     local run = function(cmd) return vim.fn.trim(vim.fn.system(cmd)) end
     local file_parent = vim.fn.expand('%:p:h')
@@ -27,6 +36,7 @@ local get_git_data = function()
 
         if root_path == nil then
             root_path = run(git_prefix .. ' rev-parse --show-toplevel')
+            vim.b.git_root = root_path
             local path_parts = vim.fn.split(root_path, '/')
             root_name = '~' .. path_parts[#path_parts] .. '~'
         end
@@ -51,6 +61,13 @@ vim.api.nvim_create_augroup('FileTypes', {clear = true})
 vim.api.nvim_create_autocmd('filetype', {
     group = 'FileTypes',
     pattern = '*',
-    callback = function() vim.wo.statusline = StandardStatusLine() end
+    callback = function()
+        vim.o.laststatus = 2
+        if vim.regex('fugitive:///.*//[23]/.*'):match_str(vim.fn.expand('%')) then
+            vim.wo.statusline = FugitiveStatusLine()
+        else
+            vim.wo.statusline = StandardStatusLine()
+        end
+    end
 })
 

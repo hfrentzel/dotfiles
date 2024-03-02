@@ -18,9 +18,10 @@ end
 return {
     {'fugitive', dir='~/.config/nvim/pack/vendor/opt/fugitive/',
         ft = 'gitcommit',
-        cmd = {'G', 'Git', 'Gvdiffsplit'},
+        cmd = {'G', 'Git', 'Gvdiffsplit', 'Resolve'},
         keys = {'<c-b>'},
         config = function()
+            vim.api.nvim_create_user_command('Resolve', require('my_lua.merge_conflicts').setup_resolver, {})
             vim.keymap.set('n', '<c-b>', blame_toggle)
         end
     },
