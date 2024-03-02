@@ -57,16 +57,16 @@ test -f ~/variables && source $HOME/.config/bash/plugins/var_setup.sh
 test -f ~/workspaces && source $HOME/.config/bash/plugins/workspace_setup.sh
 test -f ~/.secrets && source ~/.secrets
 
+if command -v fzf &> /dev/null; then
+    export FZF_DEFAULT_OPTS='--height 20% --layout=reverse'
+    source $HOME/.local/shell/fzf.sh 2> /dev/null
+fi
+
 source $HOME/.config/bash/plugins/path.sh
 source $HOME/.config/bash/plugins/completions.sh
 source $HOME/.config/bash/plugins/utilities.sh
 source $HOME/.config/bash/plugins/aliases.sh
 source $HOME/.config/bash/plugins/env.sh
-
-if command -v fzf &> /dev/null; then
-    export FZF_DEFAULT_OPTS='--height 20% --layout=reverse'
-    source $HOME/.local/shell/fzf.sh 2> /dev/null
-fi
 
 if command -v zoxide &> /dev/null; then
     eval "$(zoxide init bash)"
