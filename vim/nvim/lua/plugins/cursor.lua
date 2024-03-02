@@ -3,6 +3,7 @@
 
 return {
     { 'vim-visual-multi', dir='~/.config/nvim/pack/vendor/opt/vim-visual-multi',
-        keys = { '<C-n>', '<C-Up>', '<C-Down>', '\\\\A', '\\\\\\'}
+        keys = {{'<C-n>', mode = {'v', 'n'}}, '<C-Up>', '<C-Down>',
+            '\\\\A', '\\\\\\'}
     }
 }
