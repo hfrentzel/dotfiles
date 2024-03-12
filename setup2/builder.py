@@ -20,22 +20,26 @@ TYPE_MAP: Dict[str, Type[Spec]] = {
 def build_resources(resource: Optional[str]) -> Optional[Tuple[Any, str]]:
     specs = collect_specs()
 
-    single_spec = None
+    if resource is not None:
+        return generate_resource(resource, specs[resource])
+
     for name, spec in specs.items():
-        if spec.get('override'):
-            del spec['override']
-            old_value = next(e for e in TYPE_MAP[spec.pop("type")].desired
-                             if e.name == name)
-            for key, value in spec.items():
-                setattr(old_value, key, value)
-            continue
+        generate_resource(name, spec)
 
-        resource_type = spec.pop("type")
-        new_item = TYPE_MAP[resource_type](name, **spec)
-        if name == resource:
-            single_spec = new_item, resource_type
+    return None
 
-    return single_spec
+
+def generate_resource(name: str, spec: Dict[str, Any]) -> Optional[Tuple[Any, str]]:
+    if spec.get('override'):
+        del spec['override']
+        old_value = next(e for e in TYPE_MAP[spec.pop("type")].desired
+                         if e.name == name)
+        for key, value in spec.items():
+            setattr(old_value, key, value)
+        return None
+
+    resource_type = spec.pop("type")
+    return TYPE_MAP[resource_type](name, **spec), resource_type
 
 
 # TODO Add flag to optionally include all addons regardless of flags set in

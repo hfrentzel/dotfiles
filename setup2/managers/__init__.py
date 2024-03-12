@@ -35,6 +35,11 @@ class Manager(Protocol):
         ...
 
 
+def all_desired() -> List[Spec]:
+    return [*Dir.desired, *Exe.desired, *Sym.desired, *Lib.desired,
+            *Command.desired, *Parser.desired]
+
+
 def create_jobs(selected_types: List[Manager]) -> Dict[str, Job]:
     jobs = {}
     for t in selected_types:

@@ -5,7 +5,7 @@ import itertools
 from typing import Dict, List
 
 from .builder import build_resources
-from .managers import create_jobs
+from .managers import create_jobs, all_desired
 from .managers import directory
 from .managers import exe
 from .managers import sym
@@ -18,12 +18,12 @@ from .output import red, green
 from .managers import Manager, Spec
 
 TYPE_MAP: Dict[str, Manager] = {
-    'symlink': sym,
+    'command': command,
     'directory': directory,
-    'library': lib,
     'exe': exe,
+    'library': lib,
     'parser': parser,
-    'command': command
+    'symlink': sym
 }
 
 
@@ -62,30 +62,29 @@ async def handle_jobs(selected_types: List[Manager]) -> None:
 
 
 async def handle_single_resource(resource: Spec, resource_type: str) -> None:
-    all_complete = await asyncio.gather(*[t.get_statuses() for t in TYPE_MAP.values()])
-    complete = list(itertools.chain.from_iterable(all_complete))
-
-    if resource.name in complete:
+    if resource.name in await TYPE_MAP[resource_type].get_statuses():
         print(f'{resource.name} is already set up')
         return
 
-    if (dependencies := getattr(resource, 'depends_on', '')) and \
-            (remaining := {dependencies} - set(complete)):
-        print(f'Can\'t set up {resource.name} because it has unsatisfied dependencies: {remaining}')
-        return
+    job = TYPE_MAP[resource_type].create_job(resource) or \
+        list(exe.create_bonus_jobs().values())[0]
+
+    if job.depends_on is not None:
+        if not any(d.name == job.depends_on for d in all_desired()):
+            build_resources(job.depends_on)
+        all_complete = await asyncio.gather(*[t.get_statuses() for t in TYPE_MAP.values()])
+        complete = list(itertools.chain.from_iterable(all_complete))
+
+        if remaining := {job.depends_on} - set(complete):
+            print(f'Can\'t set up {resource.name} because it has '
+                  f'unsatisfied dependencies: {remaining}')
+            return
 
     if conf.args.stage != 'run':
         print(f'{resource.name} can be set up. Rerun with -r to run the job')
         return
 
-    job = TYPE_MAP[resource_type].create_job(resource)
-    if job is not None:
-        success = await job.run()
-    else:
-        jobs = exe.create_bonus_jobs()
-        success = all(j.run() for j in jobs.values())
-
-    if success:
+    if await job.run():
         print(green(f'{resource.name} set up successfully'))
     else:
         print(red(f'Failed to set up {resource.name}'))
@@ -96,6 +95,7 @@ def run() -> None:
     resources = argparser.add_mutually_exclusive_group()
     resources.add_argument('-t', '--types', choices=TYPE_MAP.keys(), nargs='+')
     resources.add_argument('-o', '--only')
+    resources.add_argument('--force')
     stages = argparser.add_mutually_exclusive_group()
     stages.add_argument('-s', '--stage', choices=['desired', 'show_all',
                         'jobs', 'tree', 'run'], default=None)
