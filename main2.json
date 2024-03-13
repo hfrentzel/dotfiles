@@ -4,7 +4,7 @@
             "type": "command",
             "cwd": "DOT",
             "check_script": "! git submodule status | grep -qv '^ '",
-            "run_script": "git submodule update --init"
+            "run_script": "git submodule update --init --depth=10"
         },
         "bashrc": {
             "type": "symlink",
