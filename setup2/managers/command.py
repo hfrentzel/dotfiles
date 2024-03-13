@@ -1,7 +1,7 @@
 import asyncio
 import os
 from dataclasses import dataclass
-from typing import Tuple, Callable, Dict, Coroutine, List, ClassVar, Optional
+from typing import Tuple, Callable, Coroutine, List, Optional
 
 from setup2.conf import conf
 from setup2.job import Job
@@ -11,8 +11,7 @@ from setup2.managers.manager import mark_resource
 
 
 @dataclass
-class Command():
-    desired: ClassVar[List['Command']] = []
+class Resource:
     name: str
     run_script: str
     check_script: Optional[str] = None
@@ -21,13 +20,14 @@ class Command():
 
     def __post_init__(self) -> None:
         mark_resource(self.name)
-        self.desired.append(self)
+        desired.append(self)
 
 
-check_results: List[Tuple[Command, bool, str]] = []
+desired: List[Resource] = []
+check_results: List[Tuple[Resource, bool, str]] = []
 
 
-async def current_status(command: Command) -> Tuple[Command, bool, str]:
+async def current_status(command: Resource) -> Tuple[Resource, bool, str]:
     if isinstance(command.cwd, str):
         command.cwd = os.path.expanduser(command.cwd.replace('DOT', conf.dotfiles_home))
 
@@ -43,7 +43,7 @@ async def current_status(command: Command) -> Tuple[Command, bool, str]:
 async def get_statuses() -> List[str]:
     complete = []
     tasks = []
-    for command in Command.desired:
+    for command in desired:
         tasks.append(current_status(command))
     results = await asyncio.gather(*tasks)
     check_results.extend(results)
@@ -55,7 +55,7 @@ async def get_statuses() -> List[str]:
 
 def desired_printout() -> str:
     lines = []
-    for command in sorted(Command.desired, key=(lambda c: c.name)):
+    for command in sorted(desired, key=(lambda c: c.name)):
         lines.append((command.name,))
     return print_grid(('SCRIPTS',), lines)
 
@@ -69,7 +69,7 @@ def status_printout(show_all: bool) -> str:
     return print_grid(('SCRIPT', 'STATUS'), lines)
 
 
-def create_job(command: Command) -> Job:
+def create_job(command: Resource) -> Job:
     return Job(
         names=[command.name],
         description=f'Run the {command.name} script',

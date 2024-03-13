@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import ClassVar, List, Tuple, Coroutine, Callable
+from typing import List, Tuple, Coroutine, Callable
 import os
 
 from setup2.job import Job
@@ -9,20 +9,20 @@ from setup2.managers.manager import mark_resource
 
 
 @dataclass
-class Parser():
-    desired: ClassVar[List['Parser']] = []
+class Resource():
     name: str
     language: str
 
     def __post_init__(self) -> None:
         mark_resource(self.name)
-        self.desired.append(self)
+        desired.append(self)
 
 
-check_results: List[Tuple[Parser, bool, str]] = []
+desired: List[Resource] = []
+check_results: List[Tuple[Resource, bool, str]] = []
 
 
-def current_status(parser: Parser) -> Tuple[bool, str]:
+def current_status(parser: Resource) -> Tuple[bool, str]:
     file = f'{parser.language}.so'
     parser_dir = os.path.expanduser('~/.local/share/nvim/site/parser')
     if os.path.exists(f'{parser_dir}/{file}'):
@@ -32,14 +32,14 @@ def current_status(parser: Parser) -> Tuple[bool, str]:
 
 def desired_printout() -> str:
     lines = []
-    for parser in sorted(Parser.desired, key=lambda p: p.language):
+    for parser in sorted(desired, key=lambda p: p.language):
         lines.append((parser.language,))
     return print_grid(('TREESITTER LANGUAGES',), lines)
 
 
 async def get_statuses() -> List[str]:
     complete = []
-    for parser in Parser.desired:
+    for parser in desired:
         result = current_status(parser)
         if result[0]:
             complete.append(parser.name)
@@ -56,7 +56,7 @@ def status_printout(show_all: bool) -> str:
     return print_grid(('TS PARSER', 'STATUS'), lines)
 
 
-def create_job(parser: Parser) -> Job:
+def create_job(parser: Resource) -> Job:
     return Job(
         names=[parser.name],
         description=f'Install TS parser for {parser.language}',

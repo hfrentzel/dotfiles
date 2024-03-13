@@ -2,29 +2,15 @@ import argparse
 import asyncio
 import os
 import itertools
-from typing import Dict, List
+from typing import List
 
 from .builder import build_resources
 from .managers import create_jobs, all_desired
-from .managers import directory
 from .managers import exe
-from .managers import sym
-from .managers import lib
-from .managers import command
-from .managers import parser
 from .job import print_job_tree, build_tree
 from .conf import conf
 from .output import red, green
-from .managers import Manager, Spec
-
-TYPE_MAP: Dict[str, Manager] = {
-    'command': command,
-    'directory': directory,
-    'exe': exe,
-    'library': lib,
-    'parser': parser,
-    'symlink': sym
-}
+from .managers import Manager, Spec, ALL_MANAGERS
 
 
 async def handle_jobs(selected_types: List[Manager]) -> None:
@@ -33,7 +19,7 @@ async def handle_jobs(selected_types: List[Manager]) -> None:
             print(t.desired_printout(), end='')
         return
 
-    all_complete = await asyncio.gather(*[t.get_statuses() for t in TYPE_MAP.values()])
+    all_complete = await asyncio.gather(*[t.get_statuses() for t in ALL_MANAGERS.values()])
     complete = list(itertools.chain.from_iterable(all_complete))
     if conf.args.stage in [None, 'show_all']:
         for t in selected_types:
@@ -62,17 +48,17 @@ async def handle_jobs(selected_types: List[Manager]) -> None:
 
 
 async def handle_single_resource(resource: Spec, resource_type: str) -> None:
-    if resource.name in await TYPE_MAP[resource_type].get_statuses():
+    if resource.name in await ALL_MANAGERS[resource_type].get_statuses():
         print(f'{resource.name} is already set up')
         return
 
-    job = TYPE_MAP[resource_type].create_job(resource) or \
+    job = ALL_MANAGERS[resource_type].create_job(resource) or \
         list(exe.create_bonus_jobs().values())[0]
 
     if job.depends_on is not None:
         if not any(d.name == job.depends_on for d in all_desired()):
             build_resources(job.depends_on)
-        all_complete = await asyncio.gather(*[t.get_statuses() for t in TYPE_MAP.values()])
+        all_complete = await asyncio.gather(*[t.get_statuses() for t in ALL_MANAGERS.values()])
         complete = list(itertools.chain.from_iterable(all_complete))
 
         if remaining := {job.depends_on} - set(complete):
@@ -93,7 +79,7 @@ async def handle_single_resource(resource: Spec, resource_type: str) -> None:
 def run() -> None:
     argparser = argparse.ArgumentParser(prog='EnvSetup')
     resources = argparser.add_mutually_exclusive_group()
-    resources.add_argument('-t', '--types', choices=TYPE_MAP.keys(), nargs='+')
+    resources.add_argument('-t', '--types', choices=ALL_MANAGERS.keys(), nargs='+')
     resources.add_argument('-o', '--only')
     resources.add_argument('--force')
     stages = argparser.add_mutually_exclusive_group()
@@ -116,8 +102,8 @@ def run() -> None:
 
     selected_types = []
     if conf.args.types is None:
-        selected_types = list(TYPE_MAP.values())
+        selected_types = list(ALL_MANAGERS.values())
     else:
         for t in conf.args.types:
-            selected_types.append(TYPE_MAP[t])
+            selected_types.append(ALL_MANAGERS[t])
     asyncio.run(handle_jobs(selected_types))

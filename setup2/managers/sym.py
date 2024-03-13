@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass
-from typing import ClassVar, List, Tuple, Coroutine, Callable
+from typing import List, Tuple, Coroutine, Callable
 
 from setup2.conf import conf
 from setup2.job import Job
@@ -9,21 +9,21 @@ from setup2.managers.manager import mark_resource
 
 
 @dataclass
-class Sym:
-    desired: ClassVar[List['Sym']] = []
+class Resource:
     name: str
     source: str
     target: str
 
     def __post_init__(self) -> None:
         mark_resource(self.name)
-        self.desired.append(self)
+        desired.append(self)
 
 
-check_results: List[Tuple[Sym, bool, str]] = []
+desired: List[Resource] = []
+check_results: List[Tuple[Resource, bool, str]] = []
 
 
-def current_status(sym: Sym) -> Tuple[bool, str]:
+def current_status(sym: Resource) -> Tuple[bool, str]:
     dest = os.path.expanduser(sym.target)
     if os.path.isfile(dest) or os.path.isdir(dest):
         if os.path.islink(dest):
@@ -34,14 +34,14 @@ def current_status(sym: Sym) -> Tuple[bool, str]:
 
 def desired_printout() -> str:
     lines = []
-    for sym in sorted(Sym.desired, key=lambda s: s.target):
+    for sym in sorted(desired, key=lambda s: s.target):
         lines.append((sym.target,))
     return print_grid(('SYMLINKED FILES',), lines)
 
 
 async def get_statuses() -> List[str]:
     complete = []
-    for sym in Sym.desired:
+    for sym in desired:
         result = current_status(sym)
         if result[0]:
             complete.append(sym.name)
@@ -58,7 +58,7 @@ def status_printout(show_all: bool) -> str:
     return print_grid(('SYMLINK', 'STATUS'), lines)
 
 
-def create_job(sym: Sym) -> Job:
+def create_job(sym: Resource) -> Job:
     return Job(
         names=[sym.name],
         description=f'Generate symlink at {sym.target}',

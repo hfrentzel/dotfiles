@@ -1,6 +1,6 @@
 import asyncio
 from dataclasses import dataclass
-from typing import Tuple, ClassVar, List
+from typing import Tuple, List
 
 from setup2.output import print_grid
 from setup2.managers.manager import mark_resource
@@ -9,21 +9,21 @@ from setup2.managers.package_types.npm import Npm
 
 
 @dataclass
-class Lib:
-    desired: ClassVar[List['Lib']] = []
+class Resource:
     name: str
     version: str
     manager: str
 
     def __post_init__(self) -> None:
         mark_resource(self.name)
-        self.desired.append(self)
+        desired.append(self)
 
 
+desired: List[Resource] = []
 check_results = []
 
 
-async def current_status(lib: Lib) -> Tuple[Lib, bool, str]:
+async def current_status(lib: Resource) -> Tuple[Resource, bool, str]:
     if lib.manager == 'pip':
         return (lib, *Pip.check_install(lib))
     if lib.manager == 'npm':
@@ -34,7 +34,7 @@ async def current_status(lib: Lib) -> Tuple[Lib, bool, str]:
 
 def desired_printout() -> str:
     lines = []
-    for lib in sorted(Lib.desired, key=(lambda b: b.name)):
+    for lib in sorted(desired, key=(lambda b: b.name)):
         lines.append((lib.name, lib.version))
     return print_grid(('LIBRARY', 'VERSION'), lines)
 
@@ -42,7 +42,7 @@ def desired_printout() -> str:
 async def get_statuses() -> List[str]:
     complete = []
     tasks = []
-    for lib in Lib.desired:
+    for lib in desired:
         tasks.append(current_status(lib))
     results = await asyncio.gather(*tasks)
     check_results.extend(results)
@@ -67,5 +67,5 @@ JOB_BUILDERS = {
 }
 
 
-def create_job(lib: Lib) -> None:
+def create_job(lib: Resource) -> None:
     JOB_BUILDERS[lib.manager](lib)

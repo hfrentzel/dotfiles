@@ -1,11 +1,10 @@
 from dataclasses import dataclass, field
-from typing import ClassVar, List, Optional
+from typing import List, Optional
 from setup2.managers.manager import mark_resource
 
 
 @dataclass
 class Exe():
-    desired: ClassVar[List['Exe']] = []
     name: str
     version: str = ''
     installers: List[str] = field(default_factory=list)
@@ -22,4 +21,7 @@ class Exe():
         mark_resource(self.name, self.override)
         if self.command_name == '':
             self.command_name = self.name
-        self.desired.append(self)
+        desired.append(self)
+
+
+desired: List[Exe] = []

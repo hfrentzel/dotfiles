@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass
-from typing import Tuple, List, ClassVar, Callable, Coroutine
+from typing import Tuple, List, Callable, Coroutine
 
 from setup2.job import Job
 from setup2.output import print_grid
@@ -8,20 +8,20 @@ from setup2.managers.manager import mark_resource
 
 
 @dataclass
-class Dir():
-    desired: ClassVar[List['Dir']] = []
+class Resource():
     name: str
     path: str
 
     def __post_init__(self) -> None:
         mark_resource(self.name)
-        self.desired.append(self)
+        desired.append(self)
 
 
-check_results: List[Tuple[Dir, bool, str]] = []
+desired: List[Resource] = []
+check_results: List[Tuple[Resource, bool, str]] = []
 
 
-def current_status(directory: Dir) -> Tuple[bool, str]:
+def current_status(directory: Resource) -> Tuple[bool, str]:
     path = os.path.expanduser(directory.path)
     if os.path.isdir(path):
         return (True, 'Exists')
@@ -32,14 +32,14 @@ def current_status(directory: Dir) -> Tuple[bool, str]:
 
 def desired_printout() -> str:
     lines = []
-    for directory in sorted(Dir.desired, key=(lambda d: d.path)):
+    for directory in sorted(desired, key=(lambda d: d.path)):
         lines.append((directory.path,))
     return print_grid(('SUB-DIRECTORIES',), lines)
 
 
 async def get_statuses() -> List[str]:
     complete = []
-    for directory in Dir.desired:
+    for directory in desired:
         result = current_status(directory)
         if result[0]:
             complete.append(directory.name)
@@ -56,7 +56,7 @@ def status_printout(show_all: bool) -> str:
     return print_grid(('SUB-DIRECTORIES', 'STATUS'), lines)
 
 
-def create_job(directory: Dir) -> Job:
+def create_job(directory: Resource) -> Job:
     return Job(
         names=[directory.name],
         description=f'Create directory at {directory.path}',

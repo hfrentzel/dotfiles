@@ -6,7 +6,7 @@ from typing import List, Tuple, Dict, Callable, Union, Optional
 from setup2.job import Job
 from setup2.process import async_proc, ver_greater_than
 from setup2.output import print_grid
-from setup2.managers.exe_class import Exe
+from setup2.managers.exe_class import Exe, desired as desired
 from setup2.managers.package_types.apt import Apt
 from setup2.managers.package_types.cargo import cargo_builder
 from setup2.managers.package_types.go import go_builder
@@ -19,6 +19,7 @@ from setup2.managers.package_types.npm import Npm
 from setup2.managers.package_types.tar import tar_builder
 from setup2.managers.package_types.zip import zip_builder
 
+
 VERSION_REGEX = re.compile(r'\d+\.\d+\.\d+', re.M)
 
 
@@ -28,6 +29,7 @@ Apt, Deb, Pip, Npm, Tar
 #TODO validate elements of installers list are valid
 """
 
+Resource = Exe
 
 check_results: List[Tuple[Exe, bool, str]] = []
 
@@ -64,7 +66,7 @@ async def current_status(exe: Exe) -> Tuple[Exe, bool, str]:
 
 def desired_printout() -> str:
     lines = []
-    for exe in sorted(Exe.desired, key=(lambda e: e.name)):
+    for exe in sorted(desired, key=(lambda e: e.name)):
         lines.append((exe.name, exe.version))
     return print_grid(('COMMAND', 'VERSION'), lines)
 
@@ -72,7 +74,7 @@ def desired_printout() -> str:
 async def get_statuses() -> List[str]:
     complete = []
     tasks = []
-    for exe in Exe.desired:
+    for exe in desired:
         tasks.append(current_status(exe))
     results = await asyncio.gather(*tasks)
     check_results.extend(results)

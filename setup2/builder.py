@@ -1,20 +1,12 @@
 import json
 import os
-from typing import Dict, Any, Optional, Tuple, Type, List
+from typing import Dict, Any, Optional, Tuple, List
 
-from setup2.managers import Exe, Sym, Command, Dir, Lib, Parser, Spec
 from setup2.conf import conf
 from setup2.menu import show
+from setup2.managers import ALL_MANAGERS
 
 USER_CONFIG = os.path.expanduser('~/.config/env_setup/config.json')
-TYPE_MAP: Dict[str, Type[Spec]] = {
-    "command": Command,
-    "directory": Dir,
-    "exe": Exe,
-    "library": Lib,
-    "parser": Parser,
-    "symlink": Sym
-}
 
 
 def build_resources(resource: Optional[str]) -> Optional[Tuple[Any, str]]:
@@ -32,14 +24,14 @@ def build_resources(resource: Optional[str]) -> Optional[Tuple[Any, str]]:
 def generate_resource(name: str, spec: Dict[str, Any]) -> Optional[Tuple[Any, str]]:
     if spec.get('override'):
         del spec['override']
-        old_value = next(e for e in TYPE_MAP[spec.pop("type")].desired
+        old_value = next(e for e in ALL_MANAGERS[spec.pop("type")].desired
                          if e.name == name)
         for key, value in spec.items():
             setattr(old_value, key, value)
         return None
 
     resource_type = spec.pop("type")
-    return TYPE_MAP[resource_type](name, **spec), resource_type
+    return ALL_MANAGERS[resource_type].Resource(name, **spec), resource_type
 
 
 # TODO Add flag to optionally include all addons regardless of flags set in
