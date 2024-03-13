@@ -1,21 +1,16 @@
-local has_path, util = pcall (require, 'lspconfig/util')
-if not has_path then
-    return
-end
-local path = util.path
 local helpers = require('dot_helpers')
 
 local diags_on = true
-toggleDiagnostics = function()
+local toggleDiagnostics = function()
     if diags_on then
         diags_on = false
         vim.diagnostic.hide()
         vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
-            vim.lsp.diagnostic.on_publish_diagnostics, 
+            vim.lsp.diagnostic.on_publish_diagnostics,
                 {virtual_text = false, underline = false, signs = false})
     else
         diags_on = true
-        vim.diagnostic.show(nil, nil, nil, 
+        vim.diagnostic.show(nil, nil, nil,
             {virtual_text = true, underline = true, signs = true})
         vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
             vim.lsp.diagnostic.on_publish_diagnostics,
@@ -26,26 +21,32 @@ end
 local on_attach = function ()
     vim.diagnostic.config({severity_sort = true})
     vim.wo.signcolumn = 'yes'
-    vim.keymap.set('n', 'K', "<cmd>lua vim.lsp.buf.hover()<CR>",
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover,
         {buffer = true, silent = true})
-    vim.keymap.set('n', 'gd', "<cmd>lua vim.lsp.buf.definition()<CR>",
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition,
         {buffer = true, silent = true})
-    vim.keymap.set('n', '<leader>3', "<cmd>lua vim.diagnostic.setloclist()<CR>",
+    vim.keymap.set('n', '<leader>3', vim.diagnostic.setloclist,
         {buffer = true, silent = true})
-    vim.keymap.set('n', '[d', "<cmd>lua vim.diagnostic.goto_prev()<CR>",
+    vim.keymap.set('n', '[d', vim.diagnostic.goto_prev,
         {buffer = true, silent = true})
-    vim.keymap.set('n', ']d', "<cmd>lua vim.diagnostic.goto_next()<CR>",
+    vim.keymap.set('n', ']d', vim.diagnostic.goto_next,
         {buffer = true, silent = true})
-    vim.keymap.set('n', '<leader>d', "<cmd>lua vim.diagnostic.open_float()<CR>",
+    vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float,
         {buffer = true, silent = true})
-    vim.keymap.set('n', '<leader>4', "<cmd>lua toggleDiagnostics()<CR>",
+    vim.keymap.set('n', '<leader>4', toggleDiagnostics,
         {buffer = true, silent = true})
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-local py_before_init = function(params, config)
+local py_before_init = function(_, config)
+    local has_path, util = pcall (require, 'lspconfig/util')
+    if not has_path then
+        return
+    end
+    local path = util.path
+
     local jedi_args = {} -- object
     local mypy_args = {"--namespace-packages"} -- array
     local pylint_args = {} -- array
@@ -80,19 +81,19 @@ local py_before_init = function(params, config)
     config.settings.pylsp.plugins.pylsp_mypy.overrides = mypy_args
 end
 
-local yaml_before_init = function(params, config)
-    filename = vim.fn.expand('~/.config/vim/schemas.json')
+local yaml_before_init = function(_, config)
+    local filename = vim.fn.expand('~/.config/vim/schemas.json')
     if vim.fn.filereadable(filename) == 0 then
         return
     end
-    schema_file = io.open(filename)
-    schema_overrides = vim.fn.json_decode(schema_file:read('*a'))
+    local schema_file = io.open(filename)
+    local schema_overrides = vim.fn.json_decode(schema_file:read('*a'))
     schema_file:close()
 
     config.settings.yaml.schemas = schema_overrides.all
     for dir, schemas in pairs(schema_overrides) do
         if dir == config.root_dir then
-            config.settings.yaml.schemas = 
+            config.settings.yaml.schemas =
                 vim.tbl_extend('force', config.settings.yaml.schemas, schemas)
         end
     end
@@ -105,7 +106,7 @@ nvim_lsp.pylsp.setup{
     on_attach = on_attach,
     before_init = py_before_init,
     capabilities = capabilities,
-    root_dir = function(fname)
+    root_dir = function(_)
         if vim.b['workspace'] then
             return vim.b['workspace']
         else
@@ -183,7 +184,7 @@ nvim_lsp.yamlls.setup({
     }
 })
 
-updateDiags = function()
+local updateDiags = function()
     vim.diagnostic.setloclist({open = false})
     vim.b['diagnostic_counts'] = {
         error = vim.fn.len(vim.diagnostic.get(0, {severity = 1})),
