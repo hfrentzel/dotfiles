@@ -20,6 +20,10 @@
         "type": "parser",
         "language": "vim"
     },
+    "ts-vimdoc": {
+        "type": "parser",
+        "language": "vimdoc"
+    },
     "vim-language-server": {
         "type": "exe",
         "version": "2.3.0",
