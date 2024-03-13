@@ -1,4 +1,4 @@
-[ -z "PS1" ] && return
+[ -z "$PS1" ] && return
 
 export HISTSIZE=100000
 
