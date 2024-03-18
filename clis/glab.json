@@ -3,7 +3,7 @@
         "type": "exe",
         "version": "1.35.0",
         "installers": ["Gitlab", "Go"],
-        "repo": "gitlab-org/cli",
-        "url": "gitlab.com/gitlab-org/cli/cmd/glab"
+        "url": "gitlab.com/gitlab-org/cli/cmd/glab",
+        "source_repo": "https://gitlab.com/gitlab-org/cli"
     }
 }

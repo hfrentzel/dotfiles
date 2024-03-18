@@ -6,19 +6,22 @@
         "steps": [
             "curl -L 'https://dl.k8s.io/release/v{version}/bin/linux/amd64/kubectl' -o ~/.local/bin/kubectl",
             "chmod +x ~/.local/bin/kubectl"
-        ]
+        ],
+        "source_repo": "https://github.com/kubernetes/kubectl"
     },
     "helm": {
         "type": "exe",
         "version": "3.12.3",
         "installers": ["Github"],
-        "repo": "helm/helm"
+        "homepage": "https://helm.sh",
+        "source_repo": "https://github.com/helm/helm"
     },
     "k9s": {
         "type": "exe",
         "version": "0.30.7",
         "installers": ["Github", "Go"],
-        "repo": "derailed/k9s",
+        "homepage": "https://k9scli.io/",
+        "source_repo": "https://github.com/derailed/k9s",
         "url": "github.com/derailed/k9s"
     },
     "k9s-hotkeys": {

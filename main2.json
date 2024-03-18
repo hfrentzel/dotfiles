@@ -47,17 +47,20 @@
         },
         "jq": {
             "type": "exe",
-            "installers": ["Apt"]
+            "installers": ["Apt"],
+            "homepage": "https://jqlang.github.io/jq",
+            "source_repo": "https://github.com/jqlang/jq"
         },
         "dos2unix": {
             "type": "exe",
-            "installers": ["Apt"]
+            "installers": ["Apt"],
+            "homepage": "https://dos2unix.sourceforge.io/"
         },
         "zoxide": {
             "type": "exe",
             "version": "0.9.0",
             "installers": ["Github"],
-            "repo": "ajeetdsouza/zoxide"
+            "source_repo": "https://github.com/ajeetdsouza/zoxide"
         },
         "less_data": {
             "type": "directory",
@@ -67,7 +70,8 @@
             "type": "exe",
             "version": "0.15.1",
             "installers": ["Github"],
-            "repo": "dandavision/delta"
+            "homepage": "https://dandavison.github.io/delta/",
+            "source_repo": "https://github.com/dandavison/delta"
         },
         "gitconfig": {
             "type": "symlink",
@@ -79,7 +83,7 @@
             "command_name": "rg",
             "version": "13.0.0",
             "installers": ["Github"],
-            "repo": "BurntSushi/ripgrep"
+            "source_repo": "https://github.com/BurntSushi/ripgrep"
         },
         "rgconfig": {
             "type": "symlink",
@@ -90,7 +94,7 @@
             "type": "exe",
             "version": "0.23.0",
             "installers": ["Github"],
-            "repo": "sharkdp/bat"
+            "source_repo": "https://github.com/sharkdp/bat"
         },
         "batconfig": {
             "type": "symlink",

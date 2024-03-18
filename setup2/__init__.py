@@ -1,10 +1,11 @@
 import argparse
 import asyncio
+import json
 import os
 import itertools
 from typing import List
 
-from .builder import build_resources
+from .builder import build_resources, collect_specs
 from .managers import create_jobs, all_desired
 from .managers import exe
 from .job import print_job_tree, build_tree
@@ -76,24 +77,9 @@ async def handle_single_resource(resource: Spec, resource_type: str) -> None:
         print(red(f'Failed to set up {resource.name}'))
 
 
-def run() -> None:
-    argparser = argparse.ArgumentParser(prog='EnvSetup')
-    resources = argparser.add_mutually_exclusive_group()
-    resources.add_argument('-t', '--types', choices=ALL_MANAGERS.keys(), nargs='+')
-    resources.add_argument('-o', '--only')
-    resources.add_argument('--force')
-    stages = argparser.add_mutually_exclusive_group()
-    stages.add_argument('-s', '--stage', choices=['desired', 'show_all',
-                        'jobs', 'tree', 'run'], default=None)
-    stages.add_argument('-d', '--desired', action='store_const',
-                        const='desired', dest='stage')
-    stages.add_argument('-r', '--run', action='store_const',
-                        const='run', dest='stage')
-
+def check():
     os.environ['NPM_CONFIG_USERCONFIG'] = os.path.expanduser('~/.config/npm/npmrc')
-
     conf.dotfiles_home = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    conf.args = argparser.parse_args()
 
     resource = build_resources(conf.args.only)
     if resource:
@@ -107,3 +93,37 @@ def run() -> None:
         for t in conf.args.types:
             selected_types.append(ALL_MANAGERS[t])
     asyncio.run(handle_jobs(selected_types))
+
+
+def show():
+    specs = collect_specs(include_all=True)
+    if (spec := conf.args.spec[0]) in specs:
+        print(json.dumps({spec: specs[spec]}, indent=4))
+    else:
+        print(f"Spec '{spec}' not found")
+
+
+def run() -> None:
+    argparser = argparse.ArgumentParser(prog='EnvSetup')
+    argparser.set_defaults(func=check)
+
+    resources = argparser.add_mutually_exclusive_group()
+    resources.add_argument('-t', '--types', choices=ALL_MANAGERS.keys(), nargs='+')
+    resources.add_argument('-o', '--only')
+    resources.add_argument('--force')
+
+    stages = argparser.add_mutually_exclusive_group()
+    stages.add_argument('-s', '--stage', choices=['desired', 'show_all',
+                        'jobs', 'tree', 'run'], default=None)
+    stages.add_argument('-d', '--desired', action='store_const',
+                        const='desired', dest='stage')
+    stages.add_argument('-r', '--run', action='store_const',
+                        const='run', dest='stage')
+
+    subparsers = argparser.add_subparsers(title="subcommands")
+    show_cmd = subparsers.add_parser("show", help="show json spec")
+    show_cmd.set_defaults(func=show)
+    show_cmd.add_argument('spec', type=str, nargs=1)
+
+    conf.args = argparser.parse_args()
+    conf.args.func()

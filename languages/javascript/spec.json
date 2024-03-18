@@ -7,23 +7,29 @@
     "typescript": {
         "type": "library",
         "version": "4.9.4",
-        "manager": "npm"
+        "manager": "npm",
+        "homepage": "https://www.typescriptlang.org/",
+        "source_repo": "https://github.com/Microsoft/TypeScript"
     },
     "eslint": {
         "type": "exe",
         "version": "8.32.0",
-        "installers": ["Npm"]
+        "installers": ["Npm"],
+        "homepage": "https://eslint.org/",
+        "source_repo": "https://github.com/eslint/eslint"
     },
     "typescript-language-server": {
         "type": "exe",
         "version": "3.0.2",
-        "installers": ["Npm"]
+        "installers": ["Npm"],
+        "source_repo": "https://github.com/typescript-language-server/typescript-language-server"
     },
     "vscode-langservers-extracted": {
         "type": "exe",
         "command_name": "vscode-eslint-language-server",
         "version": "4.5.0",
-        "installers": ["Npm"]
+        "installers": ["Npm"],
+        "source_repo": "https://github.com/hrsh7th/vscode-langservers-extracted"
     },
     "ts-javascript": {
         "type": "parser",

@@ -3,7 +3,8 @@
         "type": "exe",
         "version": "3.7.3",
         "installers": ["Github"],
-        "repo": "LuaLS/lua-language-server",
+        "homepage": "https://luals.github.io",
+        "source_repo": "https://github.com/LuaLS/lua-language-server",
         "extract_path": "~/.local/share/lua"
     },
     "luals-symlink": {

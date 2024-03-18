@@ -1,6 +1,7 @@
 import json
 import os
 from typing import Dict, Any, Optional, Tuple, List
+import re
 
 from setup2.conf import conf
 from setup2.menu import show
@@ -22,21 +23,36 @@ def build_resources(resource: Optional[str]) -> Optional[Tuple[Any, str]]:
 
 
 def generate_resource(name: str, spec: Dict[str, Any]) -> Optional[Tuple[Any, str]]:
+    resource_type = spec.pop("type")
+
     if spec.get('override'):
         del spec['override']
-        old_value = next(e for e in ALL_MANAGERS[spec.pop("type")].desired
+        old_value = next(e for e in ALL_MANAGERS[resource_type].desired
                          if e.name == name)
         for key, value in spec.items():
             setattr(old_value, key, value)
         return None
 
-    resource_type = spec.pop("type")
-    return ALL_MANAGERS[resource_type].Resource(name, **spec), resource_type
+    args = {}
+    for key, value in spec.items():
+        if key == 'source_repo':
+            if 'github.com' in value and 'Github' in spec.get('installers', []):
+                match = re.search(r'(?:https?://)?github.com/(\S+)', value)
+                if match:
+                    args['repo'] = match.group(1)
+            elif 'gitlab.com' in value and 'Gitlab' in spec.get('installers', []):
+                match = re.search(r'(?:https?://)?gitlab.com/(\S+)', value)
+                if match:
+                    args['repo'] = match.group(1)
+        elif key == 'homepage':
+            continue
+        else:
+            args[key] = value
+
+    return ALL_MANAGERS[resource_type].Resource(name, **args), resource_type
 
 
-# TODO Add flag to optionally include all addons regardless of flags set in
-# USER_CONFIG
-def collect_specs() -> Dict[str, Dict[str, Any]]:
+def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
     with open(os.path.join(conf.dotfiles_home, 'main2.json'), encoding='utf-8') as f:
         base_spec = json.loads(f.read())
     addons = base_spec['addons']
@@ -45,7 +61,7 @@ def collect_specs() -> Dict[str, Dict[str, Any]]:
     choices, external_addons = load_config(addons)
 
     for name, file in addons.items():
-        if not choices[name]:
+        if not include_all and not choices[name]:
             continue
         with open(os.path.join(conf.dotfiles_home, file), encoding='utf-8') as f:
             specs.update(json.loads(f.read()))

@@ -3,7 +3,7 @@
         "type": "exe",
         "version": "0.39.0",
         "installers": ["Github"],
-        "repo": "junegunn/fzf"
+        "source_repo": "https://github.com/junegunn/fzf"
     },
     "fzf_completion": {
         "type": "command",

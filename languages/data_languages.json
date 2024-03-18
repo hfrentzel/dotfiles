@@ -7,7 +7,8 @@
         "type": "exe",
         "command_name": "vscode-json-language-server",
         "version": "4.5.0",
-        "installers": ["Npm"]
+        "installers": ["Npm"],
+        "source_repo": "https://github.com/hrsh7th/vscode-langservers-extracted"
     },
     "ts-yaml": {
         "type": "parser",
@@ -16,13 +17,15 @@
     "yaml-language-server": {
         "type": "exe",
         "version": "1.14.0",
-        "installers": ["Npm"]
+        "installers": ["Npm"],
+        "source_repo": "https://github.com/redhat-developer/yaml-language-server"
     },
     "yq": {
         "type": "exe",
         "version": "4.40.4",
         "installers": ["Github", "Go"],
-        "repo": "mikefarah/yq",
+        "homepage": "https://mikefarah.gitbook.io/yq/",
+        "source_repo": "https://github.com/mikefarah/yq",
         "url": "github.com/mikefarah/yq"
     }
 }

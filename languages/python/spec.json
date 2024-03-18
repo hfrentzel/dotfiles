@@ -1,33 +1,42 @@
 {
     "python3.9": {
         "type": "exe",
-        "installers": ["Apt"]
+        "installers": ["Apt"],
+        "homepage": "https://www.python.org/",
+        "source_repo": "https://github.com/python/cpython"
     },
     "flake8": {
         "type": "exe",
         "version": "6.0.0",
-        "installers": ["Pip"]
+        "installers": ["Pip"],
+        "homepage": "https://flake8.pycqa.org/en/latest/",
+        "source_repo": "https://github.com/PyCQA/flake8"
     },
     "pylint": {
         "type": "exe",
         "version": "2.15.4",
-        "installers": ["Pip"]
+        "installers": ["Pip"],
+        "homepage": "https://pylint.readthedocs.io/en/latest/",
+        "source_repo": "https://github.com/pylint-dev/pylint"
     },
     "python-lsp-server": {
         "type": "exe",
         "command_name": "pylsp",
         "version": "1.7.1",
-        "installers": ["Pip"]
+        "installers": ["Pip"],
+        "source_repo": "https://github.com/python-lsp/python-lsp-server"
     },
     "pylsp-mypy": {
         "type": "library",
         "version": "0.6.5",
-        "manager": "pip"
+        "manager": "pip",
+        "source_repo": "https://github.com/python-lsp/pylsp-mypy"
     },
     "debugpy": {
         "type": "library",
         "version": "1.6.4",
-        "manager": "pip"
+        "manager": "pip",
+        "source_repo": "https://github.com/microsoft/debugpy"
     },
     "python_data": {
         "type": "directory",

@@ -3,13 +3,16 @@
         "type": "exe",
         "version": "1.6.4",
         "installers": ["Zip"],
-        "url": "https://releases.hashicorp.com/terraform/{version}/terraform_{version}_linux_amd64.zip"
+        "url": "https://releases.hashicorp.com/terraform/{version}/terraform_{version}_linux_amd64.zip",
+        "homepage": "https://www.terraform.io/",
+        "source_repo": "https://github.com/hashicorp/terraform"
     },
     "terraform-ls": {
         "type": "exe",
         "version": "0.30.1",
         "installers": ["Zip"],
-        "url": "https://releases.hashicorp.com/terraform-ls/{version}/terraform-ls_{version}_linux_amd64.zip"
+        "url": "https://releases.hashicorp.com/terraform-ls/{version}/terraform-ls_{version}_linux_amd64.zip",
+        "source_repo": "https://github.com/hashicorp/terraform-ls"
     },
     "ts-terraform": {
         "type": "parser",

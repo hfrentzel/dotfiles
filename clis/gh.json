@@ -3,6 +3,7 @@
         "type": "exe",
         "version": "2.23.0",
         "installers": ["Github"],
-        "repo": "cli/cli"
+        "homepage": "https://cli.github.com/",
+        "source_repo": "https://github.com/cli/cli"
     }
 }
