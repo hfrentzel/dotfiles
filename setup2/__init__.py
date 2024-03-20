@@ -3,6 +3,7 @@ import asyncio
 import json
 import os
 import itertools
+import webbrowser
 from typing import List
 
 from .builder import build_resources, collect_specs
@@ -103,6 +104,36 @@ def show():
         print(f"Spec '{spec}' not found")
 
 
+def home():
+    specs = collect_specs(include_all=True)
+    spec = conf.args.spec[0]
+    if spec not in specs:
+        print(f"Spec '{spec}' not found")
+        return
+
+    if home_url := specs[spec].get('homepage'):
+        webbrowser.open(home_url)
+    elif source_url := specs[spec].get('source_repo'):
+        webbrowser.open(source_url)
+    else:
+        print(f"No home page listed for '{spec}'")
+        return
+
+
+def source():
+    specs = collect_specs(include_all=True)
+    spec = conf.args.spec[0]
+    if spec not in specs:
+        print(f"Spec '{spec}' not found")
+        return
+
+    if source_url := specs[spec].get('source_repo'):
+        webbrowser.open(source_url)
+    else:
+        print(f"No source repository listed for '{spec}'")
+        return
+
+
 def run() -> None:
     argparser = argparse.ArgumentParser(prog='EnvSetup')
     argparser.set_defaults(func=check)
@@ -124,6 +155,14 @@ def run() -> None:
     show_cmd = subparsers.add_parser("show", help="show json spec")
     show_cmd.set_defaults(func=show)
     show_cmd.add_argument('spec', type=str, nargs=1)
+
+    home_cmd = subparsers.add_parser("home", help="Go to tool's homepage")
+    home_cmd.set_defaults(func=home)
+    home_cmd.add_argument('spec', type=str, nargs=1)
+
+    source_cmd = subparsers.add_parser("source", help="Go to tool's source code")
+    source_cmd.set_defaults(func=source)
+    source_cmd.add_argument('spec', type=str, nargs=1)
 
     conf.args = argparser.parse_args()
     conf.args.func()
