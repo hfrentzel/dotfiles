@@ -88,3 +88,6 @@
 [submodule "vim/nvim/pack/vendor/opt/lazy.nvim"]
 	path = vim/nvim/pack/vendor/opt/lazy.nvim
 	url = https://github.com/folke/lazy.nvim
+[submodule "vim/nvim/pack/vendor/opt/vim-sleuth"]
+	path = vim/nvim/pack/vendor/opt/vim-sleuth
+	url = https://github.com/tpope/vim-sleuth.git

@@ -9,9 +9,6 @@ set diffopt+=linematch:60
 
 
 set backspace=indent,eol,start          " Normal backspacing
-set expandtab                           " Always uses spaces over tabs
-set shiftwidth=4                        " Spaces per tab
-set tabstop=4                           " Spaces per tab
 set autoindent                          " maintain indent on new line
 set textwidth=80
 set formatoptions-=t                    " Don't autowrap text
