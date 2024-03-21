@@ -3,7 +3,13 @@
 -- Currently includes vim-surround and CamelCaseMotion
 
 return {
-    {'vim-sleuth', dir='~/.config/nvim/pack/vendor/opt/vim-sleuth'},
+    {'vim-sleuth', dir='~/.config/nvim/pack/vendor/opt/vim-sleuth',
+        init = function()
+            vim.o.expandtab = true
+            vim.o.shiftwidth = 4
+            vim.o.tabstop = 4
+        end
+    },
     {'vim-surround', dir='~/.config/nvim/pack/vendor/opt/vim-surround',
         event='VeryLazy'},
     {'CamelCaseMotion', dir='~/.config/nvim/pack/vendor/opt/CamelCaseMotion',
