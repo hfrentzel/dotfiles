@@ -1,4 +1,4 @@
-focus = {}
+local focus = {}
 
 local colorcolumns = '+' .. table.concat(vim.fn.range(0, 254), ',+')
 
@@ -25,12 +25,14 @@ local focus_full_window = {
 
 focus.focus_window = function()
     local filetype = vim.bo.filetype
+    local filename = vim.api.nvim_buf_get_name(0)
 
-    if filetype ~= '' and number_blacklist[filetype] ~= true then
+    if vim.api.nvim_win_get_config(0).relative == '' and
+            filetype ~= '' and number_blacklist[filetype] ~= true then
         vim.wo.number = true
         vim.wo.relativenumber = true
     end
-    if focus_full_window[filetype] == true then
+    if filename == '' or focus_full_window[filetype] == true then
         vim.wo.winhighlight = ''
         vim.wo.colorcolumn = ''
     else
@@ -42,7 +44,8 @@ end
 focus.blur_window = function()
     local filetype = vim.bo.filetype
 
-    if filetype ~= '' and number_blacklist[filetype] ~= true then
+    if vim.api.nvim_win_get_config(0).relative == '' and
+            filetype ~= '' and number_blacklist[filetype] ~= true then
         vim.wo.number = true
         vim.wo.relativenumber = false
     end
