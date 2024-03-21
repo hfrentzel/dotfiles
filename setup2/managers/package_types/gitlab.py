@@ -1,5 +1,5 @@
 import json
-from typing import Any, List
+from typing import Any, Dict, List
 
 from setup2.job import Job
 from setup2.output import red
@@ -18,9 +18,7 @@ class Gitlab():
             repo = spec.repo
             tag = await cls.get_release(repo, spec.version)
 
-            response = await cls.glab_api_call(f'{repo.replace("/", "%2F")}/releases/{tag}')
-            available_assets = {a['name'].lower(): a['name'] for a in response['assets']['links']}
-
+            available_assets = await cls.get_assets(repo, tag)
             asset = filter_assets(list(available_assets.keys()))
             if asset is None:
                 print(red(f'Failed to install {spec.name} from Gitlab release'))
@@ -41,6 +39,11 @@ class Gitlab():
         return Job(names=[spec.name],
                    description=f'Install {spec.name} from Github release',
                    job=inner)
+
+    @classmethod
+    async def get_assets(cls, repo: str, tag: str) -> Dict[str, str]:
+        response = await cls.glab_api_call(f'{repo.replace("/", "%2F")}/releases/{tag}')
+        return {a['name'].lower(): a['name'] for a in response['assets']['links']}
 
     @classmethod
     async def get_release(cls, repo: str, version: str) -> str:

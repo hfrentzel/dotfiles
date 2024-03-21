@@ -6,9 +6,10 @@ import itertools
 import webbrowser
 from typing import List
 
-from .builder import build_resources, collect_specs
+from .builder import build_resources, collect_specs, generate_resource
 from .managers import create_jobs, all_desired
 from .managers import exe
+from .inspect import search_assets
 from .job import print_job_tree, build_tree
 from .conf import conf
 from .output import red, green
@@ -134,6 +135,12 @@ def source():
         return
 
 
+def list_assets():
+    specs = collect_specs(include_all=True)
+    resource, _ = generate_resource(conf.args.spec[0], specs[conf.args.spec[0]])
+    asyncio.run(search_assets(resource))
+
+
 def run() -> None:
     argparser = argparse.ArgumentParser(prog='EnvSetup')
     argparser.set_defaults(func=check)
@@ -163,6 +170,10 @@ def run() -> None:
     source_cmd = subparsers.add_parser("source", help="Go to tool's source code")
     source_cmd.set_defaults(func=source)
     source_cmd.add_argument('spec', type=str, nargs=1)
+
+    assets_cmd = subparsers.add_parser("list-assets", help="List the Github assets for a spec")
+    assets_cmd.set_defaults(func=list_assets)
+    assets_cmd.add_argument('spec', type=str, nargs=1)
 
     conf.args = argparser.parse_args()
     conf.args.func()

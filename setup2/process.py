@@ -2,7 +2,7 @@ import asyncio
 from dataclasses import dataclass
 import platform
 from os import path
-from typing import Optional, List
+from typing import Optional, List, Literal, overload
 
 from .conf import conf
 
@@ -55,7 +55,17 @@ async def fetch_file(url: str, version: Optional[str]) -> str:
     return filename
 
 
+@overload
+def filter_assets(asset_list: List[str], return_all: Literal[True]) -> List[str]:
+    ...
+
+
+@overload
 def filter_assets(asset_list: List[str]) -> Optional[str]:
+    ...
+
+
+def filter_assets(asset_list, return_all=False):
     system = platform.uname()
     system_os = system.system.lower()
     hardware = set_hardware(system.machine.lower())
@@ -73,6 +83,8 @@ def filter_assets(asset_list: List[str]) -> Optional[str]:
     if system_os == 'linux' and 'x86_64' in hardware and len(asset_list) == 2:
         asset_list = [a for a in asset_list if 'musl' not in a] or asset_list
 
+    if return_all:
+        return asset_list
     if len(asset_list) == 1:
         return asset_list[0]
     return None

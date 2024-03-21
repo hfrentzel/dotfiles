@@ -20,9 +20,7 @@ class Github():
             repo = spec.repo
             tag = await cls.get_release(repo, spec.version)
 
-            response = await cls.gh_api_call(f'repos/{repo}/releases/tags/{tag}')
-            available_assets = [a['name'].lower() for a in response['assets']]
-
+            available_assets = await cls.get_assets(repo, tag)
             asset = filter_assets(available_assets)
             spec.url = f'https://github.com/{repo}/releases/download/{tag}/{asset}'
 
@@ -42,6 +40,11 @@ class Github():
         return Job(names=[spec.name],
                    description=f'Install {spec.name} from Github release',
                    job=inner)
+
+    @classmethod
+    async def get_assets(cls, repo: str, tag: str) -> List[str]:
+        response = await cls.gh_api_call(f'repos/{repo}/releases/tags/{tag}')
+        return [a['name'].lower() for a in response['assets']]
 
     @classmethod
     async def get_release(cls, repo: str, version: str) -> str:
