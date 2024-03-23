@@ -1,7 +1,8 @@
 import asyncio
 from dataclasses import dataclass
+from itertools import zip_longest
 import platform
-from os import path
+import os
 from typing import Optional, List, Literal, overload
 
 from .conf import conf
@@ -15,12 +16,14 @@ class JobOutput:
 
 
 def ver_greater_than(current: str, target: str) -> bool:
-    curr_major, curr_minor, curr_patch = [int(t) for t in current.split(".")]
-    tar_major, tar_minor, tar_patch = [int(t) for t in target.split(".")]
-    return (
-        curr_major > tar_major or
-        (curr_major == tar_major and curr_minor > tar_minor) or
-        (curr_major == tar_major and curr_minor == tar_minor and curr_patch >= tar_patch))
+    curr_segments = [int(t) for t in current.split(".")]
+    tar_segments = [int(t) for t in target.split(".")]
+    for curr, tar in zip_longest(curr_segments, tar_segments, fillvalue=0):
+        if curr > tar:
+            return True
+        if curr < tar:
+            return False
+    return True
 
 
 async def async_proc(cmd: str, stdin: Optional[bytes] = None,

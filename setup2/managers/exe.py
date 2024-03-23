@@ -20,7 +20,7 @@ from setup2.managers.package_types.tar import tar_builder
 from setup2.managers.package_types.zip import zip_builder
 
 
-VERSION_REGEX = re.compile(r'\d+\.\d+\.\d+', re.M)
+VERSION_REGEX = re.compile(r'\d+\.\d+(\.\d+)?', re.M)
 
 
 """
