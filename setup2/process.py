@@ -26,14 +26,17 @@ def ver_greater_than(current: str, target: str) -> bool:
     return True
 
 
-async def async_proc(cmd: str, stdin: Optional[bytes] = None,
-                     cwd: Optional[str] = None) -> JobOutput:
+async def async_proc(cmd: str,
+                     cwd: Optional[str] = None,
+                     stdin: Optional[bytes] = None,
+                     forward_env: bool = False) -> JobOutput:
     if isinstance(stdin, str):
         stdin = stdin.encode()
     # TODO Log stdout and stderr if command fails
     process = await asyncio.create_subprocess_shell(
         cmd,
         cwd=cwd,
+        env=os.environ if forward_env else None,
         stdin=asyncio.subprocess.PIPE if stdin else None,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE)
@@ -49,10 +52,10 @@ async def fetch_file(url: str, version: Optional[str]) -> str:
     full_url = url
     if version is not None:
         full_url = url.format(version=version)
-    _, file = path.split(full_url)
+    _, file = os.path.split(full_url)
 
     filename = f'{conf.sources_dir}/{file}'
-    if not path.exists(filename):
+    if not os.path.exists(filename):
         await async_proc(f'curl -L {full_url} -o {filename}')
 
     return filename

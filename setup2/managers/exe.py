@@ -1,4 +1,5 @@
 import asyncio
+import os
 import re
 import shutil
 from typing import List, Tuple, Dict, Callable, Union, Optional
@@ -43,7 +44,8 @@ async def current_status(exe: Exe) -> Tuple[Exe, bool, str]:
 
     subcommands = ["--version", "version", "-V", "-v"]
     for cmd in subcommands:
-        version = await async_proc(f'{exe.command_name} {cmd}')
+        version = await async_proc(f'{exe.command_name} {cmd}',
+                                   forward_env=True)
         if version.returncode == 0:
             break
 
@@ -72,6 +74,10 @@ def desired_printout() -> str:
 
 
 async def get_statuses() -> List[str]:
+    local_bin = os.path.expanduser('~/.local/bin')
+    if local_bin not in os.environ['PATH']:
+        os.environ['PATH'] += ':' + local_bin
+
     complete = []
     tasks = []
     for exe in desired:
