@@ -1,6 +1,6 @@
 compalias() {
-    alias=$1
-    cmd=$2
+    local alias=$1
+    local cmd=$2
     if [[ -z "$alias" || -z "$cmd" ]]; then
         echo "compalias args not set"
         return
@@ -8,7 +8,7 @@ compalias() {
 
     alias "$alias"="$cmd"
 
-    existing_completion=$(complete -p $cmd 2> /dev/null | sed 's/ [^ ]*$//')
+    local existing_completion=$(complete -p $cmd 2> /dev/null | sed 's/ [^ ]*$//')
     if [[ ! -z "$existing_completion" ]]; then
         eval "$existing_completion $alias"
     fi
@@ -28,7 +28,7 @@ compalias() {
     for dir in "${dirs[@]}"; do
         [[ -d "$dir" ]] || continue
         for compfile in "$cmd" "$cmd.bash" "_$cmd"; do
-            compfile="$dir/$compfile"
+            local compfile="$dir/$compfile"
 
             if [[ -f "$compfile" ]]; then
                 mkdir -p "$HOME/.local/share/bash-completion/completions/"

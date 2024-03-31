@@ -1,5 +1,5 @@
 add_to_path() {
-    new_dir=$1
+    local new_dir=$1
     PATH=${PATH//":$new_dir:"/:}
     PATH=${PATH/#"$new_dir:"/}
     PATH=${PATH/%":$new_dir"/}
