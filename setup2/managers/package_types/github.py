@@ -15,7 +15,7 @@ class Github():
     token = None
 
     @classmethod
-    def github_builder(cls, spec: Exe) -> Job:
+    def github_builder(cls, spec: Exe, _: str = "") -> Job:
         async def inner() -> bool:
             repo = spec.repo
             tag = await cls.get_release(repo, spec.version)

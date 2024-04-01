@@ -9,7 +9,7 @@ from setup2.managers.exe_class import Exe
 from setup2.managers.package_types.archive import find_extract_path
 
 
-def zip_builder(spec: Exe) -> Job:
+def zip_builder(spec: Exe, _: str = "") -> Job:
     async def inner() -> bool:
         if conf.root_access:
             install_home = '/usr/local'

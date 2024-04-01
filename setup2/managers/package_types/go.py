@@ -11,7 +11,7 @@ Exe('go',
     url='https://go.dev/dl/go{version}.linux-amd64.tar.gz')
 
 
-def go_builder(spec: Exe) -> Job:
+def go_builder(spec: Exe, _: str = "") -> Job:
     async def inner() -> bool:
         print(f'Installing {spec.name} with go...')
         result = await async_proc(

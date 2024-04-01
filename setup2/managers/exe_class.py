@@ -1,13 +1,20 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, Union, TypedDict
 from setup2.managers.manager import mark_resource
 
 
 @dataclass
-class Exe():
+class InstallerSpec(TypedDict):
+    installer: str
+    package_name: Optional[str]
+    post_script: Optional[List[str]]
+
+
+@dataclass
+class Exe:
     name: str
     version: str = ''
-    installers: List[str] = field(default_factory=list)
+    installers: List[Union[InstallerSpec, str]] = field(default_factory=list)
     depends_on: Optional[str] = None
     on_demand: bool = False
     override: bool = False

@@ -68,4 +68,4 @@ JOB_BUILDERS = {
 
 
 def create_job(lib: Resource) -> None:
-    JOB_BUILDERS[lib.manager](lib)
+    JOB_BUILDERS[lib.manager](lib, lib.name)

@@ -4,7 +4,7 @@ from setup2.process import async_proc, fetch_file
 from setup2.managers.exe_class import Exe
 
 
-def deb_builder(spec: Exe) -> Job:
+def deb_builder(spec: Exe, _: str = "") -> Job:
     async def inner() -> bool:
         print(f'Installing {spec.name} from debian archive...')
         archive_file = await fetch_file(spec.url, spec.version)

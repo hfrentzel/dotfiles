@@ -3,7 +3,7 @@ from setup2.job import Job
 from setup2.process import async_proc
 
 
-def sequence_builder(spec: Exe) -> Job:
+def sequence_builder(spec: Exe, _: str = "") -> Job:
     async def inner() -> bool:
         print(f'Beginning steps to install {spec.name}')
         for step_template in spec.steps:

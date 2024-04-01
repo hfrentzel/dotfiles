@@ -10,8 +10,8 @@ class Apt():
     all_apts: List[str] = []
 
     @classmethod
-    def apt_builder(cls, spec: Exe) -> bool:
-        cls.all_apts.append(spec.name)
+    def apt_builder(cls, _: Exe, package: str) -> bool:
+        cls.all_apts.append(package)
         return True
 
     @classmethod

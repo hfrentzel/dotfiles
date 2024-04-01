@@ -99,7 +99,7 @@ def status_printout(show_all: bool) -> str:
     return print_grid(('COMMAND', 'DESIRED', 'CURRENT'), lines)
 
 
-JOB_BUILDERS: Dict[str, Callable[[Exe], Union[bool, Job]]] = {
+JOB_BUILDERS: Dict[str, Callable[[Exe, str], Union[bool, Job]]] = {
     'Apt': Apt.apt_builder,
     'Cargo': cargo_builder,
     'Deb': deb_builder,
@@ -116,7 +116,13 @@ JOB_BUILDERS: Dict[str, Callable[[Exe], Union[bool, Job]]] = {
 
 def create_job(exe: Exe) -> Optional[Job]:
     for t in exe.installers:
-        settled = JOB_BUILDERS[t](exe)
+        if isinstance(t, str):
+            installer = t
+            package = exe.name
+        else:
+            installer = t['installer']
+            package = t.get('package_name') or exe.name
+        settled = JOB_BUILDERS[installer](exe, package)
         if isinstance(settled, Job):
             return settled
         if settled:

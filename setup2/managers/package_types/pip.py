@@ -15,8 +15,8 @@ class Pip():
     curr_installed: Optional[Dict[str, str]] = None
 
     @classmethod
-    def pip_builder(cls, spec: Package) -> bool:
-        cls.all_pips.append((spec.name, spec.version))
+    def pip_builder(cls, spec: Package, package: str) -> bool:
+        cls.all_pips.append((package, spec.version))
         return True
 
     @classmethod

@@ -23,8 +23,8 @@ class Npm():
     curr_installed: Optional[Dict[str, str]] = None
 
     @classmethod
-    def npm_builder(cls, spec: Package) -> bool:
-        cls.all_packages.append((spec.name, spec.version))
+    def npm_builder(cls, spec: Package, package: str) -> bool:
+        cls.all_packages.append((package, spec.version))
         return True
 
     @classmethod
