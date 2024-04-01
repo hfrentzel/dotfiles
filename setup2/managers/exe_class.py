@@ -17,7 +17,6 @@ class Exe:
     installers: List[Union[InstallerSpec, str]] = field(default_factory=list)
     depends_on: Optional[str] = None
     on_demand: bool = False
-    override: bool = False
     command_name: str = ''
     extract_path: Optional[str] = None
     url: str = ''
@@ -25,7 +24,7 @@ class Exe:
     steps: List[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
-        mark_resource(self.name, self.override)
+        mark_resource(self.name)
         if self.command_name == '':
             self.command_name = self.name
         desired.append(self)
