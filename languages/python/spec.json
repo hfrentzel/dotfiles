@@ -1,7 +1,11 @@
 {
-    "python3.9": {
+    "python": {
         "type": "exe",
-        "installers": ["Apt"],
+        "version": "3.9.5",
+        "installers": [{
+            "installer": "Apt",
+            "package_name": "python3.9"
+        }],
         "homepage": "https://www.python.org/",
         "source_repo": "https://github.com/python/cpython"
     },

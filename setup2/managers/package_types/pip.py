@@ -29,7 +29,7 @@ class Pip():
 
             print('Running pip install...')
             result = await async_proc(
-                f'/usr/bin/python3.9 -m pip install {pip_string}')
+                f'python -m pip install {pip_string}')
             success = not result.returncode
             if success:
                 print(green('The following apps were successfully installed '
@@ -41,14 +41,14 @@ class Pip():
 
         return Job(names=[p[0] for p in cls.all_pips],
                    description=f'Install {pip_string} with pip',
-                   depends_on='python3.9',
+                   depends_on='python',
                    job=inner)
 
     @classmethod
     def get_version(cls, package: Package) -> Optional[str]:
         if cls.curr_installed is None:
             results = json.loads(
-                subprocess.run(shlex.split('/usr/bin/python3.9 -m pip list --format=json'),
+                subprocess.run(shlex.split('python -m pip list --format=json'),
                                check=False, capture_output=True).stdout.decode())
             cls.curr_installed = {r['name']: r['version'] for r in results}
         if cls.curr_installed.get(package.name) is None:
