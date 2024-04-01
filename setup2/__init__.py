@@ -80,9 +80,6 @@ async def handle_single_resource(resource: Spec, resource_type: str) -> None:
 
 
 def check():
-    os.environ['NPM_CONFIG_USERCONFIG'] = os.path.expanduser('~/.config/npm/npmrc')
-    conf.dotfiles_home = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
     resource = build_resources(conf.args.only)
     if resource:
         asyncio.run(handle_single_resource(*resource))
@@ -174,6 +171,9 @@ def run() -> None:
     assets_cmd = subparsers.add_parser("list-assets", help="List the Github assets for a spec")
     assets_cmd.set_defaults(func=list_assets)
     assets_cmd.add_argument('spec', type=str, nargs=1)
+
+    os.environ['NPM_CONFIG_USERCONFIG'] = os.path.expanduser('~/.config/npm/npmrc')
+    conf.dotfiles_home = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     conf.args = argparser.parse_args()
     conf.args.func()
