@@ -63,8 +63,10 @@
     whitespace-error-style = "#280050" reverse
     zero-style = syntax
     syntax-theme = base16
+[mergetool]
+    keepBackup = false
 [mergetool "fugitive"]
-    cmd = nvim -f -c \"Resolve\" \"$MERGED\"
+    cmd = nvim -f -c \"let g:opened_with_mt = 1\" -c \"Resolve\" \"$MERGED\"
 [diff]
     compactionHeuristic = true
 [merge]

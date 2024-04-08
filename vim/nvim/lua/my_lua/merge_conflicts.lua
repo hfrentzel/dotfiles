@@ -49,6 +49,11 @@ local teardown_resolver = function()
     end
     vim.g.merging_buffer = nil
     clear_git_state()
+    vim.api.nvim_buf_call(buf, function() vim.cmd.write() end)
+
+    if vim.g.opened_with_mt == 1 then
+        vim.cmd.quit()
+    end
 end
 
 M.setup_resolver = function()
