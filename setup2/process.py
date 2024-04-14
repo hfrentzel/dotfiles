@@ -7,6 +7,11 @@ from typing import Optional, List, Literal, overload
 
 from .conf import conf
 
+AMD_64 = ['amd64', 'x86_64', 'x64']
+ARM_64 = ['aarch64', 'arm64']
+ARM_32 = ['armv7', 'arm-']
+ALL_HARDWARE = [*AMD_64, *ARM_64, *ARM_32]
+
 
 @dataclass
 class JobOutput:
@@ -79,11 +84,11 @@ def filter_assets(asset_list, return_all=False):
         # TODO handle deb files when sudo permissions are available
         pass
 
-    asset_list = [a for a in asset_list if a.endswith('.zip') or '.tar.' in a]
+    asset_list = [a for a in asset_list if a.endswith('.zip') or a.endswith('.tar.gz')]
 
     if any(system_os in a for a in asset_list):
         asset_list = [a for a in asset_list if system_os in a]
-    if any(any(h in a for a in asset_list) for h in hardware):
+    if any(any(h in a for h in ALL_HARDWARE) for a in asset_list):
         asset_list = [a for a in asset_list if any(h in a for h in hardware)]
 
     if system_os == 'linux' and 'x86_64' in hardware and len(asset_list) == 2:
@@ -98,9 +103,9 @@ def filter_assets(asset_list, return_all=False):
 
 def set_hardware(machine: str) -> List[str]:
     if machine in ['amd64', 'x86_64']:
-        return ['amd64', 'x86_64', 'x64']
+        return AMD_64
     if machine == 'aarch64' and platform.architecture()[0] == '64bit':
-        return ['aarch64', 'arm64']
+        return ARM_64
     if machine == 'aarch64' and platform.architecture()[0] == '32bit':
-        return ['armv7', 'arm-']
+        return ARM_32
     return ['']
