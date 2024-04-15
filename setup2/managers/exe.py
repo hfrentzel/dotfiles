@@ -42,7 +42,10 @@ async def current_status(exe: Exe) -> Tuple[Exe, bool, str]:
     if exe.version == '':
         return (exe, True, 'ANY')
 
-    subcommands = ["--version", "version", "-V", "-v"]
+    if exe.version_cmd:
+        subcommands = [exe.version_cmd]
+    else:
+        subcommands = ["--version", "version", "-V", "-v"]
     for cmd in subcommands:
         version = await async_proc(f'{exe.command_name} {cmd}',
                                    forward_env=True)

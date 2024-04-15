@@ -19,6 +19,7 @@
     "k9s": {
         "type": "exe",
         "version": "0.30.7",
+        "version_cmd": "version",
         "installers": ["Github", "Go"],
         "homepage": "https://k9scli.io/",
         "source_repo": "https://github.com/derailed/k9s",

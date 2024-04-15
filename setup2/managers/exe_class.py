@@ -19,6 +19,7 @@ class Exe:
     on_demand: bool = False
     command_name: str = ''
     extract_path: Optional[str] = None
+    version_cmd: str = ''
     url: str = ''
     repo: str = ''
     steps: List[str] = field(default_factory=list)
