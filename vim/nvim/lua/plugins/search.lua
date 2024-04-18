@@ -39,7 +39,7 @@ return {
     {'telescope', dir = '~/.config/nvim/pack/vendor/opt/telescope.nvim',
         keys = {
             { '<leader>g', mode={'n', 'v'}},
-            'gu'
+            'gu', 'gd'
         },
         config = function()
             require('telescope').setup({
@@ -71,6 +71,14 @@ return {
                             width = 0.8,
                         }
                     },
+                    lsp_definitions = {
+                        theme = "dropdown",
+                        layout_config = {
+                            anchor = 'N',
+                            prompt_position = 'top',
+                            width = 0.8,
+                        }
+                    },
                     lsp_references = {
                         theme = "dropdown",
                         layout_config = {
@@ -84,6 +92,7 @@ return {
             local builtin = require('telescope.builtin')
             vim.keymap.set('n', '<leader>g', builtin.live_grep)
             vim.keymap.set('n', 'gu', builtin.lsp_references)
+            vim.keymap.set('n', 'gd', builtin.lsp_definitions)
             vim.keymap.set('v', '<leader>g', function()
                 local text = getVisualSelection()
                 builtin.live_grep({default_text = text})
