@@ -14,13 +14,16 @@ conf() {
     local FILES="$(find "$DIR" -follow -mindepth 1 -type f)"
     local NUM_FILES=$(echo "$FILES" | wc -l)
     if [[ $NUM_FILES -gt 1 ]]; then
-        # nvim $(echo "$FILES" | fzf)
         echo "$FILES" | fzf --bind 'enter:become(nvim {}),ctrl-o:become(echo {}),ctrl-p:become(bat {})'
     else
         nvim $FILES
     fi
 }
 
+_conf() {
+    COMPREPLY=($(compgen -W "$(ls ~/.config)" -- "${COMP_WORDS[COMP_CWORD]}"))
+}
+_fzf_orig_completion_conf="complete -o nospace -F %s conf #_conf"
 _fzf_conf_completion() {
     _fzf_complete -- "$@" < <(ls ~/.config/)
 }
