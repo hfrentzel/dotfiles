@@ -2,6 +2,11 @@
 -- Configure LSPs
 
 return {
+    {'dressing.nvim', dir = '~/.config/nvim/pack/vendor/opt/dressing.nvim',
+        keys = {
+            {'<leader>r', vim.lsp.buf.rename }
+        }
+    },
     {'nvim-lspconfig', dir = '~/.config/nvim/pack/vendor/opt/nvim-lspconfig',
         event = {'BufReadPre', 'BufNewFile'},
         config = function()
@@ -76,9 +81,11 @@ return {
                         plugins = {
                             flake8 = {enabled = true, maxLineLength = 120},
                             pycodestyle = {enabled = false},
+                            jedi_rename = {enabled = false},
                             pylsp_mypy = {enabled = true},
                             pyflakes = {enabled = false},
                             pylint = {enabled = true}
+                            pylsp_rope = {rename = true}
                         }
                     }
                 },

@@ -1,4 +1,5 @@
 __pycache__/
+.ropeproject/
 
 python/.pyvenvs
 py310venv

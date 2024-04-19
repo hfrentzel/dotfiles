@@ -36,6 +36,12 @@
         "manager": "pip",
         "source_repo": "https://github.com/python-lsp/pylsp-mypy"
     },
+    "pylsp-rope": {
+        "type": "library",
+        "version": "0.1.16",
+        "manager": "pip",
+        "source_repo": "https://github.com/python-rope/pylsp-rope"
+    },
     "debugpy": {
         "type": "library",
         "version": "1.6.4",

@@ -1,0 +1,2 @@
+[tool.rope]
+ignored_resources = ['vim']

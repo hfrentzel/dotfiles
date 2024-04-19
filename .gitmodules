@@ -91,3 +91,6 @@
 [submodule "vim/nvim/pack/vendor/opt/vim-sleuth"]
 	path = vim/nvim/pack/vendor/opt/vim-sleuth
 	url = https://github.com/tpope/vim-sleuth.git
+[submodule "vim/nvim/pack/vendor/opt/dressing.nvim"]
+	path = vim/nvim/pack/vendor/opt/dressing.nvim
+	url = https://github.com/stevearc/dressing.nvim.git
