@@ -33,6 +33,7 @@ return {
                 local args = {buffer = true, silent = true}
                 vim.diagnostic.config({severity_sort = true})
                 vim.wo.signcolumn = 'yes'
+                vim.keymap.set('n', 'g=', vim.lsp.buf.format, args)
                 vim.keymap.set('n', 'K', vim.lsp.buf.hover, args)
                 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, args)
                 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, args)
@@ -84,6 +85,7 @@ return {
                             pylint = {enabled = true},
                             ruff = {
                                 enabled = true,
+                                format = {"I"},
                             },
                             pylsp_rope = {rename = true}
                         }
