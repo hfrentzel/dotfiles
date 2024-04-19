@@ -79,12 +79,12 @@ return {
                 settings = {
                     pylsp = {
                         plugins = {
-                            flake8 = {enabled = true, maxLineLength = 120},
-                            pycodestyle = {enabled = false},
                             jedi_rename = {enabled = false},
                             pylsp_mypy = {enabled = true},
-                            pyflakes = {enabled = false},
-                            pylint = {enabled = true}
+                            pylint = {enabled = true},
+                            ruff = {
+                                enabled = true,
+                            },
                             pylsp_rope = {rename = true}
                         }
                     }

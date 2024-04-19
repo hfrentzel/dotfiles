@@ -1,0 +1,9 @@
+[tool.ruff]
+line-length = 100
+preview = true
+
+[tool.ruff.lint]
+select = ["W", "E", "F", "C", "PLC", "PLE", "PLR"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 15
