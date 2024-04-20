@@ -4,6 +4,9 @@
 
 return {
     { 'nvim-treesitter', dir='~/.config/nvim/pack/vendor/opt/nvim-treesitter',
+        dependencies = {
+            {'nvim-treesitter-textobjects', dir = '~/.config/nvim/pack/vendor/opt/nvim-treesitter-textobjects'}
+        },
         config = function()
             local treesitter = require('nvim-treesitter.configs')
             treesitter.setup {
@@ -27,6 +30,27 @@ return {
 
                 indent = {
                     enable = true
+                },
+
+                textobjects = {
+                    select = {
+                        enable = true,
+                        keymaps = {
+                            ["af"] = "@function.outer",
+                            ["if"] = "@function.inner",
+                            ["aif"] = "@conditional.outer",
+                            ["iif"] = "@conditional.inner",
+                        }
+                    },
+                    move = {
+                        enable = true,
+                        goto_next_start = {
+                            ["]f"] = "@function.outer"
+                        },
+                        goto_previous_start = {
+                            ["[f"] = "@function.outer"
+                        }
+                    }
                 }
             }
 

@@ -94,3 +94,6 @@
 [submodule "vim/nvim/pack/vendor/opt/dressing.nvim"]
 	path = vim/nvim/pack/vendor/opt/dressing.nvim
 	url = https://github.com/stevearc/dressing.nvim.git
+[submodule "vim/nvim/pack/vendor/opt/nvim-treesitter-textobjects"]
+	path = vim/nvim/pack/vendor/opt/nvim-treesitter-textobjects
+	url = https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
