@@ -4,7 +4,14 @@
 return {
     {'dressing.nvim', dir = '~/.config/nvim/pack/vendor/opt/dressing.nvim',
         keys = {
-            {'<leader>r', vim.lsp.buf.rename }
+            {'<leader>r', vim.lsp.buf.rename },
+            {'<leader>a', vim.lsp.buf.code_action }
+        },
+        opts = {
+            select = {
+                backend = {'builtin'},
+                builtin = { relative = 'cursor' }
+            }
         }
     },
     {'nvim-lspconfig', dir = '~/.config/nvim/pack/vendor/opt/nvim-lspconfig',
@@ -86,6 +93,7 @@ return {
                             ruff = {
                                 enabled = true,
                                 format = {"I"},
+                                unsafeFixes = true
                             },
                             pylsp_rope = {rename = true}
                         }
