@@ -1,6 +1,6 @@
 import asyncio
 from dataclasses import dataclass, field
-from typing import List, Callable, Optional, Awaitable, Dict
+from typing import Awaitable, Callable, Dict, List, Optional
 
 
 @dataclass

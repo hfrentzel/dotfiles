@@ -1,11 +1,11 @@
 import os
 from dataclasses import dataclass
-from typing import List, Tuple, Coroutine, Callable
+from typing import Callable, Coroutine, List, Tuple
 
 from setup2.conf import conf
 from setup2.job import Job
-from setup2.output import print_grid
 from setup2.managers.manager import mark_resource
+from setup2.output import print_grid
 
 
 @dataclass

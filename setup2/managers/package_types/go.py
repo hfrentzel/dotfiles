@@ -1,7 +1,7 @@
 from setup2.job import Job
-from setup2.output import red, green
-from setup2.process import async_proc
 from setup2.managers.exe_class import Exe
+from setup2.output import green, red
+from setup2.process import async_proc
 
 Exe(
     "go",

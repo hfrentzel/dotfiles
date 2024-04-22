@@ -1,13 +1,13 @@
 import json
 import shlex
 import subprocess
-from typing import Optional, List, Tuple, Dict
+from typing import Dict, List, Optional, Tuple
 
 from setup2.job import Job
-from setup2.output import red, green
-from setup2.process import async_proc
 from setup2.managers.manager import Package
 from setup2.managers.package_types.versioning import check_install
+from setup2.output import green, red
+from setup2.process import async_proc
 
 
 class Pip:

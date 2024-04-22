@@ -1,12 +1,12 @@
 import tarfile
-from os import path, makedirs
+from os import makedirs, path
 
 from setup2.conf import conf
 from setup2.job import Job
-from setup2.output import red, green
-from setup2.process import fetch_file
 from setup2.managers.exe_class import Exe
 from setup2.managers.package_types.archive import find_extract_path
+from setup2.output import green, red
+from setup2.process import fetch_file
 
 
 def tar_builder(spec: Exe, _: str = "") -> Job:
@@ -36,11 +36,11 @@ def tar_builder(spec: Exe, _: str = "") -> Job:
             # Remove common prefix from all filenames
             # TODO Use removeprefix() when python3.9 is made min version
             commonpath = path.commonpath([t.name for t in all_files])
-            commonpath = commonpath + "/" if commonpath != "" else commonpath
+            commonpath = commonpath + "/" if commonpath else commonpath
 
             for t in all_files:
                 name = t.name[len(commonpath) :]
-                if name == "":
+                if not name:
                     continue
 
                 if any(name.startswith(p) for p in ["bin", "lib", "share", "include"]):

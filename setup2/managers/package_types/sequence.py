@@ -1,5 +1,5 @@
-from setup2.managers.exe_class import Exe
 from setup2.job import Job
+from setup2.managers.exe_class import Exe
 from setup2.process import async_proc
 
 

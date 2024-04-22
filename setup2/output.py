@@ -1,4 +1,4 @@
-from typing import Tuple, Sequence, Union
+from typing import Sequence, Tuple, Union
 
 
 def print_grid(

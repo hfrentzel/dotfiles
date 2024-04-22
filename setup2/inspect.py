@@ -1,8 +1,8 @@
 from .managers.exe import Resource as Exe
 from .managers.package_types.github import Github
 from .managers.package_types.gitlab import Gitlab
+from .output import green, red, yellow
 from .process import filter_assets
-from .output import green, yellow, red
 
 
 async def search_assets(exe: Exe):

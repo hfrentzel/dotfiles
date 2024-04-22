@@ -1,6 +1,6 @@
+import os
 from argparse import Namespace
 from dataclasses import dataclass
-import os
 
 
 @dataclass

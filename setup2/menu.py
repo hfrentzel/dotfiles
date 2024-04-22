@@ -1,11 +1,11 @@
+import contextlib
 import os
 import subprocess
 import termios
 from io import TextIOWrapper
-from typing import List, Tuple, Iterator
-import contextlib
+from typing import Iterator, List, Tuple
 
-from setup2.output import red, green
+from setup2.output import green, red
 
 
 class XX:
@@ -84,13 +84,13 @@ def show(menu_entries: List[str]) -> List[Tuple[str, bool]]:
             tout.write("\r" + (len(menu_entries) - 1) * TERM_COMMAND["cursor_up"])
             tout.flush()
             next_key = read_input(tin)
-            if next_key in set(("up", "k")):
+            if next_key in {"up", "k"}:
                 active_index = max(0, active_index - 1)
-            elif next_key in set(("down", "j")):
+            elif next_key in {"down", "j"}:
                 active_index = min(len(menu_entries) - 1, active_index + 1)
-            elif next_key in set(("enter",)):
+            elif next_key in {"enter"}:
                 included[active_index] = not included[active_index]
-            elif next_key in set(("escape", "q", "ctrl-g")):
+            elif next_key in {"escape", "q", "ctrl-g"}:
                 break
     return list(zip(menu_entries, included))
 

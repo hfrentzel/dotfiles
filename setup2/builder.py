@@ -1,11 +1,11 @@
 import json
 import os
-from typing import Dict, Any, Optional, Tuple, List
 import re
+from typing import Any, Dict, List, Optional, Tuple
 
 from setup2.conf import conf
-from setup2.menu import show
 from setup2.managers import ALL_MANAGERS
+from setup2.menu import show
 
 USER_CONFIG = os.path.expanduser("~/.config/env_setup/config.json")
 

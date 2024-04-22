@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Protocol, List
+from typing import List, Protocol
 
 _all_resources: List[str] = []
 

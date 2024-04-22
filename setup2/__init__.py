@@ -1,19 +1,17 @@
 import argparse
 import asyncio
+import itertools
 import json
 import os
-import itertools
 import webbrowser
 from typing import List
 
 from .builder import build_resources, collect_specs, generate_resource
-from .managers import create_jobs, all_desired
-from .managers import exe
-from .inspect import search_assets
-from .job import print_job_tree, build_tree
 from .conf import conf
-from .output import red, green
-from .managers import Manager, Spec, ALL_MANAGERS
+from .inspect import search_assets
+from .job import build_tree, print_job_tree
+from .managers import ALL_MANAGERS, Manager, Spec, all_desired, create_jobs, exe
+from .output import green, red
 
 
 async def handle_jobs(selected_types: List[Manager]) -> None:
@@ -24,7 +22,7 @@ async def handle_jobs(selected_types: List[Manager]) -> None:
 
     all_complete = await asyncio.gather(*[t.get_statuses() for t in ALL_MANAGERS.values()])
     complete = list(itertools.chain.from_iterable(all_complete))
-    if conf.args.stage in [None, "show_all"]:
+    if conf.args.stage in {None, "show_all"}:
         for t in selected_types:
             print(t.status_printout(bool(conf.args.stage)), end="")
         return

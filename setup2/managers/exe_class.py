@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union, TypedDict
+from typing import List, Optional, TypedDict, Union
+
 from setup2.managers.manager import mark_resource
 
 
@@ -26,7 +27,7 @@ class Exe:
 
     def __post_init__(self) -> None:
         mark_resource(self.name)
-        if self.command_name == "":
+        if not self.command_name:
             self.command_name = self.name
         desired.append(self)
 

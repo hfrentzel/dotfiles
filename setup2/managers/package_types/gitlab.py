@@ -2,12 +2,12 @@ import json
 from typing import Any, Dict, List
 
 from setup2.job import Job
-from setup2.output import red
-from setup2.process import async_proc, filter_assets
 from setup2.managers.exe_class import Exe
 from setup2.managers.package_types.deb import deb_builder
 from setup2.managers.package_types.tar import tar_builder
 from setup2.managers.package_types.zip import zip_builder
+from setup2.output import red
+from setup2.process import async_proc, filter_assets
 
 
 class Gitlab:

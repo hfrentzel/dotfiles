@@ -1,13 +1,13 @@
 import asyncio
 import os
 from dataclasses import dataclass
-from typing import Tuple, Callable, Coroutine, List, Optional
+from typing import Callable, Coroutine, List, Optional, Tuple
 
 from setup2.conf import conf
 from setup2.job import Job
-from setup2.process import async_proc
-from setup2.output import print_grid, red, green
 from setup2.managers.manager import mark_resource
+from setup2.output import green, print_grid, red
+from setup2.process import async_proc
 
 
 @dataclass

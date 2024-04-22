@@ -1,9 +1,9 @@
 import asyncio
+import os
+import platform
 from dataclasses import dataclass
 from itertools import zip_longest
-import platform
-import os
-from typing import Optional, List, Literal, overload
+from typing import List, Literal, Optional, overload
 
 from .conf import conf
 
@@ -100,7 +100,7 @@ def filter_assets(asset_list, return_all=False):
 
 
 def set_hardware(machine: str) -> List[str]:
-    if machine in ["amd64", "x86_64"]:
+    if machine in {"amd64", "x86_64"}:
         return AMD_64
     if machine == "aarch64" and platform.architecture()[0] == "64bit":
         return ARM_64
