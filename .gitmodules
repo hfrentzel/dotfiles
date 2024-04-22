@@ -97,3 +97,6 @@
 [submodule "vim/nvim/pack/vendor/opt/nvim-treesitter-textobjects"]
 	path = vim/nvim/pack/vendor/opt/nvim-treesitter-textobjects
 	url = https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
+[submodule "vim/nvim/pack/vendor/opt/friendly-snippets"]
+	path = vim/nvim/pack/vendor/opt/friendly-snippets
+	url = https://github.com/rafamadriz/friendly-snippets.git

@@ -21,6 +21,7 @@ return {
             {'cmp-path', dir = '~/.config/nvim/pack/vendor/opt/cmp-path'},
             {'cmp_luasnip', dir = '~/.config/nvim/pack/vendor/opt/cmp_luasnip'},
             {'LuaSnip', dir = '~/.config/nvim/pack/vendor/opt/LuaSnip'},
+            {'friendly-snippets', dir = '~/.config/nvim/pack/vendor/opt/friendly-snippets'},
         },
         init = function()
             vim.o.completeopt='menu,menuone,noselect'
@@ -28,6 +29,7 @@ return {
         opts = function()
             local cmp = require('cmp')
             local luasnip = require('luasnip')
+            require('luasnip.loaders.from_vscode').lazy_load()
 
             return{
                 snippet = {
@@ -67,14 +69,13 @@ return {
                         end
                     end, {'i', 's'}),
 
-                    -- Leaving for now, reevaluate when I properly use snippets
-                    -- ['<Enter>'] = cmp.mapping(function(fallback)
-                    --     if cmp.visible() then
-                    --         cmp.confirm({select = true})
-                    --     else
-                    --         fallback()
-                    --     end
-                    -- end, {'i', 's'})
+                    ['<Enter>'] = cmp.mapping(function(fallback)
+                        if cmp.get_selected_entry() ~= nil then
+                            cmp.confirm({select = true})
+                        else
+                            fallback()
+                        end
+                    end, {'i', 's'})
                 },
 
                 sources = cmp.config.sources({
