@@ -6,11 +6,11 @@ from .output import green, yellow, red
 
 
 async def search_assets(exe: Exe):
-    if 'Github' not in exe.installers and 'Gitlab' not in exe.installers:
-        print(f'{exe.name} is not installable by Github or Gitlab')
+    if "Github" not in exe.installers and "Gitlab" not in exe.installers:
+        print(f"{exe.name} is not installable by Github or Gitlab")
         return
 
-    if 'Github' in exe.installers:
+    if "Github" in exe.installers:
         release = await Github.get_release(exe.repo, exe.version)
         assets = await Github.get_assets(exe.repo, release)
         selected_assets = filter_assets(assets, return_all=True)
@@ -21,12 +21,12 @@ async def search_assets(exe: Exe):
 
     color = green
     if len(selected_assets) == 0:
-        print(red('No assets remained after filtering'))
+        print(red("No assets remained after filtering"))
     if len(selected_assets) > 1:
-        print(yellow('More than one asset remains after filtering'))
+        print(yellow("More than one asset remains after filtering"))
         color = yellow
     for asset in assets:
         if asset in selected_assets:
-            print(f'* {color(asset)}')
+            print(f"* {color(asset)}")
         else:
-            print(f'  {asset}')
+            print(f"  {asset}")

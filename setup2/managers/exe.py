@@ -21,7 +21,7 @@ from setup2.managers.package_types.tar import tar_builder
 from setup2.managers.package_types.zip import zip_builder
 
 
-VERSION_REGEX = re.compile(r'\d+\.\d+(\.\d+)?', re.M)
+VERSION_REGEX = re.compile(r"\d+\.\d+(\.\d+)?", re.M)
 
 
 """
@@ -38,26 +38,25 @@ check_results: List[Tuple[Exe, bool, str]] = []
 async def current_status(exe: Exe) -> Tuple[Exe, bool, str]:
     command = shutil.which(exe.command_name)
     if command is None:
-        return (exe, False, 'MISSING')
-    if exe.version == '':
-        return (exe, True, 'ANY')
+        return (exe, False, "MISSING")
+    if exe.version == "":
+        return (exe, True, "ANY")
 
     if exe.version_cmd:
         subcommands = [exe.version_cmd]
     else:
         subcommands = ["--version", "version", "-V", "-v"]
     for cmd in subcommands:
-        version = await async_proc(f'{exe.command_name} {cmd}',
-                                   forward_env=True)
+        version = await async_proc(f"{exe.command_name} {cmd}", forward_env=True)
         if version.returncode == 0:
             break
 
     curr_ver = None
     if version.returncode != 0:
-        if exe.installers and set(exe.installers) & {'Pip', 'Npm'}:
-            if 'Pip' in exe.installers:
+        if exe.installers and set(exe.installers) & {"Pip", "Npm"}:
+            if "Pip" in exe.installers:
                 curr_ver = Pip.get_version(exe)
-            elif 'Npm' in exe.installers:
+            elif "Npm" in exe.installers:
                 curr_ver = Npm.get_version(exe)
     elif string := VERSION_REGEX.search(version.stdout):
         curr_ver = string.group(0)
@@ -66,20 +65,20 @@ async def current_status(exe: Exe) -> Tuple[Exe, bool, str]:
         success = ver_greater_than(curr_ver, exe.version)
         return (exe, success, curr_ver)
 
-    return (exe, False, 'UNKNOWN')
+    return (exe, False, "UNKNOWN")
 
 
 def desired_printout() -> str:
     lines = []
     for exe in sorted(desired, key=(lambda e: e.name)):
         lines.append((exe.name, exe.version))
-    return print_grid(('COMMAND', 'VERSION'), lines)
+    return print_grid(("COMMAND", "VERSION"), lines)
 
 
 async def get_statuses() -> List[str]:
-    local_bin = os.path.expanduser('~/.local/bin')
-    if local_bin not in os.environ['PATH']:
-        os.environ['PATH'] += ':' + local_bin
+    local_bin = os.path.expanduser("~/.local/bin")
+    if local_bin not in os.environ["PATH"]:
+        os.environ["PATH"] += ":" + local_bin
 
     complete = []
     tasks = []
@@ -99,21 +98,21 @@ def status_printout(show_all: bool) -> str:
         if not show_all and (complete or exe.on_demand):
             continue
         lines.append((exe.name, exe.version, (curr_ver, complete)))
-    return print_grid(('COMMAND', 'DESIRED', 'CURRENT'), lines)
+    return print_grid(("COMMAND", "DESIRED", "CURRENT"), lines)
 
 
 JOB_BUILDERS: Dict[str, Callable[[Exe, str], Union[bool, Job]]] = {
-    'Apt': Apt.apt_builder,
-    'Cargo': cargo_builder,
-    'Deb': deb_builder,
-    'Github': Github.github_builder,
-    'Gitlab': Gitlab.gitlab_builder,
-    'Go': go_builder,
-    'Npm': Npm.npm_builder,
-    'Pip': Pip.pip_builder,
-    'Sequence': sequence_builder,
-    'Tar': tar_builder,
-    'Zip': zip_builder,
+    "Apt": Apt.apt_builder,
+    "Cargo": cargo_builder,
+    "Deb": deb_builder,
+    "Github": Github.github_builder,
+    "Gitlab": Gitlab.gitlab_builder,
+    "Go": go_builder,
+    "Npm": Npm.npm_builder,
+    "Pip": Pip.pip_builder,
+    "Sequence": sequence_builder,
+    "Tar": tar_builder,
+    "Zip": zip_builder,
 }
 
 
@@ -123,8 +122,8 @@ def create_job(exe: Exe) -> Optional[Job]:
             installer = t
             package = exe.name
         else:
-            installer = t['installer']
-            package = t.get('package_name') or exe.name
+            installer = t["installer"]
+            package = t.get("package_name") or exe.name
         settled = JOB_BUILDERS[installer](exe, package)
         if isinstance(settled, Job):
             return settled
@@ -136,9 +135,9 @@ def create_job(exe: Exe) -> Optional[Job]:
 def create_bonus_jobs() -> Dict[str, Job]:
     jobs = {}
     if len(Apt.all_apts) != 0:
-        jobs['apt_install'] = Apt.apt_job()
+        jobs["apt_install"] = Apt.apt_job()
     if len(Pip.all_pips) != 0:
-        jobs['pip_install'] = Pip.pip_job()
+        jobs["pip_install"] = Pip.pip_job()
     if len(Npm.all_packages) != 0:
-        jobs['npm_install'] = Npm.npm_job()
+        jobs["npm_install"] = Npm.npm_job()
     return jobs

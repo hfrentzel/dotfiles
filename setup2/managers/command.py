@@ -29,15 +29,15 @@ check_results: List[Tuple[Resource, bool, str]] = []
 
 async def current_status(command: Resource) -> Tuple[Resource, bool, str]:
     if isinstance(command.cwd, str):
-        command.cwd = os.path.expanduser(command.cwd.replace('DOT', conf.dotfiles_home))
+        command.cwd = os.path.expanduser(command.cwd.replace("DOT", conf.dotfiles_home))
 
     if command.check_script is None:
-        return (command, False, 'CANT VERIFY')
+        return (command, False, "CANT VERIFY")
     result = await async_proc(command.check_script, cwd=command.cwd)
     if result.returncode == 0:
-        return (command, True, 'DONE')
+        return (command, True, "DONE")
 
-    return (command, False, 'INCOMPLETE')
+    return (command, False, "INCOMPLETE")
 
 
 async def get_statuses() -> List[str]:
@@ -57,7 +57,7 @@ def desired_printout() -> str:
     lines = []
     for command in sorted(desired, key=(lambda c: c.name)):
         lines.append((command.name,))
-    return print_grid(('SCRIPTS',), lines)
+    return print_grid(("SCRIPTS",), lines)
 
 
 def status_printout(show_all: bool) -> str:
@@ -66,29 +66,29 @@ def status_printout(show_all: bool) -> str:
         if not show_all and complete:
             continue
         lines.append((command.name, (status, complete)))
-    return print_grid(('SCRIPT', 'STATUS'), lines)
+    return print_grid(("SCRIPT", "STATUS"), lines)
 
 
 def create_job(command: Resource) -> Job:
     return Job(
         names=[command.name],
-        description=f'Run the {command.name} script',
+        description=f"Run the {command.name} script",
         depends_on=command.depends_on,
-        job=run_script(command.name, command.run_script,
-                       command.cwd)
+        job=run_script(command.name, command.run_script, command.cwd),
     )
 
 
-def run_script(name: str, script: str, cwd: Optional[str]) -> \
-        Callable[[], Coroutine[None, None, bool]]:
+def run_script(
+    name: str, script: str, cwd: Optional[str]
+) -> Callable[[], Coroutine[None, None, bool]]:
     async def inner() -> bool:
-        print(f'Running the {name} script...')
+        print(f"Running the {name} script...")
         result = await async_proc(script, cwd=cwd)
         success = not result.returncode
         if success:
-            print(green(f'{name} script ran successfully'))
+            print(green(f"{name} script ran successfully"))
         else:
-            print(red(f'{name} script failed'))
+            print(red(f"{name} script failed"))
         return success
 
     return inner

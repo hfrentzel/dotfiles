@@ -8,7 +8,7 @@ from setup2.managers.manager import mark_resource
 
 
 @dataclass
-class Resource():
+class Resource:
     name: str
     path: str
 
@@ -24,17 +24,17 @@ check_results: List[Tuple[Resource, bool, str]] = []
 def current_status(directory: Resource) -> Tuple[bool, str]:
     path = os.path.expanduser(directory.path)
     if os.path.isdir(path):
-        return (True, 'Exists')
+        return (True, "Exists")
     if os.path.exists(path):
-        return (False, 'BLOCKED')
-    return (False, 'MISSING')
+        return (False, "BLOCKED")
+    return (False, "MISSING")
 
 
 def desired_printout() -> str:
     lines = []
     for directory in sorted(desired, key=(lambda d: d.path)):
         lines.append((directory.path,))
-    return print_grid(('SUB-DIRECTORIES',), lines)
+    return print_grid(("SUB-DIRECTORIES",), lines)
 
 
 async def get_statuses() -> List[str]:
@@ -53,21 +53,21 @@ def status_printout(show_all: bool) -> str:
         if not show_all and complete:
             continue
         lines.append((directory.path, (status, complete)))
-    return print_grid(('SUB-DIRECTORIES', 'STATUS'), lines)
+    return print_grid(("SUB-DIRECTORIES", "STATUS"), lines)
 
 
 def create_job(directory: Resource) -> Job:
     return Job(
         names=[directory.name],
-        description=f'Create directory at {directory.path}',
-        job=create_directory(directory.path)
+        description=f"Create directory at {directory.path}",
+        job=create_directory(directory.path),
     )
 
 
 def create_directory(path: str) -> Callable[[], Coroutine[None, None, bool]]:
     async def inner() -> bool:
         full_path = os.path.expanduser(path)
-        print(f'Creating directory at {full_path}...')
+        print(f"Creating directory at {full_path}...")
         os.makedirs(full_path)
 
         return True

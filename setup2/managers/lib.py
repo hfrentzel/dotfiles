@@ -24,19 +24,19 @@ check_results = []
 
 
 async def current_status(lib: Resource) -> Tuple[Resource, bool, str]:
-    if lib.manager == 'pip':
+    if lib.manager == "pip":
         return (lib, *Pip.check_install(lib))
-    if lib.manager == 'npm':
+    if lib.manager == "npm":
         return (lib, *Npm.check_install(lib))
 
-    return (lib, False, 'UNKNOWN')
+    return (lib, False, "UNKNOWN")
 
 
 def desired_printout() -> str:
     lines = []
     for lib in sorted(desired, key=(lambda b: b.name)):
         lines.append((lib.name, lib.version))
-    return print_grid(('LIBRARY', 'VERSION'), lines)
+    return print_grid(("LIBRARY", "VERSION"), lines)
 
 
 async def get_statuses() -> List[str]:
@@ -58,13 +58,10 @@ def status_printout(show_all: bool) -> str:
         if not show_all and complete:
             continue
         lines.append((lib.name, lib.version, (curr_ver, complete)))
-    return print_grid(('LIBRARY', 'DESIRED', 'CURRENT'), lines)
+    return print_grid(("LIBRARY", "DESIRED", "CURRENT"), lines)
 
 
-JOB_BUILDERS = {
-    'pip': Pip.pip_builder,
-    'npm': Npm.npm_builder
-}
+JOB_BUILDERS = {"pip": Pip.pip_builder, "npm": Npm.npm_builder}
 
 
 def create_job(lib: Resource) -> None:

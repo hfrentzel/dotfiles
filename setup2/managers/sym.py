@@ -27,16 +27,16 @@ def current_status(sym: Resource) -> Tuple[bool, str]:
     dest = os.path.expanduser(sym.target)
     if os.path.isfile(dest) or os.path.isdir(dest):
         if os.path.islink(dest):
-            return (True, 'LINKED')
-        return (False, 'BLOCKED')
-    return (False, 'MISSING')
+            return (True, "LINKED")
+        return (False, "BLOCKED")
+    return (False, "MISSING")
 
 
 def desired_printout() -> str:
     lines = []
     for sym in sorted(desired, key=lambda s: s.target):
         lines.append((sym.target,))
-    return print_grid(('SYMLINKED FILES',), lines)
+    return print_grid(("SYMLINKED FILES",), lines)
 
 
 async def get_statuses() -> List[str]:
@@ -55,23 +55,23 @@ def status_printout(show_all: bool) -> str:
         if not show_all and complete:
             continue
         lines.append((sym.name, (status, complete)))
-    return print_grid(('SYMLINK', 'STATUS'), lines)
+    return print_grid(("SYMLINK", "STATUS"), lines)
 
 
 def create_job(sym: Resource) -> Job:
     return Job(
         names=[sym.name],
-        description=f'Generate symlink at {sym.target}',
-        job=create_symlink(sym.source, sym.target)
+        description=f"Generate symlink at {sym.target}",
+        job=create_symlink(sym.source, sym.target),
     )
 
 
 def create_symlink(source: str, target: str) -> Callable[[], Coroutine[None, None, bool]]:
     async def inner() -> bool:
-        src = source.replace('DOT', conf.dotfiles_home)
+        src = source.replace("DOT", conf.dotfiles_home)
         src = os.path.expanduser(src)
         dest = os.path.expanduser(target)
-        print(f'Creating symlink at {dest}...')
+        print(f"Creating symlink at {dest}...")
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         os.symlink(src, dest)
 

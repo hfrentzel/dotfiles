@@ -8,14 +8,14 @@ import contextlib
 from setup2.output import red, green
 
 
-class XX():
+class XX:
     def __init__(self, size: int = 0):
         self.size = size
 
     @contextlib.contextmanager
     def tty_handler(self) -> Iterator[Tuple[TextIOWrapper, TextIOWrapper]]:
-        tty_in = open("/dev/tty", "r", encoding='utf-8')
-        tty_out = open("/dev/tty", "w", encoding='utf-8', errors="replace")
+        tty_in = open("/dev/tty", "r", encoding="utf-8")
+        tty_out = open("/dev/tty", "w", encoding="utf-8", errors="replace")
         old_term = termios.tcgetattr(tty_in.fileno())
         new_term = termios.tcgetattr(tty_in.fileno())
         new_term[3] = new_term[3] & ~termios.ICANON & ~termios.ECHO
@@ -54,17 +54,15 @@ CODENAME_TO_CAPNAME = {
     "exit_application_mode": "rmkx",
     "up": "kcuu1",
 }
-TERM_COMMAND = {codename: query_terminfo_database(capname)
-                for codename, capname in CODENAME_TO_CAPNAME.items()}
-TERM_COMMAND.update({"enter": "\012", "escape": "\033"})
-DECODE_RAW_INPUT = {
-    terminal_code: codename for codename, terminal_code in
-    TERM_COMMAND.items()
+TERM_COMMAND = {
+    codename: query_terminfo_database(capname) for codename, capname in CODENAME_TO_CAPNAME.items()
 }
+TERM_COMMAND.update({"enter": "\012", "escape": "\033"})
+DECODE_RAW_INPUT = {terminal_code: codename for codename, terminal_code in TERM_COMMAND.items()}
 
 
 def read_input(tty: TextIOWrapper) -> str:
-    code = os.read(tty.fileno(), 80).decode('ascii', errors='ignore')
+    code = os.read(tty.fileno(), 80).decode("ascii", errors="ignore")
     next_key = DECODE_RAW_INPUT.get(code, code)
     return next_key
 
@@ -77,15 +75,13 @@ def show(menu_entries: List[str]) -> List[Tuple[str, bool]]:
         while True:
             for menu_index, menu_entry in enumerate(menu_entries):
                 tout.write("* " if menu_index == active_index else "  ")
-                tout.write(f'{menu_entry: <15}')
-                tout.write(green('ADD') if included[menu_index]
-                           else red('EXCLUDE'))
-                tout.write(TERM_COMMAND['clear_to_end_of_line'])
+                tout.write(f"{menu_entry: <15}")
+                tout.write(green("ADD") if included[menu_index] else red("EXCLUDE"))
+                tout.write(TERM_COMMAND["clear_to_end_of_line"])
                 if menu_index < len(menu_entries) - 1:
                     tout.write("\n")
 
-            tout.write("\r" + (len(menu_entries) - 1) *
-                       TERM_COMMAND["cursor_up"])
+            tout.write("\r" + (len(menu_entries) - 1) * TERM_COMMAND["cursor_up"])
             tout.flush()
             next_key = read_input(tin)
             if next_key in set(("up", "k")):
@@ -100,8 +96,8 @@ def show(menu_entries: List[str]) -> List[Tuple[str, bool]]:
 
 
 def main() -> None:
-    branches = subprocess.check_output(['git', 'branch']).decode('utf-8')
-    print(show([b[2:] for b in branches.split('\n')]))
+    branches = subprocess.check_output(["git", "branch"]).decode("utf-8")
+    print(show([b[2:] for b in branches.split("\n")]))
 
 
 if __name__ == "__main__":

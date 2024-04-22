@@ -6,7 +6,7 @@ _all_resources: List[str] = []
 
 def mark_resource(name: str) -> None:
     if name in _all_resources:
-        raise ValueError(f'{name} resource is defined more than once')
+        raise ValueError(f"{name} resource is defined more than once")
     _all_resources.append(name)
 
 
