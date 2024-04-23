@@ -12,6 +12,12 @@
         "source": "DOT/languages/lua/call_luals.sh",
         "target": "~/.local/bin/lua-language-server"
     },
+    "stylua": {
+        "type": "exe",
+        "version": "0.20.0",
+        "installers": ["Github"],
+        "source_repo": "https://github.com/JohnnyMorganz/StyLua"
+    },
     "ts-lua": {
         "type": "parser",
         "language": "lua"

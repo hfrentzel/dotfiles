@@ -100,3 +100,6 @@
 [submodule "vim/nvim/pack/vendor/opt/friendly-snippets"]
 	path = vim/nvim/pack/vendor/opt/friendly-snippets
 	url = https://github.com/rafamadriz/friendly-snippets.git
+[submodule "vim/nvim/pack/vendor/opt/conform.nvim"]
+	path = vim/nvim/pack/vendor/opt/conform.nvim
+	url = https://github.com/stevearc/conform.nvim.git

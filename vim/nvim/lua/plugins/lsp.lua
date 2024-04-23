@@ -1,6 +1,10 @@
 -- lsp.lua
 -- Configure LSPs
 
+local format = function()
+    require("conform").format({async = true, lsp_fallback = true})
+end
+
 return {
     {'dressing.nvim', dir = '~/.config/nvim/pack/vendor/opt/dressing.nvim',
         keys = {
@@ -11,6 +15,14 @@ return {
             select = {
                 backend = {'builtin'},
                 builtin = { relative = 'cursor' }
+            }
+        }
+    },
+    {'conform.nvim', dir = '~/.config/nvim/pack/vendor/opt/conform.nvim',
+        ft = { "lua" },
+        opts = {
+            formatters_by_ft = {
+                lua = { "stylua" }
             }
         }
     },
@@ -40,7 +52,7 @@ return {
                 local args = {buffer = true, silent = true}
                 vim.diagnostic.config({severity_sort = true})
                 vim.wo.signcolumn = 'yes'
-                vim.keymap.set('n', 'g=', vim.lsp.buf.format, args)
+                vim.keymap.set('n', 'g=', format, args)
                 vim.keymap.set('n', 'K', vim.lsp.buf.hover, args)
                 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, args)
                 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, args)
