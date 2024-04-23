@@ -4,22 +4,22 @@ import re
 import shutil
 from typing import Callable, Dict, List, Optional, Tuple, Union
 
-from setup2.job import Job
-from setup2.managers.exe_class import Exe
-from setup2.managers.exe_class import desired as desired
-from setup2.managers.package_types.apt import Apt
-from setup2.managers.package_types.cargo import cargo_builder
-from setup2.managers.package_types.deb import deb_builder
-from setup2.managers.package_types.github import Github
-from setup2.managers.package_types.gitlab import Gitlab
-from setup2.managers.package_types.go import go_builder
-from setup2.managers.package_types.npm import Npm
-from setup2.managers.package_types.pip import Pip
-from setup2.managers.package_types.sequence import sequence_builder
-from setup2.managers.package_types.tar import tar_builder
-from setup2.managers.package_types.zip import zip_builder
-from setup2.output import print_grid
-from setup2.process import async_proc, ver_greater_than
+from setup.job import Job
+from setup.managers.exe_class import Exe
+from setup.managers.exe_class import desired as desired
+from setup.managers.package_types.apt import Apt
+from setup.managers.package_types.cargo import cargo_builder
+from setup.managers.package_types.deb import deb_builder
+from setup.managers.package_types.github import Github
+from setup.managers.package_types.gitlab import Gitlab
+from setup.managers.package_types.go import go_builder
+from setup.managers.package_types.npm import Npm
+from setup.managers.package_types.pip import Pip
+from setup.managers.package_types.sequence import sequence_builder
+from setup.managers.package_types.tar import tar_builder
+from setup.managers.package_types.zip import zip_builder
+from setup.output import print_grid
+from setup.process import async_proc, ver_greater_than
 
 VERSION_REGEX = re.compile(r"\d+\.\d+(\.\d+)?", re.M)
 

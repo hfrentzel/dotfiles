@@ -1,3 +1,3 @@
 #! /usr/bin/env python3
-from setup2 import run
+from setup import run
 run()

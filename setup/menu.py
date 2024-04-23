@@ -5,7 +5,7 @@ import termios
 from io import TextIOWrapper
 from typing import Iterator, List, Tuple
 
-from setup2.output import green, red
+from setup.output import green, red
 
 
 class XX:

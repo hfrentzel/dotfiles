@@ -3,11 +3,11 @@ import os
 from dataclasses import dataclass
 from typing import Callable, Coroutine, List, Optional, Tuple
 
-from setup2.conf import conf
-from setup2.job import Job
-from setup2.managers.manager import mark_resource
-from setup2.output import green, print_grid, red
-from setup2.process import async_proc
+from setup.conf import conf
+from setup.job import Job
+from setup.managers.manager import mark_resource
+from setup.output import green, print_grid, red
+from setup.process import async_proc
 
 
 @dataclass

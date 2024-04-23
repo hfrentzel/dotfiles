@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, Coroutine, Dict, List, Optional, Protocol, Sequence, Tuple, Type
 
-from setup2.job import Job
+from setup.job import Job
 
 from . import command, directory, exe, lib, parser, sym
 from .exe import create_bonus_jobs

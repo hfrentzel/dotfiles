@@ -1,7 +1,7 @@
 from typing import Optional, Tuple
 
-from setup2.managers.manager import Package
-from setup2.process import ver_greater_than
+from setup.managers.manager import Package
+from setup.process import ver_greater_than
 
 
 def check_install(curr_ver: Optional[str], package: Package) -> Tuple[bool, str]:

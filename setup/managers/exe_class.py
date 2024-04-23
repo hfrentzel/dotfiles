@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, TypedDict, Union
 
-from setup2.managers.manager import mark_resource
+from setup.managers.manager import mark_resource
 
 
 @dataclass

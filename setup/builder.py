@@ -3,9 +3,9 @@ import os
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from setup2.conf import conf
-from setup2.managers import ALL_MANAGERS
-from setup2.menu import show
+from setup.conf import conf
+from setup.managers import ALL_MANAGERS
+from setup.menu import show
 
 USER_CONFIG = os.path.expanduser("~/.config/env_setup/config.json")
 
@@ -52,7 +52,7 @@ def generate_resource(name: str, spec: Dict[str, Any]) -> Optional[Tuple[Any, st
 
 
 def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
-    with open(os.path.join(conf.dotfiles_home, "main2.json"), encoding="utf-8") as f:
+    with open(os.path.join(conf.dotfiles_home, "main.json"), encoding="utf-8") as f:
         base_spec = json.loads(f.read())
     addons = base_spec["addons"]
     specs: Dict[str, Dict[str, Any]] = base_spec["resources"]

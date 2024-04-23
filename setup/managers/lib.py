@@ -2,10 +2,10 @@ import asyncio
 from dataclasses import dataclass
 from typing import List, Tuple
 
-from setup2.managers.manager import mark_resource
-from setup2.managers.package_types.npm import Npm
-from setup2.managers.package_types.pip import Pip
-from setup2.output import print_grid
+from setup.managers.manager import mark_resource
+from setup.managers.package_types.npm import Npm
+from setup.managers.package_types.pip import Pip
+from setup.output import print_grid
 
 
 @dataclass
