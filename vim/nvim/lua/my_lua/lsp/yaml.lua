@@ -13,10 +13,9 @@ M.before_init = function(_, config)
     for dir, schemas in pairs(schema_overrides) do
         if dir == config.root_dir then
             config.settings.yaml.schemas =
-            vim.tbl_extend('force', config.settings.yaml.schemas, schemas)
+                vim.tbl_extend('force', config.settings.yaml.schemas, schemas)
         end
     end
 end
-
 
 return M

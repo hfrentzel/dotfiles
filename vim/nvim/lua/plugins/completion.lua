@@ -12,26 +12,28 @@ local in_whitespace = function()
 end
 
 return {
-    {'nvim-cmp', dir = '~/.config/nvim/pack/vendor/opt/nvim-cmp',
-        event = "InsertEnter",
+    {
+        'nvim-cmp',
+        dir = '~/.config/nvim/pack/vendor/opt/nvim-cmp',
+        event = 'InsertEnter',
         dependencies = {
-            {'cmp-buffer', dir = '~/.config/nvim/pack/vendor/opt/cmp-buffer'},
-            {'cmp-nvim-lsp', dir = '~/.config/nvim/pack/vendor/opt/cmp-nvim-lsp'},
-            {'cmp-nvim-lua', dir = '~/.config/nvim/pack/vendor/opt/cmp-nvim-lua'},
-            {'cmp-path', dir = '~/.config/nvim/pack/vendor/opt/cmp-path'},
-            {'cmp_luasnip', dir = '~/.config/nvim/pack/vendor/opt/cmp_luasnip'},
-            {'LuaSnip', dir = '~/.config/nvim/pack/vendor/opt/LuaSnip'},
-            {'friendly-snippets', dir = '~/.config/nvim/pack/vendor/opt/friendly-snippets'},
+            { 'cmp-buffer', dir = '~/.config/nvim/pack/vendor/opt/cmp-buffer' },
+            { 'cmp-nvim-lsp', dir = '~/.config/nvim/pack/vendor/opt/cmp-nvim-lsp' },
+            { 'cmp-nvim-lua', dir = '~/.config/nvim/pack/vendor/opt/cmp-nvim-lua' },
+            { 'cmp-path', dir = '~/.config/nvim/pack/vendor/opt/cmp-path' },
+            { 'cmp_luasnip', dir = '~/.config/nvim/pack/vendor/opt/cmp_luasnip' },
+            { 'LuaSnip', dir = '~/.config/nvim/pack/vendor/opt/LuaSnip' },
+            { 'friendly-snippets', dir = '~/.config/nvim/pack/vendor/opt/friendly-snippets' },
         },
         init = function()
-            vim.o.completeopt='menu,menuone,noselect'
+            vim.o.completeopt = 'menu,menuone,noselect'
         end,
         opts = function()
             local cmp = require('cmp')
             local luasnip = require('luasnip')
             require('luasnip.loaders.from_vscode').lazy_load()
 
-            return{
+            return {
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
@@ -44,12 +46,12 @@ return {
                         else
                             fallback()
                         end
-                    end, {'i', 's'}),
+                    end, { 'i', 's' }),
 
                     ['<Tab>'] = cmp.mapping(function(_)
                         if cmp.visible() then
                             if #cmp.get_entries() == 1 then
-                                cmp.confirm({select = true})
+                                cmp.confirm({ select = true })
                             else
                                 cmp.select_next_item()
                             end
@@ -58,34 +60,38 @@ return {
                         elseif in_whitespace() then
                             vim.api.nvim_feedkeys(
                                 vim.api.nvim_replace_termcodes('<Tab>', true, true, true),
-                                'nt', true)
+                                'nt',
+                                true
+                            )
                         else
                             cmp.complete()
                             if #cmp.get_entries() == 0 then
                                 vim.api.nvim_feedkeys(
                                     vim.api.nvim_replace_termcodes('<Tab>', true, true, true),
-                                    'nt', true)
+                                    'nt',
+                                    true
+                                )
                             end
                         end
-                    end, {'i', 's'}),
+                    end, { 'i', 's' }),
 
                     ['<Enter>'] = cmp.mapping(function(fallback)
                         if cmp.get_selected_entry() ~= nil then
-                            cmp.confirm({select = true})
+                            cmp.confirm({ select = true })
                         else
                             fallback()
                         end
-                    end, {'i', 's'})
+                    end, { 'i', 's' }),
                 },
 
                 sources = cmp.config.sources({
-                    { name = 'nvim_lsp'},
-                    { name = 'buffer'},
-                    { name = 'luasnip'},
-                    { name = 'nvim_lua'},
-                    { name = 'path'}
-                })
+                    { name = 'nvim_lsp' },
+                    { name = 'buffer' },
+                    { name = 'luasnip' },
+                    { name = 'nvim_lua' },
+                    { name = 'path' },
+                }),
             }
-        end
-    }
+        end,
+    },
 }

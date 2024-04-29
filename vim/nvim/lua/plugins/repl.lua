@@ -2,10 +2,12 @@
 -- Implement REPL integration using vim-slime
 
 return {
-    {'vim-slime', dir = '~/.config/nvim/pack/vendor/opt/vim-slime',
+    {
+        'vim-slime',
+        dir = '~/.config/nvim/pack/vendor/opt/vim-slime',
         keys = {
-            { "<leader><enter>",  "<Plug>SlimeRegionSend", mode='x'},
-            { "<leader><enter>",  "<Plug>SlimeParagraphSend"},
+            { '<leader><enter>', '<Plug>SlimeRegionSend', mode = 'x' },
+            { '<leader><enter>', '<Plug>SlimeParagraphSend' },
         },
         init = function()
             vim.g.slime_no_mappings = 1
@@ -14,9 +16,9 @@ return {
             vim.g.slime_paste_file = vim.fn.tempname()
             vim.g.slime_target = 'tmux'
             vim.g.slime_default_config = {
-                socket_name='default',
-                target_pane='{right-of}'
+                socket_name = 'default',
+                target_pane = '{right-of}',
             }
-        end
-    }
+        end,
+    },
 }

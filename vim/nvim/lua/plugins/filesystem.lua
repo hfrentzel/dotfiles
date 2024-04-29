@@ -4,8 +4,8 @@
 
 -- Open an NvimTree window replacing the current buffer
 local vinegar_open = function()
-    local core = require'nvim-tree.core'
-    local view = require"nvim-tree.view"
+    local core = require('nvim-tree.core')
+    local view = require('nvim-tree.view')
     vim.g.curr_file = vim.fn.expand('%')
     if vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()) == '' then
         -- based off of nvim-tree.open_replacing_current_buffer but can
@@ -15,27 +15,32 @@ local vinegar_open = function()
             core.init(cwd)
         end
         view.open_in_current_win({
-            hijack_current_buf = false, resize = false
+            hijack_current_buf = false,
+            resize = false,
         })
-        require"nvim-tree.renderer".draw()
+        require('nvim-tree.renderer').draw()
     else
-        require"nvim-tree.api".tree.open({
-            current_window=true,
-            find_file=true,
-            path=vim.fn.expand('%:h')})
+        require('nvim-tree.api').tree.open({
+            current_window = true,
+            find_file = true,
+            path = vim.fn.expand('%:h'),
+        })
     end
     vim.b.curr_file = vim.g.curr_file
 end
 
 return {
-    {'eunuch', dir='~/.config/nvim/pack/vendor/opt/eunuch/',
-        cmd = {'Copy', 'Duplicate', 'Mkdir', 'Move',
-            'Rename', 'Remove', 'SudoWrite'}
+    {
+        'eunuch',
+        dir = '~/.config/nvim/pack/vendor/opt/eunuch/',
+        cmd = { 'Copy', 'Duplicate', 'Mkdir', 'Move', 'Rename', 'Remove', 'SudoWrite' },
     },
-    {'nvim-tree.lua', dir='~/.config/nvim/pack/vendor/opt/nvim-tree.lua/',
+    {
+        'nvim-tree.lua',
+        dir = '~/.config/nvim/pack/vendor/opt/nvim-tree.lua/',
         keys = {
-            {'<leader>1', ':NvimTreeFocus<CR>'},
-            {'-', vinegar_open}
+            { '<leader>1', ':NvimTreeFocus<CR>' },
+            { '-', vinegar_open },
         },
         init = function()
             vim.g.loaded_netrw = 1
@@ -48,12 +53,12 @@ return {
             -- and go back to previous buffer
             local close_tree = function()
                 if vim.b.curr_file ~= '' then
-                    require("nvim-tree.actions.node.open-file").fn(
-                        "edit_in_place", vim.b.curr_file)
+                    require('nvim-tree.actions.node.open-file').fn('edit_in_place', vim.b.curr_file)
                 elseif vim.b.curr_file == '' then
                     vim.api.nvim_feedkeys(
                         vim.api.nvim_replace_termcodes('<c-6>', true, true, true),
-                        'n', true
+                        'n',
+                        true
                     )
                 else
                     api.tree.close()
@@ -71,8 +76,7 @@ return {
             end
 
             local on_attach = function(bufnr)
-                local opts = {buffer = bufnr, noremap = true, silent = true,
-                    nowait = true }
+                local opts = { buffer = bufnr, noremap = true, silent = true, nowait = true }
 
                 vim.keymap.set('n', '-', close_tree, opts)
                 vim.keymap.set('n', '<c-\\>', api.node.open.vertical, opts)
@@ -85,27 +89,27 @@ return {
                 actions = {
                     open_file = {
                         -- quit_on_open = true
-                    }
+                    },
                 },
                 filters = {
-                    dotfiles = false
+                    dotfiles = false,
                 },
-                renderer =  {
+                renderer = {
                     icons = {
                         glyphs = {
                             folder = {
                                 arrow_closed = '▸',
-                                arrow_open = '▾'
-                            }
+                                arrow_open = '▾',
+                            },
                         },
                         show = {
                             file = false,
-                            folder = false
-                        }
+                            folder = false,
+                        },
                     },
                 },
-                on_attach=on_attach
+                on_attach = on_attach,
             })
-        end
-    }
+        end,
+    },
 }
