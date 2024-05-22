@@ -4,28 +4,12 @@
 
 -- Open an NvimTree window replacing the current buffer
 local vinegar_open = function()
-    local core = require('nvim-tree.core')
-    local view = require('nvim-tree.view')
     vim.g.curr_file = vim.fn.expand('%')
-    if vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()) == '' then
-        -- based off of nvim-tree.open_replacing_current_buffer but can
-        -- be used when current buffer is unnamed
-        local cwd = vim.fn.fnamemodify('', ':p:h')
-        if not core.get_explorer() or cwd ~= core.get_cwd() then
-            core.init(cwd)
-        end
-        view.open_in_current_win({
-            hijack_current_buf = false,
-            resize = false,
-        })
-        require('nvim-tree.renderer').draw()
-    else
-        require('nvim-tree.api').tree.open({
-            current_window = true,
-            find_file = true,
-            path = vim.fn.expand('%:h'),
-        })
-    end
+    require('nvim-tree.api').tree.open({
+        current_window = true,
+        find_file = true,
+        path = vim.fn.expand('%:h'),
+    })
     vim.b.curr_file = vim.g.curr_file
 end
 
@@ -89,6 +73,9 @@ return {
                 actions = {
                     open_file = {
                         -- quit_on_open = true
+                    },
+                    change_dir = {
+                        enable = false,
                     },
                 },
                 filters = {
