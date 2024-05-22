@@ -11,7 +11,7 @@
     mt = mergetool
 
     # Go to main/master branch, whatever the name is
-    home = !git checkout $(git remote show origin | sed -n '/HEAD branch/s/.*: //p')
+    home = !git checkout master 2> /dev/null || git checkout main
 
     # Stage all changed files
     A = add -A
