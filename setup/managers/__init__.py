@@ -15,7 +15,7 @@ class Spec(Protocol):
 # https://github.com/python/mypy/issues/7041
 class Manager(Protocol):
     @property
-    def Resource(self) -> Type[Spec]:  # pylint: disable=invalid-name
+    def Resource(self) -> Type[Spec]:  # noqa: N802
         ...
 
     @property

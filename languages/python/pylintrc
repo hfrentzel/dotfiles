@@ -1,13 +1,16 @@
 [MAIN]
 disable=
     f-string-without-interpolation,
+    invalid-name,
     logging-fstring-interpolation,
     missing-class-docstring,
     missing-function-docstring,
     missing-module-docstring,
     no-value-for-parameter,
+    subprocess-run-check,
     syntax-error,
     too-many-function-args,
+    trailing-newlines,
     trailing-whitespace,
     undefined-variable,
     unsubscriptable-object,

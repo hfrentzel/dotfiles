@@ -14,7 +14,7 @@ class XX:
 
     @contextlib.contextmanager
     def tty_handler(self) -> Iterator[Tuple[TextIOWrapper, TextIOWrapper]]:
-        tty_in = open("/dev/tty", "r", encoding="utf-8")
+        tty_in = open("/dev/tty", encoding="utf-8")
         tty_out = open("/dev/tty", "w", encoding="utf-8", errors="replace")
         old_term = termios.tcgetattr(tty_in.fileno())
         new_term = termios.tcgetattr(tty_in.fileno())
