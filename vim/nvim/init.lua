@@ -22,7 +22,5 @@ end
 
 require('lazy').setup(build_list({
     'nvim-dap',
-    'nvim-lspconfig',
-
     'base16-vim',
 }))
