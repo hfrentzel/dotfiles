@@ -1,4 +1,4 @@
-statusline = {}
+local statusline = {}
 
 statusline.diagnostics = function()
     local b = vim.b
@@ -31,13 +31,13 @@ statusline.determine_side = function()
         if vim.g.merge_type == 'MERGING' then
             return string.format("Branch '%s' being merged onto", vim.g.merge_head)
         else
-            return string.format('New Parent commit')
+            return 'New Parent commit'
         end
     else
         if vim.g.merge_type == 'MERGING' then
             return string.format("Branch '%s' trying to be merged", vim.g.merging_branch)
         else
-            return string.format('Commit being rebased')
+            return 'Commit being rebased'
         end
     end
 end

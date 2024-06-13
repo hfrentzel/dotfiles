@@ -12,10 +12,16 @@
         "source": "DOT/languages/lua/call_luals.sh",
         "target": "~/.local/bin/lua-language-server"
     },
+    "selene": {
+        "type": "exe",
+        "version": "0.27.1",
+        "installers": ["Github"],
+        "source_repo": "https://github.com/Kampfkarren/selene"
+    },
     "stylua": {
         "type": "exe",
         "version": "0.20.0",
-        "installers": ["Github"],
+        "installers": ["Cargo"],
         "source_repo": "https://github.com/JohnnyMorganz/StyLua"
     },
     "ts-lua": {

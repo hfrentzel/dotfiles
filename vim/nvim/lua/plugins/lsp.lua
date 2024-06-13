@@ -31,6 +31,27 @@ return {
         },
     },
     {
+        'nvim-lint',
+        dir = '~/.config/nvim/pack/vendor/opt/nvim-lint',
+        ft = { 'lua' },
+        config = function()
+            local lint = require('lint')
+            lint.linters_by_ft = {
+                lua = { 'selene' },
+            }
+            local timer = vim.uv.new_timer()
+            vim.api.nvim_create_autocmd({ 'TextChanged', 'TextChangedI', 'BufReadPost' }, {
+                group = vim.api.nvim_create_augroup('nvim-lint', { clear = true }),
+                callback = function()
+                    timer:start(100, 0, function()
+                        timer:stop()
+                        vim.schedule_wrap(lint.try_lint)()
+                    end)
+                end,
+            })
+        end,
+    },
+    {
         'nvim-lspconfig',
         dir = '~/.config/nvim/pack/vendor/opt/nvim-lspconfig',
         event = { 'BufReadPre', 'BufNewFile' },
