@@ -29,6 +29,8 @@ def current_status(sym: Resource) -> Tuple[bool, str]:
         if os.path.islink(dest):
             return (True, "LINKED")
         return (False, "BLOCKED")
+    if os.path.islink(dest):
+        return (False, "STALE")
     return (False, "MISSING")
 
 
@@ -73,6 +75,8 @@ def create_symlink(source: str, target: str) -> Callable[[], Coroutine[None, Non
         dest = os.path.expanduser(target)
         print(f"Creating symlink at {dest}...")
         os.makedirs(os.path.dirname(dest), exist_ok=True)
+        if os.path.islink(dest):
+            os.remove(dest)
         os.symlink(src, dest)
 
         return True
