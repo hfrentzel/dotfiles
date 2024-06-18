@@ -5,7 +5,7 @@ statusline.diagnostics = function()
     local output = ''
     local no_problems = true
     if b.diagnostic_counts == nil then
-        return ''
+        return tree
     end
     if b.diagnostic_counts.error > 0 then
         output = string.format('%%1*E %s', b.diagnostic_counts.error)
@@ -16,10 +16,15 @@ statusline.diagnostics = function()
         no_problems = false
     end
     if no_problems then
-        return '✓'
+        return string.format('✓ %s', tree)
     else
-        return string.format('%s%%*', output)
+        return string.format('%s%%* %s', output, tree)
     end
+end
+
+statusline.modified = function()
+    local padding = vim.fn.getwininfo(vim.fn.win_getid())[1].textoff
+    return (vim.bo.modified and '%4*' or '%5*') .. (' '):rep(padding) .. '%*'
 end
 
 statusline.status_rhs = function()

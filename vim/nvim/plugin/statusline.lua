@@ -1,5 +1,6 @@
-StandardStatusLine = function()
+local StandardStatusLine = function()
     return table.concat({
+        "%{%v:lua.require('my_lua.statusline').modified()%}",
         '%{get(b:,"adjusted_path","")}',
         '%3*%t%* %y', -- filename and filetype
         '%=',
@@ -9,7 +10,7 @@ StandardStatusLine = function()
     })
 end
 
-FugitiveStatusLine = function()
+local FugitiveStatusLine = function()
     return table.concat({
         '%3*%t%* %y ', -- filename and filetype
         "%{v:lua.require('my_lua.statusline').determine_side()}",

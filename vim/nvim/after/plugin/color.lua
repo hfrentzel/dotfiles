@@ -25,6 +25,8 @@ local function setColor()
     pinnacle.set('User1', { fg = pinnacle.fg('DiagnosticError'), bg = bg })
     pinnacle.set('User2', { fg = pinnacle.fg('DiagnosticWarn'), bg = bg })
     pinnacle.set('User3', pinnacle.embolden('StatusLine'))
+    pinnacle.set('User4', { bg = pinnacle.fg('DiffDelete')})
+    pinnacle.set('User5', { bg =  pinnacle.fg('DiffAdd')})
 end
 
 vim.api.nvim_create_augroup('TermColor', { clear = true })
