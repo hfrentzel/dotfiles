@@ -20,7 +20,23 @@ local function build_list(packages)
     return result
 end
 
-require('lazy').setup(build_list({
-    'nvim-dap',
-    'base16-vim',
-}))
+require('lazy').setup(
+    build_list({
+        'nvim-dap',
+        'base16-vim',
+    }),
+    {
+        performance = {
+            rtp = {
+                disabled_plugins = {
+                    'matchit',
+                    'matchparen',
+                    'netrwPlugin',
+                    'rplugin',
+                    'tutor',
+                    'tohtml',
+                },
+            },
+        },
+    }
+)

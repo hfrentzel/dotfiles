@@ -2,6 +2,7 @@ local statusline = {}
 
 statusline.diagnostics = function()
     local b = vim.b
+    local tree = require('nvim-treesitter.parsers').has_parser() and '🌳' or '🪓'
     local output = ''
     local no_problems = true
     if b.diagnostic_counts == nil then

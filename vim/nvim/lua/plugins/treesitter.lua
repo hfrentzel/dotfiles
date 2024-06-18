@@ -6,6 +6,8 @@ return {
     {
         'nvim-treesitter',
         dir = '~/.config/nvim/pack/vendor/opt/nvim-treesitter',
+        event = { 'BufReadPost', 'BufNewFile' },
+        cmd = { 'TSUpdate', 'TSUpdateSync' },
         dependencies = {
             {
                 'nvim-treesitter-textobjects',

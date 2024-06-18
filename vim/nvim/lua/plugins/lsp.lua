@@ -41,6 +41,7 @@ return {
             }
             local timer = vim.uv.new_timer()
             vim.api.nvim_create_autocmd({ 'TextChanged', 'TextChangedI', 'BufReadPost' }, {
+                pattern = { '*.lua' },
                 group = vim.api.nvim_create_augroup('nvim-lint', { clear = true }),
                 callback = function()
                     timer:start(100, 0, function()
@@ -162,6 +163,13 @@ return {
             nvim_lsp.rust_analyzer.setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
+                settings = {
+                    ['rust-analyzer'] = {
+                        check = {
+                            command = 'clippy',
+                        },
+                    },
+                },
             })
 
             nvim_lsp.tsserver.setup({
