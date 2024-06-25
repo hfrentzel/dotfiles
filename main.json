@@ -96,6 +96,12 @@
             "installers": ["Github"],
             "source_repo": "https://github.com/sharkdp/bat"
         },
+        "fd": {
+            "type": "exe",
+            "version": "10.1.0",
+            "installers": ["Github"],
+            "source_repo": "https://github.com/sharkdp/fd"
+        },
         "batconfig": {
             "type": "symlink",
             "source": "DOT/configs/batconfig",
