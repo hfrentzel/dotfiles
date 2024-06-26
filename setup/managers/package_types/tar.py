@@ -54,8 +54,9 @@ def tar_builder(spec: Exe, _: str = "") -> Job:
                 extract_path = find_extract_path(filename, t.mode, spec.command_name)
                 if extract_path is None:
                     continue
-                makedirs(extract_path, exist_ok=True)
-                tar.extract(t, f"{install_home}/{extract_path}")
+                full_extract_path = f"{install_home}/{extract_path}"
+                makedirs(full_extract_path, exist_ok=True)
+                tar.extract(t, full_extract_path)
 
             print(green(f"{spec.name} has been installed successfully"))
             return True
