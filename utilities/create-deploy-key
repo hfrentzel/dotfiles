@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+set -eu
+
+DIR=$1
+TITLE="$(whoami)@$(hostname)"
+KEY_FILE=$HOME/.ssh/"$DIR"_ed25519
+
+ssh-keygen -t ed25519 -C "$DIR pull" -f $KEY_FILE -N ""
+
+gh repo deploy-key add $KEY_FILE.pub -R hfrentzel/$DIR -t $TITLE
+
+cat <<EOF >> ~/.ssh/config
+
+Host $DIR
+    Hostname github.com
+    User git
+    IdentityFile $KEY_FILE
+EOF

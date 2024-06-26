@@ -1,7 +1,7 @@
 {
     "gh": {
         "type": "exe",
-        "version": "2.23.0",
+        "version": "2.51.0",
         "installers": ["Github"],
         "homepage": "https://cli.github.com/",
         "source_repo": "https://github.com/cli/cli"
