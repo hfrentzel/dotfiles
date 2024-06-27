@@ -34,6 +34,7 @@ return {
             require('luasnip.loaders.from_vscode').lazy_load()
 
             return {
+                preselect = cmp.PreselectMode.None,
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
