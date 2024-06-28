@@ -1,16 +1,18 @@
-from typing import List
+from typing import TYPE_CHECKING, List
 
 from setup.job import Job
-from setup.managers.exe_class import Exe
 from setup.output import green, red
 from setup.process import async_proc
+
+if TYPE_CHECKING:
+    from setup.managers.exe import Exe
 
 
 class Apt:
     all_apts: List[str] = []
 
     @classmethod
-    def apt_builder(cls, _: Exe, package: str) -> bool:
+    def apt_builder(cls, _: "Exe", package: str) -> bool:
         cls.all_apts.append(package)
         return True
 

@@ -48,7 +48,7 @@ def generate_resource(name: str, spec: Dict[str, Any]) -> Optional[Tuple[Any, st
         else:
             args[key] = value
 
-    return ALL_MANAGERS[resource_type].Resource(name, **args), resource_type
+    return ALL_MANAGERS[resource_type](name, **args), resource_type
 
 
 def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:

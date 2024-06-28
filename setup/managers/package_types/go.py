@@ -1,19 +1,14 @@
+from typing import TYPE_CHECKING
+
 from setup.job import Job
-from setup.managers.exe_class import Exe
 from setup.output import green, red
 from setup.process import async_proc
 
-Exe(
-    "go",
-    version="1.20.11",
-    on_demand=True,
-    installers=["Tar"],
-    extract_path="~/.local",
-    url="https://go.dev/dl/go{version}.linux-amd64.tar.gz",
-)
+if TYPE_CHECKING:
+    from setup.managers.exe import Exe
 
 
-def go_builder(spec: Exe, _: str = "") -> Job:
+def go_builder(spec: "Exe", _: str = "") -> Job:
     async def inner() -> bool:
         print(f"Installing {spec.name} with go...")
         result = await async_proc(f"go install {spec.url}@v{spec.version}")

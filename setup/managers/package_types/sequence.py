@@ -1,9 +1,13 @@
+from typing import TYPE_CHECKING
+
 from setup.job import Job
-from setup.managers.exe_class import Exe
 from setup.process import async_proc
 
+if TYPE_CHECKING:
+    from setup.managers.exe import Exe
 
-def sequence_builder(spec: Exe, _: str = "") -> Job:
+
+def sequence_builder(spec: "Exe", _: str = "") -> Job:
     async def inner() -> bool:
         print(f"Beginning steps to install {spec.name}")
         for step_template in spec.steps:

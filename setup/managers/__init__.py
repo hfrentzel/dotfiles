@@ -1,60 +1,37 @@
-from dataclasses import dataclass
-from typing import Any, Coroutine, Dict, List, Optional, Protocol, Sequence, Tuple, Type
+from typing import Dict, List, Type
 
 from setup.job import Job
 
-from . import command, directory, exe, lib, parser, sym
-from .exe import create_bonus_jobs
+from .command import Command
+from .directory import Directory
+from .exe import Exe as Exe
+from .lib import Library
+from .manager import Manager as Manager
+from .parser import Parser
+from .sym import Symlink
 
-
-@dataclass
-class Spec(Protocol):
-    name: str
-
-
-# https://github.com/python/mypy/issues/7041
-class Manager(Protocol):
-    @property
-    def Resource(self) -> Type[Spec]:  # noqa: N802
-        ...
-
-    @property
-    def desired(self) -> Sequence[Spec]: ...
-
-    @property
-    def check_results(self) -> Sequence[Tuple[Spec, bool, str]]: ...
-
-    def desired_printout(self) -> str: ...
-
-    def status_printout(self, show_all: bool) -> str: ...
-
-    def create_job(self, resource: Any) -> Optional[Job]: ...
-
-    def get_statuses(self) -> Coroutine[None, None, List[str]]: ...
-
-
-ALL_MANAGERS: Dict[str, Manager] = {
-    "command": command,
-    "directory": directory,
-    "exe": exe,
-    "library": lib,
-    "parser": parser,
-    "symlink": sym,
+ALL_MANAGERS: Dict[str, Type[Manager]] = {
+    "command": Command,
+    "directory": Directory,
+    "exe": Exe,
+    "library": Library,
+    "parser": Parser,
+    "symlink": Symlink,
 }
 
 
-def all_desired() -> List[Spec]:
+def all_desired() -> List[Manager]:
     return [
-        *command.desired,
-        *directory.desired,
-        *exe.desired,
-        *lib.desired,
-        *parser.desired,
-        *sym.desired,
+        *Command.desired,
+        *Directory.desired,
+        *Exe.desired,
+        *Library.desired,
+        *Parser.desired,
+        *Symlink.desired,
     ]
 
 
-def create_jobs(selected_types: List[Manager]) -> Dict[str, Job]:
+def create_jobs(selected_types: List[Type[Manager]]) -> Dict[str, Job]:
     jobs = {}
     for t in selected_types:
         for resource, complete, status in t.check_results:
@@ -64,8 +41,8 @@ def create_jobs(selected_types: List[Manager]) -> Dict[str, Job]:
                 # TODO Add unblocking job
                 pass
             else:
-                job = t.create_job(resource)
+                job = resource.create_job()
                 if job is not None:
                     jobs[resource.name] = job
-    jobs.update(create_bonus_jobs())
+    jobs.update(Exe.create_bonus_jobs())
     return jobs

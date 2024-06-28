@@ -1,14 +1,16 @@
-from .managers.exe import Resource as Exe
+from typing import Optional
+
+from .managers.exe import Exe
 from .managers.package_types.github import Github
 from .managers.package_types.gitlab import Gitlab
 from .output import green, red, yellow
 from .process import filter_assets
 
 
-async def search_assets(exe: Exe):
+async def search_assets(exe: Exe) -> Optional[str]:
     if "Github" not in exe.installers and "Gitlab" not in exe.installers:
         print(f"{exe.name} is not installable by Github or Gitlab")
-        return
+        return None
 
     if "Github" in exe.installers:
         release = await Github.get_release(exe.repo, exe.version)
@@ -30,3 +32,4 @@ async def search_assets(exe: Exe):
             print(f"* {color(asset)}")
         else:
             print(f"  {asset}")
+    return None

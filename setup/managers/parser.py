@@ -1,74 +1,70 @@
 import os
 from dataclasses import dataclass
-from typing import Callable, Coroutine, List, Tuple
+from typing import Callable, ClassVar, Coroutine, List, Tuple
 
 from setup.job import Job
-from setup.managers.manager import mark_resource
+from setup.managers.manager import Manager, mark_resource
 from setup.output import print_grid
 from setup.process import async_proc
 
 
 @dataclass
-class Resource:
+class Parser(Manager):
+    desired: ClassVar[List["Parser"]] = []
+    check_results: ClassVar[List[Tuple["Parser", bool, str]]] = []
     name: str
     language: str
 
     def __post_init__(self) -> None:
         mark_resource(self.name)
-        desired.append(self)
+        self.desired.append(self)
 
+    def current_status(self) -> Tuple[bool, str]:
+        file = f"{self.language}.so"
+        parser_dir = os.path.expanduser("~/.local/share/nvim/site/self")
+        if os.path.exists(f"{parser_dir}/{file}"):
+            return (True, "INSTALLED")
+        return (False, "MISSING")
 
-desired: List[Resource] = []
-check_results: List[Tuple[Resource, bool, str]] = []
+    @classmethod
+    def desired_printout(cls) -> str:
+        lines = []
+        for parser in sorted(cls.desired, key=lambda p: p.language):
+            lines.append((parser.language,))
+        return print_grid(("TREESITTER LANGUAGES",), lines)
 
+    @classmethod
+    async def get_statuses(cls) -> List[str]:
+        complete = []
+        for parser in cls.desired:
+            result = cls.current_status(parser)
+            if result[0]:
+                complete.append(parser.name)
+            cls.check_results.append((parser, *result))
+        return complete
 
-def current_status(parser: Resource) -> Tuple[bool, str]:
-    file = f"{parser.language}.so"
-    parser_dir = os.path.expanduser("~/.local/share/nvim/site/parser")
-    if os.path.exists(f"{parser_dir}/{file}"):
-        return (True, "INSTALLED")
-    return (False, "MISSING")
+    @classmethod
+    def status_printout(cls, show_all: bool) -> str:
+        lines = []
+        for parser, complete, status in sorted(cls.check_results, key=(lambda s: s[0].language)):
+            if not show_all and complete:
+                continue
+            lines.append((parser.language, (status, complete)))
+        return print_grid(("TS PARSER", "STATUS"), lines)
 
+    def create_job(self) -> Job:
+        return Job(
+            names=[self.name],
+            description=f"Install TS self for {self.language}",
+            depends_on="neovim",
+            job=self.install_ts_parser(self.language),
+        )
 
-def desired_printout() -> str:
-    lines = []
-    for parser in sorted(desired, key=lambda p: p.language):
-        lines.append((parser.language,))
-    return print_grid(("TREESITTER LANGUAGES",), lines)
+    @staticmethod
+    def install_ts_parser(language: str) -> Callable[[], Coroutine[None, None, bool]]:
+        async def inner() -> bool:
+            print(f"Installing Treesitter parser for {language}...")
+            await async_proc(f'nvim --headless +"TSInstallSync {language}" +q')
+            return True
 
-
-async def get_statuses() -> List[str]:
-    complete = []
-    for parser in desired:
-        result = current_status(parser)
-        if result[0]:
-            complete.append(parser.name)
-        check_results.append((parser, *result))
-    return complete
-
-
-def status_printout(show_all: bool) -> str:
-    lines = []
-    for parser, complete, status in sorted(check_results, key=(lambda s: s[0].language)):
-        if not show_all and complete:
-            continue
-        lines.append((parser.language, (status, complete)))
-    return print_grid(("TS PARSER", "STATUS"), lines)
-
-
-def create_job(parser: Resource) -> Job:
-    return Job(
-        names=[parser.name],
-        description=f"Install TS parser for {parser.language}",
-        depends_on="neovim",
-        job=install_ts_parser(parser.language),
-    )
-
-
-def install_ts_parser(language: str) -> Callable[[], Coroutine[None, None, bool]]:
-    async def inner() -> bool:
-        print(f"Installing Treesitter parser for {language}...")
-        await async_proc(f'nvim --headless +"TSInstallSync {language}" +q')
-        return True
-
-    return inner
+        return inner

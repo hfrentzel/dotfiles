@@ -1,18 +1,20 @@
 import json
-from typing import Any, Dict, List
+from typing import TYPE_CHECKING, Any, Dict, List
 
 from setup.job import Job
-from setup.managers.exe_class import Exe
 from setup.managers.package_types.deb import deb_builder
 from setup.managers.package_types.tar import tar_builder
 from setup.managers.package_types.zip import zip_builder
 from setup.output import red
 from setup.process import async_proc, filter_assets
 
+if TYPE_CHECKING:
+    from setup.managers.exe import Exe
+
 
 class Gitlab:
     @classmethod
-    def gitlab_builder(cls, spec: Exe, _: str = "") -> Job:
+    def gitlab_builder(cls, spec: "Exe", _: str = "") -> Job:
         async def inner() -> bool:
             repo = spec.repo
             tag = await cls.get_release(repo, spec.version)

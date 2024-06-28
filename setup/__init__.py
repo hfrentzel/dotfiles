@@ -4,23 +4,23 @@ import itertools
 import json
 import os
 import webbrowser
-from typing import List
+from typing import List, Type
 
 from .builder import build_resources, collect_specs, generate_resource
 from .conf import conf
 from .inspect import search_assets
 from .job import build_tree, print_job_tree
-from .managers import ALL_MANAGERS, Manager, Spec, all_desired, create_jobs, exe
+from .managers import ALL_MANAGERS, Exe, Manager, all_desired, create_jobs
 from .output import green, red
 
 
-async def handle_jobs(selected_types: List[Manager]) -> None:
+async def handle_jobs(selected_types: List[Type[Manager]]) -> None:
     if conf.args.stage == "desired":
         for t in selected_types:
             print(t.desired_printout(), end="")
         return
 
-    all_complete = await asyncio.gather(*[t.get_statuses() for t in ALL_MANAGERS.values()])
+    all_complete = await asyncio.gather(*[t.get_statuses() for t in selected_types])
     complete = list(itertools.chain.from_iterable(all_complete))
     if conf.args.stage in {None, "show_all"}:
         for t in selected_types:
@@ -48,14 +48,14 @@ async def handle_jobs(selected_types: List[Manager]) -> None:
         print(red("Not all jobs were successful. Check logs for details"))
 
 
-async def handle_single_resource(resource: Spec, resource_type: str) -> None:
+async def handle_single_resource(resource: Manager, resource_type: str) -> None:
     if resource.name in await ALL_MANAGERS[resource_type].get_statuses():
         print(f"{resource.name} is already set up")
         return
 
     job = (
         ALL_MANAGERS[resource_type].create_job(resource)
-        or list(exe.create_bonus_jobs().values())[0]
+        or list(Exe.create_bonus_jobs().values())[0]
     )
 
     if job.depends_on is not None:
@@ -81,7 +81,7 @@ async def handle_single_resource(resource: Spec, resource_type: str) -> None:
         print(red(f"Failed to set up {resource.name}"))
 
 
-def check():
+def check() -> None:
     resource = build_resources(conf.args.only)
     if resource:
         asyncio.run(handle_single_resource(*resource))
@@ -96,7 +96,7 @@ def check():
     asyncio.run(handle_jobs(selected_types))
 
 
-def show():
+def show() -> None:
     specs = collect_specs(include_all=True)
     if (spec := conf.args.spec[0]) in specs:
         print(json.dumps({spec: specs[spec]}, indent=4))
@@ -104,7 +104,7 @@ def show():
         print(f"Spec '{spec}' not found")
 
 
-def home():
+def home() -> None:
     specs = collect_specs(include_all=True)
     spec = conf.args.spec[0]
     if spec not in specs:
@@ -120,7 +120,7 @@ def home():
         return
 
 
-def source():
+def source() -> None:
     specs = collect_specs(include_all=True)
     spec = conf.args.spec[0]
     if spec not in specs:
@@ -134,7 +134,7 @@ def source():
         return
 
 
-def list_assets():
+def list_assets() -> None:
     specs = collect_specs(include_all=True)
     resource, _ = generate_resource(conf.args.spec[0], specs[conf.args.spec[0]])
     asyncio.run(search_assets(resource))

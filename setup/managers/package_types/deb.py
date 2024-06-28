@@ -1,10 +1,14 @@
+from typing import TYPE_CHECKING
+
 from setup.job import Job
-from setup.managers.exe_class import Exe
 from setup.output import green, red
 from setup.process import async_proc, fetch_file
 
+if TYPE_CHECKING:
+    from setup.managers.exe import Exe
 
-def deb_builder(spec: Exe, _: str = "") -> Job:
+
+def deb_builder(spec: "Exe", _: str = "") -> Job:
     async def inner() -> bool:
         print(f"Installing {spec.name} from debian archive...")
         archive_file = await fetch_file(spec.url, spec.version)

@@ -1,15 +1,18 @@
 import tarfile
 from os import makedirs, path
+from typing import TYPE_CHECKING
 
 from setup.conf import conf
 from setup.job import Job
-from setup.managers.exe_class import Exe
 from setup.managers.package_types.archive import find_extract_path
 from setup.output import green, red
 from setup.process import fetch_file
 
+if TYPE_CHECKING:
+    from setup.managers.exe import Exe
 
-def tar_builder(spec: Exe, _: str = "") -> Job:
+
+def tar_builder(spec: "Exe", _: str = "") -> Job:
     async def inner() -> bool:
         if conf.root_access:
             install_home = "/usr/local"

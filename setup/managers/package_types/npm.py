@@ -3,19 +3,10 @@ import os
 from typing import List, Optional, Tuple
 
 from setup.job import Job
-from setup.managers.exe_class import Exe
 from setup.managers.manager import Package
 from setup.managers.package_types.versioning import check_install
 from setup.output import green, red
 from setup.process import async_proc
-
-Exe(
-    "node",
-    version="18.13.0",
-    installers=["Tar"],
-    on_demand=True,
-    url="https://nodejs.org/dist/v{version}/node-v{version}-linux-x64.tar.xz",
-)
 
 
 class Npm:
