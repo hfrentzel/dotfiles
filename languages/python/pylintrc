@@ -1,5 +1,6 @@
 [MAIN]
 disable=
+    bad-classmethod-argument,
     f-string-without-interpolation,
     invalid-name,
     logging-fstring-interpolation,

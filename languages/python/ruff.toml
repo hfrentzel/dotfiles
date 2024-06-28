@@ -6,6 +6,8 @@ preview = true
 select = [
     # pycodestyle and Pyflakes
     "W", "E", "F", 
+    #pep-8-naming
+    "N",
     # isort
     "I", 
     # McCabe
