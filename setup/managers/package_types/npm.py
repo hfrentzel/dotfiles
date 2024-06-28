@@ -1,8 +1,6 @@
 import json
-import shlex
-import shutil
-import subprocess
-from typing import Dict, List, Optional, Tuple
+import os
+from typing import List, Optional, Tuple
 
 from setup.job import Job
 from setup.managers.exe_class import Exe
@@ -22,7 +20,6 @@ Exe(
 
 class Npm:
     all_packages: List[Tuple[str, str]] = []
-    curr_installed: Optional[Dict[str, str]] = None
 
     @classmethod
     def npm_builder(cls, spec: Package, package: str) -> bool:
@@ -61,19 +58,9 @@ class Npm:
 
     @classmethod
     def get_version(cls, package: Package) -> Optional[str]:
-        if cls.curr_installed is None:
-            if not shutil.which("npm"):
-                cls.curr_installed = {}
-                return None
-            results = json.loads(
-                subprocess.run(
-                    shlex.split("npm -g -j list"), check=False, capture_output=True
-                ).stdout.decode()
-            )
-            cls.curr_installed = {k: v["version"] for (k, v) in results["dependencies"].items()}
-        if cls.curr_installed.get(package.name) is None:
-            return None
-        return cls.curr_installed[package.name]
+        node_dir = os.path.expanduser("~/.local/lib/node_modules/")
+        with open(f"{node_dir}/{package.name}/package.json", encoding="utf-8") as f:
+            return json.loads(f.read())["version"]
 
     @classmethod
     def check_install(cls, package: Package) -> Tuple[bool, str]:

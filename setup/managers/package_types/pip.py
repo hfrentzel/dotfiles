@@ -1,7 +1,7 @@
-import json
-import shlex
+import os
+import re
 import subprocess
-from typing import Dict, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 from setup.job import Job
 from setup.managers.manager import Package
@@ -12,7 +12,7 @@ from setup.process import async_proc
 
 class Pip:
     all_pips: List[Tuple[str, str]] = []
-    curr_installed: Optional[Dict[str, str]] = None
+    files: str = ""
 
     @classmethod
     def pip_builder(cls, spec: Package, package: str) -> bool:
@@ -51,18 +51,21 @@ class Pip:
 
     @classmethod
     def get_version(cls, package: Package) -> Optional[str]:
-        if cls.curr_installed is None:
-            results = json.loads(
+        if not cls.files:
+            pip_dir = (
                 subprocess.run(
-                    shlex.split("python -m pip list --format=json"),
-                    check=False,
-                    capture_output=True,
-                ).stdout.decode()
+                    ["python", "-m", "site", "--user-site"], check=False, capture_output=True
+                )
+                .stdout.decode()
+                .strip()
             )
-            cls.curr_installed = {r["name"]: r["version"] for r in results}
-        if cls.curr_installed.get(package.name) is None:
-            return None
-        return cls.curr_installed[package.name]
+            cls.files = "\n".join([
+                s.replace("_", "-") for s in os.listdir(pip_dir) if "dist-info" in s
+            ])
+
+        if (m := re.search(f"{package.name}-(.*)\\.dist-info", cls.files)) is not None:
+            return m.group(1)
+        return None
 
     @classmethod
     def check_install(cls, package: Package) -> Tuple[bool, str]:
