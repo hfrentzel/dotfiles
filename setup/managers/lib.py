@@ -13,22 +13,24 @@ JOB_BUILDERS = {"pip": Pip.pip_builder, "npm": Npm.npm_builder}
 @dataclass
 class Library(Manager, Package):
     desired: ClassVar[List["Library"]] = []
-    check_results: ClassVar[List[Tuple["Library", bool, str]]] = []
     name: str
     version: str
     manager: str
+    state: Tuple[bool, str] = (False, "")
 
     def __post_init__(self) -> None:
         mark_resource(self.name)
         self.desired.append(self)
 
-    async def current_status(self) -> Tuple["Library", bool, str]:
+    async def set_status(self) -> None:
         if self.manager == "pip":
-            return (self, *Pip.check_install(self))
+            self.state = Pip.check_install(self)
+            return
         if self.manager == "npm":
-            return (self, *Npm.check_install(self))
+            self.state = Npm.check_install(self)
+            return
 
-        return (self, False, "UNKNOWN")
+        self.state = (False, "UNKNOWN")
 
     @classmethod
     def desired_printout(cls) -> str:
@@ -42,21 +44,20 @@ class Library(Manager, Package):
         complete = []
         tasks = []
         for lib in cls.desired:
-            tasks.append(lib.current_status())
-        results = await asyncio.gather(*tasks)
-        cls.check_results.extend(results)
-        for result in results:
-            if result[1]:
-                complete.append(result[0].name)
+            tasks.append(lib.set_status())
+        await asyncio.gather(*tasks)
+        for lib in cls.desired:
+            if lib.state[0]:
+                complete.append(lib.name)
         return complete
 
     @classmethod
     def status_printout(cls, show_all: bool) -> str:
         lines = []
-        for lib, complete, curr_ver in sorted(cls.check_results, key=(lambda b: b[0].name)):
-            if not show_all and complete:
+        for lib in sorted(cls.desired, key=(lambda b: b.name)):
+            if not show_all and lib.state[0]:
                 continue
-            lines.append((lib.name, lib.version, (curr_ver, complete)))
+            lines.append((lib.name, lib.version, (lib.state[1], lib.state[0])))
         return print_grid(("LIBRARY", "DESIRED", "CURRENT"), lines)
 
     def create_job(self) -> None:

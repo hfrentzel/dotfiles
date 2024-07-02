@@ -51,7 +51,9 @@ class Npm:
     def get_version(cls, package: Package) -> Optional[str]:
         node_dir = os.path.expanduser("~/.local/lib/node_modules/")
         with open(f"{node_dir}/{package.name}/package.json", encoding="utf-8") as f:
-            return json.loads(f.read())["version"]
+            if isinstance(version := json.loads(f.read()).get("version"), str):
+                return version
+        return None
 
     @classmethod
     def check_install(cls, package: Package) -> Tuple[bool, str]:

@@ -16,12 +16,13 @@ def print_grid(
             max_lengths[i] = max(length, item_len)
 
     line = ""
+
+    def format_cell(r: Union[str, Tuple[str, bool]]) -> str:
+        return r if isinstance(r, str) else (green if r[1] else red)(r[0])
+
     for row in [header, *rows]:
         line += (
-            " ".join([
-                f"{r if isinstance(r, str) else (green if r[1] else red)(r[0]): <{max(13, max_lengths[i])}}"
-                for i, r in enumerate(row)
-            ])
+            " ".join([f"{format_cell(r): <{max(13, max_lengths[i])}}" for i, r in enumerate(row)])
             + "\n"
         )
     line += "\n"

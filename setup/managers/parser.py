@@ -2,6 +2,7 @@ import os
 from dataclasses import dataclass
 from typing import Callable, ClassVar, Coroutine, List, Tuple
 
+from setup.conf import conf
 from setup.job import Job
 from setup.managers.manager import Manager, mark_resource
 from setup.output import print_grid
@@ -11,20 +12,23 @@ from setup.process import async_proc
 @dataclass
 class Parser(Manager):
     desired: ClassVar[List["Parser"]] = []
-    check_results: ClassVar[List[Tuple["Parser", bool, str]]] = []
     name: str
     language: str
+    state: Tuple[bool, str] = (False, "")
 
     def __post_init__(self) -> None:
         mark_resource(self.name)
         self.desired.append(self)
 
-    def current_status(self) -> Tuple[bool, str]:
+    async def set_status(self) -> None:
+        self._set_status()
+
+    def _set_status(self) -> None:
         file = f"{self.language}.so"
-        parser_dir = os.path.expanduser("~/.local/share/nvim/site/self")
-        if os.path.exists(f"{parser_dir}/{file}"):
-            return (True, "INSTALLED")
-        return (False, "MISSING")
+        if os.path.exists(f"{conf.parser_dir}/{file}"):
+            self.state = (True, "INSTALLED")
+            return
+        self.state = (False, "MISSING")
 
     @classmethod
     def desired_printout(cls) -> str:
@@ -37,19 +41,18 @@ class Parser(Manager):
     async def get_statuses(cls) -> List[str]:
         complete = []
         for parser in cls.desired:
-            result = cls.current_status(parser)
-            if result[0]:
+            parser._set_status()
+            if cls.state[0]:
                 complete.append(parser.name)
-            cls.check_results.append((parser, *result))
         return complete
 
     @classmethod
     def status_printout(cls, show_all: bool) -> str:
         lines = []
-        for parser, complete, status in sorted(cls.check_results, key=(lambda s: s[0].language)):
-            if not show_all and complete:
+        for parser in sorted(cls.desired, key=(lambda s: s.language)):
+            if not show_all and parser.state[0]:
                 continue
-            lines.append((parser.language, (status, complete)))
+            lines.append((parser.language, (parser.state[1], parser.state[0])))
         return print_grid(("TS PARSER", "STATUS"), lines)
 
     def create_job(self) -> Job:

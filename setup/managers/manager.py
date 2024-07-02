@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import ClassVar, List, Optional, Protocol, Sequence, Tuple
+from typing import ClassVar, List, Optional, Sequence, Tuple
 
 from setup.job import Job
 
@@ -19,16 +19,15 @@ class Package(ABC):
     version: str
 
 
-@dataclass
-class Spec(Protocol):
-    name: str
-
-
 # https://github.com/python/mypy/issues/7041
 class Manager(ABC):
     name: str
-    check_results: ClassVar[Sequence[Tuple["Manager", bool, str]]]
+    state: Tuple[bool, str]
     desired: ClassVar[Sequence["Manager"]]
+
+    @abstractmethod
+    async def set_status(self) -> None:
+        pass
 
     @classmethod
     @abstractmethod

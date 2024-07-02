@@ -13,9 +13,9 @@ from setup.process import async_proc
 @dataclass
 class Command(Manager):
     desired: ClassVar[List["Command"]] = []
-    check_results: ClassVar[List[Tuple["Command", bool, str]]] = []
     name: str
     run_script: str
+    state: Tuple[bool, str] = (False, "")
     check_script: Optional[str] = None
     depends_on: Optional[str] = None
     cwd: Optional[str] = None
@@ -24,29 +24,30 @@ class Command(Manager):
         mark_resource(self.name)
         self.desired.append(self)
 
-    async def current_status(self) -> Tuple["Command", bool, str]:
+    async def set_status(self) -> None:
         if isinstance(self.cwd, str):
             self.cwd = os.path.expanduser(self.cwd.replace("DOT", conf.dotfiles_home))
 
         if self.check_script is None:
-            return (self, False, "CANT VERIFY")
+            self.state = (False, "CANT VERIFY")
+            return
         result = await async_proc(self.check_script, cwd=self.cwd)
         if result.returncode == 0:
-            return (self, True, "DONE")
+            self.state = (True, "DONE")
+            return
 
-        return (self, False, "INCOMPLETE")
+        self.state = (False, "INCOMPLETE")
 
     @classmethod
     async def get_statuses(cls) -> List[str]:
         complete = []
         tasks = []
         for command in cls.desired:
-            tasks.append(command.current_status())
-        results = await asyncio.gather(*tasks)
-        cls.check_results.extend(results)
-        for result in results:
-            if result[1]:
-                complete.append(result[0].name)
+            tasks.append(command.set_status())
+        await asyncio.gather(*tasks)
+        for command in cls.desired:
+            if command.state[0]:
+                complete.append(command.name)
         return complete
 
     @classmethod
@@ -59,10 +60,10 @@ class Command(Manager):
     @classmethod
     def status_printout(cls, show_all: bool) -> str:
         lines = []
-        for command, complete, status in sorted(cls.check_results, key=(lambda c: c[0].name)):
-            if not show_all and complete:
+        for command in sorted(cls.desired, key=(lambda c: c.name)):
+            if not show_all and command.state[0]:
                 continue
-            lines.append((command.name, (status, complete)))
+            lines.append((command.name, (command.state[1], command.state[0])))
         return print_grid(("SCRIPT", "STATUS"), lines)
 
     def create_job(self) -> Job:

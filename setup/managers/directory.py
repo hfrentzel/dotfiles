@@ -10,21 +10,26 @@ from setup.output import print_grid
 @dataclass
 class Directory(Manager):
     desired: ClassVar[List["Directory"]] = []
-    check_results: ClassVar[List[Tuple["Directory", bool, str]]] = []
     name: str
     path: str
+    state: Tuple[bool, str] = (False, "")
 
     def __post_init__(self) -> None:
         mark_resource(self.name)
         self.desired.append(self)
 
-    def current_status(self) -> Tuple[bool, str]:
+    async def set_status(self) -> None:
+        self._set_status()
+
+    def _set_status(self) -> None:
         path = os.path.expanduser(self.path)
         if os.path.isdir(path):
-            return (True, "Exists")
+            self.state = (True, "Exists")
+            return
         if os.path.exists(path):
-            return (False, "BLOCKED")
-        return (False, "MISSING")
+            self.state = (False, "BLOCKED")
+            return
+        self.state = (False, "MISSING")
 
     @classmethod
     def desired_printout(cls) -> str:
@@ -37,19 +42,18 @@ class Directory(Manager):
     async def get_statuses(cls) -> List[str]:
         complete = []
         for directory in cls.desired:
-            result = directory.current_status()
-            if result[0]:
+            directory._set_status()
+            if directory.state[0]:
                 complete.append(directory.name)
-            cls.check_results.append((directory, *result))
         return complete
 
     @classmethod
     def status_printout(cls, show_all: bool) -> str:
         lines = []
-        for directory, complete, status in sorted(cls.check_results, key=(lambda d: d[0].path)):
-            if not show_all and complete:
+        for directory in sorted(cls.desired, key=(lambda d: d.path)):
+            if not show_all and directory.state[0]:
                 continue
-            lines.append((directory.path, (status, complete)))
+            lines.append((directory.path, (directory.state[1], directory.state[0])))
         return print_grid(("SUB-DIRECTORIES", "STATUS"), lines)
 
     def create_job(self) -> Job:

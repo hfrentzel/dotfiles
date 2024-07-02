@@ -10,7 +10,7 @@ from .builder import build_resources, collect_specs, generate_resource
 from .conf import conf
 from .inspect import search_assets
 from .job import build_tree, print_job_tree
-from .managers import ALL_MANAGERS, Exe, Manager, all_desired, create_jobs
+from .managers import ALL_MANAGERS, Manager, all_desired, create_bonus_jobs, create_jobs
 from .output import green, red
 
 
@@ -49,14 +49,12 @@ async def handle_jobs(selected_types: List[Type[Manager]]) -> None:
 
 
 async def handle_single_resource(resource: Manager, resource_type: str) -> None:
-    if resource.name in await ALL_MANAGERS[resource_type].get_statuses():
+    await resource.set_status()
+    if resource.state[0]:
         print(f"{resource.name} is already set up")
         return
 
-    job = (
-        ALL_MANAGERS[resource_type].create_job(resource)
-        or list(Exe.create_bonus_jobs().values())[0]
-    )
+    job = ALL_MANAGERS[resource_type].create_job(resource) or list(create_bonus_jobs().values())[0]
 
     if job.depends_on is not None:
         if not any(d.name == job.depends_on for d in all_desired()):

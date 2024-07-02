@@ -11,24 +11,30 @@ from setup.output import print_grid
 @dataclass
 class Symlink(Manager):
     desired: ClassVar[List["Symlink"]] = []
-    check_results: ClassVar[List[Tuple["Symlink", bool, str]]] = []
     name: str
     source: str
     target: str
+    state: Tuple[bool, str] = (False, "")
 
     def __post_init__(self) -> None:
         mark_resource(self.name)
         self.desired.append(self)
 
-    def current_status(self) -> Tuple[bool, str]:
+    async def set_status(self) -> None:
+        self._set_status()
+
+    def _set_status(self) -> None:
         dest = os.path.expanduser(self.target)
         if os.path.isfile(dest) or os.path.isdir(dest):
             if os.path.islink(dest):
-                return (True, "LINKED")
-            return (False, "BLOCKED")
+                self.state = (True, "LINKED")
+                return
+            self.state = (False, "BLOCKED")
+            return
         if os.path.islink(dest):
-            return (False, "STALE")
-        return (False, "MISSING")
+            self.state = (False, "STALE")
+            return
+        self.state = (False, "MISSING")
 
     @classmethod
     def desired_printout(cls) -> str:
@@ -41,19 +47,18 @@ class Symlink(Manager):
     async def get_statuses(cls) -> List[str]:
         complete = []
         for sym in cls.desired:
-            result = cls.current_status(sym)
-            if result[0]:
+            sym._set_status()
+            if sym.state[0]:
                 complete.append(sym.name)
-            cls.check_results.append((sym, *result))
         return complete
 
     @classmethod
     def status_printout(cls, show_all: bool) -> str:
         lines = []
-        for sym, complete, status in sorted(cls.check_results, key=(lambda s: s[0].name)):
-            if not show_all and complete:
+        for sym in sorted(cls.desired, key=(lambda s: s.name)):
+            if not show_all and sym.state[0]:
                 continue
-            lines.append((sym.name, (status, complete)))
+            lines.append((sym.name, (sym.state[1], sym.state[0])))
         return print_grid(("SYMLINK", "STATUS"), lines)
 
     def create_job(self) -> Job:

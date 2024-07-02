@@ -22,7 +22,7 @@ def build_resources(resource: Optional[str]) -> Optional[Tuple[Any, str]]:
     return None
 
 
-def generate_resource(name: str, spec: Dict[str, Any]) -> Optional[Tuple[Any, str]]:
+def generate_resource(name: str, spec: Dict[str, Any]) -> Tuple[Any, str]:
     resource_type = spec.pop("type")
 
     if spec.get("override"):
@@ -30,7 +30,7 @@ def generate_resource(name: str, spec: Dict[str, Any]) -> Optional[Tuple[Any, st
         old_value = next(e for e in ALL_MANAGERS[resource_type].desired if e.name == name)
         for key, value in spec.items():
             setattr(old_value, key, value)
-        return None
+        return old_value, resource_type
 
     args = {}
     for key, value in spec.items():

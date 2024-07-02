@@ -54,8 +54,8 @@ class InstallerSpec(TypedDict):
 @dataclass
 class Exe(Manager, Package):
     desired: ClassVar[List["Exe"]] = []
-    check_results: ClassVar[List[Tuple["Exe", bool, str]]] = []
     name: str
+    state: Tuple[bool, str] = (False, "")
     version: str = ""
     installers: List[Union[InstallerSpec, str]] = field(default_factory=list)
     depends_on: Optional[str] = None
@@ -73,12 +73,14 @@ class Exe(Manager, Package):
             self.command_name = self.name
         self.desired.append(self)
 
-    async def current_status(self) -> Tuple["Exe", bool, str]:
+    async def set_status(self) -> None:
         command = shutil.which(self.command_name)
         if command is None:
-            return (self, False, "MISSING")
+            self.state = False, "MISSING"
+            return
         if not self.version:
-            return (self, True, "ANY")
+            self.state = (True, "ANY")
+            return
 
         if self.version_cmd:
             subcommands = [self.version_cmd]
@@ -101,9 +103,10 @@ class Exe(Manager, Package):
 
         if curr_ver is not None:
             success = ver_greater_than(curr_ver, self.version)
-            return (self, success, curr_ver)
+            self.state = (success, curr_ver)
+            return
 
-        return (self, False, "UNKNOWN")
+        self.state = (False, "UNKNOWN")
 
     @classmethod
     def desired_printout(cls) -> str:
@@ -121,21 +124,20 @@ class Exe(Manager, Package):
         complete = []
         tasks = []
         for exe in cls.desired:
-            tasks.append(exe.current_status())
-        results = await asyncio.gather(*tasks)
-        cls.check_results.extend(results)
-        for result in results:
-            if result[1]:
-                complete.append(result[0].name)
+            tasks.append(exe.set_status())
+        await asyncio.gather(*tasks)
+        for exe in cls.desired:
+            if exe.state[0]:
+                complete.append(exe.name)
         return complete
 
     @classmethod
     def status_printout(cls, show_all: bool) -> str:
         lines = []
-        for exe, complete, curr_ver in sorted(cls.check_results, key=(lambda e: e[0].name)):
-            if not show_all and (complete or exe.on_demand):
+        for exe in sorted(cls.desired, key=(lambda e: e.name)):
+            if not show_all and (exe.state[0] or exe.on_demand):
                 continue
-            lines.append((exe.name, exe.version, (curr_ver, complete)))
+            lines.append((exe.name, exe.version, (exe.state[1], exe.state[0])))
         return print_grid(("COMMAND", "DESIRED", "CURRENT"), lines)
 
     def create_job(self) -> Optional[Job]:
@@ -152,17 +154,6 @@ class Exe(Manager, Package):
             if settled:
                 break
         return None
-
-    @staticmethod
-    def create_bonus_jobs() -> Dict[str, Job]:
-        jobs = {}
-        if len(Apt.all_apts) != 0:
-            jobs["apt_install"] = Apt.apt_job()
-        if len(Pip.all_pips) != 0:
-            jobs["pip_install"] = Pip.pip_job()
-        if len(Npm.all_packages) != 0:
-            jobs["npm_install"] = Npm.npm_job()
-        return jobs
 
 
 Exe(

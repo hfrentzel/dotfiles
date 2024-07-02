@@ -3,7 +3,7 @@ import os
 import platform
 from dataclasses import dataclass
 from itertools import zip_longest
-from typing import List, Literal, Optional, overload
+from typing import List, Literal, Optional, Union, overload
 
 from .conf import conf
 
@@ -74,7 +74,9 @@ def filter_assets(asset_list: List[str], return_all: Literal[True]) -> List[str]
 def filter_assets(asset_list: List[str]) -> Optional[str]: ...
 
 
-def filter_assets(asset_list, return_all=False):
+def filter_assets(
+    asset_list: List[str], return_all: Optional[bool] = False
+) -> Union[List[str], Optional[str]]:
     system = platform.uname()
     system_os = system.system.lower()
     hardware = set_hardware(system.machine.lower())
