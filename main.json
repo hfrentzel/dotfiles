@@ -16,6 +16,11 @@
             "source": "DOT/bash/plugins",
             "target": "~/.config/bash/plugins"
         },
+        "color": {
+            "type": "symlink",
+            "source": "DOT/appearance/term_colors.py",
+            "target": "~/.local/bin/color"
+        },
         "clean_profile": {
             "type": "command",
             "cwd": "~",

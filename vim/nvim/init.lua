@@ -23,7 +23,6 @@ end
 require('lazy').setup(
     build_list({
         'nvim-dap',
-        'base16-vim',
     }),
     {
         performance = {

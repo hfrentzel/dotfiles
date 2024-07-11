@@ -109,7 +109,6 @@ nnoremap <C-L> <C-W>l
 
 if has('packages')
     packadd! CamelCaseMotion
-    packadd! base16-vim
     packadd! fugitive
     packadd! eunuch
     packadd! vim-slime
@@ -117,7 +116,6 @@ if has('packages')
     packadd! vim-visual-multi
     packadd! vim-tmux-navigator
     packadd! tcomment_vim
-    packadd! pinnacle
 endif
 
 filetype plugin indent on

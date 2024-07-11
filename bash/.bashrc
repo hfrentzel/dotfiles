@@ -39,13 +39,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# Base16 Shell
-BASE16_SHELL="$HOME/.config/bash/plugins/base16-shell/"
-[ -n "$PS1" ] && \
-    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-        eval "$("$BASE16_SHELL/profile_helper.sh")"
-source ~/.config/bash/plugins/color.sh
-
 [ -n "$TMUX" ] && \
     tmux show-environment | grep ^USERPROFILE > /dev/null && \
     export $(tmux show-environment | grep ^USERPROFILE) && \
@@ -67,6 +60,9 @@ source $HOME/.config/bash/plugins/completions.sh
 source $HOME/.config/bash/plugins/utilities.sh
 source $HOME/.config/bash/plugins/aliases.sh
 source $HOME/.config/bash/plugins/env.sh
+
+BASE16_CONFIG="$HOME/.local/share/dotfiles/base16"
+test -f $BASE16_CONFIG && color $(cat $BASE16_CONFIG)
 
 if command -v zoxide &> /dev/null; then
     eval "$(zoxide init bash)"

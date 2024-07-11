@@ -10,24 +10,15 @@
 [submodule "vim/nvim/pack/vendor/opt/tcomment_vim"]
 	path = vim/nvim/pack/vendor/opt/tcomment_vim
 	url = https://github.com/tomtom/tcomment_vim
-[submodule "bash/plugins/base16-shell"]
-	path = bash/plugins/base16-shell
-	url = https://github.com/chriskempson/base16-shell.git
 [submodule "vim/nvim/pack/vendor/opt/command-t"]
 	path = vim/nvim/pack/vendor/opt/command-t
 	url = https://github.com/wincent/command-t.git
 [submodule "vim/nvim/pack/vendor/opt/vim-tmux-navigator"]
 	path = vim/nvim/pack/vendor/opt/vim-tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator
-[submodule "vim/nvim/pack/vendor/opt/pinnacle"]
-	path = vim/nvim/pack/vendor/opt/pinnacle
-	url = https://github.com/wincent/pinnacle.git
 [submodule "vim/nvim/pack/vendor/opt/nvim-lspconfig"]
 	path = vim/nvim/pack/vendor/opt/nvim-lspconfig
 	url = https://github.com/neovim/nvim-lspconfig
-[submodule "vim/nvim/pack/vendor/opt/base16-vim"]
-	path = vim/nvim/pack/vendor/opt/base16-vim
-	url = https://github.com/chriskempson/base16-vim.git
 [submodule "vim/nvim/pack/vendor/opt/nvim-cmp"]
 	path = vim/nvim/pack/vendor/opt/nvim-cmp
 	url = https://github.com/hrsh7th/nvim-cmp
@@ -106,3 +97,6 @@
 [submodule "vim/nvim/pack/vendor/opt/nvim-lint"]
 	path = vim/nvim/pack/vendor/opt/nvim-lint
 	url = https://github.com/mfussenegger/nvim-lint.git
+[submodule "appearance/schemes"]
+	path = appearance/schemes
+	url = https://github.com/tinted-theming/schemes.git
