@@ -3,11 +3,21 @@ import os
 import re
 import shutil
 from dataclasses import dataclass, field
-from typing import Callable, ClassVar, Dict, List, Optional, Tuple, TypedDict, Union
+from typing import (
+    Callable,
+    ClassVar,
+    Dict,
+    List,
+    Optional,
+    Tuple,
+    TypedDict,
+    Union,
+)
 
 from setup.job import Job
 from setup.managers.manager import Manager, Package, mark_resource
 from setup.managers.package_types.apt import Apt
+from setup.managers.package_types.build_hole import build_hole_builder
 from setup.managers.package_types.cargo import cargo_builder
 from setup.managers.package_types.deb import deb_builder
 from setup.managers.package_types.github import Github
@@ -24,6 +34,7 @@ from setup.process import async_proc, ver_greater_than
 VERSION_REGEX = re.compile(r"\d+\.\d+(\.\d+)?", re.M)
 JOB_BUILDERS: Dict[str, Callable[["Exe", str], Union[bool, Job]]] = {
     "Apt": Apt.apt_builder,
+    "bh": build_hole_builder,
     "Cargo": cargo_builder,
     "Deb": deb_builder,
     "Github": Github.github_builder,
@@ -87,7 +98,9 @@ class Exe(Manager, Package):
         else:
             subcommands = ["--version", "version", "-V", "-v"]
         for cmd in subcommands:
-            version = await async_proc(f"{self.command_name} {cmd}", forward_env=True)
+            version = await async_proc(
+                f"{self.command_name} {cmd}", forward_env=True
+            )
             if version.returncode == 0:
                 break
 
