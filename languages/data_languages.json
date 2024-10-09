@@ -23,7 +23,7 @@
     "yq": {
         "type": "exe",
         "version": "4.40.4",
-        "installers": ["Github", "Go"],
+        "installers": ["bh", "Go"],
         "homepage": "https://mikefarah.gitbook.io/yq/",
         "source_repo": "https://github.com/mikefarah/yq",
         "url": "github.com/mikefarah/yq"
