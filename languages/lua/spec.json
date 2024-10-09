@@ -15,13 +15,13 @@
     "selene": {
         "type": "exe",
         "version": "0.27.1",
-        "installers": ["Github"],
+        "installers": ["bh"],
         "source_repo": "https://github.com/Kampfkarren/selene"
     },
     "stylua": {
         "type": "exe",
         "version": "0.20.0",
-        "installers": ["Cargo"],
+        "installers": ["bh"],
         "source_repo": "https://github.com/JohnnyMorganz/StyLua"
     },
     "ts-lua": {
