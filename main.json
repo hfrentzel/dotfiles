@@ -40,6 +40,12 @@
             "type": "directory",
             "path": "~/.local/share/dotfiles"
         },
+        "tmux": {
+            "type": "exe",
+            "version": "3.3",
+            "installers": ["bh"],
+            "source_repo": "https://github.com/tmux/tmux"
+        },
         "tmux.conf": {
             "type": "symlink",
             "source": "DOT/tmux/tmux.conf",
