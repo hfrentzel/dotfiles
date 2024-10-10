@@ -14,6 +14,7 @@ return {
             { '<leader>a', vim.lsp.buf.code_action },
         },
         opts = {
+            input = { mappings = { i = { ['<Esc>'] = 'Close' } } },
             select = {
                 backend = { 'builtin' },
                 builtin = { relative = 'cursor' },
