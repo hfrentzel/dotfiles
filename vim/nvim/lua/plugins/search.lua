@@ -29,6 +29,9 @@ return {
             require('wincent.commandt').setup({
                 always_show_dot_files = true,
                 height = 30,
+                match_listing = { border = 'rounded' },
+                prompt = { border = 'rounded' },
+                traverse = 'pwd',
                 mappings = {
                     i = {
                         ['<C-\\>'] = 'open_vsplit',
