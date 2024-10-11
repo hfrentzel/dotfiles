@@ -34,5 +34,13 @@
     "ts-javascript": {
         "type": "parser",
         "language": "javascript"
+    },
+    "ts-tsx": {
+        "type": "parser",
+        "language": "tsx"
+    },
+    "ts-typescript": {
+        "type": "parser",
+        "language": "typescript"
     }
 }
