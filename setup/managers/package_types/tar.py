@@ -31,6 +31,7 @@ def tar_builder(spec: "Exe", _: str = "") -> Job:
             extract_path = None
 
             if len(all_files) == 1 and all_files[0].mode & 0b001001001:
+                all_files[0].path = all_files[0].name.split('/')[-1]
                 extract_path = f"{install_home}/bin"
                 tar.extract(all_files[0], extract_path)
                 print(green(f"{spec.name} has been installed successfully"))
