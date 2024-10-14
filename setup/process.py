@@ -32,7 +32,10 @@ def ver_greater_than(current: str, target: str) -> bool:
 
 
 async def async_proc(
-    cmd: str, cwd: Optional[str] = None, stdin: Optional[bytes] = None, forward_env: bool = False
+    cmd: str,
+    cwd: Optional[str] = None,
+    stdin: Optional[bytes] = None,
+    forward_env: bool = False,
 ) -> JobOutput:
     if isinstance(stdin, str):
         stdin = stdin.encode()
@@ -67,7 +70,9 @@ async def fetch_file(url: str, version: Optional[str]) -> str:
 
 
 @overload
-def filter_assets(asset_list: List[str], return_all: Literal[True]) -> List[str]: ...
+def filter_assets(
+    asset_list: List[str], return_all: Literal[True]
+) -> List[str]: ...
 
 
 @overload
@@ -84,7 +89,9 @@ def filter_assets(
         # TODO handle deb files when sudo permissions are available
         pass
 
-    asset_list = [a for a in asset_list if a.endswith(".zip") or a.endswith(".tar.gz")]
+    asset_list = [
+        a for a in asset_list if a.endswith(".zip") or a.endswith(".tar.gz")
+    ]
 
     if any(system_os in a for a in asset_list):
         asset_list = [a for a in asset_list if system_os in a]

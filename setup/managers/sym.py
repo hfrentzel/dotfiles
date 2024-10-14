@@ -69,7 +69,9 @@ class Symlink(Manager):
         )
 
     @staticmethod
-    def create_symlink(source: str, target: str) -> Callable[[], Coroutine[None, None, bool]]:
+    def create_symlink(
+        source: str, target: str
+    ) -> Callable[[], Coroutine[None, None, bool]]:
         async def inner() -> bool:
             src = source.replace("DOT", conf.dotfiles_home)
             src = os.path.expanduser(src)

@@ -27,7 +27,9 @@ class Job:
         return f"{self.names}, {self.job}"
 
 
-def print_job_tree(jobs: List[Job], level: int = 0, parent_is_last: bool = True) -> None:
+def print_job_tree(
+    jobs: List[Job], level: int = 0, parent_is_last: bool = True
+) -> None:
     for i, job in enumerate(jobs):
         is_last_item = i == len(jobs) - 1
 
@@ -44,7 +46,9 @@ def print_job_tree(jobs: List[Job], level: int = 0, parent_is_last: bool = True)
 def build_tree(jobs: Dict[str, Job], complete: List[str]) -> List[Job]:
     root_jobs = []
     for job_name, job in jobs.items():
-        if job.on_demand and not any(j.depends_on in job.names for j in jobs.values()):
+        if job.on_demand and not any(
+            j.depends_on in job.names for j in jobs.values()
+        ):
             continue
         if job.depends_on is None:
             root_jobs.append(job)
@@ -52,9 +56,13 @@ def build_tree(jobs: Dict[str, Job], complete: List[str]) -> List[Job]:
             root_jobs.append(job)
         else:
             try:
-                parent = next(j for j in jobs.values() if job.depends_on in j.names)
+                parent = next(
+                    j for j in jobs.values() if job.depends_on in j.names
+                )
             except StopIteration:
-                print(f"The dependency '{job.depends_on}' for job '{job_name}' is missing")
+                print(
+                    f"The dependency '{job.depends_on}' for job '{job_name}' is missing"
+                )
             parent.children.append(job)
 
     return root_jobs

@@ -24,7 +24,9 @@ class Github:
 
             available_assets = await cls.get_assets(repo, tag)
             asset = filter_assets(available_assets)
-            spec.url = f"https://github.com/{repo}/releases/download/{tag}/{asset}"
+            spec.url = (
+                f"https://github.com/{repo}/releases/download/{tag}/{asset}"
+            )
 
             if asset is None:
                 print(red(f"Failed to install {spec.name} from Github release"))
@@ -40,7 +42,9 @@ class Github:
             return True
 
         return Job(
-            names=[spec.name], description=f"Install {spec.name} from Github release", job=inner
+            names=[spec.name],
+            description=f"Install {spec.name} from Github release",
+            job=inner,
         )
 
     @classmethod
@@ -50,7 +54,9 @@ class Github:
 
     @classmethod
     async def get_release(cls, repo: str, version: str) -> str:
-        response: List[Dict[str, str]] = await cls.gh_api_call(f"repos/{repo}/releases")
+        response: List[Dict[str, str]] = await cls.gh_api_call(
+            f"repos/{repo}/releases"
+        )
         releases = [r["tag_name"] for r in response]
         return next(r for r in releases if version in r)
 
@@ -58,7 +64,9 @@ class Github:
     async def gh_api_call(cls, path: str) -> Any:
         token = cls.get_token()
         url = f"https://api.github.com/{path}"
-        result = await async_proc(f'curl -L -H "Authorization: Bearer {token}" {url}')
+        result = await async_proc(
+            f'curl -L -H "Authorization: Bearer {token}" {url}'
+        )
         if result.returncode != 0:
             return None
         return json.loads(result.stdout)

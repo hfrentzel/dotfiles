@@ -13,7 +13,15 @@ from .package_types.pip import Pip
 from .parser import Parser
 from .sym import Symlink
 
-__all__ = ["Command", "Directory", "Exe", "Library", "Manager", "Parser", "Symlink"]
+__all__ = [
+    "Command",
+    "Directory",
+    "Exe",
+    "Library",
+    "Manager",
+    "Parser",
+    "Symlink",
+]
 
 ALL_MANAGERS: Dict[str, Type[Manager]] = {
     "command": Command,

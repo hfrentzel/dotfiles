@@ -4,7 +4,9 @@ from setup.managers.manager import Package
 from setup.process import ver_greater_than
 
 
-def check_install(curr_ver: Optional[str], package: Package) -> Tuple[bool, str]:
+def check_install(
+    curr_ver: Optional[str], package: Package
+) -> Tuple[bool, str]:
     if curr_ver is None:
         return (False, "MISSING")
 

@@ -64,7 +64,9 @@ class Parser(Manager):
         )
 
     @staticmethod
-    def install_ts_parser(language: str) -> Callable[[], Coroutine[None, None, bool]]:
+    def install_ts_parser(
+        language: str,
+    ) -> Callable[[], Coroutine[None, None, bool]]:
         async def inner() -> bool:
             print(f"Installing Treesitter parser for {language}...")
             await async_proc(f'nvim --headless +"TSInstallSync {language}" +q')

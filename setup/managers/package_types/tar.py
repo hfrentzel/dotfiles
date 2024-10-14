@@ -46,7 +46,10 @@ def tar_builder(spec: "Exe", _: str = "") -> Job:
                 if not name:
                     continue
 
-                if any(name.startswith(p) for p in ["bin", "lib", "share", "include"]):
+                if any(
+                    name.startswith(p)
+                    for p in ["bin", "lib", "share", "include"]
+                ):
                     t.path = name
                     tar.extract(t, path.expanduser(install_home))
                     continue
@@ -54,7 +57,9 @@ def tar_builder(spec: "Exe", _: str = "") -> Job:
                 filename = path.split(name)[1]
                 t.path = filename
 
-                extract_path = find_extract_path(filename, t.mode, spec.command_name)
+                extract_path = find_extract_path(
+                    filename, t.mode, spec.command_name
+                )
                 if extract_path is None:
                     continue
                 full_extract_path = f"{install_home}/{extract_path}"

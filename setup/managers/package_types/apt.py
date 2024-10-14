@@ -23,7 +23,9 @@ class Apt:
                 return True
             print("Running apt install...")
             await async_proc("sudo apt update")
-            result = await async_proc(f'sudo apt install --yes {" ".join(cls.all_apts)}')
+            result = await async_proc(
+                f'sudo apt install --yes {" ".join(cls.all_apts)}'
+            )
             success = not result.returncode
             if success:
                 print(
@@ -38,5 +40,7 @@ class Apt:
             return success
 
         return Job(
-            names=cls.all_apts, description=f'Install {", ".join(cls.all_apts)} with Apt', job=inner
+            names=cls.all_apts,
+            description=f'Install {", ".join(cls.all_apts)} with Apt',
+            job=inner,
         )

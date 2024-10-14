@@ -40,17 +40,25 @@ class Gitlab:
             return False
 
         return Job(
-            names=[spec.name], description=f"Install {spec.name} from Github release", job=inner
+            names=[spec.name],
+            description=f"Install {spec.name} from Github release",
+            job=inner,
         )
 
     @classmethod
     async def get_assets(cls, repo: str, tag: str) -> Dict[str, str]:
-        response = await cls.glab_api_call(f'{repo.replace("/", "%2F")}/releases/{tag}')
-        return {a["name"].lower(): a["name"] for a in response["assets"]["links"]}
+        response = await cls.glab_api_call(
+            f'{repo.replace("/", "%2F")}/releases/{tag}'
+        )
+        return {
+            a["name"].lower(): a["name"] for a in response["assets"]["links"]
+        }
 
     @classmethod
     async def get_release(cls, repo: str, version: str) -> str:
-        response = await cls.glab_api_call(f'{repo.replace("/", "%2F")}/releases')
+        response = await cls.glab_api_call(
+            f'{repo.replace("/", "%2F")}/releases'
+        )
         releases: List[str] = [r["tag_name"] for r in response]
         return next(r for r in releases if version in r)
 

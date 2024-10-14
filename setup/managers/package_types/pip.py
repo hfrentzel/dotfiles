@@ -54,16 +54,22 @@ class Pip:
         if not cls.files:
             pip_dir = (
                 subprocess.run(
-                    ["python", "-m", "site", "--user-site"], check=False, capture_output=True
+                    ["python", "-m", "site", "--user-site"],
+                    check=False,
+                    capture_output=True,
                 )
                 .stdout.decode()
                 .strip()
             )
             cls.files = "\n".join([
-                s.replace("_", "-") for s in os.listdir(pip_dir) if "dist-info" in s
+                s.replace("_", "-")
+                for s in os.listdir(pip_dir)
+                if "dist-info" in s
             ])
 
-        if (m := re.search(f"{package.name}-(.*)\\.dist-info", cls.files)) is not None:
+        if (
+            m := re.search(f"{package.name}-(.*)\\.dist-info", cls.files)
+        ) is not None:
             return m.group(1)
         return None
 

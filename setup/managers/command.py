@@ -26,7 +26,9 @@ class Command(Manager):
 
     async def set_status(self) -> None:
         if isinstance(self.cwd, str):
-            self.cwd = os.path.expanduser(self.cwd.replace("DOT", conf.dotfiles_home))
+            self.cwd = os.path.expanduser(
+                self.cwd.replace("DOT", conf.dotfiles_home)
+            )
 
         if self.check_script is None:
             self.state = (False, "CANT VERIFY")

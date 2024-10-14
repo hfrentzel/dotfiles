@@ -10,7 +10,13 @@ from .builder import build_resources, collect_specs, generate_resource
 from .conf import conf
 from .inspect import search_assets
 from .job import build_tree, print_job_tree
-from .managers import ALL_MANAGERS, Manager, all_desired, create_bonus_jobs, create_jobs
+from .managers import (
+    ALL_MANAGERS,
+    Manager,
+    all_desired,
+    create_bonus_jobs,
+    create_jobs,
+)
 from .output import green, red
 
 
@@ -20,7 +26,9 @@ async def handle_jobs(selected_types: List[Type[Manager]]) -> None:
             print(t.desired_printout(), end="")
         return
 
-    all_complete = await asyncio.gather(*[t.get_statuses() for t in selected_types])
+    all_complete = await asyncio.gather(*[
+        t.get_statuses() for t in selected_types
+    ])
     complete = list(itertools.chain.from_iterable(all_complete))
     if conf.args.stage in {None, "show_all"}:
         for t in selected_types:
@@ -54,12 +62,17 @@ async def handle_single_resource(resource: Manager, resource_type: str) -> None:
         print(f"{resource.name} is already set up")
         return
 
-    job = ALL_MANAGERS[resource_type].create_job(resource) or list(create_bonus_jobs().values())[0]
+    job = (
+        ALL_MANAGERS[resource_type].create_job(resource)
+        or list(create_bonus_jobs().values())[0]
+    )
 
     if job.depends_on is not None:
         if not any(d.name == job.depends_on for d in all_desired()):
             build_resources(job.depends_on)
-        all_complete = await asyncio.gather(*[t.get_statuses() for t in ALL_MANAGERS.values()])
+        all_complete = await asyncio.gather(*[
+            t.get_statuses() for t in ALL_MANAGERS.values()
+        ])
         complete = list(itertools.chain.from_iterable(all_complete))
 
         if remaining := {job.depends_on} - set(complete):
@@ -143,16 +156,25 @@ def run() -> None:
     argparser.set_defaults(func=check)
 
     resources = argparser.add_mutually_exclusive_group()
-    resources.add_argument("-t", "--types", choices=ALL_MANAGERS.keys(), nargs="+")
+    resources.add_argument(
+        "-t", "--types", choices=ALL_MANAGERS.keys(), nargs="+"
+    )
     resources.add_argument("-o", "--only")
     resources.add_argument("--force")
 
     stages = argparser.add_mutually_exclusive_group()
     stages.add_argument(
-        "-s", "--stage", choices=["desired", "show_all", "jobs", "tree", "run"], default=None
+        "-s",
+        "--stage",
+        choices=["desired", "show_all", "jobs", "tree", "run"],
+        default=None,
     )
-    stages.add_argument("-d", "--desired", action="store_const", const="desired", dest="stage")
-    stages.add_argument("-r", "--run", action="store_const", const="run", dest="stage")
+    stages.add_argument(
+        "-d", "--desired", action="store_const", const="desired", dest="stage"
+    )
+    stages.add_argument(
+        "-r", "--run", action="store_const", const="run", dest="stage"
+    )
 
     subparsers = argparser.add_subparsers(title="subcommands")
     show_cmd = subparsers.add_parser("show", help="show json spec")
@@ -163,16 +185,24 @@ def run() -> None:
     home_cmd.set_defaults(func=home)
     home_cmd.add_argument("spec", type=str, nargs=1)
 
-    source_cmd = subparsers.add_parser("source", help="Go to tool's source code")
+    source_cmd = subparsers.add_parser(
+        "source", help="Go to tool's source code"
+    )
     source_cmd.set_defaults(func=source)
     source_cmd.add_argument("spec", type=str, nargs=1)
 
-    assets_cmd = subparsers.add_parser("list-assets", help="List the Github assets for a spec")
+    assets_cmd = subparsers.add_parser(
+        "list-assets", help="List the Github assets for a spec"
+    )
     assets_cmd.set_defaults(func=list_assets)
     assets_cmd.add_argument("spec", type=str, nargs=1)
 
-    os.environ["NPM_CONFIG_USERCONFIG"] = os.path.expanduser("~/.config/npm/npmrc")
-    conf.dotfiles_home = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    os.environ["NPM_CONFIG_USERCONFIG"] = os.path.expanduser(
+        "~/.config/npm/npmrc"
+    )
+    conf.dotfiles_home = os.path.dirname(
+        os.path.dirname(os.path.abspath(__file__))
+    )
 
     conf.args = argparser.parse_args()
     conf.args.func()

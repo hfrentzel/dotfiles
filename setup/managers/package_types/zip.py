@@ -25,7 +25,9 @@ def zip_builder(spec: "Exe", _: str = "") -> Job:
             all_files = [z for z in archive.infolist() if not z.is_dir()]
             extract_path = None
 
-            if len(all_files) == 1 and all_files[0].external_attr & (0o111 << 16):
+            if len(all_files) == 1 and all_files[0].external_attr & (
+                0o111 << 16
+            ):
                 mode = (all_files[0].external_attr >> 16) & 0o777
                 extract_path = f"{install_home}/bin"
 
@@ -45,7 +47,10 @@ def zip_builder(spec: "Exe", _: str = "") -> Job:
                 if not name:
                     continue
 
-                if any(name.startswith(p) for p in ["bin", "lib", "share", "include"]):
+                if any(
+                    name.startswith(p)
+                    for p in ["bin", "lib", "share", "include"]
+                ):
                     z.filename = name
                     archive.extract(z, install_home)
                     continue
@@ -54,7 +59,9 @@ def zip_builder(spec: "Exe", _: str = "") -> Job:
                 z.filename = filename
                 mode = (z.external_attr >> 16) & 0o777
 
-                extract_path = find_extract_path(filename, mode, spec.command_name)
+                extract_path = find_extract_path(
+                    filename, mode, spec.command_name
+                )
                 if extract_path is None:
                     continue
                 makedirs(extract_path, exist_ok=True)
@@ -68,4 +75,8 @@ def zip_builder(spec: "Exe", _: str = "") -> Job:
         print(red(f"Failed to install {spec.name} from zip file"))
         return False
 
-    return Job(names=[spec.name], description=f"Install {spec.name} from zip file", job=inner)
+    return Job(
+        names=[spec.name],
+        description=f"Install {spec.name} from zip file",
+        job=inner,
+    )

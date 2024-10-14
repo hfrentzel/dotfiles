@@ -20,4 +20,8 @@ def deb_builder(spec: "Exe", _: str = "") -> Job:
             print(red(f"Failed to install {spec.name} from debian archive"))
         return success
 
-    return Job(names=[spec.name], description=f"Install {spec.name} from debian archive", job=inner)
+    return Job(
+        names=[spec.name],
+        description=f"Install {spec.name} from debian archive",
+        job=inner,
+    )

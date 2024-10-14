@@ -2,7 +2,9 @@ from os import path
 from typing import Optional
 
 
-def find_extract_path(filename: str, mode: int, command_name: str) -> Optional[str]:
+def find_extract_path(
+    filename: str, mode: int, command_name: str
+) -> Optional[str]:
     extension = path.splitext(filename)[1]
     if extension in {".ps1", ".zsh", ".fish"}:
         return None

@@ -20,5 +20,8 @@ def go_builder(spec: "Exe", _: str = "") -> Job:
         return success
 
     return Job(
-        names=[spec.name], description=f"Install {spec.name} with go", depends_on="go", job=inner
+        names=[spec.name],
+        description=f"Install {spec.name} with go",
+        depends_on="go",
+        job=inner,
     )

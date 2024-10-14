@@ -53,7 +53,10 @@ class Directory(Manager):
         for directory in sorted(cls.desired, key=(lambda d: d.path)):
             if not show_all and directory.state[0]:
                 continue
-            lines.append((directory.path, (directory.state[1], directory.state[0])))
+            lines.append((
+                directory.path,
+                (directory.state[1], directory.state[0]),
+            ))
         return print_grid(("SUB-DIRECTORIES", "STATUS"), lines)
 
     def create_job(self) -> Job:
@@ -64,7 +67,9 @@ class Directory(Manager):
         )
 
     @staticmethod
-    def create_directory(path: str) -> Callable[[], Coroutine[None, None, bool]]:
+    def create_directory(
+        path: str,
+    ) -> Callable[[], Coroutine[None, None, bool]]:
         async def inner() -> bool:
             full_path = os.path.expanduser(path)
             print(f"Creating directory at {full_path}...")

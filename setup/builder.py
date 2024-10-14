@@ -27,7 +27,9 @@ def generate_resource(name: str, spec: Dict[str, Any]) -> Tuple[Any, str]:
 
     if spec.get("override"):
         del spec["override"]
-        old_value = next(e for e in ALL_MANAGERS[resource_type].desired if e.name == name)
+        old_value = next(
+            e for e in ALL_MANAGERS[resource_type].desired if e.name == name
+        )
         for key, value in spec.items():
             setattr(old_value, key, value)
         return old_value, resource_type
@@ -39,7 +41,9 @@ def generate_resource(name: str, spec: Dict[str, Any]) -> Tuple[Any, str]:
                 match = re.search(r"(?:https?://)?github.com/(\S+)", value)
                 if match:
                     args["repo"] = match.group(1)
-            elif "gitlab.com" in value and "Gitlab" in spec.get("installers", []):
+            elif "gitlab.com" in value and "Gitlab" in spec.get(
+                "installers", []
+            ):
                 match = re.search(r"(?:https?://)?gitlab.com/(\S+)", value)
                 if match:
                     args["repo"] = match.group(1)
@@ -52,7 +56,9 @@ def generate_resource(name: str, spec: Dict[str, Any]) -> Tuple[Any, str]:
 
 
 def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
-    with open(os.path.join(conf.dotfiles_home, "main.json"), encoding="utf-8") as f:
+    with open(
+        os.path.join(conf.dotfiles_home, "main.json"), encoding="utf-8"
+    ) as f:
         base_spec = json.loads(f.read())
     addons = base_spec["addons"]
     specs: Dict[str, Dict[str, Any]] = base_spec["resources"]
@@ -62,7 +68,9 @@ def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
     for name, file in addons.items():
         if not include_all and not choices[name]:
             continue
-        with open(os.path.join(conf.dotfiles_home, file), encoding="utf-8") as f:
+        with open(
+            os.path.join(conf.dotfiles_home, file), encoding="utf-8"
+        ) as f:
             specs.update(json.loads(f.read()))
 
     for e_addon in external_addons or []:
@@ -72,7 +80,9 @@ def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
     return specs
 
 
-def load_config(addons: Dict[str, str]) -> Tuple[Dict[str, bool], Optional[List[str]]]:
+def load_config(
+    addons: Dict[str, str],
+) -> Tuple[Dict[str, bool], Optional[List[str]]]:
     if os.path.exists(USER_CONFIG):
         with open(USER_CONFIG, encoding="utf-8") as f:
             config_options = json.loads(f.read())
@@ -97,9 +107,15 @@ def load_config(addons: Dict[str, str]) -> Tuple[Dict[str, bool], Optional[List[
     return choices, None
 
 
-def write_config(choices: Dict[str, bool], external_addons: Optional[List[str]] = None) -> None:
+def write_config(
+    choices: Dict[str, bool], external_addons: Optional[List[str]] = None
+) -> None:
     with open(USER_CONFIG, "w", encoding="utf-8") as f:
-        f.write(json.dumps({"addons": choices, "external": external_addons}, indent=4))
+        f.write(
+            json.dumps(
+                {"addons": choices, "external": external_addons}, indent=4
+            )
+        )
 
 
 def select_addons(addons: Dict[str, str]) -> Dict[str, bool]:

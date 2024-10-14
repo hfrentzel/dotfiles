@@ -2,7 +2,8 @@ from typing import Sequence, Tuple, Union
 
 
 def print_grid(
-    header: Tuple[str, ...], rows: Sequence[Tuple[Union[str, Tuple[str, bool]], ...]]
+    header: Tuple[str, ...],
+    rows: Sequence[Tuple[Union[str, Tuple[str, bool]], ...]],
 ) -> str:
     if len(rows) == 0:
         return ""
@@ -22,7 +23,10 @@ def print_grid(
 
     for row in [header, *rows]:
         line += (
-            " ".join([f"{format_cell(r): <{max(13, max_lengths[i])}}" for i, r in enumerate(row)])
+            " ".join([
+                f"{format_cell(r): <{max(13, max_lengths[i])}}"
+                for i, r in enumerate(row)
+            ])
             + "\n"
         )
     line += "\n"
