@@ -49,8 +49,14 @@ class Npm:
 
     @classmethod
     def get_version(cls, package: Package) -> Optional[str]:
-        node_dir = os.path.expanduser("~/.local/lib/node_modules/")
-        with open(f"{node_dir}/{package.name}/package.json", encoding="utf-8") as f:
+        path = os.path.join(
+            os.path.expanduser("~/.local/lib/node_modules"),
+            package.name,
+            "package.json",
+        )
+        if not os.path.exists(path):
+            return None
+        with open(path) as f:
             if isinstance(version := json.loads(f.read()).get("version"), str):
                 return version
         return None
