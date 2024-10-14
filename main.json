@@ -69,7 +69,7 @@
         },
         "zoxide": {
             "type": "exe",
-            "version": "0.9.0",
+            "version": "0.9.6",
             "installers": ["bh"],
             "source_repo": "https://github.com/ajeetdsouza/zoxide"
         },
@@ -79,7 +79,7 @@
         },
         "delta": {
             "type": "exe",
-            "version": "0.15.1",
+            "version": "0.18.2",
             "installers": ["bh"],
             "homepage": "https://dandavison.github.io/delta/",
             "source_repo": "https://github.com/dandavison/delta"
@@ -92,7 +92,7 @@
         "ripgrep": {
             "type": "exe",
             "command_name": "rg",
-            "version": "13.0.0",
+            "version": "14.1.1",
             "installers": ["bh"],
             "source_repo": "https://github.com/BurntSushi/ripgrep"
         },
@@ -103,13 +103,13 @@
         },
         "bat": {
             "type": "exe",
-            "version": "0.23.0",
+            "version": "0.24.0",
             "installers": ["bh"],
             "source_repo": "https://github.com/sharkdp/bat"
         },
         "fd": {
             "type": "exe",
-            "version": "10.1.0",
+            "version": "10.2.0",
             "installers": ["bh"],
             "source_repo": "https://github.com/sharkdp/fd"
         },
