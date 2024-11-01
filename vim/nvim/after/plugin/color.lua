@@ -56,22 +56,17 @@ local function setColor(scheme)
 
     hi('Operator', { fg = colors['05'] })
 
-    hi('Character', { fg = colors['08'] })
     hi('Identifier', { fg = colors['08'] })
     hi('Statement', { fg = colors['08'] })
+    hi('@variable', { fg = colors['08'] })
 
-    hi('Boolean', { fg = colors['09'] })
     hi('Constant', { fg = colors['09'] })
-    hi('Number', { fg = colors['09'] })
-    hi('Float', { fg = colors['09'] })
 
     hi('Label', { fg = colors['0A'] })
     hi('PreProc', { fg = colors['0A'] })
     hi('Repeat', { fg = colors['0A'] })
     hi('Tag', { fg = colors['0A'] })
     hi('Type', { fg = colors['0A'] })
-    hi('Typedef', { fg = colors['0A'] })
-    hi('StorageClass', { fg = colors['0A'] })
 
     hi('String', { fg = colors['0B'] })
 
@@ -134,9 +129,13 @@ local function setColor(scheme)
     hi('TabLine', { fg = colors['03'], bg = colors['01'], attr = 'none' })
     hi('TabLineFill', { fg = colors['03'], bg = colors['01'], attr = 'none' })
     hi('TabLineSel', { fg = colors['0B'], bg = colors['01'], attr = 'none' })
+    hi('NormalFloat', { bg = colors['01'] })
 
+    hi('Added', { fg = colors['0B'], bg = colors['01'] })
+    hi('Changed', { fg = colors['0D'], bg = colors['01'] })
+    hi('Removed', { fg = colors['08'], bg = colors['01'] })
     hi('DiffFile', { fg = colors['08'], bg = colors['00'] })
-    hi('DiffAdd', { fg = colors['0B'], bg = colors['01'] })
+    hi('DiffAdd', { fg = colors['01'], bg = colors['0B'] })
     hi('DiffAdded', { fg = colors['0B'], bg = colors['00'] })
     hi('DiffNewFile', { fg = colors['0B'], bg = colors['00'] })
     hi('DiffChange', { fg = colors['03'], bg = colors['01'] })

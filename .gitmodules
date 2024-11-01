@@ -7,9 +7,6 @@
 [submodule "vim/nvim/pack/vendor/opt/vim-visual-multi"]
 	path = vim/nvim/pack/vendor/opt/vim-visual-multi
 	url = https://github.com/mg979/vim-visual-multi
-[submodule "vim/nvim/pack/vendor/opt/tcomment_vim"]
-	path = vim/nvim/pack/vendor/opt/tcomment_vim
-	url = https://github.com/tomtom/tcomment_vim
 [submodule "vim/nvim/pack/vendor/opt/command-t"]
 	path = vim/nvim/pack/vendor/opt/command-t
 	url = https://github.com/wincent/command-t.git

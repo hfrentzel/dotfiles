@@ -5,15 +5,16 @@ statusline.diagnostics = function()
     local tree = require('nvim-treesitter.parsers').has_parser() and '🌳' or '🪓'
     local output = ''
     local no_problems = true
-    if b.diagnostic_counts == nil then
+    if b.diags_ready ~= true then
         return tree
     end
-    if b.diagnostic_counts.error > 0 then
-        output = string.format('%%1*E %s', b.diagnostic_counts.error)
+    local counts = vim.diagnostic.count(vim.fn.winbufnr(0))
+    if counts[1] ~= nil then
+        output = string.format('%%1*E %s', counts[1])
         no_problems = false
     end
-    if b.diagnostic_counts.warning > 0 then
-        output = string.format('%s %%2*W %s', output, b.diagnostic_counts.warning)
+    if counts[2] ~= nil then
+        output = string.format('%s %%2*W %s', output, counts[2])
         no_problems = false
     end
     if no_problems then

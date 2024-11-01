@@ -92,12 +92,6 @@ let g:slime_target = 'tmux'
 let g:slime_default_config = {'socket_name': 'default',
                         \ 'target_pane': '{right-of}' }
 
-" <c-_> maps <c-/> functions like other editors
-let g:tcomment_maps = 0
-let g:tcomment_opleader = ''
-nnoremap <silent> <c-_> :TComment<cr>
-vnoremap <silent> <c-_> :TCommentMaybeInline<cr>
-
 omap <silent> i<leader>w <Plug>CamelCaseMotion_iw
 xmap <silent> i<leader>w <Plug>CamelCaseMotion_iw
 
@@ -115,7 +109,6 @@ if has('packages')
     packadd! vim-surround
     packadd! vim-visual-multi
     packadd! vim-tmux-navigator
-    packadd! tcomment_vim
 endif
 
 filetype plugin indent on

@@ -87,9 +87,6 @@ return {
                 vim.diagnostic.config({ severity_sort = true })
                 vim.wo.signcolumn = 'yes'
                 vim.keymap.set('n', 'g=', format, args)
-                vim.keymap.set('n', 'K', vim.lsp.buf.hover, args)
-                vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, args)
-                vim.keymap.set('n', ']d', vim.diagnostic.goto_next, args)
                 vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, args)
                 vim.keymap.set('n', '<leader>3', vim.diagnostic.setloclist, args)
                 vim.keymap.set('n', '<leader>4', toggleDiagnostics, args)
@@ -97,12 +94,7 @@ return {
 
             local updateDiags = function()
                 vim.diagnostic.setloclist({ open = false })
-                vim.b['diagnostic_counts'] = {
-                    error = vim.fn.len(vim.diagnostic.get(0, { severity = 1 })),
-                    warning = vim.fn.len(vim.diagnostic.get(0, { severity = 2 })),
-                    info = vim.fn.len(vim.diagnostic.get(0, { severity = 3 })),
-                    hint = vim.fn.len(vim.diagnostic.get(0, { severity = 4 })),
-                }
+                vim.b.diags_ready = true
             end
 
             vim.api.nvim_create_augroup('diagnostics', { clear = true })
