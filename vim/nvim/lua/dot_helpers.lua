@@ -12,7 +12,7 @@ end
 
 functions.get_git_root = function()
     local git_prefix = 'git -C ' .. vim.fn.expand('%:p:h')
-    if vim.fn.system(git_prefix .. ' rev-parse  --is-inside-work-tree') then
+    if vim.fn.system(git_prefix .. ' rev-parse  --is-inside-work-tree') == 'true' then
         return vim.fn.substitute(
             vim.fn.system(git_prefix .. ' rev-parse --show-toplevel'),
             '\n',
