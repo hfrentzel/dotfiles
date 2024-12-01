@@ -33,7 +33,7 @@ colors = {}
 with open(f"{scheme_dir}{scheme}.yaml", encoding="utf-8") as f:
     for line in f.readlines():
         if line.startswith("  base"):
-            colors[line[6:8]] = line[11:17]
+            colors[line[6:8]] = line[12:18]
 
 with open(os.path.expanduser("~/.local/share/dotfiles/base16"), "w") as c:
     c.write(scheme)

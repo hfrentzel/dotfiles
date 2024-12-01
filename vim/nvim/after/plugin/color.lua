@@ -49,7 +49,7 @@ local function setColor(scheme)
     local colors = {}
     for line in io.lines(scheme_file) do
         if line:find('  base', 1, true) == 1 then
-            colors[string.sub(line, 7, 8)] = '#' .. string.sub(line, 12, 17)
+            colors[string.sub(line, 7, 8)] = string.sub(line, 12, 18)
         end
     end
     hi('Comment', { fg = colors['03'], attr = 'italic' })
