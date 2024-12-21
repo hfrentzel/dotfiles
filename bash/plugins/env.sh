@@ -9,6 +9,9 @@ export INPUTRC="$HOME/.config/readline/inputrc"
 
 export PYTHONSTARTUP="$HOME/.config/python/startup.py"
 export PYLINTRC="$HOME/.config/pylint/pylintrc"
+export MYPY_CACHE_DIR="$HOME/.cache/mypy"
 
 export RUSTUP_HOME="$HOME/.local/share/rustup"
 export CARGO_HOME="$HOME/.local/share/cargo"
+
+export SQLITE_HISTORY="$HOME/.local/share/sqlite_history"
