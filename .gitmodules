@@ -70,9 +70,6 @@
 [submodule "vim/nvim/pack/vendor/opt/markdown-preview.nvim"]
 	path = vim/nvim/pack/vendor/opt/markdown-preview.nvim
 	url = https://github.com/iamcco/markdown-preview.nvim
-[submodule "vim/nvim/pack/vendor/opt/vimwiki"]
-	path = vim/nvim/pack/vendor/opt/vimwiki
-	url = https://github.com/vimwiki/vimwiki
 [submodule "vim/nvim/pack/vendor/opt/lazy.nvim"]
 	path = vim/nvim/pack/vendor/opt/lazy.nvim
 	url = https://github.com/folke/lazy.nvim
@@ -97,3 +94,6 @@
 [submodule "appearance/schemes"]
 	path = appearance/schemes
 	url = https://github.com/tinted-theming/schemes.git
+[submodule "vim/nvim/pack/vendor/opt/obsidian.nvim"]
+	path = vim/nvim/pack/vendor/opt/obsidian.nvim
+	url = https://github.com/epwalsh/obsidian.nvim
