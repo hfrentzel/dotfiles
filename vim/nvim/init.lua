@@ -40,3 +40,8 @@ require('lazy').setup(
         },
     }
 )
+
+local localrc = vim.fn.expand("~/.config/vim/local.init.lua")
+if vim.fn.filereadable(localrc) == 1 then
+    vim.cmd.source(localrc)
+end
