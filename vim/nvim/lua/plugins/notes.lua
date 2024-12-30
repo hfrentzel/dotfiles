@@ -14,7 +14,6 @@ return {
                     vim.cmd.edit('~/vimwiki/index.md')
                 end,
             },
-
         },
         opts = {
             workspaces = {
@@ -29,25 +28,31 @@ return {
                 end,
                 enter_note = function()
                     vim.wo.conceallevel = 2
+                    vim.keymap.set(
+                        'v',
+                        '<cr>',
+                        ':ObsidianLinkNew<cr>',
+                        { buffer = true, silent = true }
+                    )
                 end,
                 leave_note = function()
                     vim.wo.conceallevel = 0
                 end,
             },
             mappings = {
-                ["<cr>"] = {
+                ['<cr>'] = {
                     action = function()
-                        return require("obsidian").util.smart_action()
+                        return require('obsidian').util.smart_action()
                     end,
-                    opts = { buffer = true, expr = true }
-                }
+                    opts = { buffer = true, expr = true },
+                },
             },
             note_id_func = function(title)
                 return title
             end,
             note_frontmatter_func = function()
                 return {}
-            end
+            end,
         },
     },
 }
