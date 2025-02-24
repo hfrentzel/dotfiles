@@ -70,36 +70,37 @@ def read_input(tty: TextIOWrapper) -> str:
     return next_key
 
 
-def show(menu_entries: List[str]) -> List[Tuple[str, bool]]:
-    included = [True] * len(menu_entries)
+def show(preferences: List[Tuple[str, bool]]) -> List[Tuple[str, bool]]:
+    # included = [True] * len(menu_entries)
     active_index = 0
-    x = XX(len(menu_entries))
+    x = XX(len(preferences))
     with x.tty_handler() as (tin, tout):
         while True:
-            for menu_index, menu_entry in enumerate(menu_entries):
+            for menu_index, (menu_entry, included) in enumerate(preferences):
                 tout.write("* " if menu_index == active_index else "  ")
                 tout.write(f"{menu_entry: <15}")
-                tout.write(
-                    green("ADD") if included[menu_index] else red("EXCLUDE")
-                )
+                tout.write(green("INCLUDE") if included else red("EXCLUDE"))
                 tout.write(TERM_COMMAND["clear_to_end_of_line"])
-                if menu_index < len(menu_entries) - 1:
+                if menu_index < len(preferences) - 1:
                     tout.write("\n")
 
             tout.write(
-                "\r" + (len(menu_entries) - 1) * TERM_COMMAND["cursor_up"]
+                "\r" + (len(preferences) - 1) * TERM_COMMAND["cursor_up"]
             )
             tout.flush()
             next_key = read_input(tin)
             if next_key in {"up", "k"}:
                 active_index = max(0, active_index - 1)
             elif next_key in {"down", "j"}:
-                active_index = min(len(menu_entries) - 1, active_index + 1)
+                active_index = min(len(preferences) - 1, active_index + 1)
             elif next_key in {"enter"}:
-                included[active_index] = not included[active_index]
+                preferences[active_index] = (
+                    preferences[active_index][0],
+                    not preferences[active_index][1],
+                )
             elif next_key in {"escape", "q", "ctrl-g"}:
                 break
-    return list(zip(menu_entries, included))
+    return preferences
 
 
 def main() -> None:
