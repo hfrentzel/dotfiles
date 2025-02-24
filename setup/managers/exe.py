@@ -93,26 +93,30 @@ class Exe(Manager, Package):
             self.state = (True, "ANY")
             return
 
-        if self.version_cmd:
-            subcommands = [self.version_cmd]
+        # TODO This is a hack, make this better
+        if self.version_cmd == "NPM":
+            curr_ver = Npm.get_version(self)
         else:
-            subcommands = ["--version", "version", "-V", "-v"]
-        for cmd in subcommands:
-            version = await async_proc(
-                f"{self.command_name} {cmd}", forward_env=True
-            )
-            if version.returncode == 0:
-                break
+            if self.version_cmd:
+                subcommands = [self.version_cmd]
+            else:
+                subcommands = ["--version", "version", "-V", "-v"]
+            for cmd in subcommands:
+                version = await async_proc(
+                    f"{self.command_name} {cmd}", forward_env=True
+                )
+                if version.returncode == 0:
+                    break
 
-        curr_ver = None
-        if version.returncode != 0:
-            if self.installers and set(self.installers) & {"Pip", "Npm"}:
-                if "Pip" in self.installers:
-                    curr_ver = Pip.get_version(self)
-                elif "Npm" in self.installers:
-                    curr_ver = Npm.get_version(self)
-        elif string := VERSION_REGEX.search(version.stdout):
-            curr_ver = string.group(0)
+            curr_ver = None
+            if version.returncode != 0:
+                if self.installers and set(self.installers) & {"Pip", "Npm"}:
+                    if "Pip" in self.installers:
+                        curr_ver = Pip.get_version(self)
+                    elif "Npm" in self.installers:
+                        curr_ver = Npm.get_version(self)
+            elif string := VERSION_REGEX.search(version.stdout):
+                curr_ver = string.group(0)
 
         if curr_ver is not None:
             success = ver_greater_than(curr_ver, self.version)

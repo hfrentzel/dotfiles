@@ -29,6 +29,7 @@
         "command_name": "vscode-eslint-language-server",
         "version": "4.5.0",
         "installers": ["Npm"],
+        "version_cmd": "NPM",
         "source_repo": "https://github.com/hrsh7th/vscode-langservers-extracted"
     },
     "ts-javascript": {
