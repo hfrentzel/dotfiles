@@ -1,5 +1,10 @@
 {
     "resources": {
+        "mysetup": {
+            "type": "symlink",
+            "source": "DOT/main.py",
+            "target": "~/.local/bin/mysetup"
+        },
         "submodules": {
             "type": "command",
             "cwd": "DOT",
