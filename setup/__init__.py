@@ -6,6 +6,7 @@ import os
 import webbrowser
 from typing import List, Type
 
+from .available import lookup_releases
 from .builder import (
     build_resources,
     collect_specs,
@@ -160,6 +161,16 @@ def config() -> None:
     edit_config()
 
 
+def available() -> None:
+    specs = collect_specs(include_all=True)
+    spec = conf.args.spec[0]
+    if spec not in specs:
+        print(f"Spec '{spec}' not found")
+        return
+
+    lookup_releases(specs[spec])
+
+
 def run() -> None:
     argparser = argparse.ArgumentParser(prog="EnvSetup")
     argparser.set_defaults(func=check)
@@ -199,6 +210,12 @@ def run() -> None:
     )
     source_cmd.set_defaults(func=source)
     source_cmd.add_argument("spec", type=str, nargs=1)
+
+    available_cmd = subparsers.add_parser(
+        "available", help="Lookup up releases of resource"
+    )
+    available_cmd.set_defaults(func=available)
+    available_cmd.add_argument("spec", type=str, nargs=1)
 
     assets_cmd = subparsers.add_parser(
         "list-assets", help="List the Github assets for a spec"
