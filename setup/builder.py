@@ -63,7 +63,7 @@ def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
     addons = base_spec["addons"]
     specs: Dict[str, Dict[str, Any]] = base_spec["resources"]
 
-    choices, external_addons = load_config(addons)
+    choices, external_addons = load_settings(addons)
 
     for name, file in addons.items():
         if not include_all and not choices[name]:
@@ -80,14 +80,11 @@ def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
     return specs
 
 
-def load_config(
+def load_settings(
     addons: Dict[str, str],
 ) -> Tuple[Dict[str, bool], Optional[List[str]]]:
-    if os.path.exists(USER_CONFIG):
-        with open(USER_CONFIG, encoding="utf-8") as f:
-            config_options = json.loads(f.read())
-            choices = config_options["addons"]
-            external_addons = config_options.get("external")
+    choices, external_addons = read_config()
+    if choices is not None:
         if missing_addons := set(addons) - set(choices):
             print("There are new addons that are not tracked on this machine")
             for addon in missing_addons:
@@ -99,12 +96,41 @@ def load_config(
             write_config(choices, external_addons)
         return choices, external_addons
 
-    print("No env config file found. Creating one...")
-    choices = select_addons(addons)
+    print("No config file found. Creating one...")
+    choices = select_addons([(a, True) for a in addons])
     os.makedirs(os.path.dirname(USER_CONFIG), exist_ok=True)
     write_config(choices)
 
     return choices, None
+
+
+def edit_config():
+    with open(
+        os.path.join(conf.dotfiles_home, "main.json"), encoding="utf-8"
+    ) as f:
+        base_spec = json.loads(f.read())
+    addons = base_spec["addons"]
+
+    choices, external = read_config()
+    if choices is None:
+        choices = [(a, True) for a in addons]
+    elif missing_addons := set(addons) - set(choices):
+        for addon in missing_addons:
+            choices[addon] = True
+
+    choices = select_addons(list(choices.items()))
+    os.makedirs(os.path.dirname(USER_CONFIG), exist_ok=True)
+    write_config(choices, external)
+
+
+def read_config() -> Tuple[Optional[Dict[str, bool]], Optional[List[str]]]:
+    if not os.path.exists(USER_CONFIG):
+        return None, None
+    with open(USER_CONFIG, encoding="utf-8") as f:
+        config_options = json.loads(f.read())
+        choices = config_options["addons"]
+        external_addons = config_options.get("external")
+    return choices, external_addons
 
 
 def write_config(
@@ -118,7 +144,7 @@ def write_config(
         )
 
 
-def select_addons(addons: Dict[str, str]) -> Dict[str, bool]:
+def select_addons(preferences: List[Tuple[str, bool]]) -> Dict[str, bool]:
     print("Select which addons should be tracked on this machine")
-    items = show(list(addons.keys()))
+    items = show(preferences)
     return {i[0]: i[1] for i in items}

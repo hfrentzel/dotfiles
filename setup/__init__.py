@@ -6,7 +6,12 @@ import os
 import webbrowser
 from typing import List, Type
 
-from .builder import build_resources, collect_specs, generate_resource
+from .builder import (
+    build_resources,
+    collect_specs,
+    edit_config,
+    generate_resource,
+)
 from .conf import conf
 from .inspect import search_assets
 from .job import build_tree, print_job_tree
@@ -151,6 +156,10 @@ def list_assets() -> None:
     asyncio.run(search_assets(resource))
 
 
+def config() -> None:
+    edit_config()
+
+
 def run() -> None:
     argparser = argparse.ArgumentParser(prog="EnvSetup")
     argparser.set_defaults(func=check)
@@ -196,6 +205,11 @@ def run() -> None:
     )
     assets_cmd.set_defaults(func=list_assets)
     assets_cmd.add_argument("spec", type=str, nargs=1)
+
+    config_cmd = subparsers.add_parser(
+        "config", help="Modify the set of resources to manage on this machine"
+    )
+    config_cmd.set_defaults(func=config)
 
     os.environ["NPM_CONFIG_USERCONFIG"] = os.path.expanduser(
         "~/.config/npm/npmrc"
