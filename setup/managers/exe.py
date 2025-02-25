@@ -55,7 +55,6 @@ Apt, Deb, Pip, Npm, Tar
 """
 
 
-@dataclass
 class InstallerSpec(TypedDict):
     installer: str
     package_name: Optional[str]
