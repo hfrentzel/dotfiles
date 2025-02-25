@@ -119,7 +119,7 @@ return {
                     if vim.b['workspace'] then
                         return vim.b['workspace']
                     else
-                        return helpers.get_git_root()
+                        return vim.fs.root(0, '.git') or vim.fn.expand('%:p:h')
                     end
                 end,
                 settings = {
