@@ -183,7 +183,7 @@ Exe(
 
 Exe(
     "node",
-    version="18.13.0",
+    version="22.14.0",
     installers=["Tar"],
     on_demand=True,
     url="https://nodejs.org/dist/v{version}/node-v{version}-linux-x64.tar.xz",
