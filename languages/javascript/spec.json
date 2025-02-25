@@ -20,14 +20,14 @@
     },
     "typescript-language-server": {
         "type": "exe",
-        "version": "3.0.2",
+        "version": "4.3.3",
         "installers": ["Npm"],
         "source_repo": "https://github.com/typescript-language-server/typescript-language-server"
     },
     "vscode-langservers-extracted": {
         "type": "exe",
         "command_name": "vscode-eslint-language-server",
-        "version": "4.5.0",
+        "version": "4.10.0",
         "installers": ["Npm"],
         "version_cmd": "NPM",
         "source_repo": "https://github.com/hrsh7th/vscode-langservers-extracted"

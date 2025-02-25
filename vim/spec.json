@@ -27,7 +27,7 @@
     },
     "vim-language-server": {
         "type": "exe",
-        "version": "2.3.0",
+        "version": "2.3.1",
         "installers": ["Npm"],
         "version_cmd": "NPM",
         "source_repo": "https://github.com/iamcco/vim-language-server"

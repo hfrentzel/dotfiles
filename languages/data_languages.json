@@ -6,7 +6,7 @@
     "vscode-langservers-extracted": {
         "type": "exe",
         "command_name": "vscode-json-language-server",
-        "version": "4.5.0",
+        "version": "4.10.0",
         "installers": ["Npm"],
         "version_cmd": "NPM",
         "source_repo": "https://github.com/hrsh7th/vscode-langservers-extracted"
@@ -17,7 +17,7 @@
     },
     "yaml-language-server": {
         "type": "exe",
-        "version": "1.14.0",
+        "version": "1.16.0",
         "installers": ["Npm"],
         "version_cmd": "NPM",
         "source_repo": "https://github.com/redhat-developer/yaml-language-server"
