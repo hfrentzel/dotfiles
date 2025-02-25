@@ -21,20 +21,20 @@
     "python-lsp-server": {
         "type": "exe",
         "command_name": "pylsp",
-        "version": "1.12.0",
+        "version": "1.12.2",
         "installers": ["Pip"],
         "source_repo": "https://github.com/python-lsp/python-lsp-server"
     },
     "ruff": {
         "type": "exe",
-        "version": "0.4.0",
+        "version": "0.9.7",
         "installers": ["Pip"],
         "homepage": "https://docs.astral.sh/ruff",
         "source_repo": "https://github.com/astral-sh/ruff"
     },
     "python-lsp-ruff" : {
         "type": "library",
-        "version": "2.2.0",
+        "version": "2.2.2",
         "manager": "pip",
         "source_repo": "https://github.com/python-lsp/python-lsp-ruff"
     },
@@ -45,7 +45,7 @@
     },
     "pylint": {
         "type": "exe",
-        "version": "2.15.4",
+        "version": "3.3.4",
         "installers": ["Pip"],
         "homepage": "https://pylint.readthedocs.io/en/latest/",
         "source_repo": "https://github.com/pylint-dev/pylint"
@@ -57,26 +57,26 @@
     },
     "mypy": {
         "type": "exe",
-        "version": "1.8.0",
+        "version": "1.15.0",
         "installers": ["Pip"],
         "homepage": "https://www.mypy-lang.org/",
         "source_repo": "https://github.com/python/mypy"
     },
     "pylsp-mypy": {
         "type": "library",
-        "version": "0.6.5",
+        "version": "0.7.0",
         "manager": "pip",
         "source_repo": "https://github.com/python-lsp/pylsp-mypy"
     },
     "pylsp-rope": {
         "type": "library",
-        "version": "0.1.16",
+        "version": "0.1.17",
         "manager": "pip",
         "source_repo": "https://github.com/python-rope/pylsp-rope"
     },
     "debugpy": {
         "type": "library",
-        "version": "1.6.4",
+        "version": "1.8.12",
         "manager": "pip",
         "source_repo": "https://github.com/microsoft/debugpy"
     },
