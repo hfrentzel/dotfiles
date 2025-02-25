@@ -74,7 +74,7 @@
         },
         "zoxide": {
             "type": "exe",
-            "version": "0.9.6",
+            "version": "0.9.7",
             "installers": ["bh"],
             "source_repo": "https://github.com/ajeetdsouza/zoxide"
         },
@@ -108,7 +108,7 @@
         },
         "bat": {
             "type": "exe",
-            "version": "0.24.0",
+            "version": "0.25.0",
             "installers": ["bh"],
             "source_repo": "https://github.com/sharkdp/bat"
         },

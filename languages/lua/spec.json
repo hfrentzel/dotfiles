@@ -14,13 +14,13 @@
     },
     "selene": {
         "type": "exe",
-        "version": "0.27.1",
+        "version": "0.28.0",
         "installers": ["bh"],
         "source_repo": "https://github.com/Kampfkarren/selene"
     },
     "stylua": {
         "type": "exe",
-        "version": "0.20.0",
+        "version": "2.0.2",
         "installers": ["bh"],
         "source_repo": "https://github.com/JohnnyMorganz/StyLua"
     },

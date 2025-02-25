@@ -24,7 +24,7 @@
     },
     "yq": {
         "type": "exe",
-        "version": "4.40.4",
+        "version": "4.45.1",
         "installers": ["bh", "Go"],
         "homepage": "https://mikefarah.gitbook.io/yq/",
         "source_repo": "https://github.com/mikefarah/yq",
