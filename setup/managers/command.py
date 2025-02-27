@@ -33,6 +33,11 @@ class Command(Manager):
         if self.check_script is None:
             self.state = (False, "CANT VERIFY")
             return
+
+        if self.cwd and not os.path.exists(self.cwd):
+            self.state = (False, "INCOMPLETE")
+            return
+
         result = await async_proc(self.check_script, cwd=self.cwd)
         if result.returncode == 0:
             self.state = (True, "DONE")
@@ -82,6 +87,11 @@ class Command(Manager):
     ) -> Callable[[], Coroutine[None, None, bool]]:
         async def inner() -> bool:
             print(f"Running the {name} script...")
+
+            if cwd and not os.path.exists(cwd):
+                print(red(f"{name} script failed"))
+                return False
+
             result = await async_proc(script, cwd=cwd)
             success = not result.returncode
             if success:
