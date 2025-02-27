@@ -5,7 +5,7 @@ from typing import Callable, ClassVar, Coroutine, List, Tuple
 from setup.conf import conf
 from setup.job import Job
 from setup.managers.manager import Manager, mark_resource
-from setup.output import print_grid
+from setup.output import print_grid, yellow
 
 
 @dataclass
@@ -55,7 +55,7 @@ class Symlink(Manager):
     @classmethod
     def status_printout(cls, show_all: bool) -> str:
         lines = []
-        for sym in sorted(cls.desired, key=(lambda s: s.name)):
+        for sym in sorted(cls.desired, key=lambda s: s.name):
             if not show_all and sym.state[0]:
                 continue
             lines.append((sym.name, (sym.state[1], sym.state[0])))
@@ -76,6 +76,24 @@ class Symlink(Manager):
             src = source.replace("DOT", conf.dotfiles_home)
             src = os.path.expanduser(src)
             dest = os.path.expanduser(target)
+
+            # Handle files that are blocking symlink
+            if os.path.isfile(dest):
+                old_folder = os.path.expanduser(
+                    "~/.local/share/mysetup/old_files"
+                )
+                old_file = os.path.basename(dest)
+                old_file = os.path.join(old_folder, old_file + ".old")
+                os.makedirs(old_folder, exist_ok=True)
+                print(
+                    yellow(
+                        f"NOTE: {dest} already exists. "
+                        f"This existing file will be moved to {old_file} "
+                        "before the symlink is created."
+                    )
+                )
+                os.rename(dest, old_file)
+
             print(f"Creating symlink at {dest}...")
             os.makedirs(os.path.dirname(dest), exist_ok=True)
             if os.path.islink(dest):

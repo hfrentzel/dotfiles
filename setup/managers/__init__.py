@@ -50,13 +50,10 @@ def create_jobs(selected_types: List[Type[Manager]]) -> Dict[str, Job]:
         for resource in t.desired:
             if resource.state[0]:
                 continue
-            if resource.state[1] == "BLOCKED":
-                # TODO Add unblocking job
-                pass
-            else:
-                job = resource.create_job()
-                if job is not None:
-                    jobs[resource.name] = job
+
+            job = resource.create_job()
+            if job is not None:
+                jobs[resource.name] = job
     jobs.update(create_bonus_jobs())
     return jobs
 
