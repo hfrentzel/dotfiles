@@ -52,15 +52,18 @@ class Pip:
     @classmethod
     def get_version(cls, package: Package) -> Optional[str]:
         if not cls.files:
-            pip_dir = (
-                subprocess.run(
-                    ["python", "-m", "site", "--user-site"],
-                    check=False,
-                    capture_output=True,
+            try:
+                pip_dir = (
+                    subprocess.run(
+                        ["python", "-m", "site", "--user-site"],
+                        check=False,
+                        capture_output=True,
+                    )
+                    .stdout.decode()
+                    .strip()
                 )
-                .stdout.decode()
-                .strip()
-            )
+            except FileNotFoundError:
+                return None
             cls.files = "\n".join([
                 s.replace("_", "-")
                 for s in os.listdir(pip_dir)

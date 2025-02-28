@@ -57,7 +57,8 @@ Apt, Deb, Pip, Npm, Tar
 
 class InstallerSpec(TypedDict):
     installer: str
-    package_name: Optional[str]
+    package_name: Optional[Union[str, List[str]]]
+    apt_repo: Optional[str]
     post_script: Optional[List[str]]
 
 
@@ -160,11 +161,9 @@ class Exe(Manager, Package):
         for t in self.installers:
             if isinstance(t, str):
                 installer = t
-                package = self.name
             else:
                 installer = t["installer"]
-                package = t.get("package_name") or self.name
-            settled = JOB_BUILDERS[installer](self, package)
+            settled = JOB_BUILDERS[installer](self, self.name)
             if isinstance(settled, Job):
                 return settled
             if settled:

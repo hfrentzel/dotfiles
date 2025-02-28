@@ -1,11 +1,21 @@
 {
     "python": {
         "type": "exe",
-        "version": "3.9.5",
-        "installers": [{
-            "installer": "Apt",
-            "package_name": "python3.9"
-        }],
+        "version": "3.11.11",
+        "installers": [
+            {
+                "installer": "Apt",
+                "package_name": [
+                    "python3.11",
+                    "python3.11-venv"
+                ],
+                "apt_repo": "ppa:deadsnakes/ppa",
+                "post_script": [
+                    "sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.11 11",
+                    "curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11"
+                ]
+            }
+        ],
         "homepage": "https://www.python.org/",
         "source_repo": "https://github.com/python/cpython"
     },
@@ -22,17 +32,21 @@
         "type": "exe",
         "command_name": "pylsp",
         "version": "1.12.2",
-        "installers": ["Pip"],
+        "installers": [
+            "Pip"
+        ],
         "source_repo": "https://github.com/python-lsp/python-lsp-server"
     },
     "ruff": {
         "type": "exe",
         "version": "0.9.7",
-        "installers": ["Pip"],
+        "installers": [
+            "Pip"
+        ],
         "homepage": "https://docs.astral.sh/ruff",
         "source_repo": "https://github.com/astral-sh/ruff"
     },
-    "python-lsp-ruff" : {
+    "python-lsp-ruff": {
         "type": "library",
         "version": "2.2.2",
         "manager": "pip",
@@ -46,7 +60,9 @@
     "pylint": {
         "type": "exe",
         "version": "3.3.4",
-        "installers": ["Pip"],
+        "installers": [
+            "Pip"
+        ],
         "homepage": "https://pylint.readthedocs.io/en/latest/",
         "source_repo": "https://github.com/pylint-dev/pylint"
     },
@@ -58,7 +74,9 @@
     "mypy": {
         "type": "exe",
         "version": "1.15.0",
-        "installers": ["Pip"],
+        "installers": [
+            "Pip"
+        ],
         "homepage": "https://www.mypy-lang.org/",
         "source_repo": "https://github.com/python/mypy"
     },
