@@ -1,4 +1,5 @@
 import json
+from logging import Logger
 from typing import TYPE_CHECKING, Any, Dict, List
 
 from setup.job import Job
@@ -15,14 +16,17 @@ if TYPE_CHECKING:
 class Gitlab:
     @classmethod
     def gitlab_builder(cls, spec: "Exe", _: str = "") -> Job:
-        async def inner() -> bool:
+        async def inner(logger: Logger) -> bool:
+            logger.info(f"Installing {spec.name} from Gitlab release")
             repo = spec.repo
-            tag = await cls.get_release(repo, spec.version)
+            tag = await cls.get_release(repo, spec.version, logger)
 
-            available_assets = await cls.get_assets(repo, tag)
+            available_assets = await cls.get_assets(repo, tag, logger)
             asset = filter_assets(list(available_assets.keys()))
             if asset is None:
-                print(red(f"Failed to install {spec.name} from Gitlab release"))
+                logger.error(
+                    red(f"Failed to install {spec.name} from Gitlab release")
+                )
                 return False
 
             spec.url = (
@@ -40,32 +44,34 @@ class Gitlab:
             return False
 
         return Job(
-            names=[spec.name],
-            description=f"Install {spec.name} from Github release",
+            name=spec.name,
+            description=f"Install {spec.name} from Gitlab release",
             job=inner,
         )
 
     @classmethod
-    async def get_assets(cls, repo: str, tag: str) -> Dict[str, str]:
+    async def get_assets(
+        cls, repo: str, tag: str, logger: Logger
+    ) -> Dict[str, str]:
         response = await cls.glab_api_call(
-            f'{repo.replace("/", "%2F")}/releases/{tag}'
+            f"{repo.replace('/', '%2F')}/releases/{tag}", logger
         )
         return {
             a["name"].lower(): a["name"] for a in response["assets"]["links"]
         }
 
     @classmethod
-    async def get_release(cls, repo: str, version: str) -> str:
+    async def get_release(cls, repo: str, version: str, logger: Logger) -> str:
         response = await cls.glab_api_call(
-            f'{repo.replace("/", "%2F")}/releases'
+            f"{repo.replace('/', '%2F')}/releases", logger
         )
         releases: List[str] = [r["tag_name"] for r in response]
         return next(r for r in releases if version in r)
 
     @classmethod
-    async def glab_api_call(cls, path: str) -> Any:
+    async def glab_api_call(cls, path: str, logger: Logger) -> Any:
         url = f"https://gitlab.com/api/v4/projects/{path}"
-        result = await async_proc(f"curl {url}")
+        result = await async_proc(f"curl {url}", logger=logger)
         if result.returncode != 0:
             return None
         return json.loads(result.stdout)

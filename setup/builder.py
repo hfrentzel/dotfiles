@@ -104,7 +104,7 @@ def load_settings(
     return choices, None
 
 
-def edit_config():
+def edit_config() -> None:
     with open(
         os.path.join(conf.dotfiles_home, "main.json"), encoding="utf-8"
     ) as f:
@@ -113,7 +113,7 @@ def edit_config():
 
     choices, external = read_config()
     if choices is None:
-        choices = [(a, True) for a in addons]
+        choices = addons.fromkeys(addons, True)
     elif missing_addons := set(addons) - set(choices):
         for addon in missing_addons:
             choices[addon] = True

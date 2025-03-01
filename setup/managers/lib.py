@@ -35,7 +35,7 @@ class Library(Manager, Package):
     @classmethod
     def desired_printout(cls) -> str:
         lines = []
-        for lib in sorted(cls.desired, key=(lambda b: b.name)):
+        for lib in sorted(cls.desired, key=lambda b: b.name):
             lines.append((lib.name, lib.version))
         return print_grid(("LIBRARY", "VERSION"), lines)
 
@@ -54,7 +54,7 @@ class Library(Manager, Package):
     @classmethod
     def status_printout(cls, show_all: bool) -> str:
         lines = []
-        for lib in sorted(cls.desired, key=(lambda b: b.name)):
+        for lib in sorted(cls.desired, key=lambda b: b.name):
             if not show_all and lib.state[0]:
                 continue
             lines.append((lib.name, lib.version, (lib.state[1], lib.state[0])))

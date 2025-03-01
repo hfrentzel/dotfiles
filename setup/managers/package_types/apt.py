@@ -1,3 +1,4 @@
+from logging import Logger
 from typing import TYPE_CHECKING, List
 
 from setup.job import Job
@@ -37,38 +38,44 @@ class Apt:
 
     @classmethod
     def apt_job(cls) -> Job:
-        async def inner() -> bool:
+        async def inner(logger: Logger) -> bool:
             if len(cls.all_apts) == 0:
                 return True
-            print("Running apt install...")
+            apt_string = ",".join(cls.all_apts)
+            logger.info(
+                "Running apt install to install the following "
+                f"packages: {apt_string}"
+            )
 
             for repo in cls.apt_repos:
                 result = await async_proc(
-                    f"sudo add-apt-repository {repo} --yes"
+                    f"sudo add-apt-repository {repo} --yes", logger=logger
                 )
 
             await async_proc("sudo apt update")
             result = await async_proc(
-                f"sudo apt install --yes {' '.join(cls.all_apts)}"
+                f"sudo apt install --yes {' '.join(cls.all_apts)}",
+                logger=logger,
             )
             success = not result.returncode
             if success:
-                print(
+                logger.info(
                     green(
                         "The following app(s) were successfully installed "
-                        f"with apt: {','.join(cls.all_apts)}"
+                        f"with apt: {apt_string}"
                     )
                 )
                 for script in cls.scripts:
                     for step in script:
-                        result = await async_proc(step)
+                        result = await async_proc(step, logger=logger)
             else:
-                print(red("apt installation failed"))
+                logger.error(red("apt installation failed"))
                 # TODO try installing packages one at a time
             return success
 
         return Job(
-            names=cls.all_apts,
+            name="apt_install",
+            resources=cls.all_apts,
             description=f"Install {', '.join(cls.all_apts)} with Apt",
             job=inner,
         )

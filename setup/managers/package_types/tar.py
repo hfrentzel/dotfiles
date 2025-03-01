@@ -1,4 +1,5 @@
 import tarfile
+from logging import Logger
 from os import makedirs, path
 from typing import TYPE_CHECKING
 
@@ -13,28 +14,32 @@ if TYPE_CHECKING:
 
 
 def tar_builder(spec: "Exe", _: str = "") -> Job:
-    async def inner() -> bool:
+    async def inner(logger: Logger) -> bool:
         if conf.root_access:
             install_home = "/usr/local"
         else:
             install_home = path.expanduser("~/.local")
 
-        print(f"Installing {spec.name} from tarball...")
+        logger.info(f"Installing {spec.name} from tarball...")
         archive_file = await fetch_file(spec.url, spec.version)
         with tarfile.open(archive_file) as tar:
             if spec.extract_path:
                 tar.extractall(path.expanduser(spec.extract_path))
-                print(green(f"{spec.name} has been installed successfully"))
+                logger.info(
+                    green(f"{spec.name} has been installed successfully")
+                )
                 return True
 
             all_files = [t for t in tar.getmembers() if not t.isdir()]
             extract_path = None
 
             if len(all_files) == 1 and all_files[0].mode & 0b001001001:
-                all_files[0].path = all_files[0].name.split('/')[-1]
+                all_files[0].path = all_files[0].name.split("/")[-1]
                 extract_path = f"{install_home}/bin"
                 tar.extract(all_files[0], extract_path)
-                print(green(f"{spec.name} has been installed successfully"))
+                logger.info(
+                    green(f"{spec.name} has been installed successfully")
+                )
                 return True
 
             # Remove common prefix from all filenames
@@ -67,14 +72,14 @@ def tar_builder(spec: "Exe", _: str = "") -> Job:
                 makedirs(full_extract_path, exist_ok=True)
                 tar.extract(t, full_extract_path)
 
-            print(green(f"{spec.name} has been installed successfully"))
+            logger.info(green(f"{spec.name} has been installed successfully"))
             return True
 
-        print(red(f"Failed to install {spec.name} from tarball"))
+        logger.error(red(f"Failed to install {spec.name} from tarball"))
         return False
 
     return Job(
-        names=[spec.name],
+        name=spec.name,
         description=f"Install {spec.name} from tarball",
         on_demand=spec.on_demand,
         job=inner,

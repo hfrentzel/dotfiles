@@ -1,3 +1,4 @@
+from logging import Logger
 from typing import TYPE_CHECKING
 
 from setup.job import Job
@@ -9,19 +10,21 @@ if TYPE_CHECKING:
 
 
 def deb_builder(spec: "Exe", _: str = "") -> Job:
-    async def inner() -> bool:
-        print(f"Installing {spec.name} from debian archive...")
+    async def inner(logger: Logger) -> bool:
+        logger.info(f"Installing {spec.name} from debian archive...")
         archive_file = await fetch_file(spec.url, spec.version)
         result = await async_proc(f"sudo apt install {archive_file}")
         success = not result.returncode
         if success:
-            print(green(f"{spec.name} has been installed successfully"))
+            logger.info(green(f"{spec.name} has been installed successfully"))
         else:
-            print(red(f"Failed to install {spec.name} from debian archive"))
+            logger.error(
+                red(f"Failed to install {spec.name} from debian archive")
+            )
         return success
 
     return Job(
-        names=[spec.name],
+        name=spec.name,
         description=f"Install {spec.name} from debian archive",
         job=inner,
     )

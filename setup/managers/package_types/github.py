@@ -1,5 +1,6 @@
 import json
 import os
+from logging import Logger
 from typing import TYPE_CHECKING, Any, Dict, List
 
 from setup.job import Job
@@ -18,18 +19,21 @@ class Github:
 
     @classmethod
     def github_builder(cls, spec: "Exe", _: str = "") -> Job:
-        async def inner() -> bool:
+        async def inner(logger: Logger) -> bool:
+            logger.info(f"Installing {spec.name} from Github release")
             repo = spec.repo
-            tag = await cls.get_release(repo, spec.version)
+            tag = await cls.get_release(repo, spec.version, logger)
 
-            available_assets = await cls.get_assets(repo, tag)
+            available_assets = await cls.get_assets(repo, tag, logger)
             asset = filter_assets(available_assets)
             spec.url = (
                 f"https://github.com/{repo}/releases/download/{tag}/{asset}"
             )
 
             if asset is None:
-                print(red(f"Failed to install {spec.name} from Github release"))
+                logger.error(
+                    red(f"Failed to install {spec.name} from Github release")
+                )
                 return False
 
             if asset.endswith(".deb"):
@@ -42,30 +46,32 @@ class Github:
             return True
 
         return Job(
-            names=[spec.name],
+            name=spec.name,
             description=f"Install {spec.name} from Github release",
             job=inner,
         )
 
     @classmethod
-    async def get_assets(cls, repo: str, tag: str) -> List[str]:
-        response = await cls.gh_api_call(f"repos/{repo}/releases/tags/{tag}")
+    async def get_assets(cls, repo: str, tag: str, logger: Logger) -> List[str]:
+        response = await cls.gh_api_call(
+            f"repos/{repo}/releases/tags/{tag}", logger
+        )
         return [a["name"].lower() for a in response["assets"]]
 
     @classmethod
-    async def get_release(cls, repo: str, version: str) -> str:
+    async def get_release(cls, repo: str, version: str, logger: Logger) -> str:
         response: List[Dict[str, str]] = await cls.gh_api_call(
-            f"repos/{repo}/releases"
+            f"repos/{repo}/releases", logger
         )
         releases = [r["tag_name"] for r in response]
         return next(r for r in releases if version in r)
 
     @classmethod
-    async def gh_api_call(cls, path: str) -> Any:
+    async def gh_api_call(cls, path: str, logger: Logger) -> Any:
         token = cls.get_token()
         url = f"https://api.github.com/{path}"
         result = await async_proc(
-            f'curl -L -H "Authorization: Bearer {token}" {url}'
+            f'curl -L -H "Authorization: Bearer {token}" {url}', logger=logger
         )
         if result.returncode != 0:
             return None

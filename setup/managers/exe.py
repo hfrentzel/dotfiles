@@ -128,7 +128,7 @@ class Exe(Manager, Package):
     @classmethod
     def desired_printout(cls) -> str:
         lines = []
-        for exe in sorted(cls.desired, key=(lambda e: e.name)):
+        for exe in sorted(cls.desired, key=lambda e: e.name):
             lines.append((exe.name, exe.version))
         return print_grid(("COMMAND", "VERSION"), lines)
 
@@ -151,7 +151,7 @@ class Exe(Manager, Package):
     @classmethod
     def status_printout(cls, show_all: bool) -> str:
         lines = []
-        for exe in sorted(cls.desired, key=(lambda e: e.name)):
+        for exe in sorted(cls.desired, key=lambda e: e.name):
             if not show_all and (exe.state[0] or exe.on_demand):
                 continue
             lines.append((exe.name, exe.version, (exe.state[1], exe.state[0])))

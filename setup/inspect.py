@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 
 from .managers.exe import Exe
@@ -8,17 +9,20 @@ from .process import filter_assets
 
 
 async def search_assets(exe: Exe) -> Optional[str]:
+    logger = logging.getLogger("search_assets")
     if "Github" not in exe.installers and "Gitlab" not in exe.installers:
         print(f"{exe.name} is not installable by Github or Gitlab")
         return None
 
     if "Github" in exe.installers:
-        release = await Github.get_release(exe.repo, exe.version)
-        assets = await Github.get_assets(exe.repo, release)
+        release = await Github.get_release(exe.repo, exe.version, logger)
+        assets = await Github.get_assets(exe.repo, release, logger)
         selected_assets = filter_assets(assets, return_all=True)
     else:
-        release = await Gitlab.get_release(exe.repo, exe.version)
-        assets = list((await Gitlab.get_assets(exe.repo, release)).keys())
+        release = await Gitlab.get_release(exe.repo, exe.version, logger)
+        assets = list(
+            (await Gitlab.get_assets(exe.repo, release, logger)).keys()
+        )
         selected_assets = filter_assets(assets, return_all=True)
 
     color = green

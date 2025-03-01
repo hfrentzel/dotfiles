@@ -1,3 +1,4 @@
+from logging import Logger
 from typing import TYPE_CHECKING
 
 from setup.job import Job
@@ -9,18 +10,20 @@ if TYPE_CHECKING:
 
 
 def go_builder(spec: "Exe", _: str = "") -> Job:
-    async def inner() -> bool:
-        print(f"Installing {spec.name} with go...")
-        result = await async_proc(f"go install {spec.url}@v{spec.version}")
+    async def inner(logger: Logger) -> bool:
+        logger.info(f"Installing {spec.name} with go...")
+        result = await async_proc(
+            f"go install {spec.url}@v{spec.version}", logger=logger
+        )
         success = not result.returncode
         if success:
-            print(green(f"{spec.name} has been installed successfully"))
+            logger.info(green(f"{spec.name} has been installed successfully"))
         else:
-            print(red(f"Failed to install {spec.name} with go"))
+            logger.error(red(f"Failed to install {spec.name} with go"))
         return success
 
     return Job(
-        names=[spec.name],
+        name=spec.name,
         description=f"Install {spec.name} with go",
         depends_on="go",
         job=inner,

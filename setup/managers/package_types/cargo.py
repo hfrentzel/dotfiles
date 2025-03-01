@@ -1,3 +1,4 @@
+from logging import Logger
 from typing import TYPE_CHECKING
 
 from setup.job import Job
@@ -9,20 +10,20 @@ if TYPE_CHECKING:
 
 
 def cargo_builder(spec: "Exe", package: str) -> Job:
-    async def inner() -> bool:
-        print(f"Installing {spec.name} with cargo...")
+    async def inner(logger: Logger) -> bool:
+        logger.info(f"Installing {spec.name} with cargo...")
         result = await async_proc(
             f"cargo install --version {spec.version} {package}"
         )
         success = not result.returncode
         if success:
-            print(green(f"{spec.name} has been installed successfully"))
+            logger.info(green(f"{spec.name} has been installed successfully"))
         else:
-            print(red(f"Failed to install {spec.name} with cargo"))
+            logger.error(red(f"Failed to install {spec.name} with cargo"))
         return success
 
     return Job(
-        names=[spec.name],
+        name=spec.name,
         description=f"Install {spec.name} with cargo",
         depends_on="cargo",
         job=inner,

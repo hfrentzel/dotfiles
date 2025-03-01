@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass
+from logging import Logger
 from typing import Callable, ClassVar, Coroutine, List, Tuple
 
 from setup.job import Job
@@ -34,7 +35,7 @@ class Directory(Manager):
     @classmethod
     def desired_printout(cls) -> str:
         lines = []
-        for directory in sorted(cls.desired, key=(lambda d: d.path)):
+        for directory in sorted(cls.desired, key=lambda d: d.path):
             lines.append((directory.path,))
         return print_grid(("SUB-DIRECTORIES",), lines)
 
@@ -50,7 +51,7 @@ class Directory(Manager):
     @classmethod
     def status_printout(cls, show_all: bool) -> str:
         lines = []
-        for directory in sorted(cls.desired, key=(lambda d: d.path)):
+        for directory in sorted(cls.desired, key=lambda d: d.path):
             if not show_all and directory.state[0]:
                 continue
             lines.append((
@@ -61,7 +62,7 @@ class Directory(Manager):
 
     def create_job(self) -> Job:
         return Job(
-            names=[self.name],
+            name=self.name,
             description=f"Create self at {self.path}",
             job=self.create_directory(self.path),
         )
@@ -69,10 +70,10 @@ class Directory(Manager):
     @staticmethod
     def create_directory(
         path: str,
-    ) -> Callable[[], Coroutine[None, None, bool]]:
-        async def inner() -> bool:
+    ) -> Callable[[Logger], Coroutine[None, None, bool]]:
+        async def inner(logger: Logger) -> bool:
             full_path = os.path.expanduser(path)
-            print(f"Creating directory at {full_path}...")
+            logger.info(f"Creating directory at {full_path}...")
             os.makedirs(full_path)
 
             return True

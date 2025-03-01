@@ -2,6 +2,7 @@ import argparse
 import asyncio
 import itertools
 import json
+import logging
 import os
 import webbrowser
 from typing import List, Type
@@ -27,6 +28,7 @@ from .output import green, red
 
 
 async def handle_jobs(selected_types: List[Type[Manager]]) -> None:
+    logger = logging.getLogger("mysetup")
     if conf.args.stage == "desired":
         for t in selected_types:
             print(t.desired_printout(), end="")
@@ -43,7 +45,7 @@ async def handle_jobs(selected_types: List[Type[Manager]]) -> None:
 
     jobs = create_jobs(selected_types)
     if len(jobs) == 0:
-        print("All items are satisfied")
+        logger.info("No jobs to run. All resources are setup")
         return
 
     if conf.args.stage == "jobs":
@@ -57,9 +59,11 @@ async def handle_jobs(selected_types: List[Type[Manager]]) -> None:
         return
 
     if all(await asyncio.gather(*[job.run() for job in root_jobs])):
-        print(green("All items setup successfully"))
+        logger.info(green("All resources have been setup successfully"))
     else:
-        print(red("Not all jobs were successful. Check logs for details"))
+        logger.error(
+            red("Not all jobs were successful. Check logs for details")
+        )
 
 
 async def handle_single_resource(resource: Manager, resource_type: str) -> None:
@@ -174,6 +178,8 @@ def available() -> None:
 def run() -> None:
     argparser = argparse.ArgumentParser(prog="EnvSetup")
     argparser.set_defaults(func=check)
+    argparser.add_argument("-l", "--log", choices=['debug', 'info', 'error',
+                                                   'warn'], default='info')
 
     resources = argparser.add_mutually_exclusive_group()
     resources.add_argument(
@@ -236,4 +242,13 @@ def run() -> None:
     )
 
     conf.args = argparser.parse_args()
+    loglevel = {
+        'debug': logging.DEBUG,
+        'info': logging.INFO,
+        'warning': logging.WARNING,
+        'error': logging.ERROR,
+    }[conf.args.log]
+    logging.basicConfig(
+        level=loglevel, format="[%(levelname)s] %(name)s: %(message)s"
+    )
     conf.args.func()

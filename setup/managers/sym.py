@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass
+from logging import Logger
 from typing import Callable, ClassVar, Coroutine, List, Tuple
 
 from setup.conf import conf
@@ -63,7 +64,7 @@ class Symlink(Manager):
 
     def create_job(self) -> Job:
         return Job(
-            names=[self.name],
+            name=self.name,
             description=f"Generate symlink at {self.target}",
             job=self.create_symlink(self.source, self.target),
         )
@@ -71,8 +72,8 @@ class Symlink(Manager):
     @staticmethod
     def create_symlink(
         source: str, target: str
-    ) -> Callable[[], Coroutine[None, None, bool]]:
-        async def inner() -> bool:
+    ) -> Callable[[Logger], Coroutine[None, None, bool]]:
+        async def inner(logger: Logger) -> bool:
             src = source.replace("DOT", conf.dotfiles_home)
             src = os.path.expanduser(src)
             dest = os.path.expanduser(target)
@@ -85,7 +86,7 @@ class Symlink(Manager):
                 old_file = os.path.basename(dest)
                 old_file = os.path.join(old_folder, old_file + ".old")
                 os.makedirs(old_folder, exist_ok=True)
-                print(
+                logger.warning(
                     yellow(
                         f"NOTE: {dest} already exists. "
                         f"This existing file will be moved to {old_file} "
@@ -94,7 +95,7 @@ class Symlink(Manager):
                 )
                 os.rename(dest, old_file)
 
-            print(f"Creating symlink at {dest}...")
+            logger.info(f"Creating symlink at {dest}...")
             os.makedirs(os.path.dirname(dest), exist_ok=True)
             if os.path.islink(dest):
                 os.remove(dest)

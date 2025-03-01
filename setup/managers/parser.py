@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass
+from logging import Logger
 from typing import Callable, ClassVar, Coroutine, List, Tuple
 
 from setup.conf import conf
@@ -49,7 +50,7 @@ class Parser(Manager):
     @classmethod
     def status_printout(cls, show_all: bool) -> str:
         lines = []
-        for parser in sorted(cls.desired, key=(lambda s: s.language)):
+        for parser in sorted(cls.desired, key=lambda s: s.language):
             if not show_all and parser.state[0]:
                 continue
             lines.append((parser.language, (parser.state[1], parser.state[0])))
@@ -57,8 +58,8 @@ class Parser(Manager):
 
     def create_job(self) -> Job:
         return Job(
-            names=[self.name],
-            description=f"Install TS self for {self.language}",
+            name=self.name,
+            description=f"Install treesitter parser for {self.language}",
             depends_on="neovim",
             job=self.install_ts_parser(self.language),
         )
@@ -66,10 +67,12 @@ class Parser(Manager):
     @staticmethod
     def install_ts_parser(
         language: str,
-    ) -> Callable[[], Coroutine[None, None, bool]]:
-        async def inner() -> bool:
-            print(f"Installing Treesitter parser for {language}...")
-            await async_proc(f'nvim --headless +"TSInstallSync {language}" +q')
+    ) -> Callable[[Logger], Coroutine[None, None, bool]]:
+        async def inner(logger: Logger) -> bool:
+            logger.info(f"Installing Treesitter parser for {language}...")
+            await async_proc(
+                f'nvim --headless +"TSInstallSync {language}" +q', logger=logger
+            )
             return True
 
         return inner

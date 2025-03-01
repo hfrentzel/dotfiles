@@ -1,6 +1,7 @@
 import asyncio
 import os
 from dataclasses import dataclass
+from logging import Logger
 from typing import Callable, ClassVar, Coroutine, List, Optional, Tuple
 
 from setup.conf import conf
@@ -60,14 +61,14 @@ class Command(Manager):
     @classmethod
     def desired_printout(cls) -> str:
         lines = []
-        for command in sorted(cls.desired, key=(lambda c: c.name)):
+        for command in sorted(cls.desired, key=lambda c: c.name):
             lines.append((command.name,))
         return print_grid(("SCRIPTS",), lines)
 
     @classmethod
     def status_printout(cls, show_all: bool) -> str:
         lines = []
-        for command in sorted(cls.desired, key=(lambda c: c.name)):
+        for command in sorted(cls.desired, key=lambda c: c.name):
             if not show_all and command.state[0]:
                 continue
             lines.append((command.name, (command.state[1], command.state[0])))
@@ -75,7 +76,7 @@ class Command(Manager):
 
     def create_job(self) -> Job:
         return Job(
-            names=[self.name],
+            name=self.name,
             description=f"Run the {self.name} script",
             depends_on=self.depends_on,
             job=self.perform_script(self.name, self.run_script, self.cwd),
@@ -84,20 +85,20 @@ class Command(Manager):
     @staticmethod
     def perform_script(
         name: str, script: str, cwd: Optional[str]
-    ) -> Callable[[], Coroutine[None, None, bool]]:
-        async def inner() -> bool:
-            print(f"Running the {name} script...")
+    ) -> Callable[[Logger], Coroutine[None, None, bool]]:
+        async def inner(logger: Logger) -> bool:
+            logger.info(f"Running the {name} script...")
 
             if cwd and not os.path.exists(cwd):
-                print(red(f"{name} script failed"))
+                logger.error(red(f"{name} script failed"))
                 return False
 
-            result = await async_proc(script, cwd=cwd)
+            result = await async_proc(script, cwd=cwd, logger=logger)
             success = not result.returncode
             if success:
-                print(green(f"{name} script ran successfully"))
+                logger.info(green(f"{name} script ran successfully"))
             else:
-                print(red(f"{name} script failed"))
+                logger.error(red(f"{name} script failed"))
             return success
 
         return inner

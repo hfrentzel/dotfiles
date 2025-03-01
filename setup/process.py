@@ -3,6 +3,7 @@ import os
 import platform
 from dataclasses import dataclass
 from itertools import zip_longest
+from logging import Logger
 from typing import List, Literal, Optional, Union, overload
 
 from .conf import conf
@@ -36,7 +37,10 @@ async def async_proc(
     cwd: Optional[str] = None,
     stdin: Optional[bytes] = None,
     forward_env: bool = False,
+    logger: Optional[Logger] = None,
 ) -> JobOutput:
+    if logger:
+        logger.debug(f'Running process: "{cmd}"')
     if isinstance(stdin, str):
         stdin = stdin.encode()
     # TODO Log stdout and stderr if command fails

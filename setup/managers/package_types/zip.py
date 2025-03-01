@@ -1,3 +1,4 @@
+from logging import Logger
 from os import chmod, makedirs, path
 from typing import TYPE_CHECKING
 from zipfile import ZipFile
@@ -13,13 +14,13 @@ if TYPE_CHECKING:
 
 
 def zip_builder(spec: "Exe", _: str = "") -> Job:
-    async def inner() -> bool:
+    async def inner(logger: Logger) -> bool:
         if conf.root_access:
             install_home = "/usr/local"
         else:
             install_home = path.expanduser("~/.local")
 
-        print(f"Installing {spec.name} from zip file...")
+        logger.info(f"Installing {spec.name} from zip file...")
         archive_file = await fetch_file(spec.url, spec.version)
         with ZipFile(archive_file) as archive:
             all_files = [z for z in archive.infolist() if not z.is_dir()]
@@ -34,7 +35,7 @@ def zip_builder(spec: "Exe", _: str = "") -> Job:
                 archive.extract(all_files[0], extract_path)
                 chmod(f"{extract_path}/{all_files[0].filename}", mode)
 
-                print(green(f"{spec.name} has been installed successfully"))
+                logger.info(green(f"{spec.name} has been installed successfully"))
                 return True
 
             # Remove common prefix from all filenames
@@ -69,14 +70,14 @@ def zip_builder(spec: "Exe", _: str = "") -> Job:
                 if mode & 0o111:
                     chmod(extract_path, mode)
 
-            print(green(f"{spec.name} has been installed successfully"))
+            logger.info(green(f"{spec.name} has been installed successfully"))
             return True
 
-        print(red(f"Failed to install {spec.name} from zip file"))
+        logger.error(red(f"Failed to install {spec.name} from zip file"))
         return False
 
     return Job(
-        names=[spec.name],
+        name=spec.name,
         description=f"Install {spec.name} from zip file",
         job=inner,
     )

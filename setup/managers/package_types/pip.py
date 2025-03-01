@@ -1,6 +1,7 @@
 import os
 import re
 import subprocess
+from logging import Logger
 from typing import List, Optional, Tuple
 
 from setup.job import Job
@@ -23,27 +24,31 @@ class Pip:
     def pip_job(cls) -> Job:
         pip_string = " ".join([f"{p[0]}=={p[1]}" for p in cls.all_pips])
 
-        async def inner() -> bool:
+        async def inner(logger: Logger) -> bool:
             if len(cls.all_pips) == 0:
                 return True
+            resources_str = ",".join(p[0] for p in cls.all_pips)
 
-            print("Running pip install...")
-            result = await async_proc(f"python -m pip install {pip_string}")
+            logger.info(f"Running pip install for resources: {resources_str}")
+            result = await async_proc(
+                f"python -m pip install {pip_string}", logger=logger
+            )
             success = not result.returncode
             if success:
-                print(
+                logger.info(
                     green(
-                        'The following apps were successfully installed '
-                        f'with pip: {",".join(p[0] for p in cls.all_pips)}'
+                        "The following apps were successfully installed "
+                        f"with pip: {resources_str}"
                     )
                 )
             else:
-                print(red("pip installation failed"))
+                logger.error(red("pip installation failed"))
                 # TODO try installing packages one at a time
             return success
 
         return Job(
-            names=[p[0] for p in cls.all_pips],
+            name="pip_install",
+            resources=[p[0] for p in cls.all_pips],
             description=f"Install {pip_string} with pip",
             depends_on="python",
             job=inner,

@@ -1,5 +1,6 @@
 import json
 import os
+from logging import Logger
 from typing import List, Optional, Tuple
 
 from setup.job import Job
@@ -21,28 +22,33 @@ class Npm:
     def npm_job(cls) -> Job:
         npm_string = " ".join([f"{p[0]}@{p[1]}" for p in cls.all_packages])
 
-        async def inner() -> bool:
+        async def inner(logger: Logger) -> bool:
             if len(cls.all_packages) == 0:
                 return True
+            resources_str = ",".join(p[0] for p in cls.all_packages)
 
-            print("Running npm install...")
-            result = await async_proc(f"npm install -g {npm_string}")
+            logger.info(f"Running npm install for resources: {resources_str}")
+            result = await async_proc(
+                f"npm install -g {npm_string}", logger=logger
+            )
             success = not result.returncode
             if success:
-                print(
+                logger.info(
                     green(
-                        'The following apps were successfully installed '
-                        f'with npm: {",".join(p[0] for p in cls.all_packages)}'
+                        "The following apps were successfully installed "
+                        f"with npm: {resources_str}"
                     )
                 )
             else:
-                print(red("npm installation failed"))
+                logger.error(red("npm installation failed"))
                 # TODO try installing packages one at a time
             return success
 
         return Job(
-            names=[p[0] for p in cls.all_packages],
-            description=f'Install {",".join(p[0] for p in cls.all_packages)} with npm',
+            name="npm_install",
+            resources=[p[0] for p in cls.all_packages],
+            description=f"Install {','.join(p[0] for p in cls.all_packages)} "
+            "with npm",
             depends_on="node",
             job=inner,
         )
@@ -56,7 +62,7 @@ class Npm:
         )
         if not os.path.exists(path):
             return None
-        with open(path) as f:
+        with open(path, encoding="utf-8") as f:
             if isinstance(version := json.loads(f.read()).get("version"), str):
                 return version
         return None
