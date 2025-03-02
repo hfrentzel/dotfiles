@@ -4,7 +4,7 @@ import platform
 from dataclasses import dataclass
 from itertools import zip_longest
 from logging import Logger
-from typing import List, Literal, Optional, Union, overload
+from typing import List, Literal, Optional, Tuple, Union, overload
 
 from .conf import conf
 
@@ -19,6 +19,26 @@ class JobOutput:
     stdout: str
     stderr: str
     returncode: Optional[int]
+
+
+class OutputTracker:
+    all_outputs: List[Tuple[str, str, JobOutput]] = []
+
+    @classmethod
+    def add_log(cls, job: str, cmd: str, job_output: JobOutput):
+        cls.all_outputs.append((job, cmd, job_output))
+
+    @classmethod
+    def write_logs(cls, filename):
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        with open(filename, 'w', encoding="utf-8") as f:
+            for job, cmd, job_output in cls.all_outputs:
+                f.write(f">>>>>[{job}]: {cmd}\n")
+                f.write(f">>>>>returncode: {job_output.returncode}\n")
+                f.write(job_output.stdout)
+                f.write("\n>>>>>>\n")
+                f.write(job_output.stderr)
+                f.write("\n")
 
 
 def ver_greater_than(current: str, target: str) -> bool:
@@ -53,11 +73,14 @@ async def async_proc(
         stderr=asyncio.subprocess.PIPE,
     )
     stdout, stderr = await process.communicate(stdin)
-    return JobOutput(
+    output = JobOutput(
         stdout=stdout.decode().strip("\n"),
         stderr=stderr.decode().strip("\n"),
         returncode=process.returncode,
     )
+    if logger:
+        OutputTracker.add_log(logger.name, cmd, output)
+    return output
 
 
 async def fetch_file(url: str, version: Optional[str]) -> str:

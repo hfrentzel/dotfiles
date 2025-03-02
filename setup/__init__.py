@@ -1,5 +1,6 @@
 import argparse
 import asyncio
+import datetime
 import itertools
 import json
 import logging
@@ -25,6 +26,7 @@ from .managers import (
     create_jobs,
 )
 from .output import green, red
+from .process import OutputTracker
 
 
 async def handle_jobs(selected_types: List[Type[Manager]]) -> None:
@@ -58,12 +60,24 @@ async def handle_jobs(selected_types: List[Type[Manager]]) -> None:
         print_job_tree(root_jobs)
         return
 
-    if all(await asyncio.gather(*[job.run() for job in root_jobs])):
-        logger.info(green("All resources have been setup successfully"))
-    else:
-        logger.error(
-            red("Not all jobs were successful. Check logs for details")
-        )
+    filename = f"{datetime.datetime.now().isoformat()}_output.txt"
+    filename = os.path.expanduser(f"~/.local/share/mysetup/log/{filename}")
+    try:
+        success = all(await asyncio.gather(*[job.run() for job in root_jobs]))
+    except Exception as e:
+        success = False
+        raise e
+    finally:
+        OutputTracker.write_logs(filename)
+        if success:
+            logger.info(green("All resources have been setup successfully"))
+        else:
+            logger.error(
+                red(
+                    "Not all jobs were successful. "
+                    f"Check logs at {filename} for details"
+                )
+            )
 
 
 async def handle_single_resource(resource: Manager, resource_type: str) -> None:
@@ -178,8 +192,12 @@ def available() -> None:
 def run() -> None:
     argparser = argparse.ArgumentParser(prog="EnvSetup")
     argparser.set_defaults(func=check)
-    argparser.add_argument("-l", "--log", choices=['debug', 'info', 'error',
-                                                   'warn'], default='info')
+    argparser.add_argument(
+        "-l",
+        "--log",
+        choices=["debug", "info", "error", "warn"],
+        default="info",
+    )
 
     resources = argparser.add_mutually_exclusive_group()
     resources.add_argument(
@@ -243,10 +261,10 @@ def run() -> None:
 
     conf.args = argparser.parse_args()
     loglevel = {
-        'debug': logging.DEBUG,
-        'info': logging.INFO,
-        'warning': logging.WARNING,
-        'error': logging.ERROR,
+        "debug": logging.DEBUG,
+        "info": logging.INFO,
+        "warning": logging.WARNING,
+        "error": logging.ERROR,
     }[conf.args.log]
     logging.basicConfig(
         level=loglevel, format="[%(levelname)s] %(name)s: %(message)s"
