@@ -4,25 +4,28 @@ import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from setup.conf import conf
-from setup.managers import ALL_MANAGERS
+from setup.managers import ALL_MANAGERS, Manager
 from setup.menu import show
 
 USER_CONFIG = os.path.expanduser("~/.config/env_setup/config.json")
 
 
-def build_resources(resource: Optional[str]) -> Optional[Tuple[Any, str]]:
+def build_resources(resource: Optional[str], types: List[str]) -> List[Manager]:
     specs = collect_specs()
 
     if resource is not None:
-        return generate_resource(resource, specs[resource])
+        return [generate_resource(resource, specs[resource])]
 
+    all_resources = []
     for name, spec in specs.items():
-        generate_resource(name, spec)
+        if spec.get("type") not in types:
+            continue
+        all_resources.append(generate_resource(name, spec))
 
-    return None
+    return all_resources
 
 
-def generate_resource(name: str, spec: Dict[str, Any]) -> Tuple[Any, str]:
+def generate_resource(name: str, spec: Dict[str, Any]) -> Manager:
     resource_type = spec.pop("type")
 
     if spec.get("override"):
@@ -32,7 +35,7 @@ def generate_resource(name: str, spec: Dict[str, Any]) -> Tuple[Any, str]:
         )
         for key, value in spec.items():
             setattr(old_value, key, value)
-        return old_value, resource_type
+        return old_value
 
     args = {}
     for key, value in spec.items():
@@ -52,7 +55,7 @@ def generate_resource(name: str, spec: Dict[str, Any]) -> Tuple[Any, str]:
         else:
             args[key] = value
 
-    return ALL_MANAGERS[resource_type](name, **args), resource_type
+    return ALL_MANAGERS[resource_type](name, **args)
 
 
 def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
@@ -68,10 +71,7 @@ def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
     for name, file in addons.items():
         if not include_all and not choices[name]:
             continue
-        with open(
-            os.path.join(conf.dotfiles_home, file), encoding="utf-8"
-        ) as f:
-            specs.update(json.loads(f.read()))
+        specs.update(get_addon_specs(file))
 
     for e_addon in external_addons or []:
         with open(os.path.expanduser(e_addon), encoding="utf-8") as f:

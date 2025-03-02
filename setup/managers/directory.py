@@ -19,10 +19,7 @@ class Directory(Manager):
         mark_resource(self.name)
         self.desired.append(self)
 
-    async def set_status(self) -> None:
-        self._set_status()
-
-    def _set_status(self) -> None:
+    async def _set_status(self) -> None:
         path = os.path.expanduser(self.path)
         if os.path.isdir(path):
             self.state = (True, "Exists")
@@ -38,15 +35,6 @@ class Directory(Manager):
         for directory in sorted(cls.desired, key=lambda d: d.path):
             lines.append((directory.path,))
         return print_grid(("SUB-DIRECTORIES",), lines)
-
-    @classmethod
-    async def get_statuses(cls) -> List[str]:
-        complete = []
-        for directory in cls.desired:
-            directory._set_status()
-            if directory.state[0]:
-                complete.append(directory.name)
-        return complete
 
     @classmethod
     def status_printout(cls, show_all: bool) -> str:

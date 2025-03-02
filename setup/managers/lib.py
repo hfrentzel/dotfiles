@@ -1,4 +1,3 @@
-import asyncio
 from dataclasses import dataclass
 from typing import ClassVar, List, Tuple
 
@@ -22,7 +21,7 @@ class Library(Manager, Package):
         mark_resource(self.name)
         self.desired.append(self)
 
-    async def set_status(self) -> None:
+    async def _set_status(self) -> None:
         if self.manager == "pip":
             self.state = Pip.check_install(self)
             return
@@ -38,18 +37,6 @@ class Library(Manager, Package):
         for lib in sorted(cls.desired, key=lambda b: b.name):
             lines.append((lib.name, lib.version))
         return print_grid(("LIBRARY", "VERSION"), lines)
-
-    @classmethod
-    async def get_statuses(cls) -> List[str]:
-        complete = []
-        tasks = []
-        for lib in cls.desired:
-            tasks.append(lib.set_status())
-        await asyncio.gather(*tasks)
-        for lib in cls.desired:
-            if lib.state[0]:
-                complete.append(lib.name)
-        return complete
 
     @classmethod
     def status_printout(cls, show_all: bool) -> str:

@@ -25,10 +25,6 @@ class Manager(ABC):
     state: Tuple[bool, str]
     desired: ClassVar[Sequence["Manager"]]
 
-    @abstractmethod
-    async def set_status(self) -> None:
-        pass
-
     @classmethod
     @abstractmethod
     def desired_printout(cls) -> str:
@@ -43,7 +39,10 @@ class Manager(ABC):
     def create_job(self) -> Optional[Job]:
         pass
 
-    @classmethod
     @abstractmethod
-    async def get_statuses(cls) -> List[str]:
+    async def _set_status(self) -> None:
         pass
+
+    async def get_status(self) -> bool:
+        await self._set_status()
+        return self.state[0]

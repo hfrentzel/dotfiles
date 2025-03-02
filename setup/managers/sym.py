@@ -21,10 +21,7 @@ class Symlink(Manager):
         mark_resource(self.name)
         self.desired.append(self)
 
-    async def set_status(self) -> None:
-        self._set_status()
-
-    def _set_status(self) -> None:
+    async def _set_status(self) -> None:
         dest = os.path.expanduser(self.target)
         if os.path.isfile(dest) or os.path.isdir(dest):
             if os.path.islink(dest):
@@ -43,15 +40,6 @@ class Symlink(Manager):
         for sym in sorted(cls.desired, key=lambda s: s.target):
             lines.append((sym.target,))
         return print_grid(("SYMLINKED FILES",), lines)
-
-    @classmethod
-    async def get_statuses(cls) -> List[str]:
-        complete = []
-        for sym in cls.desired:
-            sym._set_status()
-            if sym.state[0]:
-                complete.append(sym.name)
-        return complete
 
     @classmethod
     def status_printout(cls, show_all: bool) -> str:

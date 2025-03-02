@@ -21,10 +21,7 @@ class Parser(Manager):
         mark_resource(self.name)
         self.desired.append(self)
 
-    async def set_status(self) -> None:
-        self._set_status()
-
-    def _set_status(self) -> None:
+    async def _set_status(self) -> None:
         file = f"{self.language}.so"
         if os.path.exists(f"{conf.parser_dir}/{file}"):
             self.state = (True, "INSTALLED")
@@ -37,15 +34,6 @@ class Parser(Manager):
         for parser in sorted(cls.desired, key=lambda p: p.language):
             lines.append((parser.language,))
         return print_grid(("TREESITTER LANGUAGES",), lines)
-
-    @classmethod
-    async def get_statuses(cls) -> List[str]:
-        complete = []
-        for parser in cls.desired:
-            parser._set_status()
-            if cls.state[0]:
-                complete.append(parser.name)
-        return complete
 
     @classmethod
     def status_printout(cls, show_all: bool) -> str:

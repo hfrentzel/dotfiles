@@ -1,4 +1,3 @@
-import asyncio
 import os
 from dataclasses import dataclass
 from logging import Logger
@@ -25,7 +24,7 @@ class Command(Manager):
         mark_resource(self.name)
         self.desired.append(self)
 
-    async def set_status(self) -> None:
+    async def _set_status(self) -> None:
         if isinstance(self.cwd, str):
             self.cwd = os.path.expanduser(
                 self.cwd.replace("DOT", conf.dotfiles_home)
@@ -45,18 +44,6 @@ class Command(Manager):
             return
 
         self.state = (False, "INCOMPLETE")
-
-    @classmethod
-    async def get_statuses(cls) -> List[str]:
-        complete = []
-        tasks = []
-        for command in cls.desired:
-            tasks.append(command.set_status())
-        await asyncio.gather(*tasks)
-        for command in cls.desired:
-            if command.state[0]:
-                complete.append(command.name)
-        return complete
 
     @classmethod
     def desired_printout(cls) -> str:

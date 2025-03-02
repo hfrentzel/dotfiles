@@ -1,5 +1,3 @@
-import asyncio
-import os
 import re
 import shutil
 from dataclasses import dataclass, field
@@ -84,7 +82,7 @@ class Exe(Manager, Package):
             self.command_name = self.name
         self.desired.append(self)
 
-    async def set_status(self) -> None:
+    async def _set_status(self) -> None:
         command = shutil.which(self.command_name)
         if command is None:
             self.state = False, "MISSING"
@@ -131,22 +129,6 @@ class Exe(Manager, Package):
         for exe in sorted(cls.desired, key=lambda e: e.name):
             lines.append((exe.name, exe.version))
         return print_grid(("COMMAND", "VERSION"), lines)
-
-    @classmethod
-    async def get_statuses(cls) -> List[str]:
-        local_bin = os.path.expanduser("~/.local/bin")
-        if local_bin not in os.environ["PATH"]:
-            os.environ["PATH"] += ":" + local_bin
-
-        complete = []
-        tasks = []
-        for exe in cls.desired:
-            tasks.append(exe.set_status())
-        await asyncio.gather(*tasks)
-        for exe in cls.desired:
-            if exe.state[0]:
-                complete.append(exe.name)
-        return complete
 
     @classmethod
     def status_printout(cls, show_all: bool) -> str:

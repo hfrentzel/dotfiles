@@ -1,7 +1,6 @@
 import argparse
 import asyncio
 import datetime
-import itertools
 import json
 import logging
 import os
@@ -20,6 +19,7 @@ from .inspect import search_assets
 from .job import build_tree, print_job_tree
 from .managers import (
     ALL_MANAGERS,
+    Exe,
     Manager,
     all_desired,
     create_bonus_jobs,
@@ -29,17 +29,17 @@ from .output import green, red
 from .process import OutputTracker
 
 
-async def handle_jobs(selected_types: List[Type[Manager]]) -> None:
+async def handle_jobs(
+    resources: List[Manager], selected_types: List[Type[Manager]]
+) -> None:
     logger = logging.getLogger("mysetup")
     if conf.args.stage == "desired":
         for t in selected_types:
             print(t.desired_printout(), end="")
         return
 
-    all_complete = await asyncio.gather(*[
-        t.get_statuses() for t in selected_types
-    ])
-    complete = list(itertools.chain.from_iterable(all_complete))
+    all_complete = await asyncio.gather(*[r.get_status() for r in resources])
+    complete = [r.name for r, c in zip(resources, all_complete) if c]
     if conf.args.stage in {None, "show_all"}:
         for t in selected_types:
             print(t.status_printout(bool(conf.args.stage)), end="")
@@ -80,24 +80,19 @@ async def handle_jobs(selected_types: List[Type[Manager]]) -> None:
             )
 
 
-async def handle_single_resource(resource: Manager, resource_type: str) -> None:
-    await resource.set_status()
-    if resource.state[0]:
+async def handle_single_resource(resource: Manager) -> None:
+    if await resource.get_status():
         print(f"{resource.name} is already set up")
         return
 
-    job = (
-        ALL_MANAGERS[resource_type].create_job(resource)
-        or list(create_bonus_jobs().values())[0]
-    )
+    job = resource.create_job() or list(create_bonus_jobs().values())[0]
 
     if job.depends_on is not None:
         if not any(d.name == job.depends_on for d in all_desired()):
-            build_resources(job.depends_on)
-        all_complete = await asyncio.gather(*[
-            t.get_statuses() for t in ALL_MANAGERS.values()
-        ])
-        complete = list(itertools.chain.from_iterable(all_complete))
+            dependencies = build_resources(
+                job.depends_on, list(ALL_MANAGERS.keys())
+            )
+        complete = [d.name for d in dependencies if await d.get_status()]
 
         if remaining := {job.depends_on} - set(complete):
             print(
@@ -117,18 +112,22 @@ async def handle_single_resource(resource: Manager, resource_type: str) -> None:
 
 
 def check() -> None:
-    resource = build_resources(conf.args.only)
-    if resource:
-        asyncio.run(handle_single_resource(*resource))
-        return
-
     selected_types = []
+    types = []
     if conf.args.types is None:
         selected_types = list(ALL_MANAGERS.values())
+        types = list(ALL_MANAGERS.keys())
     else:
+        types = conf.args.types
         for t in conf.args.types:
             selected_types.append(ALL_MANAGERS[t])
-    asyncio.run(handle_jobs(selected_types))
+
+    resources = build_resources(conf.args.only, types)
+    if len(resources) == 1:
+        asyncio.run(handle_single_resource(resources[0]))
+        return
+
+    asyncio.run(handle_jobs(resources, selected_types))
 
 
 def show() -> None:
@@ -171,8 +170,9 @@ def source() -> None:
 
 def list_assets() -> None:
     specs = collect_specs(include_all=True)
-    resource, _ = generate_resource(conf.args.spec[0], specs[conf.args.spec[0]])
-    asyncio.run(search_assets(resource))
+    resource = generate_resource(conf.args.spec[0], specs[conf.args.spec[0]])
+    if isinstance(resource, Exe):
+        asyncio.run(search_assets(resource))
 
 
 def config() -> None:
@@ -258,6 +258,10 @@ def run() -> None:
     conf.dotfiles_home = os.path.dirname(
         os.path.dirname(os.path.abspath(__file__))
     )
+
+    local_bin = os.path.expanduser("~/.local/bin")
+    if local_bin not in os.environ["PATH"]:
+        os.environ["PATH"] += ":" + local_bin
 
     conf.args = argparser.parse_args()
     loglevel = {
