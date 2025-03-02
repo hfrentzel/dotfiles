@@ -9,10 +9,11 @@ from typing import List, Type
 
 from .available import lookup_releases
 from .builder import (
+    NoSpecError,
     build_resources,
-    collect_specs,
     edit_config,
-    generate_resource,
+    get_resource,
+    get_spec,
 )
 from .conf import conf
 from .inspect import search_assets
@@ -89,10 +90,12 @@ async def handle_single_resource(resource: Manager) -> None:
 
     if job.depends_on is not None:
         if not any(d.name == job.depends_on for d in all_desired()):
-            dependencies = build_resources(
-                job.depends_on, list(ALL_MANAGERS.keys())
+            dependency = get_resource(job.depends_on)
+            complete = (
+                [dependency.name] if await dependency.get_status() else []
             )
-        complete = [d.name for d in dependencies if await d.get_status()]
+        else:
+            complete = []
 
         if remaining := {job.depends_on} - set(complete):
             print(
@@ -112,65 +115,48 @@ async def handle_single_resource(resource: Manager) -> None:
 
 
 def check() -> None:
-    selected_types = []
-    types = []
-    if conf.args.types is None:
-        selected_types = list(ALL_MANAGERS.values())
-        types = list(ALL_MANAGERS.keys())
-    else:
-        types = conf.args.types
-        for t in conf.args.types:
-            selected_types.append(ALL_MANAGERS[t])
-
-    resources = build_resources(conf.args.only, types)
-    if len(resources) == 1:
-        asyncio.run(handle_single_resource(resources[0]))
+    if conf.args.only is not None:
+        resource = get_resource(conf.args.only)
+        asyncio.run(handle_single_resource(resource))
         return
 
-    asyncio.run(handle_jobs(resources, selected_types))
+    types = conf.args.types or list(ALL_MANAGERS.keys())
+    managers = [ALL_MANAGERS[t] for t in types]
+
+    resources = build_resources(types)
+    asyncio.run(handle_jobs(resources, managers))
 
 
 def show() -> None:
-    specs = collect_specs(include_all=True)
-    if (spec := conf.args.spec[0]) in specs:
-        print(json.dumps({spec: specs[spec]}, indent=4))
-    else:
-        print(f"Spec '{spec}' not found")
+    name = conf.args.spec[0]
+    spec = get_spec(name)
+    print(json.dumps({name: spec}, indent=4))
 
 
 def home() -> None:
-    specs = collect_specs(include_all=True)
-    spec = conf.args.spec[0]
-    if spec not in specs:
-        print(f"Spec '{spec}' not found")
-        return
+    name = conf.args.spec[0]
+    spec = get_spec(name)
 
-    if home_url := specs[spec].get("homepage"):
+    if home_url := spec.get("homepage"):
         webbrowser.open(home_url)
-    elif source_url := specs[spec].get("source_repo"):
+    elif source_url := spec.get("source_repo"):
         webbrowser.open(source_url)
     else:
-        print(f"No home page listed for '{spec}'")
-        return
+        print(f"No home page listed for '{name}'")
 
 
 def source() -> None:
-    specs = collect_specs(include_all=True)
-    spec = conf.args.spec[0]
-    if spec not in specs:
-        print(f"Spec '{spec}' not found")
-        return
+    name = conf.args.spec[0]
+    spec = get_spec(name)
 
-    if source_url := specs[spec].get("source_repo"):
+    if source_url := spec.get("source_repo"):
         webbrowser.open(source_url)
     else:
-        print(f"No source repository listed for '{spec}'")
-        return
+        print(f"No source repository listed for '{name}'")
 
 
 def list_assets() -> None:
-    specs = collect_specs(include_all=True)
-    resource = generate_resource(conf.args.spec[0], specs[conf.args.spec[0]])
+    resource = get_resource(conf.args.spec[0])
     if isinstance(resource, Exe):
         asyncio.run(search_assets(resource))
 
@@ -180,13 +166,8 @@ def config() -> None:
 
 
 def available() -> None:
-    specs = collect_specs(include_all=True)
-    spec = conf.args.spec[0]
-    if spec not in specs:
-        print(f"Spec '{spec}' not found")
-        return
-
-    lookup_releases(specs[spec])
+    spec = get_spec(conf.args.spec[0])
+    lookup_releases(spec)
 
 
 def run() -> None:
@@ -273,4 +254,7 @@ def run() -> None:
     logging.basicConfig(
         level=loglevel, format="[%(levelname)s] %(name)s: %(message)s"
     )
-    conf.args.func()
+    try:
+        conf.args.func()
+    except NoSpecError as e:
+        print(f"Spec '{e.name}' not found")

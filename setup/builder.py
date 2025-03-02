@@ -10,12 +10,13 @@ from setup.menu import show
 USER_CONFIG = os.path.expanduser("~/.config/env_setup/config.json")
 
 
-def build_resources(resource: Optional[str], types: List[str]) -> List[Manager]:
+class NoSpecError(Exception):
+    def __init__(self, name: str) -> None:
+        self.name = name
+
+
+def build_resources(types: List[str]) -> List[Manager]:
     specs = collect_specs()
-
-    if resource is not None:
-        return [generate_resource(resource, specs[resource])]
-
     all_resources = []
     for name, spec in specs.items():
         if spec.get("type") not in types:
@@ -23,6 +24,10 @@ def build_resources(resource: Optional[str], types: List[str]) -> List[Manager]:
         all_resources.append(generate_resource(name, spec))
 
     return all_resources
+
+
+def get_resource(name: str) -> Manager:
+    return generate_resource(name, get_spec(name))
 
 
 def generate_resource(name: str, spec: Dict[str, Any]) -> Manager:
@@ -59,37 +64,58 @@ def generate_resource(name: str, spec: Dict[str, Any]) -> Manager:
 
 
 def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
-    with open(
-        os.path.join(conf.dotfiles_home, "main.json"), encoding="utf-8"
-    ) as f:
-        base_spec = json.loads(f.read())
-    addons = base_spec["addons"]
-    specs: Dict[str, Dict[str, Any]] = base_spec["resources"]
+    specs, addons = get_base_specs()
 
     choices, external_addons = load_settings(addons)
-
     for name, file in addons.items():
         if not include_all and not choices[name]:
             continue
         specs.update(get_addon_specs(file))
 
-    for e_addon in external_addons or []:
-        with open(os.path.expanduser(e_addon), encoding="utf-8") as f:
-            specs.update(json.loads(f.read()))
+    for e_addon in external_addons:
+        specs.update(get_addon_specs(e_addon))
 
     return specs
 
 
+def get_spec(name: str) -> Dict[str, Any]:
+    specs, addons = get_base_specs()
+    if name in specs:
+        return specs[name]
+
+    for file in addons.values():
+        addons_specs = get_addon_specs(file)
+        if name in addons_specs:
+            return addons_specs[name]
+    raise NoSpecError(name)
+
+
+def get_base_specs() -> Tuple[Dict[str, Dict[str, Any]], Dict[str, str]]:
+    with open(
+        os.path.join(conf.dotfiles_home, "main.json"), encoding="utf-8"
+    ) as f:
+        base_spec = json.loads(f.read())
+    addons = base_spec["addons"]
+    specs = base_spec["resources"]
+
+    return specs, addons
+
+
+def get_addon_specs(addon: str) -> Dict[str, Dict[str, Any]]:
+    with open(os.path.join(conf.dotfiles_home, addon), encoding="utf-8") as f:
+        return json.loads(f.read())
+
+
 def load_settings(
     addons: Dict[str, str],
-) -> Tuple[Dict[str, bool], Optional[List[str]]]:
+) -> Tuple[Dict[str, bool], List[str]]:
     choices, external_addons = read_config()
     if choices is not None:
         if missing_addons := set(addons) - set(choices):
             print("There are new addons that are not tracked on this machine")
             for addon in missing_addons:
                 choices[addon] = (
-                    input(f'Do you want to manage addon "{addon}"' f" [y/n]?: ")
+                    input(f'Do you want to manage addon "{addon}" [y/n]?: ')
                     .lower()
                     .startswith("y")
                 )
@@ -101,7 +127,7 @@ def load_settings(
     os.makedirs(os.path.dirname(USER_CONFIG), exist_ok=True)
     write_config(choices)
 
-    return choices, None
+    return choices, []
 
 
 def edit_config() -> None:
@@ -123,13 +149,13 @@ def edit_config() -> None:
     write_config(choices, external)
 
 
-def read_config() -> Tuple[Optional[Dict[str, bool]], Optional[List[str]]]:
+def read_config() -> Tuple[Optional[Dict[str, bool]], List[str]]:
     if not os.path.exists(USER_CONFIG):
-        return None, None
+        return None, []
     with open(USER_CONFIG, encoding="utf-8") as f:
         config_options = json.loads(f.read())
         choices = config_options["addons"]
-        external_addons = config_options.get("external")
+        external_addons = config_options.get("external") or []
     return choices, external_addons
 
 
