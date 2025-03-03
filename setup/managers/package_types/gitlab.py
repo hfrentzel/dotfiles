@@ -15,37 +15,39 @@ if TYPE_CHECKING:
 
 class Gitlab:
     @classmethod
-    def gitlab_builder(cls, spec: "Exe", _: str = "") -> Job:
+    def gitlab_builder(cls, resource: "Exe") -> Job:
         async def inner(logger: Logger) -> bool:
-            logger.info(f"Installing {spec.name} from Gitlab release")
-            repo = spec.repo
-            tag = await cls.get_release(repo, spec.version, logger)
+            logger.info(f"Installing {resource.name} from Gitlab release")
+            repo = resource.repo
+            tag = await cls.get_release(repo, resource.version, logger)
 
             available_assets = await cls.get_assets(repo, tag, logger)
             asset = filter_assets(list(available_assets.keys()))
             if asset is None:
                 logger.error(
-                    red(f"Failed to install {spec.name} from Gitlab release")
+                    red(
+                        f"Failed to install {resource.name} from Gitlab release"
+                    )
                 )
                 return False
 
-            spec.url = (
+            resource.url = (
                 f"https://gitlab.com/{repo}/-"
                 + f"/releases/{tag}/downloads/{available_assets[asset]}"
             )
 
             if asset.endswith(".deb"):
-                return await deb_builder(spec).run()
+                return await deb_builder(resource).run()
             if asset.endswith(".zip"):
-                return await zip_builder(spec).run()
+                return await zip_builder(resource).run()
             if ".tar." in asset:
-                return await tar_builder(spec).run()
+                return await tar_builder(resource).run()
 
             return False
 
         return Job(
-            name=spec.name,
-            description=f"Install {spec.name} from Gitlab release",
+            name=resource.name,
+            description=f"Install {resource.name} from Gitlab release",
             job=inner,
         )
 

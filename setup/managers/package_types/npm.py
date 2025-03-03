@@ -14,8 +14,8 @@ class Npm:
     all_packages: List[Tuple[str, str]] = []
 
     @classmethod
-    def npm_builder(cls, spec: Package, package: str) -> bool:
-        cls.all_packages.append((package, spec.version))
+    def npm_builder(cls, resource: Package) -> bool:
+        cls.all_packages.append((resource.name, resource.version))
         return True
 
     @classmethod

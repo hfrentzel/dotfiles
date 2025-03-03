@@ -13,20 +13,20 @@ if TYPE_CHECKING:
     from setup.managers.exe import Exe
 
 
-def tar_builder(spec: "Exe", _: str = "") -> Job:
+def tar_builder(resource: "Exe") -> Job:
     async def inner(logger: Logger) -> bool:
         if conf.root_access:
             install_home = "/usr/local"
         else:
             install_home = path.expanduser("~/.local")
 
-        logger.info(f"Installing {spec.name} from tarball...")
-        archive_file = await fetch_file(spec.url, spec.version)
+        logger.info(f"Installing {resource.name} from tarball...")
+        archive_file = await fetch_file(resource.url, resource.version)
         with tarfile.open(archive_file) as tar:
-            if spec.extract_path:
-                tar.extractall(path.expanduser(spec.extract_path))
+            if resource.extract_path:
+                tar.extractall(path.expanduser(resource.extract_path))
                 logger.info(
-                    green(f"{spec.name} has been installed successfully")
+                    green(f"{resource.name} has been installed successfully")
                 )
                 return True
 
@@ -38,7 +38,7 @@ def tar_builder(spec: "Exe", _: str = "") -> Job:
                 extract_path = f"{install_home}/bin"
                 tar.extract(all_files[0], extract_path)
                 logger.info(
-                    green(f"{spec.name} has been installed successfully")
+                    green(f"{resource.name} has been installed successfully")
                 )
                 return True
 
@@ -64,7 +64,7 @@ def tar_builder(spec: "Exe", _: str = "") -> Job:
                 t.path = filename
 
                 extract_path = find_extract_path(
-                    filename, t.mode, spec.command_name
+                    filename, t.mode, resource.command_name
                 )
                 if extract_path is None:
                     continue
@@ -72,14 +72,16 @@ def tar_builder(spec: "Exe", _: str = "") -> Job:
                 makedirs(full_extract_path, exist_ok=True)
                 tar.extract(t, full_extract_path)
 
-            logger.info(green(f"{spec.name} has been installed successfully"))
+            logger.info(
+                green(f"{resource.name} has been installed successfully")
+            )
             return True
 
-        logger.error(red(f"Failed to install {spec.name} from tarball"))
+        logger.error(red(f"Failed to install {resource.name} from tarball"))
         return False
 
     return Job(
-        name=spec.name,
-        description=f"Install {spec.name} from tarball",
+        name=resource.name,
+        description=f"Install {resource.name} from tarball",
         job=inner,
     )

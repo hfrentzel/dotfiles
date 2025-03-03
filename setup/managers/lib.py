@@ -48,4 +48,4 @@ class Library(Manager, Package):
         return print_grid(("LIBRARY", "DESIRED", "CURRENT"), lines)
 
     def create_job(self) -> None:
-        JOB_BUILDERS[self.manager](self, self.name)
+        JOB_BUILDERS[self.manager](self)

@@ -30,7 +30,7 @@ from setup.output import print_grid
 from setup.process import async_proc, ver_greater_than
 
 VERSION_REGEX = re.compile(r"\d+\.\d+(\.\d+)?", re.M)
-JOB_BUILDERS: Dict[str, Callable[["Exe", str], Union[bool, Job]]] = {
+JOB_BUILDERS: Dict[str, Callable[["Exe"], Union[bool, Job]]] = {
     "Apt": Apt.apt_builder,
     "bh": build_hole_builder,
     "Cargo": cargo_builder,
@@ -144,7 +144,7 @@ class Exe(Manager, Package):
                 installer = t
             else:
                 installer = t["installer"]
-            settled = JOB_BUILDERS[installer](self, self.name)
+            settled = JOB_BUILDERS[installer](self)
             if isinstance(settled, Job):
                 return settled
             if settled:

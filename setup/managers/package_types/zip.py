@@ -13,15 +13,15 @@ if TYPE_CHECKING:
     from setup.managers.exe import Exe
 
 
-def zip_builder(spec: "Exe", _: str = "") -> Job:
+def zip_builder(resource: "Exe") -> Job:
     async def inner(logger: Logger) -> bool:
         if conf.root_access:
             install_home = "/usr/local"
         else:
             install_home = path.expanduser("~/.local")
 
-        logger.info(f"Installing {spec.name} from zip file...")
-        archive_file = await fetch_file(spec.url, spec.version)
+        logger.info(f"Installing {resource.name} from zip file...")
+        archive_file = await fetch_file(resource.url, resource.version)
         with ZipFile(archive_file) as archive:
             all_files = [z for z in archive.infolist() if not z.is_dir()]
             extract_path = None
@@ -35,7 +35,7 @@ def zip_builder(spec: "Exe", _: str = "") -> Job:
                 archive.extract(all_files[0], extract_path)
                 chmod(f"{extract_path}/{all_files[0].filename}", mode)
 
-                logger.info(green(f"{spec.name} has been installed successfully"))
+                logger.info(green(f"{resource.name} has been installed successfully"))
                 return True
 
             # Remove common prefix from all filenames
@@ -61,7 +61,7 @@ def zip_builder(spec: "Exe", _: str = "") -> Job:
                 mode = (z.external_attr >> 16) & 0o777
 
                 extract_path = find_extract_path(
-                    filename, mode, spec.command_name
+                    filename, mode, resource.command_name
                 )
                 if extract_path is None:
                     continue
@@ -70,14 +70,14 @@ def zip_builder(spec: "Exe", _: str = "") -> Job:
                 if mode & 0o111:
                     chmod(extract_path, mode)
 
-            logger.info(green(f"{spec.name} has been installed successfully"))
+            logger.info(green(f"{resource.name} has been installed successfully"))
             return True
 
-        logger.error(red(f"Failed to install {spec.name} from zip file"))
+        logger.error(red(f"Failed to install {resource.name} from zip file"))
         return False
 
     return Job(
-        name=spec.name,
-        description=f"Install {spec.name} from zip file",
+        name=resource.name,
+        description=f"Install {resource.name} from zip file",
         job=inner,
     )

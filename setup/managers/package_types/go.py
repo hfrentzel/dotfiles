@@ -9,22 +9,24 @@ if TYPE_CHECKING:
     from setup.managers.exe import Exe
 
 
-def go_builder(spec: "Exe", _: str = "") -> Job:
+def go_builder(resource: "Exe") -> Job:
     async def inner(logger: Logger) -> bool:
-        logger.info(f"Installing {spec.name} with go...")
+        logger.info(f"Installing {resource.name} with go...")
         result = await async_proc(
-            f"go install {spec.url}@v{spec.version}", logger=logger
+            f"go install {resource.url}@v{resource.version}", logger=logger
         )
         success = not result.returncode
         if success:
-            logger.info(green(f"{spec.name} has been installed successfully"))
+            logger.info(
+                green(f"{resource.name} has been installed successfully")
+            )
         else:
-            logger.error(red(f"Failed to install {spec.name} with go"))
+            logger.error(red(f"Failed to install {resource.name} with go"))
         return success
 
     return Job(
-        name=spec.name,
-        description=f"Install {spec.name} with go",
+        name=resource.name,
+        description=f"Install {resource.name} with go",
         depends_on=["go"],
         job=inner,
     )

@@ -18,36 +18,38 @@ class Github:
     token = None
 
     @classmethod
-    def github_builder(cls, spec: "Exe", _: str = "") -> Job:
+    def github_builder(cls, resource: "Exe") -> Job:
         async def inner(logger: Logger) -> bool:
-            logger.info(f"Installing {spec.name} from Github release")
-            repo = spec.repo
-            tag = await cls.get_release(repo, spec.version, logger)
+            logger.info(f"Installing {resource.name} from Github release")
+            repo = resource.repo
+            tag = await cls.get_release(repo, resource.version, logger)
 
             available_assets = await cls.get_assets(repo, tag, logger)
             asset = filter_assets(available_assets)
-            spec.url = (
+            resource.url = (
                 f"https://github.com/{repo}/releases/download/{tag}/{asset}"
             )
 
             if asset is None:
                 logger.error(
-                    red(f"Failed to install {spec.name} from Github release")
+                    red(
+                        f"Failed to install {resource.name} from Github release"
+                    )
                 )
                 return False
 
             if asset.endswith(".deb"):
-                await deb_builder(spec).run()
+                await deb_builder(resource).run()
             elif asset.endswith(".zip"):
-                await zip_builder(spec).run()
+                await zip_builder(resource).run()
             elif ".tar." in asset:
-                await tar_builder(spec).run()
+                await tar_builder(resource).run()
 
             return True
 
         return Job(
-            name=spec.name,
-            description=f"Install {spec.name} from Github release",
+            name=resource.name,
+            description=f"Install {resource.name} from Github release",
             job=inner,
         )
 

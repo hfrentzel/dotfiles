@@ -16,8 +16,8 @@ class Apt:
     scripts: List[List[str]] = []
 
     @classmethod
-    def apt_builder(cls, spec: "Exe", package: str) -> bool:
-        for installer in spec.installers:
+    def apt_builder(cls, resource: "Exe") -> bool:
+        for installer in resource.installers:
             if (
                 isinstance(installer, dict)
                 and installer.get("installer") == "Apt"
@@ -33,9 +33,9 @@ class Apt:
                     cls.scripts.append(script)
                 break
             if installer == "Apt":
-                cls.all_apts.append(package)
+                cls.all_apts.append(resource.name)
                 break
-        cls.resources.append(spec.name)
+        cls.resources.append(resource.name)
         return True
 
     @classmethod

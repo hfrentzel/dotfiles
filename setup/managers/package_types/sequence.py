@@ -8,21 +8,23 @@ if TYPE_CHECKING:
     from setup.managers.exe import Exe
 
 
-def sequence_builder(spec: "Exe", _: str = "") -> Job:
+def sequence_builder(resource: "Exe") -> Job:
     async def inner(logger: Logger) -> bool:
-        logger.info(f"Beginning steps to install {spec.name}")
-        for step_template in spec.steps:
-            step = step_template.format(version=spec.version)
+        logger.info(f"Beginning steps to install {resource.name}")
+        for step_template in resource.steps:
+            step = step_template.format(version=resource.version)
             result = await async_proc(step, logger=logger)
             if result.returncode != 0:
-                logger.error(f"{spec.name} installation failed on step: {step}")
+                logger.error(
+                    f"{resource.name} installation failed on step: {step}"
+                )
                 return False
 
         return True
 
     return Job(
-        name=spec.name,
-        description=f"Execute {spec.name} installation sequence",
-        depends_on=spec.depends_on,
+        name=resource.name,
+        description=f"Execute {resource.name} installation sequence",
+        depends_on=resource.depends_on,
         job=inner,
     )

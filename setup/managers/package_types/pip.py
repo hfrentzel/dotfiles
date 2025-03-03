@@ -16,8 +16,8 @@ class Pip:
     files: str = ""
 
     @classmethod
-    def pip_builder(cls, spec: Package, package: str) -> bool:
-        cls.all_pips.append((package, spec.version))
+    def pip_builder(cls, resource: Package) -> bool:
+        cls.all_pips.append((resource.name, resource.version))
         return True
 
     @classmethod

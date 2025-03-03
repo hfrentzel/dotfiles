@@ -12,9 +12,9 @@ if TYPE_CHECKING:
     from setup.managers.exe import Exe
 
 
-def build_hole_builder(spec: "Exe", _: str = "") -> Job:
+def build_hole_builder(resource: "Exe") -> Job:
     async def inner(logger: Logger) -> bool:
-        logger.info(green(f"Starting {spec.name} install with build-hole"))
+        logger.info(green(f"Starting {resource.name} install with build-hole"))
         hole = await get_hole(logger)
 
         hardware = platform.uname().machine.lower()
@@ -22,13 +22,13 @@ def build_hole_builder(spec: "Exe", _: str = "") -> Job:
             env = "x86_64-linux-20.04"
         else:
             env = "aarch64-linux-22.04"
-        spec.url = hole[spec.name][spec.version][env]
+        resource.url = hole[resource.name][resource.version][env]
 
-        return await tar_builder(spec).run()
+        return await tar_builder(resource).run()
 
     return Job(
-        name=spec.name,
-        description=f"Install {spec.name} from build-hole",
+        name=resource.name,
+        description=f"Install {resource.name} from build-hole",
         job=inner,
     )
 
