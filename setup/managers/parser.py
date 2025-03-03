@@ -48,7 +48,7 @@ class Parser(Manager):
         return Job(
             name=self.name,
             description=f"Install treesitter parser for {self.language}",
-            depends_on=["neovim"],
+            depends_on=["neovim", "submodules"],
             job=self.install_ts_parser(self.language),
         )
 
