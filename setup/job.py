@@ -40,10 +40,14 @@ def print_job_tree(
         is_last_item = i == len(jobs) - 1
 
         front = ("   " if parent_is_last else "│  ") * level
-        if is_last_item:
-            print(f"{front}└──{job.resources}")
+        if len(job.resources) == 1 and job.resources[0] == job.name:
+            output = job.name
         else:
-            print(f"{front}├──{job.resources}")
+            output = f"{job.name}({','.join(job.resources)})"
+        if is_last_item:
+            print(f"{front}└──{output}")
+        else:
+            print(f"{front}├──{output}")
 
         if len(job.children) != 0:
             print_job_tree(job.children, level + 1, is_last_item)
