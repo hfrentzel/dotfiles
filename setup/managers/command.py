@@ -17,7 +17,7 @@ class Command(Manager):
     run_script: str
     state: Tuple[bool, str] = (False, "")
     check_script: Optional[str] = None
-    depends_on: Optional[str] = None
+    depends_on: Optional[List[str]] = None
     cwd: Optional[str] = None
 
     def __post_init__(self) -> None:

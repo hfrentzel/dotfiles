@@ -10,7 +10,7 @@ class Job:
     job: Callable[[logging.Logger], Awaitable[bool]]
     description: str
     resources: List[str] = field(default_factory=list)
-    depends_on: Optional[str] = None
+    depends_on: Optional[List[str]] = None
     children: List["Job"] = field(default_factory=list)
 
     def __post_init__(self) -> None:

@@ -50,7 +50,7 @@ class Pip:
             name="pip_install",
             resources=[p[0] for p in cls.all_pips],
             description=f"Install {pip_string} with pip",
-            depends_on="python",
+            depends_on=["python"],
             job=inner,
         )
 

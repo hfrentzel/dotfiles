@@ -25,6 +25,6 @@ def cargo_builder(spec: "Exe", package: str) -> Job:
     return Job(
         name=spec.name,
         description=f"Install {spec.name} with cargo",
-        depends_on="cargo",
+        depends_on=["cargo"],
         job=inner,
     )

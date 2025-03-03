@@ -5,7 +5,7 @@
         "version": "1.85.0",
         "installers": ["Sequence"],
         "steps": ["curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path"],
-        "depends_on": "cargoconfig",
+        "depends_on": ["cargoconfig"],
         "homepage": "https://www.rust-lang.org/",
         "source_repo": "https://github.com/rust-lang/rust"
     },

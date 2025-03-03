@@ -49,7 +49,7 @@ class Npm:
             resources=[p[0] for p in cls.all_packages],
             description=f"Install {','.join(p[0] for p in cls.all_packages)} "
             "with npm",
-            depends_on="node",
+            depends_on=["node"],
             job=inner,
         )
 

@@ -67,7 +67,7 @@ class Exe(Manager, Package):
     state: Tuple[bool, str] = (False, "")
     version: str = ""
     installers: List[Union[InstallerSpec, str]] = field(default_factory=list)
-    depends_on: Optional[str] = None
+    depends_on: Optional[List[str]] = None
     command_name: str = ""
     extract_path: Optional[str] = None
     version_cmd: str = ""

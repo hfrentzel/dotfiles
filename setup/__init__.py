@@ -90,15 +90,15 @@ async def handle_single_resource(resource: Manager) -> None:
     job = resource.create_job() or list(create_bonus_jobs().values())[0]
 
     if job.depends_on is not None:
-        if not any(d.name == job.depends_on for d in all_desired()):
-            dependency = get_resource(job.depends_on)
+        if not any(d.name in job.depends_on for d in all_desired()):
+            dependency = get_resource(job.depends_on[0])
             complete = (
                 [dependency.name] if await dependency.get_status() else []
             )
         else:
             complete = []
 
-        if remaining := {job.depends_on} - set(complete):
+        if remaining := set(job.depends_on) - set(complete):
             print(
                 f"Can't set up {resource.name} because it has "
                 f"unsatisfied dependencies: {remaining}"
