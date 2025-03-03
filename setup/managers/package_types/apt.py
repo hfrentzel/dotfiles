@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Set
 
 from setup.job import Job
 from setup.output import green, red
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class Apt:
     resources: List[str] = []
-    all_apts: List[str] = []
+    all_apts: Set[str] = set()
     apt_repos: List[str] = []
     scripts: List[List[str]] = []
 
@@ -26,14 +26,14 @@ class Apt:
                     cls.apt_repos.append(apt_repo)
                 if packages := installer.get("package_name"):
                     if isinstance(packages, str):
-                        cls.all_apts.append(packages)
+                        cls.all_apts.add(packages)
                     else:
-                        cls.all_apts.extend(packages)
+                        cls.all_apts.update(packages)
                 if script := installer.get("post_script"):
                     cls.scripts.append(script)
                 break
             if installer == "Apt":
-                cls.all_apts.append(resource.name)
+                cls.all_apts.add(resource.name)
                 break
         cls.resources.append(resource.name)
         return True

@@ -1,0 +1,22 @@
+{
+    "make": {
+        "type": "exe",
+        "installers": [
+            {
+                "installer": "Apt",
+                "package_name": "build-essential"
+            }
+        ],
+        "homepage": "https://www.gnu.org/software/make/"
+    },
+    "gcc": {
+        "type": "exe",
+        "installers": [
+            {
+                "installer": "Apt",
+                "package_name": "build-essential"
+            }
+        ],
+        "homepage": "https://gcc.gnu.org/"
+    }
+}

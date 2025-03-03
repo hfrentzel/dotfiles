@@ -44,6 +44,6 @@
         "cwd": "DOT/vim/nvim/pack/vendor/opt/command-t/lua/wincent/commandt/lib",
         "run_script": "make",
         "check_script": "test -f commandt.so",
-        "depends_on": ["submodules"]
+        "depends_on": ["submodules", "make", "gcc"]
     }
 }
