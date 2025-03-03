@@ -33,15 +33,6 @@ def get_resource(name: str) -> Manager:
 def generate_resource(name: str, spec: Dict[str, Any]) -> Manager:
     resource_type = spec.pop("type")
 
-    if spec.get("override"):
-        del spec["override"]
-        old_value = next(
-            e for e in ALL_MANAGERS[resource_type].desired if e.name == name
-        )
-        for key, value in spec.items():
-            setattr(old_value, key, value)
-        return old_value
-
     args = {}
     for key, value in spec.items():
         if key == "source_repo":

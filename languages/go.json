@@ -1,8 +1,10 @@
 {
     "go": {
         "type": "exe",
-        "override": true,
-        "on_demand": false
+        "version": "1.20.11",
+        "installers": ["Tar"],
+        "extract_path": "~/.local",
+        "url":"https://go.dev/dl/go{version}.linux-amd64.tar.gz"
     },
     "gopls": {
         "type": "exe",

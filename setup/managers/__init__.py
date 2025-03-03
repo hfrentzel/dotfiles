@@ -44,16 +44,15 @@ def all_desired() -> List[Manager]:
     ]
 
 
-def create_jobs(selected_types: List[Type[Manager]]) -> Dict[str, Job]:
+def create_jobs(resources: List[Manager]) -> Dict[str, Job]:
     jobs = {}
-    for t in selected_types:
-        for resource in t.desired:
-            if resource.state[0]:
-                continue
+    for r in resources:
+        if r.state[0]:
+            continue
 
-            job = resource.create_job()
-            if job is not None:
-                jobs[resource.name] = job
+        job = r.create_job()
+        if job is not None:
+            jobs[r.name] = job
     jobs.update(create_bonus_jobs())
     return jobs
 

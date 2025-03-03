@@ -68,7 +68,6 @@ class Exe(Manager, Package):
     version: str = ""
     installers: List[Union[InstallerSpec, str]] = field(default_factory=list)
     depends_on: Optional[str] = None
-    on_demand: bool = False
     command_name: str = ""
     extract_path: Optional[str] = None
     version_cmd: str = ""
@@ -134,7 +133,7 @@ class Exe(Manager, Package):
     def status_printout(cls, show_all: bool) -> str:
         lines = []
         for exe in sorted(cls.desired, key=lambda e: e.name):
-            if not show_all and (exe.state[0] or exe.on_demand):
+            if not show_all and exe.state[0]:
                 continue
             lines.append((exe.name, exe.version, (exe.state[1], exe.state[0])))
         return print_grid(("COMMAND", "DESIRED", "CURRENT"), lines)
@@ -151,21 +150,3 @@ class Exe(Manager, Package):
             if settled:
                 break
         return None
-
-
-Exe(
-    "go",
-    version="1.20.11",
-    on_demand=True,
-    installers=["Tar"],
-    extract_path="~/.local",
-    url="https://go.dev/dl/go{version}.linux-amd64.tar.gz",
-)
-
-Exe(
-    "node",
-    version="22.14.0",
-    installers=["Tar"],
-    on_demand=True,
-    url="https://nodejs.org/dist/v{version}/node-v{version}-linux-x64.tar.xz",
-)

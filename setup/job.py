@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from dataclasses import dataclass, field
-from typing import Awaitable, Callable, Dict, List, Optional
+from typing import Awaitable, Callable, List, Optional
 
 
 @dataclass
@@ -11,7 +11,6 @@ class Job:
     description: str
     resources: List[str] = field(default_factory=list)
     depends_on: Optional[str] = None
-    on_demand: bool = False
     children: List["Job"] = field(default_factory=list)
 
     def __post_init__(self) -> None:
@@ -48,29 +47,3 @@ def print_job_tree(
 
         if len(job.children) != 0:
             print_job_tree(job.children, level + 1, is_last_item)
-
-
-def build_tree(jobs: Dict[str, Job], complete: List[str]) -> List[Job]:
-    root_jobs = []
-    for job_name, job in jobs.items():
-        if job.on_demand and not any(
-            j.depends_on in job.resources for j in jobs.values()
-        ):
-            continue
-        if job.depends_on is None:
-            root_jobs.append(job)
-        elif job.depends_on in complete:
-            root_jobs.append(job)
-        else:
-            try:
-                parent = next(
-                    j for j in jobs.values() if job.depends_on in j.resources
-                )
-            except StopIteration:
-                print(
-                    f"The dependency '{job.depends_on}' for job '{job_name}' "
-                    "is missing"
-                )
-            parent.children.append(job)
-
-    return root_jobs

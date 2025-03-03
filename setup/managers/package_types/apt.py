@@ -10,6 +10,7 @@ if TYPE_CHECKING:
 
 
 class Apt:
+    resources: List[str] = []
     all_apts: List[str] = []
     apt_repos: List[str] = []
     scripts: List[List[str]] = []
@@ -34,6 +35,7 @@ class Apt:
             if installer == "Apt":
                 cls.all_apts.append(package)
                 break
+        cls.resources.append(spec.name)
         return True
 
     @classmethod
@@ -75,7 +77,7 @@ class Apt:
 
         return Job(
             name="apt_install",
-            resources=cls.all_apts,
+            resources=cls.resources,
             description=f"Install {', '.join(cls.all_apts)} with Apt",
             job=inner,
         )

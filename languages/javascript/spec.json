@@ -1,8 +1,9 @@
 {
     "node": {
         "type": "exe",
-        "on_demand": false,
-        "override": true
+        "version": "22.14.0",
+        "installers": ["Tar"],
+        "url":"https://nodejs.org/dist/v{version}/node-v{version}-linux-x64.tar.xz"
     },
     "typescript": {
         "type": "library",

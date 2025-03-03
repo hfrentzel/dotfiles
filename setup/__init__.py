@@ -17,7 +17,7 @@ from .builder import (
 )
 from .conf import conf
 from .inspect import search_assets
-from .job import build_tree, print_job_tree
+from .job import print_job_tree
 from .managers import (
     ALL_MANAGERS,
     Exe,
@@ -28,6 +28,7 @@ from .managers import (
 )
 from .output import green, red
 from .process import OutputTracker
+from .tree import build_tree
 
 
 async def handle_jobs(
@@ -46,7 +47,7 @@ async def handle_jobs(
             print(t.status_printout(bool(conf.args.stage)), end="")
         return
 
-    jobs = create_jobs(selected_types)
+    jobs = create_jobs(resources)
     if len(jobs) == 0:
         logger.info("No jobs to run. All resources are setup")
         return
@@ -56,7 +57,7 @@ async def handle_jobs(
             print(m.description)
         return
 
-    root_jobs = build_tree(jobs, complete)
+    root_jobs = await build_tree(jobs, complete)
     if conf.args.stage == "tree":
         print_job_tree(root_jobs)
         return
