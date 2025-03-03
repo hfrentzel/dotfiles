@@ -79,5 +79,6 @@ class Apt:
             name="apt_install",
             resources=cls.resources,
             description=f"Install {', '.join(cls.all_apts)} with Apt",
+            needs_root_access=True,
             job=inner,
         )

@@ -57,11 +57,16 @@ def child_wrapper(child_job: Job, futs: List[asyncio.Future]):
     )
 
 
-async def build_tree(jobs: Dict[str, Job], complete: List[str]) -> List[Job]:
+async def build_tree(
+    jobs: Dict[str, Job], complete: List[str]
+) -> Tuple[List[Job], bool]:
     jobs, complete = await check_all_dependencies(jobs, complete)
+    need_root_access = False
 
     root_jobs = []
     for job in jobs.values():
+        if job.needs_root_access:
+            need_root_access = True
         if job.depends_on is None:
             root_jobs.append(job)
         elif set(job.depends_on).issubset(set(complete)):
@@ -84,4 +89,4 @@ async def build_tree(jobs: Dict[str, Job], complete: List[str]) -> List[Job]:
                 futs.append(fut)
             parents[0].children.append(child_wrapper(job, futs))
 
-    return root_jobs
+    return root_jobs, need_root_access

@@ -27,7 +27,7 @@ from .managers import (
     create_jobs,
 )
 from .output import green, red
-from .process import OutputTracker
+from .process import OutputTracker, async_proc
 from .tree import build_tree
 
 
@@ -57,7 +57,7 @@ async def handle_jobs(
             print(m.description)
         return
 
-    root_jobs = await build_tree(jobs, complete)
+    root_jobs, need_root_access = await build_tree(jobs, complete)
     if conf.args.stage == "tree":
         print_job_tree(root_jobs)
         return
@@ -65,6 +65,8 @@ async def handle_jobs(
     filename = f"{datetime.datetime.now().isoformat()}_output.txt"
     filename = os.path.expanduser(f"~/.local/share/mysetup/log/{filename}")
     try:
+        if need_root_access:
+            await async_proc("sudo echo")
         success = all(await asyncio.gather(*[job.run() for job in root_jobs]))
     except Exception as e:
         success = False
