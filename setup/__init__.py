@@ -245,7 +245,7 @@ def run() -> None:
 
     local_bin = os.path.expanduser("~/.local/bin")
     if local_bin not in os.environ["PATH"]:
-        os.environ["PATH"] += ":" + local_bin
+        os.environ["PATH"] = local_bin + ":" + os.environ["PATH"]
 
     conf.args = argparser.parse_args()
     loglevel = {
