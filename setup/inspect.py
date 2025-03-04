@@ -2,7 +2,7 @@ import logging
 from typing import Optional
 
 from .managers.exe import Exe
-from .managers.package_types.github import Github
+from .managers.package_types.github import Github, GithubApiError
 from .managers.package_types.gitlab import Gitlab
 from .output import green, red, yellow
 from .process import filter_assets
@@ -15,8 +15,12 @@ async def search_assets(exe: Exe) -> Optional[str]:
         return None
 
     if "Github" in exe.installers:
-        release = await Github.get_release(exe.repo, exe.version, logger)
-        assets = await Github.get_assets(exe.repo, release, logger)
+        try:
+            release = await Github.get_release(exe.repo, exe.version, logger)
+            assets = await Github.get_assets(exe.repo, release, logger)
+        except GithubApiError as e:
+            logger.error(red(f"Github API call failed: {e.reason}"))
+            return None
         selected_assets = filter_assets(assets, return_all=True)
     else:
         release = await Gitlab.get_release(exe.repo, exe.version, logger)

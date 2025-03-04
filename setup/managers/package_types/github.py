@@ -1,7 +1,7 @@
 import json
 import os
 from logging import Logger
-from typing import TYPE_CHECKING, Any, Dict, List
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from setup.job import Job
 from setup.managers.package_types.deb import deb_builder
@@ -14,6 +14,11 @@ if TYPE_CHECKING:
     from setup.managers.exe import Exe
 
 
+class GithubApiError(Exception):
+    def __init__(self, reason):
+        self.reason = reason
+
+
 class Github:
     token = None
 
@@ -22,9 +27,17 @@ class Github:
         async def inner(logger: Logger) -> bool:
             logger.info(f"Installing {resource.name} from Github release")
             repo = resource.repo
-            tag = await cls.get_release(repo, resource.version, logger)
+            try:
+                tag = await cls.get_release(repo, resource.version, logger)
 
-            available_assets = await cls.get_assets(repo, tag, logger)
+                available_assets = await cls.get_assets(repo, tag, logger)
+            except GithubApiError as e:
+                logger.error(
+                    red(
+                        f"Failed to install {resource.name} from Github"
+                        f"release: {e.reason}"
+                    )
+                )
             asset = filter_assets(available_assets)
             resource.url = (
                 f"https://github.com/{repo}/releases/download/{tag}/{asset}"
@@ -70,19 +83,40 @@ class Github:
 
     @classmethod
     async def gh_api_call(cls, path: str, logger: Logger) -> Any:
-        token = cls.get_token()
         url = f"https://api.github.com/{path}"
-        result = await async_proc(
-            f'curl -L -H "Authorization: Bearer {token}" {url}', logger=logger
-        )
-        if result.returncode != 0:
-            return None
-        return json.loads(result.stdout)
+        auth = ""
+        while True:
+            result = await async_proc(f"curl -L {auth} {url}", logger=logger)
+            if result.returncode != 0:
+                return None
+            resp = json.loads(result.stdout)
+
+            mess = resp.get("message", "") if isinstance(resp, dict) else ""
+            if mess.startswith("API rate limit exceeded") and not auth:
+                logger.debug("Hit Github rate limit")
+                token = cls.get_token()
+                if token is None:
+                    raise GithubApiError(
+                        "Rate limit was hit and credentials don't exist"
+                    )
+                auth = f'-H "Authorization: Bearer {token}" '
+            elif mess.startswith("Bad credentials"):
+                raise GithubApiError(
+                    "Rate limit was hit and credentials are bad"
+                )
+            else:
+                break
+
+        return resp
 
     @classmethod
-    def get_token(cls) -> str:
+    def get_token(cls) -> Optional[str]:
         # TODO Store and retrieve token some other way
         if cls.token is None:
-            with open(os.path.expanduser("~/.gh_token"), encoding="utf-8") as f:
-                cls.token = f.read().strip("\n")
+            token_file = os.path.expanduser("~/.gh_token")
+            if os.path.isfile(token_file):
+                with open(token_file, encoding="utf-8") as f:
+                    cls.token = f.read().strip("\n")
+            else:
+                return None
         return cls.token
