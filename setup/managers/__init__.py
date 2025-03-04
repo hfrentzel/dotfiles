@@ -44,19 +44,6 @@ def all_desired() -> List[Manager]:
     ]
 
 
-def create_jobs(resources: List[Manager]) -> Dict[str, Job]:
-    jobs = {}
-    for r in resources:
-        if r.state[0]:
-            continue
-
-        job = r.create_job()
-        if job is not None:
-            jobs[r.name] = job
-    jobs.update(create_bonus_jobs())
-    return jobs
-
-
 def create_bonus_jobs() -> Dict[str, Job]:
     jobs = {}
     if len(Apt.all_apts) != 0:

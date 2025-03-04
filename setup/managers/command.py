@@ -1,5 +1,5 @@
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from logging import Logger
 from typing import Callable, ClassVar, Coroutine, List, Optional, Tuple
 
@@ -17,7 +17,7 @@ class Command(Manager):
     run_script: str
     state: Tuple[bool, str] = (False, "")
     check_script: Optional[str] = None
-    depends_on: Optional[List[str]] = None
+    depends_on: List[str] = field(default_factory=list)
     cwd: Optional[str] = None
 
     def __post_init__(self) -> None:

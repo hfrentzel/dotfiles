@@ -5,34 +5,50 @@ from typing import Dict, List, Tuple
 from .builder import get_resource
 from .job import Job
 from .managers import create_bonus_jobs
+from .managers.manager import Manager
 
 
-async def check_all_dependencies(
-    jobs: Dict[str, Job], complete: List[str]
+async def create_jobs(
+    resources: List[Manager], complete: List[str]
 ) -> Tuple[Dict[str, Job], List[str]]:
+    jobs = {}
     all_dependencies = set()
     all_job_resources = set()
+    for r in resources:
+        if r.state[0]:
+            continue
 
-    run_dependency_check = True
-    while run_dependency_check:
-        for job in jobs.values():
-            if job.depends_on:
-                all_dependencies.update(job.depends_on)
-            all_job_resources.update(job.resources)
-        missing_dependencies = all_dependencies - set(complete).union(
-            all_job_resources
-        )
-        run_dependency_check = False
+        job = r.create_job()
+        if job is None:
+            continue
+        jobs[r.name] = job
+        all_dependencies.update(job.depends_on)
+        all_job_resources.update(job.resources)
+
+    bonus_jobs = create_bonus_jobs()
+    for bonus_job in bonus_jobs.values():
+        all_dependencies.update(bonus_job.depends_on)
+        all_job_resources.update(bonus_job.resources)
+    jobs.update(bonus_jobs)
+
+    while missing_dependencies := (
+        all_dependencies - set(complete).union(all_job_resources)
+    ):
         for dep in missing_dependencies:
-            resource = get_resource(dep)
-            if await resource.get_status():
-                complete.append(resource.name)
+            r = get_resource(dep)
+            if await r.get_status():
+                complete.append(r.name)
+            elif new_job := r.create_job():
+                jobs[r.name] = new_job
+                all_dependencies.update(new_job.depends_on)
+                all_job_resources.update(new_job.resources)
             else:
-                run_dependency_check = True
-                if new_job := resource.create_job():
-                    jobs[resource.name] = new_job
-                else:
-                    jobs.update(create_bonus_jobs())
+                bonus_jobs = create_bonus_jobs()
+                for bonus_job in bonus_jobs.values():
+                    all_dependencies.update(bonus_job.depends_on)
+                    all_job_resources.update(bonus_job.resources)
+                jobs.update(bonus_jobs)
+
     return jobs, complete
 
 
@@ -61,7 +77,6 @@ def child_wrapper(child_job: Job, futs: List[asyncio.Future]):
 async def build_tree(
     jobs: Dict[str, Job], complete: List[str]
 ) -> Tuple[List[Job], bool]:
-    jobs, complete = await check_all_dependencies(jobs, complete)
     need_root_access = False
 
     root_jobs = []
@@ -70,7 +85,7 @@ async def build_tree(
         job = job_list[i]
         if job.needs_root_access:
             need_root_access = True
-        if job.depends_on is None:
+        if len(job.depends_on) == 0:
             root_jobs.append(job)
         elif set(job.depends_on).issubset(set(complete)):
             root_jobs.append(job)

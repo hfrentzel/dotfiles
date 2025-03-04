@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from dataclasses import dataclass, field
-from typing import Awaitable, Callable, List, Optional
+from typing import Awaitable, Callable, List
 
 
 @dataclass
@@ -11,7 +11,7 @@ class Job:
     description: str
     resources: List[str] = field(default_factory=list)
     needs_root_access: bool = False
-    depends_on: Optional[List[str]] = None
+    depends_on: List[str] = field(default_factory=list)
     children: List["Job"] = field(default_factory=list)
 
     def __post_init__(self) -> None:

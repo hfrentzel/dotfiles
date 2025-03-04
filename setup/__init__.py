@@ -24,11 +24,10 @@ from .managers import (
     Manager,
     all_desired,
     create_bonus_jobs,
-    create_jobs,
 )
 from .output import green, red
 from .process import OutputTracker, async_proc
-from .tree import build_tree
+from .tree import build_tree, create_jobs
 
 
 async def handle_jobs(
@@ -47,7 +46,7 @@ async def handle_jobs(
             print(t.status_printout(bool(conf.args.stage)), end="")
         return
 
-    jobs = create_jobs(resources)
+    jobs, complete = await create_jobs(resources, complete)
     if len(jobs) == 0:
         logger.info("No jobs to run. All resources are setup")
         return
@@ -91,7 +90,7 @@ async def handle_single_resource(resource: Manager) -> None:
 
     job = resource.create_job() or list(create_bonus_jobs().values())[0]
 
-    if job.depends_on is not None:
+    if len(job.depends_on) != 0:
         if not any(d.name in job.depends_on for d in all_desired()):
             dependency = get_resource(job.depends_on[0])
             complete = (
