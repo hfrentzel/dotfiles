@@ -17,7 +17,6 @@ from .builder import (
 )
 from .conf import conf
 from .inspect import search_assets
-from .job import print_job_tree
 from .managers import (
     ALL_MANAGERS,
     Exe,
@@ -27,7 +26,7 @@ from .managers import (
 )
 from .output import green, red
 from .process import OutputTracker, async_proc
-from .tree import build_tree, create_jobs
+from .tree import build_tree, create_jobs, print_job_tree
 
 
 async def handle_jobs(
@@ -40,37 +39,38 @@ async def handle_jobs(
         return
 
     all_complete = await asyncio.gather(*[r.get_status() for r in resources])
-    complete = [r.name for r, c in zip(resources, all_complete) if c]
+    complete = {r.name for r, c in zip(resources, all_complete) if c}
     if conf.args.stage in {None, "show_all"}:
         for t in selected_types:
             print(t.status_printout(bool(conf.args.stage)), end="")
         return
 
-    jobs, complete = await create_jobs(resources, complete)
+    jobs = await create_jobs(resources, complete)
     if len(jobs) == 0:
         logger.info("No jobs to run. All resources are setup")
         return
 
     if conf.args.stage == "jobs":
-        for m in jobs.values():
+        for m in jobs:
             print(m.description)
         return
 
-    root_jobs, need_root_access = await build_tree(jobs, complete)
+    ready_jobs = await build_tree(jobs)
     if conf.args.stage == "tree":
-        print_job_tree(root_jobs)
+        print_job_tree(ready_jobs)
         return
 
-    filename = f"{datetime.datetime.now().isoformat()}_output.txt"
-    filename = os.path.expanduser(f"~/.local/share/mysetup/log/{filename}")
+    timestamp = f"{datetime.datetime.now().isoformat()}_output.txt"
     try:
+        need_root_access = any(j.needs_root_access for j in ready_jobs)
         if need_root_access:
             await async_proc("sudo echo")
-        success = all(await asyncio.gather(*[job.run() for job in root_jobs]))
+        success = all(await asyncio.gather(*[job.run() for job in ready_jobs]))
     except Exception as e:
         success = False
         raise e
     finally:
+        filename = os.path.expanduser(f"~/.local/share/mysetup/log/{timestamp}")
         OutputTracker.write_logs(filename)
         if success:
             logger.info(green("All resources have been setup successfully"))

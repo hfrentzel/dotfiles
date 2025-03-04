@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from asyncio import Future
 from dataclasses import dataclass, field
 from typing import Awaitable, Callable, List
 
@@ -12,7 +13,8 @@ class Job:
     resources: List[str] = field(default_factory=list)
     needs_root_access: bool = False
     depends_on: List[str] = field(default_factory=list)
-    children: List["Job"] = field(default_factory=list)
+    children: List[Future] = field(default_factory=list)
+    parents: List[Future] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if len(self.resources) == 0:
@@ -21,34 +23,27 @@ class Job:
     async def run(self) -> bool:
         try:
             logger = logging.getLogger(self.name)
+
+            if len(self.parents) != 0:
+                parent_results = await asyncio.gather(*self.parents)
+                if not all(p[1] for p in parent_results):
+                    failures = [p[0] for p in parent_results if not p[1]]
+                    logger.error(
+                        f"Did not run job {self.name} because it had"
+                        f"failed dependencies: {','.join(failures)}"
+                    )
+                    for f in self.children:
+                        f.set_result((self.name, False))
+                    return False
+
             result = await self.job(logger)
-            if result and len(self.children) != 0:
-                runners = [job.run() for job in self.children]
-                result = all(await asyncio.gather(*runners))
         except Exception as e:
             logger.error(e)
             result = False
+
+        for f in self.children:
+            f.set_result((self.name, result))
         return result
 
     def __repr__(self) -> str:
         return f"{self.resources}, {self.job}"
-
-
-def print_job_tree(
-    jobs: List[Job], level: int = 0, parent_is_last: bool = True
-) -> None:
-    for i, job in enumerate(jobs):
-        is_last_item = i == len(jobs) - 1
-
-        front = ("   " if parent_is_last else "│  ") * level
-        if len(job.resources) == 1 and job.resources[0] == job.name:
-            output = job.name
-        else:
-            output = f"{job.name}({','.join(job.resources)})"
-        if is_last_item:
-            print(f"{front}└──{output}")
-        else:
-            print(f"{front}├──{output}")
-
-        if len(job.children) != 0:
-            print_job_tree(job.children, level + 1, is_last_item)
