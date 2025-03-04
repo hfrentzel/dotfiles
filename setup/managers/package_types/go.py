@@ -1,3 +1,4 @@
+import os
 from logging import Logger
 from typing import TYPE_CHECKING
 
@@ -11,6 +12,10 @@ if TYPE_CHECKING:
 
 def go_builder(resource: "Exe") -> Job:
     async def inner(logger: Logger) -> bool:
+        os.environ["GOBIN"] = os.path.expanduser("~/.local/bin")
+        os.environ["GOMODCACHE"] = os.path.expanduser("~/.cache/go/mod")
+        os.environ["GOPATH"] = os.path.expanduser("~/.local/share/go")
+
         logger.info(f"Installing {resource.name} with go...")
         result = await async_proc(
             f"go install {resource.url}@v{resource.version}", logger=logger

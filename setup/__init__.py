@@ -247,7 +247,10 @@ def run() -> None:
     local_bin = os.path.expanduser("~/.local/bin")
     if local_bin not in os.environ["PATH"]:
         cargo_bin = os.path.expanduser("~/.local/share/cargo/bin")
-        os.environ["PATH"] = f"{local_bin}:{cargo_bin}:{os.environ['PATH']}"
+        go_bin = os.path.expanduser("~/.local/go/bin")
+        os.environ["PATH"] = (
+            f"{local_bin}:{go_bin}:{cargo_bin}:{os.environ['PATH']}"
+        )
 
     conf.args = argparser.parse_args()
     loglevel = {

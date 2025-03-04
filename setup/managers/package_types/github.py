@@ -38,6 +38,7 @@ class Github:
                         f"release: {e.reason}"
                     )
                 )
+                return False
             asset = filter_assets(available_assets)
             resource.url = (
                 f"https://github.com/{repo}/releases/download/{tag}/{asset}"
