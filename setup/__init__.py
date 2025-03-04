@@ -239,13 +239,16 @@ def run() -> None:
     os.environ["NPM_CONFIG_USERCONFIG"] = os.path.expanduser(
         "~/.config/npm/npmrc"
     )
+    os.environ["CARGO_HOME"] = os.path.expanduser("~/.local/share/cargo")
+    os.environ["RUSTUP_HOME"] = os.path.expanduser("~/.local/share/rustup")
     conf.dotfiles_home = os.path.dirname(
         os.path.dirname(os.path.abspath(__file__))
     )
 
     local_bin = os.path.expanduser("~/.local/bin")
     if local_bin not in os.environ["PATH"]:
-        os.environ["PATH"] = local_bin + ":" + os.environ["PATH"]
+        cargo_bin = os.path.expanduser("~/.local/share/cargo/bin")
+        os.environ["PATH"] = f"{local_bin}:{cargo_bin}:{os.environ['PATH']}"
 
     conf.args = argparser.parse_args()
     loglevel = {
