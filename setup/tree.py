@@ -39,6 +39,7 @@ async def check_all_dependencies(
 def make_future_job(name: str, fut: asyncio.Future):
     async def inner(_: Logger):
         fut.set_result("done")
+        return True
 
     return Job(name=name, description="", job=inner)
 
@@ -46,7 +47,7 @@ def make_future_job(name: str, fut: asyncio.Future):
 def child_wrapper(child_job: Job, futs: List[asyncio.Future]):
     async def inner(_):
         await asyncio.gather(*futs)
-        await child_job.run()
+        return await child_job.run()
 
     return Job(
         name=child_job.name,
@@ -64,7 +65,9 @@ async def build_tree(
     need_root_access = False
 
     root_jobs = []
-    for job in jobs.values():
+    job_list = list(jobs.values())
+    for i in range(len(job_list)):
+        job = job_list[i]
         if job.needs_root_access:
             need_root_access = True
         if job.depends_on is None:
@@ -82,11 +85,14 @@ async def build_tree(
                 continue
             loop = asyncio.get_event_loop()
             futs = []
-            for i, parent in enumerate(parents[1:]):
+            for j, parent in enumerate(parents[1:]):
                 fut = loop.create_future()
-                name = f"{job.name}__{i}"
+                name = f"{job.name}__{j}"
                 parent.children.append(make_future_job(name, fut))
                 futs.append(fut)
-            parents[0].children.append(child_wrapper(job, futs))
+            wrapper_job = child_wrapper(job, futs)
+            parents[0].children.append(wrapper_job)
+            job.children = []
+            job_list[i] = wrapper_job
 
     return root_jobs, need_root_access

@@ -13,6 +13,7 @@ from setup.process import async_proc
 @dataclass
 class Parser(Manager):
     desired: ClassVar[List["Parser"]] = []
+    jobs: ClassVar[List[str]] = []
     name: str
     language: str
     state: Tuple[bool, str] = (False, "")
@@ -45,10 +46,11 @@ class Parser(Manager):
         return print_grid(("TS PARSER", "STATUS"), lines)
 
     def create_job(self) -> Job:
+        self.jobs.append(self.name)
         return Job(
             name=self.name,
             description=f"Install treesitter parser for {self.language}",
-            depends_on=["neovim", "submodules"],
+            depends_on=["nvim_init"],
             job=self.install_ts_parser(self.language),
         )
 
@@ -64,3 +66,17 @@ class Parser(Manager):
             return True
 
         return inner
+
+    @classmethod
+    def nvim_init_job(cls) -> Job:
+        async def inner(logger: Logger):
+            logger.info("Running nvim_init")
+            await async_proc("nvim --headless +q")
+            return True
+
+        return Job(
+            name="nvim_init",
+            description="Run headless neovim to create scratch directories",
+            depends_on=["neovim", "submodules", "vimrc", "nvimconfig", "gcc"],
+            job=inner,
+        )
