@@ -54,9 +54,9 @@ async def handle_jobs(
             print(m.description)
         return
 
-    ready_jobs = await build_tree(jobs)
+    ready_jobs, tree = await build_tree(jobs)
     if conf.args.stage == "tree":
-        print_job_tree(ready_jobs)
+        print_job_tree(tree)
         return
 
     timestamp = f"{datetime.datetime.now().isoformat()}_output.txt"

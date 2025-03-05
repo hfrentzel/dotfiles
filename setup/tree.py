@@ -1,5 +1,6 @@
 import asyncio
-from typing import List, Set
+from dataclasses import dataclass, field
+from typing import List, Set, Tuple
 
 from .builder import get_resource
 from .job import Job
@@ -51,7 +52,16 @@ async def create_jobs(
     return list(jobs.values())
 
 
-async def build_tree(jobs: List[Job]) -> List[Job]:
+@dataclass
+class TreeNode:
+    name: str
+    resources: List[str] = field(default_factory=list)
+    children: List["TreeNode"] = field(default_factory=list)
+
+
+async def build_tree(jobs: List[Job]) -> Tuple[List[Job], List[TreeNode]]:
+    tree_d = {j.name: TreeNode(j.name, j.resources, []) for j in jobs}
+    tree = []
     for job in jobs:
         if parents := [
             j
@@ -59,15 +69,37 @@ async def build_tree(jobs: List[Job]) -> List[Job]:
             if set(job.depends_on).intersection(set(j.resources))
         ]:
             loop = asyncio.get_event_loop()
-            for p in parents:
+            for i, p in enumerate(parents):
                 fut = loop.create_future()
                 p.children.append(fut)
                 job.parents.append(fut)
-    return jobs
+                if i == 0:
+                    tree_d[p.name].children.append(tree_d[job.name])
+                else:
+                    tree_d[p.name].children.append(TreeNode(f"{job.name}__{i}"))
+        else:
+            tree.append(tree_d[job.name])
+
+    return jobs, tree
 
 
-def print_job_tree(jobs: List[Job]) -> None:
-    for j in jobs:
-        print(
-            f"{j.name}: Parents: {len(j.parents)} Children: {len(j.children)}"
-        )
+def print_job_tree(
+    jobs: List[TreeNode], level: int = 0, parent_is_last: bool = True
+) -> None:
+    for i, job in enumerate(jobs):
+        is_last_item = i == len(jobs) - 1
+
+        front = ("   " if parent_is_last else "│  ") * level
+        if len(job.resources) == 0 or (
+            len(job.resources) == 1 and job.resources[0] == job.name
+        ):
+            output = job.name
+        else:
+            output = f"{job.name}({','.join(job.resources)})"
+        if is_last_item:
+            print(f"{front}└──{output}")
+        else:
+            print(f"{front}├──{output}")
+
+        if len(job.children) != 0:
+            print_job_tree(job.children, level + 1, is_last_item)
