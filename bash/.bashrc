@@ -6,9 +6,7 @@ export EDITOR=nvim
 export VISUAL=nvim 
 export PAGER='less --mouse --wheel-lines=3 -RF'
 export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep/config
-if command -v bat &> /dev/null; then
-    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-fi
+export FZF_DEFAULT_OPTS='--height 20% --layout=reverse'
 
 # This should normally be set by terminal, I'm setting it manually because
 # it's not. May need to change this if I ever start using terminals that
@@ -50,11 +48,7 @@ test -f ~/variables && source $HOME/.config/bash/plugins/var_setup.sh
 test -f ~/workspaces && source $HOME/.config/bash/plugins/workspace_setup.sh
 test -f ~/.secrets && source ~/.secrets
 
-if command -v fzf &> /dev/null; then
-    export FZF_DEFAULT_OPTS='--height 20% --layout=reverse'
-    source $HOME/.local/shell/fzf.sh 2> /dev/null
-fi
-
+source $HOME/.local/shell/fzf.sh 2> /dev/null
 source $HOME/.config/bash/plugins/path.sh
 source $HOME/.config/bash/plugins/completions.sh
 source $HOME/.config/bash/plugins/utilities.sh
@@ -63,6 +57,10 @@ source $HOME/.config/bash/plugins/env.sh
 
 BASE16_CONFIG="$HOME/.local/share/dotfiles/base16"
 test -f $BASE16_CONFIG && color $(cat $BASE16_CONFIG)
+
+if command -v bat &> /dev/null; then
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+fi
 
 if command -v zoxide &> /dev/null; then
     eval "$(zoxide init bash)"
