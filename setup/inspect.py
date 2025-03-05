@@ -1,12 +1,15 @@
 import logging
+import os
 import re
+import tarfile
 from typing import Any, Dict, List, Optional
 
 from .managers.package_types.github import Github, GithubApiError
 from .managers.package_types.gitlab import Gitlab
+from .managers.package_types.tar import extract_tar
 from .menu import MenuPiece, show
 from .output import green, red, yellow
-from .process import filter_assets, fetch_file
+from .process import fetch_file, filter_assets
 
 
 async def search_assets(name: str, spec: Dict[str, Any]) -> Optional[str]:
@@ -105,3 +108,19 @@ async def get_asset(repo: str) -> None:
     )
     filename = await fetch_file(download_url)
     print(f"Downloaded asset to {filename}")
+    resp = input("What do you want to now: [L]ist, [E]xtract, [N]othing: ")
+
+    if not resp or resp[0].lower() not in {"l", "e"}:
+        return
+
+    if (letter := resp[0].lower()) == "e":
+        extract_path = os.path.dirname(filename)
+        extract_tar(filename, extract_path, "")
+        print(f"Tarball extracted to {os.path.splitext(filename)[0]}")
+    elif letter == "l":
+        with tarfile.open(filename) as tar:
+            files = tar.getnames()
+            for i in range(0, min(20, len(files))):
+                print(files[i])
+            if len(files) > 20:
+                print(f"...and {len(files) - 20} more")
