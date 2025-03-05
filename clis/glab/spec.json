@@ -5,5 +5,10 @@
         "installers": ["Gitlab", "Go"],
         "url": "gitlab.com/gitlab-org/cli/cmd/glab",
         "source_repo": "https://gitlab.com/gitlab-org/cli"
+    },
+    "glabconfig": {
+        "type": "symlink",
+        "source": "DOT/clis/glab/config.yml",
+        "target": "~/.config/glab-cli/config.yml"
     }
 }

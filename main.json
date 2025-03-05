@@ -152,6 +152,6 @@
         "vim": "vim/spec.json",
         "kubernetes": "clis/kubernetes/spec.json",
         "gh": "clis/gh.json",
-        "glab": "clis/glab.json"
+        "glab": "clis/glab/spec.json"
     }
 }
