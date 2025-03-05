@@ -8,15 +8,16 @@
     },
     "gopls": {
         "type": "exe",
-        "version": "0.14.0",
-        "installers": ["Go"],
+        "version": "0.18.1",
+        "installers": ["bh", "Go"],
         "source_repo": "https://github.com/golang/tools/tree/master/gopls",
         "url": "golang.org/x/tools/gopls"
     },
     "golangci-lint": {
         "type": "exe",
-        "version": "1.55.2",
-        "installers": ["Go"],
+        "version": "1.64.6",
+        "installers": ["bh", "Go"],
+        "homepage": "https://golangci-lint.run",
         "source_repo": "https://github.com/golangci/golangci-lint",
         "url": "github.com/golangci/golangci-lint/cmd/golangci-lint"
     },
