@@ -19,7 +19,6 @@ from .conf import conf
 from .inspect import search_assets
 from .managers import (
     ALL_MANAGERS,
-    Exe,
     Manager,
     all_desired,
     create_bonus_jobs,
@@ -158,9 +157,8 @@ def source() -> None:
 
 
 def list_assets() -> None:
-    resource = get_resource(conf.args.spec[0])
-    if isinstance(resource, Exe):
-        asyncio.run(search_assets(resource))
+    resource = get_spec(conf.args.spec[0])
+    asyncio.run(search_assets(conf.args.spec[0], resource))
 
 
 def config() -> None:
