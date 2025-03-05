@@ -178,8 +178,9 @@ class ConfigEditor(MenuPiece):
     def keys() -> List[str]:
         return ["enter"]
 
-    def action(self, key, index: int) -> None:
+    def action(self, key, index: int) -> bool:
         self.addons[index] = (self.addons[index][0], not self.addons[index][1])
+        return False
 
 
 def select_addons(preferences: List[Tuple[str, bool]]) -> Dict[str, bool]:

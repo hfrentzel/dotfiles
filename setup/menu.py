@@ -22,7 +22,7 @@ class MenuPiece(ABC):
         pass
 
     @abstractmethod
-    def action(self, key: str, index: int) -> None:
+    def action(self, key: str, index: int) -> bool:
         pass
 
 
@@ -88,7 +88,7 @@ def read_input(tty: TextIOWrapper) -> str:
     return next_key
 
 
-def show(menu_options: MenuPiece):
+def show(menu_options: MenuPiece) -> int:
     active_index = 0
     x = XX(menu_options.len())
     with x.tty_handler() as (tin, tout):
@@ -110,10 +110,13 @@ def show(menu_options: MenuPiece):
             elif next_key in {"down", "j"}:
                 active_index = min(menu_options.len() - 1, active_index + 1)
             elif next_key in menu_options.keys():
-                menu_options.action(next_key, active_index)
+                if menu_options.action(next_key, active_index):
+                    break
             elif next_key in {"escape", "q", "ctrl-g"}:
+                active_index = -1
                 break
 
+    return active_index
 
 def main() -> None:
     branches = subprocess.check_output(["git", "branch"]).decode("utf-8")

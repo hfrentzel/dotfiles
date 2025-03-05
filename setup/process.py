@@ -83,7 +83,7 @@ async def async_proc(
     return output
 
 
-async def fetch_file(url: str, version: Optional[str]) -> str:
+async def fetch_file(url: str, version: Optional[str] = None) -> str:
     full_url = url
     if version is not None:
         full_url = url.format(version=version)

@@ -76,11 +76,15 @@ class Github:
 
     @classmethod
     async def get_release(cls, repo: str, version: str, logger: Logger) -> str:
-        response: List[Dict[str, str]] = await cls.gh_api_call(
-            f"repos/{repo}/releases", logger
-        )
+        response = await cls.get_releases(repo, logger)
         releases = [r["tag_name"] for r in response]
         return next(r for r in releases if version in r)
+
+    @classmethod
+    async def get_releases(
+        cls, repo: str, logger: Logger
+    ) -> List[Dict[str, str]]:
+        return await cls.gh_api_call(f"repos/{repo}/releases", logger)
 
     @classmethod
     async def gh_api_call(cls, path: str, logger: Logger) -> Any:
@@ -93,6 +97,8 @@ class Github:
             resp = json.loads(result.stdout)
 
             mess = resp.get("message", "") if isinstance(resp, dict) else ""
+            if mess.startswith("Not Found"):
+                raise GithubApiError("Not Found")
             if mess.startswith("API rate limit exceeded") and not auth:
                 logger.debug("Hit Github rate limit")
                 token = cls.get_token()

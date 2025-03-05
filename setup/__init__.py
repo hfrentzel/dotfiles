@@ -16,7 +16,7 @@ from .builder import (
     get_spec,
 )
 from .conf import conf
-from .inspect import search_assets
+from .inspect import get_asset, search_assets
 from .managers import (
     ALL_MANAGERS,
     Manager,
@@ -170,6 +170,10 @@ def available() -> None:
     lookup_releases(spec)
 
 
+def download() -> None:
+    asyncio.run(get_asset(conf.args.repo[0]))
+
+
 def run() -> None:
     argparser = argparse.ArgumentParser(prog="EnvSetup")
     argparser.set_defaults(func=check)
@@ -215,6 +219,12 @@ def run() -> None:
     )
     source_cmd.set_defaults(func=source)
     source_cmd.add_argument("spec", type=str, nargs=1)
+
+    download_cmd = subparsers.add_parser(
+        "dl", help="Download Github release asset"
+    )
+    download_cmd.set_defaults(func=download)
+    download_cmd.add_argument("repo", type=str, nargs=1)
 
     available_cmd = subparsers.add_parser(
         "available", help="Lookup up releases of resource"
