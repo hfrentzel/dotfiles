@@ -3,6 +3,8 @@ if command -v node &> /dev/null; then
     export NPM_CONFIG_USERCONFIG="$HOME/.config/npm/npmrc"
 fi
 
+export TF_CLI_CONFIG_FILE="$HOME/.config/terraform/config.tf"
+
 export LESSHISTFILE="$HOME/.local/share/less/history"
 export HISTFILE="$HOME/.local/share/bash/history"
 export INPUTRC="$HOME/.config/readline/inputrc"

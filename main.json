@@ -148,7 +148,7 @@
         "go": "languages/go.json",
         "python": "languages/python/spec.json",
         "rust": "languages/rust/spec.json",
-        "terraform": "languages/terraform.json",
+        "terraform": "languages/terraform/spec.json",
         "vim": "vim/spec.json",
         "kubernetes": "clis/kubernetes/spec.json",
         "gh": "clis/gh.json",

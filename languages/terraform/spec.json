@@ -14,6 +14,11 @@
         "url": "https://releases.hashicorp.com/terraform-ls/{version}/terraform-ls_{version}_linux_amd64.zip",
         "source_repo": "https://github.com/hashicorp/terraform-ls"
     },
+    "terraformrc": {
+        "type": "symlink",
+        "source": "DOT/languages/terraform/config.tf",
+        "target": "~/.config/terraform/config.tf"
+    },
     "ts-terraform": {
         "type": "parser",
         "language": "terraform"
