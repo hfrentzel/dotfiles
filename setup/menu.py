@@ -2,10 +2,28 @@ import contextlib
 import os
 import subprocess
 import termios
+from abc import ABC, abstractmethod
 from io import TextIOWrapper
 from typing import Iterator, List, Tuple
 
-from setup.output import green, red
+
+class MenuPiece(ABC):
+    @abstractmethod
+    def get(self, index: int) -> str:
+        pass
+
+    @abstractmethod
+    def len(self) -> int:
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def keys() -> List[str]:
+        pass
+
+    @abstractmethod
+    def action(self, key: str, index: int) -> None:
+        pass
 
 
 class XX:
@@ -70,37 +88,31 @@ def read_input(tty: TextIOWrapper) -> str:
     return next_key
 
 
-def show(preferences: List[Tuple[str, bool]]) -> List[Tuple[str, bool]]:
-    # included = [True] * len(menu_entries)
+def show(menu_options: MenuPiece):
     active_index = 0
-    x = XX(len(preferences))
+    x = XX(menu_options.len())
     with x.tty_handler() as (tin, tout):
         while True:
-            for menu_index, (menu_entry, included) in enumerate(preferences):
+            for menu_index in range(menu_options.len()):
                 tout.write("* " if menu_index == active_index else "  ")
-                tout.write(f"{menu_entry: <15}")
-                tout.write(green("INCLUDE") if included else red("EXCLUDE"))
+                tout.write(menu_options.get(menu_index))
                 tout.write(TERM_COMMAND["clear_to_end_of_line"])
-                if menu_index < len(preferences) - 1:
+                if menu_index < menu_options.len() - 1:
                     tout.write("\n")
 
             tout.write(
-                "\r" + (len(preferences) - 1) * TERM_COMMAND["cursor_up"]
+                "\r" + (menu_options.len() - 1) * TERM_COMMAND["cursor_up"]
             )
             tout.flush()
             next_key = read_input(tin)
             if next_key in {"up", "k"}:
                 active_index = max(0, active_index - 1)
             elif next_key in {"down", "j"}:
-                active_index = min(len(preferences) - 1, active_index + 1)
-            elif next_key in {"enter"}:
-                preferences[active_index] = (
-                    preferences[active_index][0],
-                    not preferences[active_index][1],
-                )
+                active_index = min(menu_options.len() - 1, active_index + 1)
+            elif next_key in menu_options.keys():
+                menu_options.action(next_key, active_index)
             elif next_key in {"escape", "q", "ctrl-g"}:
                 break
-    return preferences
 
 
 def main() -> None:

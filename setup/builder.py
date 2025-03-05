@@ -5,7 +5,8 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from setup.conf import conf
 from setup.managers import ALL_MANAGERS, Manager
-from setup.menu import show
+from setup.menu import MenuPiece, show
+from setup.output import green, red
 
 USER_CONFIG = os.path.expanduser("~/.config/env_setup/config.json")
 
@@ -161,7 +162,28 @@ def write_config(
         )
 
 
+class ConfigEditor(MenuPiece):
+    def __init__(self, addons: List[Tuple[str, bool]]):
+        self.addons = addons
+
+    def get(self, index: int) -> str:
+        item = self.addons[index]
+        state = green("INCLUDE") if item[1] else red("EXCLUDE")
+        return f"{item[0]: <15}{state}"
+
+    def len(self) -> int:
+        return len(self.addons)
+
+    @staticmethod
+    def keys() -> List[str]:
+        return ["enter"]
+
+    def action(self, key, index: int) -> None:
+        self.addons[index] = (self.addons[index][0], not self.addons[index][1])
+
+
 def select_addons(preferences: List[Tuple[str, bool]]) -> Dict[str, bool]:
     print("Select which addons should be tracked on this machine")
-    items = show(preferences)
-    return {i[0]: i[1] for i in items}
+    prefs = ConfigEditor(preferences)
+    show(prefs)
+    return {i[0]: i[1] for i in prefs.addons}
