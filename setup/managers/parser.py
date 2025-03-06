@@ -69,7 +69,7 @@ class Parser(Manager):
 
     @classmethod
     def nvim_init_job(cls) -> Job:
-        async def inner(logger: Logger):
+        async def inner(logger: Logger) -> bool:
             logger.info("Running nvim_init")
             await async_proc("nvim --headless +q")
             return True

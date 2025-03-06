@@ -2,7 +2,7 @@ import asyncio
 import logging
 from asyncio import Future
 from dataclasses import dataclass, field
-from typing import Awaitable, Callable, List
+from typing import Awaitable, Callable, List, Tuple
 
 
 @dataclass

@@ -178,7 +178,7 @@ class ConfigEditor(MenuPiece):
     def keys() -> List[str]:
         return ["enter"]
 
-    def action(self, key, index: int) -> bool:
+    def action(self, key: str, index: int) -> bool:
         self.addons[index] = (self.addons[index][0], not self.addons[index][1])
         return False
 

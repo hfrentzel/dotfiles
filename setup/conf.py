@@ -1,11 +1,11 @@
 import os
 from argparse import Namespace
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
 class Conf:
-    args: Namespace = Namespace()
+    args: Namespace = field(default_factory=Namespace)
     dotfiles_home: str = ""
     sources_dir: str = os.path.expanduser("~/.cache/env_setup")
     parser_dir: str = os.path.expanduser("~/.local/share/nvim/site/parser")

@@ -64,9 +64,7 @@ async def build_tree(jobs: List[Job]) -> Tuple[List[Job], List[TreeNode]]:
     tree = []
     for job in jobs:
         if parents := [
-            j
-            for j in jobs
-            if set(job.depends_on).intersection(set(j.resources))
+            j for j in jobs if set(job.depends_on) & set(j.resources)
         ]:
             loop = asyncio.get_event_loop()
             for i, p in enumerate(parents):

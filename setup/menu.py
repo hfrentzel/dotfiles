@@ -117,11 +117,3 @@ def show(menu_options: MenuPiece) -> int:
                 break
 
     return active_index
-
-def main() -> None:
-    branches = subprocess.check_output(["git", "branch"]).decode("utf-8")
-    print(show([b[2:] for b in branches.split("\n")]))
-
-
-if __name__ == "__main__":
-    main()

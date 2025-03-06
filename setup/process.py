@@ -25,11 +25,11 @@ class OutputTracker:
     all_outputs: List[Tuple[str, str, JobOutput]] = []
 
     @classmethod
-    def add_log(cls, job: str, cmd: str, job_output: JobOutput):
+    def add_log(cls, job: str, cmd: str, job_output: JobOutput) -> None:
         cls.all_outputs.append((job, cmd, job_output))
 
     @classmethod
-    def write_logs(cls, filename):
+    def write_logs(cls, filename: str) -> None:
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(filename, 'w', encoding="utf-8") as f:
             for job, cmd, job_output in cls.all_outputs:

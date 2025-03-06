@@ -23,7 +23,8 @@ def get_releases(repo: str) -> List[Dict]:
 
     return results
 
-def lookup_releases(spec: Dict):
+
+def lookup_releases(spec: Dict) -> None:
     repo = "/".join(spec["source_repo"].split("/")[-2:])
     releases = get_releases(repo)
     version = spec["version"]

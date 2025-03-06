@@ -1,7 +1,7 @@
 import json
 import platform
 from logging import Logger
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from setup.job import Job
 from setup.managers.package_types.tar import tar_builder
@@ -33,7 +33,7 @@ def build_hole_builder(resource: "Exe") -> Job:
     )
 
 
-async def get_hole(logger: Logger):
+async def get_hole(logger: Logger) -> Any:
     url = "https://raw.githubusercontent.com/hfrentzel/build-hole/master/hole.json"
     result = await async_proc(f"curl -L {url}", logger=logger)
     hole = json.loads(result.stdout)

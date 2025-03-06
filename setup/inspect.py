@@ -73,7 +73,7 @@ class Picker(MenuPiece):
     def keys() -> List[str]:
         return ["enter"]
 
-    def action(self, key, index: int) -> bool:
+    def action(self, key: str, index: int) -> bool:
         self.index = index
         return True
 
@@ -114,8 +114,7 @@ async def get_asset(repo: str) -> None:
         return
 
     if (letter := resp[0].lower()) == "e":
-        extract_path = os.path.dirname(filename)
-        extract_tar(filename, extract_path, "")
+        extract_tar(filename, os.path.dirname(filename), "")
         print(f"Tarball extracted to {os.path.splitext(filename)[0]}")
     elif letter == "l":
         with tarfile.open(filename) as tar:

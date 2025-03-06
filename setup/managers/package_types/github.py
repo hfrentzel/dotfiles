@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class GithubApiError(Exception):
-    def __init__(self, reason):
+    def __init__(self, reason: str) -> None:
         self.reason = reason
 
 
