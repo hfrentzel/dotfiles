@@ -2,15 +2,9 @@
     "lua-language-server": {
         "type": "exe",
         "version": "3.13.6",
-        "installers": ["Github"],
+        "installers": ["bh"],
         "homepage": "https://luals.github.io",
-        "source_repo": "https://github.com/LuaLS/lua-language-server",
-        "extract_path": "~/.local/share/lua"
-    },
-    "luals-symlink": {
-        "type": "symlink",
-        "source": "DOT/languages/lua/call_luals.sh",
-        "target": "~/.local/bin/lua-language-server"
+        "source_repo": "https://github.com/LuaLS/lua-language-server"
     },
     "selene": {
         "type": "exe",
