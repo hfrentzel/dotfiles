@@ -11,7 +11,7 @@ return {
             {
                 '<leader>ww',
                 function()
-                    vim.cmd.edit('~/vimwiki/index.md')
+                    vim.cmd.edit('~/notes/index.md')
                 end,
             },
         },
@@ -19,7 +19,7 @@ return {
             workspaces = {
                 {
                     name = 'notes',
-                    path = '~/vimwiki',
+                    path = '~/notes',
                 },
             },
             callbacks = {

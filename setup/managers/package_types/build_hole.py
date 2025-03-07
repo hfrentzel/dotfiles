@@ -19,7 +19,7 @@ def build_hole_builder(resource: "Exe") -> Job:
 
         hardware = platform.uname().machine.lower()
         if hardware == "x86_64":
-            env = "x86_64-linux-20.04"
+            env = "x86_64-linux-22.04"
         else:
             env = "aarch64-linux-22.04"
         resource.url = hole[resource.name][resource.version][env]
