@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 from setup.job import Job
 from setup.managers.package_types.tar import tar_builder
 from setup.output import green
-from setup.process import async_proc
+from setup.process import async_req
 
 if TYPE_CHECKING:
     from setup.managers.exe import Exe
@@ -35,6 +35,6 @@ def build_hole_builder(resource: "Exe") -> Job:
 
 async def get_hole(logger: Logger) -> Any:
     url = "https://raw.githubusercontent.com/hfrentzel/build-hole/master/hole.json"
-    result = await async_proc(f"curl -L {url}", logger=logger)
-    hole = json.loads(result.stdout)
+    result = await async_req(url, logger=logger)
+    hole = json.loads(result)
     return hole

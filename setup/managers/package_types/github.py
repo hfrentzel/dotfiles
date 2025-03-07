@@ -8,7 +8,7 @@ from setup.managers.package_types.deb import deb_builder
 from setup.managers.package_types.tar import tar_builder
 from setup.managers.package_types.zip import zip_builder
 from setup.output import red
-from setup.process import async_proc, filter_assets
+from setup.process import async_req, filter_assets
 
 if TYPE_CHECKING:
     from setup.managers.exe import Exe
@@ -89,16 +89,14 @@ class Github:
     @classmethod
     async def gh_api_call(cls, path: str, logger: Logger) -> Any:
         url = f"https://api.github.com/{path}"
-        auth = ""
+        auth: Dict[str, str] = {}
         while True:
-            result = await async_proc(f"curl -L {auth} {url}", logger=logger)
-            if result.returncode != 0:
-                return None
-            resp = json.loads(result.stdout)
-
-            mess = resp.get("message", "") if isinstance(resp, dict) else ""
-            if mess.startswith("Not Found"):
+            result = await async_req(url, headers=auth, logger=logger)
+            if result.statuscode == 404:
                 raise GithubApiError("Not Found")
+
+            resp = json.loads(result.output)
+            mess = resp.get("message", "") if isinstance(resp, dict) else ""
             if mess.startswith("API rate limit exceeded") and not auth:
                 logger.debug("Hit Github rate limit")
                 token = cls.get_token()
@@ -106,7 +104,7 @@ class Github:
                     raise GithubApiError(
                         "Rate limit was hit and credentials don't exist"
                     )
-                auth = f'-H "Authorization: Bearer {token}" '
+                auth = {"Authorization": f"Bearer {token}"}
             elif mess.startswith("Bad credentials"):
                 raise GithubApiError(
                     "Rate limit was hit and credentials are bad"

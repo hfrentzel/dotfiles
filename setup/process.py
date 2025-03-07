@@ -1,10 +1,11 @@
 import asyncio
 import os
 import platform
+import urllib
 from dataclasses import dataclass
 from itertools import zip_longest
 from logging import Logger
-from typing import List, Literal, Optional, Tuple, Union, overload
+from typing import Dict, List, Literal, Optional, Tuple, Union, overload
 
 from .conf import conf
 
@@ -21,6 +22,12 @@ class JobOutput:
     returncode: Optional[int]
 
 
+@dataclass
+class RequestOutput:
+    output: str
+    statuscode: int
+
+
 class OutputTracker:
     all_outputs: List[Tuple[str, str, JobOutput]] = []
 
@@ -31,7 +38,7 @@ class OutputTracker:
     @classmethod
     def write_logs(cls, filename: str) -> None:
         os.makedirs(os.path.dirname(filename), exist_ok=True)
-        with open(filename, 'w', encoding="utf-8") as f:
+        with open(filename, "w", encoding="utf-8") as f:
             for job, cmd, job_output in cls.all_outputs:
                 f.write(f">>>>>[{job}]: {cmd}\n")
                 f.write(f">>>>>returncode: {job_output.returncode}\n")
@@ -83,6 +90,37 @@ async def async_proc(
     return output
 
 
+async def async_req(
+    url: str,
+    filename: Optional[str] = None,
+    headers: Optional[Dict[str, str]] = None,
+    logger: Optional[Logger] = None,
+) -> RequestOutput:
+    loop = asyncio.get_event_loop()
+    if logger:
+        logger.debug(f"Making fetch request to {url}")
+
+    try:
+        if filename:
+            await loop.run_in_executor(
+                None, urllib.request.urlretrieve, url, filename
+            )
+            output = RequestOutput("GOT file", 200)
+        else:
+            req = urllib.request.Request(url, headers=(headers or {}))
+            resp = await loop.run_in_executor(None, urllib.request.urlopen, req)
+            output = RequestOutput(resp.read().decode("utf-8"), resp.status)
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            output = RequestOutput("Not Found", 404)
+    if logger:
+        job_output = JobOutput(
+            stdout=output.output, stderr="", returncode=output.statuscode
+        )
+        OutputTracker.add_log(logger.name, f"Async req to {url}", job_output)
+    return output
+
+
 async def fetch_file(url: str, version: Optional[str] = None) -> str:
     full_url = url
     if version is not None:
@@ -91,7 +129,7 @@ async def fetch_file(url: str, version: Optional[str] = None) -> str:
 
     filename = f"{conf.sources_dir}/{file}"
     if not os.path.exists(filename):
-        await async_proc(f"curl -L {full_url} -o {filename}")
+        await async_req(full_url, filename=filename)
 
     return filename
 

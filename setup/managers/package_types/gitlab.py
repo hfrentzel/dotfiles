@@ -7,7 +7,7 @@ from setup.managers.package_types.deb import deb_builder
 from setup.managers.package_types.tar import tar_builder
 from setup.managers.package_types.zip import zip_builder
 from setup.output import red
-from setup.process import async_proc, filter_assets
+from setup.process import async_req, filter_assets
 
 if TYPE_CHECKING:
     from setup.managers.exe import Exe
@@ -73,7 +73,5 @@ class Gitlab:
     @classmethod
     async def glab_api_call(cls, path: str, logger: Logger) -> Any:
         url = f"https://gitlab.com/api/v4/projects/{path}"
-        result = await async_proc(f"curl {url}", logger=logger)
-        if result.returncode != 0:
-            return None
-        return json.loads(result.stdout)
+        result = await async_req(url, logger=logger)
+        return json.loads(result)
