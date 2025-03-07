@@ -62,7 +62,7 @@ def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
     for name, file in addons.items():
         if not include_all and not choices[name]:
             continue
-        specs.update(get_addon_specs(file))
+        specs.update(get_addon_specs(f"DOT/{file}"))
 
     for e_addon in external_addons:
         specs.update(get_addon_specs(e_addon))
@@ -76,7 +76,7 @@ def get_spec(name: str) -> Dict[str, Any]:
         return specs[name]
 
     for file in addons.values():
-        addons_specs = get_addon_specs(file)
+        addons_specs = get_addon_specs(f"DOT/{file}")
         if name in addons_specs:
             return addons_specs[name]
     raise NoSpecError(name)
@@ -94,7 +94,7 @@ def get_base_specs() -> Tuple[Dict[str, Dict[str, Any]], Dict[str, str]]:
 
 
 def get_addon_specs(addon: str) -> Dict[str, Dict[str, Any]]:
-    with open(os.path.join(conf.dotfiles_home, addon), encoding="utf-8") as f:
+    with open(os.path.join(expand(addon)), encoding="utf-8") as f:
         return json.loads(f.read())
 
 
