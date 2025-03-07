@@ -25,7 +25,15 @@ from .managers import (
 )
 from .output import green, red
 from .process import OutputTracker, async_proc
+from .submodules import check_submodules, submodule_pull, submodule_diff
 from .tree import build_tree, create_jobs, print_job_tree
+
+LOG_LEVELS = {
+    "debug": logging.DEBUG,
+    "info": logging.INFO,
+    "warning": logging.WARNING,
+    "error": logging.ERROR,
+}
 
 
 async def handle_jobs(
@@ -180,7 +188,7 @@ def run() -> None:
     argparser.add_argument(
         "-l",
         "--log",
-        choices=["debug", "info", "error", "warn"],
+        choices=list(LOG_LEVELS.keys()),
         default="info",
     )
 
@@ -243,6 +251,17 @@ def run() -> None:
     )
     config_cmd.set_defaults(func=config)
 
+    subm_cmds = subparsers.add_parser(
+        "subm", help="Manage git submodules"
+    ).add_subparsers(title="submodule management", required=True)
+    subm_cmds.add_parser("status").set_defaults(func=check_submodules)
+    pull_cmd = subm_cmds.add_parser("pull")
+    pull_cmd.add_argument("repo", type=str, nargs=1)
+    pull_cmd.set_defaults(func=submodule_pull)
+    diff_cmd = subm_cmds.add_parser("diff")
+    diff_cmd.add_argument("repo", type=str, nargs=1)
+    diff_cmd.set_defaults(func=submodule_diff)
+
     os.environ["NPM_CONFIG_USERCONFIG"] = expand("~/.config/npm/npmrc")
     os.environ["CARGO_HOME"] = expand("~/.local/share/cargo")
     os.environ["RUSTUP_HOME"] = expand("~/.local/share/rustup")
@@ -259,12 +278,7 @@ def run() -> None:
         )
 
     conf.args = argparser.parse_args()
-    loglevel = {
-        "debug": logging.DEBUG,
-        "info": logging.INFO,
-        "warning": logging.WARNING,
-        "error": logging.ERROR,
-    }[conf.args.log]
+    loglevel = LOG_LEVELS[conf.args.log]
     logging.basicConfig(
         level=loglevel, format="[%(levelname)s] %(name)s: %(message)s"
     )

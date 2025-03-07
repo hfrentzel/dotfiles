@@ -91,7 +91,7 @@
         },
         "gitconfig": {
             "type": "symlink",
-            "source": "DOT/git/gitconfig",
+            "source": "DOT/configs/gitconfig",
             "target": "~/.config/git/config"
         },
         "ripgrep": {
