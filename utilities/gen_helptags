@@ -1,0 +1,14 @@
+#! /usr/bin/env python3
+# A script to generate vim helptags for every plugin that I have in my dotfiles
+import os
+import shlex
+import subprocess
+
+for plugin in os.scandir(
+    os.path.expanduser("~/dotfiles/vim/nvim/pack/vendor/opt")
+):
+    path = os.path.join(plugin.path, "doc")
+    if not os.path.isdir(path):
+        continue
+    cmd = f'nvim --headless -u NONE -c "helptags {path}" -c q'
+    subprocess.run(shlex.split(cmd))

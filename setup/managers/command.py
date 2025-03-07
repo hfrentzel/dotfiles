@@ -1,7 +1,7 @@
 import os
 from dataclasses import dataclass, field
 from logging import Logger
-from typing import Callable, ClassVar, Coroutine, List, Optional, Tuple
+from typing import Callable, ClassVar, Coroutine, List, Optional, Tuple, Union
 
 from setup.conf import expand
 from setup.job import Job
@@ -14,7 +14,7 @@ from setup.process import async_proc
 class Command(Manager):
     desired: ClassVar[List["Command"]] = []
     name: str
-    run_script: str
+    run_script: Union[str, List[str]]
     state: Tuple[bool, str] = (False, "")
     check_script: Optional[str] = None
     depends_on: List[str] = field(default_factory=list)
@@ -69,7 +69,7 @@ class Command(Manager):
 
     @staticmethod
     def perform_script(
-        name: str, script: str, cwd: Optional[str]
+        name: str, script: Union[str, List[str]], cwd: Optional[str]
     ) -> Callable[[Logger], Coroutine[None, None, bool]]:
         async def inner(logger: Logger) -> bool:
             logger.info(f"Running the {name} script...")
@@ -78,8 +78,15 @@ class Command(Manager):
                 logger.error(red(f"{name} script failed"))
                 return False
 
-            result = await async_proc(script, cwd=cwd, logger=logger)
-            success = not result.returncode
+            if isinstance(script, str):
+                result = await async_proc(script, cwd=cwd, logger=logger)
+                success = not result.returncode
+            else:
+                for step in script:
+                    result = await async_proc(step, cwd=cwd, logger=logger)
+                    success = not result.returncode
+                    if not success:
+                        break
             if success:
                 logger.info(green(f"{name} script ran successfully"))
             else:
