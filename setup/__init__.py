@@ -15,7 +15,7 @@ from .builder import (
     get_resource,
     get_spec,
 )
-from .conf import conf
+from .conf import conf, expand
 from .inspect import get_asset, search_assets
 from .managers import (
     ALL_MANAGERS,
@@ -69,7 +69,7 @@ async def handle_jobs(
         success = False
         raise e
     finally:
-        filename = os.path.expanduser(f"~/.local/share/mysetup/log/{timestamp}")
+        filename = expand(f"~/.local/share/mysetup/log/{timestamp}")
         OutputTracker.write_logs(filename)
         if success:
             logger.info(green("All resources have been setup successfully"))
@@ -243,19 +243,17 @@ def run() -> None:
     )
     config_cmd.set_defaults(func=config)
 
-    os.environ["NPM_CONFIG_USERCONFIG"] = os.path.expanduser(
-        "~/.config/npm/npmrc"
-    )
-    os.environ["CARGO_HOME"] = os.path.expanduser("~/.local/share/cargo")
-    os.environ["RUSTUP_HOME"] = os.path.expanduser("~/.local/share/rustup")
+    os.environ["NPM_CONFIG_USERCONFIG"] = expand("~/.config/npm/npmrc")
+    os.environ["CARGO_HOME"] = expand("~/.local/share/cargo")
+    os.environ["RUSTUP_HOME"] = expand("~/.local/share/rustup")
     conf.dotfiles_home = os.path.dirname(
         os.path.dirname(os.path.abspath(__file__))
     )
 
-    local_bin = os.path.expanduser("~/.local/bin")
+    local_bin = expand("~/.local/bin")
     if local_bin not in os.environ["PATH"]:
-        cargo_bin = os.path.expanduser("~/.local/share/cargo/bin")
-        go_bin = os.path.expanduser("~/.local/go/bin")
+        cargo_bin = expand("~/.local/share/cargo/bin")
+        go_bin = expand("~/.local/go/bin")
         os.environ["PATH"] = (
             f"{local_bin}:{go_bin}:{cargo_bin}:{os.environ['PATH']}"
         )

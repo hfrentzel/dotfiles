@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from logging import Logger
 from typing import Callable, ClassVar, Coroutine, List, Tuple
 
+from setup.conf import expand
 from setup.job import Job
 from setup.managers.manager import Manager, mark_resource
 from setup.output import print_grid
@@ -20,7 +21,7 @@ class Directory(Manager):
         self.desired.append(self)
 
     async def _set_status(self) -> None:
-        path = os.path.expanduser(self.path)
+        path = expand(self.path)
         if os.path.isdir(path):
             self.state = (True, "Exists")
             return
@@ -60,7 +61,7 @@ class Directory(Manager):
         path: str,
     ) -> Callable[[Logger], Coroutine[None, None, bool]]:
         async def inner(logger: Logger) -> bool:
-            full_path = os.path.expanduser(path)
+            full_path = expand(path)
             logger.info(f"Creating directory at {full_path}...")
             os.makedirs(full_path)
 

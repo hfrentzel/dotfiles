@@ -15,4 +15,12 @@ class Conf:
         os.makedirs(self.sources_dir, exist_ok=True)
 
 
+def expand(path: str) -> str:
+    if path.startswith("DOT"):
+        path = path.replace("DOT", conf.dotfiles_home)
+
+    path = os.path.expanduser(path)
+    return path
+
+
 conf = Conf()

@@ -3,6 +3,7 @@ import os
 from logging import Logger
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
+from setup.conf import expand
 from setup.job import Job
 from setup.managers.package_types.deb import deb_builder
 from setup.managers.package_types.tar import tar_builder
@@ -118,7 +119,7 @@ class Github:
     def get_token(cls) -> Optional[str]:
         # TODO Store and retrieve token some other way
         if cls.token is None:
-            token_file = os.path.expanduser("~/.gh_token")
+            token_file = expand("~/.gh_token")
             if os.path.isfile(token_file):
                 with open(token_file, encoding="utf-8") as f:
                     cls.token = f.read().strip("\n")

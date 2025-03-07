@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from logging import Logger
 from typing import Callable, ClassVar, Coroutine, List, Optional, Tuple
 
-from setup.conf import conf
+from setup.conf import expand
 from setup.job import Job
 from setup.managers.manager import Manager, mark_resource
 from setup.output import green, print_grid, red
@@ -26,9 +26,7 @@ class Command(Manager):
 
     async def _set_status(self) -> None:
         if isinstance(self.cwd, str):
-            self.cwd = os.path.expanduser(
-                self.cwd.replace("DOT", conf.dotfiles_home)
-            )
+            self.cwd = expand(self.cwd)
 
         if self.check_script is None:
             self.state = (False, "CANT VERIFY")

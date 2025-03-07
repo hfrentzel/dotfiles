@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from logging import Logger
 from typing import Callable, ClassVar, Coroutine, List, Tuple
 
-from setup.conf import conf
+from setup.conf import expand
 from setup.job import Job
 from setup.managers.manager import Manager, mark_resource
 from setup.output import print_grid, yellow
@@ -22,7 +22,7 @@ class Symlink(Manager):
         self.desired.append(self)
 
     async def _set_status(self) -> None:
-        dest = os.path.expanduser(self.target)
+        dest = expand(self.target)
         if os.path.isfile(dest) or os.path.isdir(dest):
             if os.path.islink(dest):
                 self.state = (True, "LINKED")
@@ -62,15 +62,12 @@ class Symlink(Manager):
         source: str, target: str
     ) -> Callable[[Logger], Coroutine[None, None, bool]]:
         async def inner(logger: Logger) -> bool:
-            src = source.replace("DOT", conf.dotfiles_home)
-            src = os.path.expanduser(src)
-            dest = os.path.expanduser(target)
+            src = expand(source)
+            dest = expand(target)
 
             # Handle files that are blocking symlink
             if os.path.isfile(dest):
-                old_folder = os.path.expanduser(
-                    "~/.local/share/mysetup/old_files"
-                )
+                old_folder = expand("~/.local/share/mysetup/old_files")
                 old_file = os.path.basename(dest)
                 old_file = os.path.join(old_folder, old_file + ".old")
                 os.makedirs(old_folder, exist_ok=True)

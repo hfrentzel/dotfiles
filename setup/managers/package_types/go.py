@@ -2,6 +2,7 @@ import os
 from logging import Logger
 from typing import TYPE_CHECKING
 
+from setup.conf import expand
 from setup.job import Job
 from setup.output import green, red
 from setup.process import async_proc
@@ -12,9 +13,9 @@ if TYPE_CHECKING:
 
 def go_builder(resource: "Exe") -> Job:
     async def inner(logger: Logger) -> bool:
-        os.environ["GOBIN"] = os.path.expanduser("~/.local/bin")
-        os.environ["GOMODCACHE"] = os.path.expanduser("~/.cache/go/mod")
-        os.environ["GOPATH"] = os.path.expanduser("~/.local/share/go")
+        os.environ["GOBIN"] = expand("~/.local/bin")
+        os.environ["GOMODCACHE"] = expand("~/.cache/go/mod")
+        os.environ["GOPATH"] = expand("~/.local/share/go")
 
         logger.info(f"Installing {resource.name} with go...")
         result = await async_proc(

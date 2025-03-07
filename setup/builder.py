@@ -3,12 +3,12 @@ import os
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from setup.conf import conf
+from setup.conf import conf, expand
 from setup.managers import ALL_MANAGERS, Manager
 from setup.menu import MenuPiece, show
 from setup.output import green, red
 
-USER_CONFIG = os.path.expanduser("~/.config/env_setup/config.json")
+USER_CONFIG = expand("~/.config/env_setup/config.json")
 
 
 class NoSpecError(Exception):

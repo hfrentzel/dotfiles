@@ -3,6 +3,7 @@ import os
 from logging import Logger
 from typing import List, Optional, Tuple
 
+from setup.conf import expand
 from setup.job import Job
 from setup.managers.manager import Package
 from setup.managers.package_types.versioning import check_install
@@ -56,7 +57,7 @@ class Npm:
     @classmethod
     def get_version(cls, package: Package) -> Optional[str]:
         path = os.path.join(
-            os.path.expanduser("~/.local/lib/node_modules"),
+            expand("~/.local/lib/node_modules"),
             package.name,
             "package.json",
         )
