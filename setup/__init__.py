@@ -5,7 +5,6 @@ import json
 import logging
 import os
 import webbrowser
-from typing import List, Type
 
 from .available import lookup_releases
 from .builder import (
@@ -25,7 +24,7 @@ from .managers import (
 )
 from .output import green, red
 from .process import OutputTracker, async_proc
-from .submodules import check_submodules, submodule_pull, submodule_diff
+from .submodules import check_submodules, submodule_diff, submodule_pull
 from .tree import build_tree, create_jobs, print_job_tree
 
 LOG_LEVELS = {
@@ -37,7 +36,7 @@ LOG_LEVELS = {
 
 
 async def handle_jobs(
-    resources: List[Manager], selected_types: List[Type[Manager]]
+    resources: list[Manager], selected_types: list[type[Manager]]
 ) -> None:
     logger = logging.getLogger("mysetup")
     if conf.args.stage == "desired":

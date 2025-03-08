@@ -1,13 +1,10 @@
 import re
 import shutil
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import (
-    Callable,
     ClassVar,
-    Dict,
-    List,
     Optional,
-    Tuple,
     TypedDict,
     Union,
 )
@@ -30,7 +27,7 @@ from setup.output import print_grid
 from setup.process import async_proc, ver_greater_than
 
 VERSION_REGEX = re.compile(r"\d+\.\d+(\.\d+)?", re.M)
-JOB_BUILDERS: Dict[str, Callable[["Exe"], Union[bool, Job]]] = {
+JOB_BUILDERS: dict[str, Callable[["Exe"], Union[bool, Job]]] = {
     "Apt": Apt.apt_builder,
     "bh": build_hole_builder,
     "Cargo": cargo_builder,
@@ -55,25 +52,25 @@ Apt, Deb, Pip, Npm, Tar
 
 class InstallerSpec(TypedDict):
     installer: str
-    package_name: Optional[Union[str, List[str]]]
+    package_name: Optional[Union[str, list[str]]]
     apt_repo: Optional[str]
-    post_script: Optional[List[str]]
+    post_script: Optional[list[str]]
 
 
 @dataclass
 class Exe(Manager, Package):
-    desired: ClassVar[List["Exe"]] = []
+    desired: ClassVar[list["Exe"]] = []
     name: str
-    state: Tuple[bool, str] = (False, "")
+    state: tuple[bool, str] = (False, "")
     version: str = ""
-    installers: List[Union[InstallerSpec, str]] = field(default_factory=list)
-    depends_on: List[str] = field(default_factory=list)
+    installers: list[Union[InstallerSpec, str]] = field(default_factory=list)
+    depends_on: list[str] = field(default_factory=list)
     command_name: str = ""
     extract_path: Optional[str] = None
     version_cmd: str = ""
     url: str = ""
     repo: str = ""
-    steps: List[str] = field(default_factory=list)
+    steps: list[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         mark_resource(self.name)

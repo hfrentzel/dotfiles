@@ -2,7 +2,7 @@ import logging
 import os
 import re
 import tarfile
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from .managers.package_types.github import Github, GithubApiError
 from .managers.package_types.gitlab import Gitlab
@@ -12,7 +12,7 @@ from .output import green, red, yellow
 from .process import fetch_file, filter_assets
 
 
-async def search_assets(name: str, spec: Dict[str, Any]) -> Optional[str]:
+async def search_assets(name: str, spec: dict[str, Any]) -> Optional[str]:
     logger = logging.getLogger("search_assets")
     if spec.get("version") is None:
         print(f"{name} does not have a version specified")
@@ -59,7 +59,7 @@ async def search_assets(name: str, spec: Dict[str, Any]) -> Optional[str]:
 
 
 class Picker(MenuPiece):
-    def __init__(self, items: List[str]):
+    def __init__(self, items: list[str]):
         self.items = items
         self.index = -1
 
@@ -70,7 +70,7 @@ class Picker(MenuPiece):
         return len(self.items)
 
     @staticmethod
-    def keys() -> List[str]:
+    def keys() -> list[str]:
         return ["enter"]
 
     def action(self, key: str, index: int) -> bool:

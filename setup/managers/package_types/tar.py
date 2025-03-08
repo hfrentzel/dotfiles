@@ -59,13 +59,11 @@ def extract_tar(
             tar.extract(all_files[0], extract_path)
             return True
 
-        # Remove common prefix from all filenames
-        # TODO Use removeprefix() when python3.9 is made min version
         commonpath = path.commonpath([t.name for t in all_files])
         commonpath = commonpath + "/" if commonpath else commonpath
 
         for t in all_files:
-            name = t.name[len(commonpath) :]
+            name = t.name.removeprefix(commonpath)
             if not name:
                 continue
 

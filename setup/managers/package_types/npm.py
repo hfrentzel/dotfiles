@@ -1,7 +1,7 @@
 import json
 import os
 from logging import Logger
-from typing import List, Optional, Tuple
+from typing import Optional
 
 from setup.conf import expand
 from setup.job import Job
@@ -12,7 +12,7 @@ from setup.process import async_proc
 
 
 class Npm:
-    all_packages: List[Tuple[str, str]] = []
+    all_packages: list[tuple[str, str]] = []
 
     @classmethod
     def npm_builder(cls, resource: Package) -> bool:
@@ -69,6 +69,6 @@ class Npm:
         return None
 
     @classmethod
-    def check_install(cls, package: Package) -> Tuple[bool, str]:
+    def check_install(cls, package: Package) -> tuple[bool, str]:
         curr_ver = cls.get_version(package)
         return check_install(curr_ver, package)

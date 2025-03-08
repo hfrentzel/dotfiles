@@ -53,13 +53,11 @@ def extract_zip(filename: str, command_name: str) -> bool:
             chmod(f"{extract_path}/{all_files[0].filename}", mode)
             return True
 
-        # Remove common prefix from all filenames
-        # TODO Use removeprefix() when python3.9 is made min version
         commonpath = path.commonpath([z.filename for z in all_files])
         commonpath = commonpath + "/" if commonpath else commonpath
 
         for z in all_files:
-            name = z.filename[len(commonpath) :]
+            name = z.filename.removeprefix(commonpath)
             if not name:
                 continue
 

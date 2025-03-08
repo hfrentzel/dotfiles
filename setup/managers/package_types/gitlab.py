@@ -1,6 +1,6 @@
 import json
 from logging import Logger
-from typing import TYPE_CHECKING, Any, Dict, List
+from typing import TYPE_CHECKING, Any
 
 from setup.job import Job
 from setup.managers.package_types.deb import deb_builder
@@ -54,7 +54,7 @@ class Gitlab:
     @classmethod
     async def get_assets(
         cls, repo: str, tag: str, logger: Logger
-    ) -> Dict[str, str]:
+    ) -> dict[str, str]:
         response = await cls.glab_api_call(
             f"{repo.replace('/', '%2F')}/releases/{tag}", logger
         )
@@ -67,11 +67,11 @@ class Gitlab:
         response = await cls.glab_api_call(
             f"{repo.replace('/', '%2F')}/releases", logger
         )
-        releases: List[str] = [r["tag_name"] for r in response]
+        releases: list[str] = [r["tag_name"] for r in response]
         return next(r for r in releases if version in r)
 
     @classmethod
     async def glab_api_call(cls, path: str, logger: Logger) -> Any:
         url = f"https://gitlab.com/api/v4/projects/{path}"
         result = await async_req(url, logger=logger)
-        return json.loads(result)
+        return json.loads(result.output)

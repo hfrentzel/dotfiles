@@ -2,12 +2,11 @@
 # recent releases of an executable on github to see if it is up to date
 import json
 import urllib.request
-from typing import Dict, List
 
 from .output import green
 
 
-def get_releases(repo: str) -> List[Dict]:
+def get_releases(repo: str) -> list[dict]:
     url = f"https://api.github.com/repos/{repo}/releases"
 
     results = None
@@ -24,7 +23,7 @@ def get_releases(repo: str) -> List[Dict]:
     return results
 
 
-def lookup_releases(spec: Dict) -> None:
+def lookup_releases(spec: dict) -> None:
     repo = "/".join(spec["source_repo"].split("/")[-2:])
     releases = get_releases(repo)
     version = spec["version"]

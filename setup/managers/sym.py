@@ -1,7 +1,8 @@
 import os
+from collections.abc import Callable, Coroutine
 from dataclasses import dataclass
 from logging import Logger
-from typing import Callable, ClassVar, Coroutine, List, Tuple
+from typing import ClassVar
 
 from setup.conf import expand
 from setup.job import Job
@@ -11,11 +12,11 @@ from setup.output import print_grid, yellow
 
 @dataclass
 class Symlink(Manager):
-    desired: ClassVar[List["Symlink"]] = []
+    desired: ClassVar[list["Symlink"]] = []
     name: str
     source: str
     target: str
-    state: Tuple[bool, str] = (False, "")
+    state: tuple[bool, str] = (False, "")
 
     def __post_init__(self) -> None:
         mark_resource(self.name)

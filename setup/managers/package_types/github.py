@@ -1,7 +1,7 @@
 import json
 import os
 from logging import Logger
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
 from setup.conf import expand
 from setup.job import Job
@@ -69,7 +69,7 @@ class Github:
         )
 
     @classmethod
-    async def get_assets(cls, repo: str, tag: str, logger: Logger) -> List[str]:
+    async def get_assets(cls, repo: str, tag: str, logger: Logger) -> list[str]:
         response = await cls.gh_api_call(
             f"repos/{repo}/releases/tags/{tag}", logger
         )
@@ -84,13 +84,13 @@ class Github:
     @classmethod
     async def get_releases(
         cls, repo: str, logger: Logger
-    ) -> List[Dict[str, str]]:
+    ) -> list[dict[str, str]]:
         return await cls.gh_api_call(f"repos/{repo}/releases", logger)
 
     @classmethod
     async def gh_api_call(cls, path: str, logger: Logger) -> Any:
         url = f"https://api.github.com/{path}"
-        auth: Dict[str, str] = {}
+        auth: dict[str, str] = {}
         while True:
             result = await async_req(url, headers=auth, logger=logger)
             if result.statuscode == 404:

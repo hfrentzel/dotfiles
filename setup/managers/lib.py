@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import ClassVar, List, Tuple
+from typing import ClassVar
 
 from setup.managers.manager import Manager, Package, mark_resource
 from setup.managers.package_types.npm import Npm
@@ -11,11 +11,11 @@ JOB_BUILDERS = {"pip": Pip.pip_builder, "npm": Npm.npm_builder}
 
 @dataclass
 class Library(Manager, Package):
-    desired: ClassVar[List["Library"]] = []
+    desired: ClassVar[list["Library"]] = []
     name: str
     version: str
     manager: str
-    state: Tuple[bool, str] = (False, "")
+    state: tuple[bool, str] = (False, "")
 
     def __post_init__(self) -> None:
         mark_resource(self.name)

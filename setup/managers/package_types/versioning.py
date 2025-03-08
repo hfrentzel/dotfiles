@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Optional
 
 from setup.managers.manager import Package
 from setup.process import ver_greater_than
@@ -6,7 +6,7 @@ from setup.process import ver_greater_than
 
 def check_install(
     curr_ver: Optional[str], package: Package
-) -> Tuple[bool, str]:
+) -> tuple[bool, str]:
     if curr_ver is None:
         return (False, "MISSING")
 

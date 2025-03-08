@@ -1,5 +1,3 @@
-from typing import Dict, List, Type
-
 from setup.job import Job
 
 from .command import Command
@@ -23,7 +21,7 @@ __all__ = [
     "Symlink",
 ]
 
-ALL_MANAGERS: Dict[str, Type[Manager]] = {
+ALL_MANAGERS: dict[str, type[Manager]] = {
     "command": Command,
     "directory": Directory,
     "exe": Exe,
@@ -33,7 +31,7 @@ ALL_MANAGERS: Dict[str, Type[Manager]] = {
 }
 
 
-def all_desired() -> List[Manager]:
+def all_desired() -> list[Manager]:
     return [
         *Command.desired,
         *Directory.desired,
@@ -44,7 +42,7 @@ def all_desired() -> List[Manager]:
     ]
 
 
-def create_bonus_jobs() -> Dict[str, Job]:
+def create_bonus_jobs() -> dict[str, Job]:
     jobs = {}
     if len(Apt.all_apts) != 0:
         jobs["apt_install"] = Apt.apt_job()

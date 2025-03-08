@@ -1,7 +1,7 @@
 import json
 import os
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Optional
 
 from setup.conf import conf, expand
 from setup.managers import ALL_MANAGERS, Manager
@@ -16,7 +16,7 @@ class NoSpecError(Exception):
         self.name = name
 
 
-def build_resources(types: List[str]) -> List[Manager]:
+def build_resources(types: list[str]) -> list[Manager]:
     specs = collect_specs()
     all_resources = []
     for name, spec in specs.items():
@@ -31,7 +31,7 @@ def get_resource(name: str) -> Manager:
     return generate_resource(name, get_spec(name))
 
 
-def generate_resource(name: str, spec: Dict[str, Any]) -> Manager:
+def generate_resource(name: str, spec: dict[str, Any]) -> Manager:
     resource_type = spec.pop("type")
 
     args = {}
@@ -55,7 +55,7 @@ def generate_resource(name: str, spec: Dict[str, Any]) -> Manager:
     return ALL_MANAGERS[resource_type](name, **args)
 
 
-def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
+def collect_specs(include_all: bool = False) -> dict[str, dict[str, Any]]:
     specs, addons = get_base_specs()
 
     choices, external_addons = load_settings(addons)
@@ -70,7 +70,7 @@ def collect_specs(include_all: bool = False) -> Dict[str, Dict[str, Any]]:
     return specs
 
 
-def get_spec(name: str) -> Dict[str, Any]:
+def get_spec(name: str) -> dict[str, Any]:
     specs, addons = get_base_specs()
     if name in specs:
         return specs[name]
@@ -82,7 +82,7 @@ def get_spec(name: str) -> Dict[str, Any]:
     raise NoSpecError(name)
 
 
-def get_base_specs() -> Tuple[Dict[str, Dict[str, Any]], Dict[str, str]]:
+def get_base_specs() -> tuple[dict[str, dict[str, Any]], dict[str, str]]:
     with open(
         os.path.join(conf.dotfiles_home, "main.json"), encoding="utf-8"
     ) as f:
@@ -93,14 +93,14 @@ def get_base_specs() -> Tuple[Dict[str, Dict[str, Any]], Dict[str, str]]:
     return specs, addons
 
 
-def get_addon_specs(addon: str) -> Dict[str, Dict[str, Any]]:
+def get_addon_specs(addon: str) -> dict[str, dict[str, Any]]:
     with open(os.path.join(expand(addon)), encoding="utf-8") as f:
         return json.loads(f.read())
 
 
 def load_settings(
-    addons: Dict[str, str],
-) -> Tuple[Dict[str, bool], List[str]]:
+    addons: dict[str, str],
+) -> tuple[dict[str, bool], list[str]]:
     choices, external_addons = read_config()
     if choices is not None:
         if missing_addons := set(addons) - set(choices):
@@ -141,7 +141,7 @@ def edit_config() -> None:
     write_config(choices, external)
 
 
-def read_config() -> Tuple[Optional[Dict[str, bool]], List[str]]:
+def read_config() -> tuple[Optional[dict[str, bool]], list[str]]:
     if not os.path.exists(USER_CONFIG):
         return None, []
     with open(USER_CONFIG, encoding="utf-8") as f:
@@ -152,7 +152,7 @@ def read_config() -> Tuple[Optional[Dict[str, bool]], List[str]]:
 
 
 def write_config(
-    choices: Dict[str, bool], external_addons: Optional[List[str]] = None
+    choices: dict[str, bool], external_addons: Optional[list[str]] = None
 ) -> None:
     with open(USER_CONFIG, "w", encoding="utf-8") as f:
         f.write(
@@ -163,7 +163,7 @@ def write_config(
 
 
 class ConfigEditor(MenuPiece):
-    def __init__(self, addons: List[Tuple[str, bool]]):
+    def __init__(self, addons: list[tuple[str, bool]]):
         self.addons = addons
 
     def get(self, index: int) -> str:
@@ -175,7 +175,7 @@ class ConfigEditor(MenuPiece):
         return len(self.addons)
 
     @staticmethod
-    def keys() -> List[str]:
+    def keys() -> list[str]:
         return ["enter"]
 
     def action(self, key: str, index: int) -> bool:
@@ -183,7 +183,7 @@ class ConfigEditor(MenuPiece):
         return False
 
 
-def select_addons(preferences: List[Tuple[str, bool]]) -> Dict[str, bool]:
+def select_addons(preferences: list[tuple[str, bool]]) -> dict[str, bool]:
     print("Select which addons should be tracked on this machine")
     prefs = ConfigEditor(preferences)
     show(prefs)

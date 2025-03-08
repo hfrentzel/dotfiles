@@ -1,9 +1,10 @@
-from typing import Sequence, Tuple, Union
+from collections.abc import Sequence
+from typing import Union
 
 
 def print_grid(
-    header: Tuple[str, ...],
-    rows: Sequence[Tuple[Union[str, Tuple[str, bool]], ...]],
+    header: tuple[str, ...],
+    rows: Sequence[tuple[Union[str, tuple[str, bool]], ...]],
 ) -> str:
     if len(rows) == 0:
         return ""
@@ -18,7 +19,7 @@ def print_grid(
 
     line = ""
 
-    def format_cell(r: Union[str, Tuple[str, bool]]) -> str:
+    def format_cell(r: Union[str, tuple[str, bool]]) -> str:
         return r if isinstance(r, str) else (green if r[1] else red)(r[0])
 
     for row in [header, *rows]:

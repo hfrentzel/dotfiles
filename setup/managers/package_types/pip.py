@@ -2,7 +2,7 @@ import os
 import re
 import subprocess
 from logging import Logger
-from typing import List, Optional, Tuple
+from typing import Optional
 
 from setup.job import Job
 from setup.managers.manager import Package
@@ -12,7 +12,7 @@ from setup.process import async_proc
 
 
 class Pip:
-    all_pips: List[Tuple[str, str]] = []
+    all_pips: list[tuple[str, str]] = []
     files: str = ""
 
     @classmethod
@@ -82,6 +82,6 @@ class Pip:
         return None
 
     @classmethod
-    def check_install(cls, package: Package) -> Tuple[bool, str]:
+    def check_install(cls, package: Package) -> tuple[bool, str]:
         curr_ver = cls.get_version(package)
         return check_install(curr_ver, package)

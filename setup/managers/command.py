@@ -1,7 +1,8 @@
 import os
+from collections.abc import Callable, Coroutine
 from dataclasses import dataclass, field
 from logging import Logger
-from typing import Callable, ClassVar, Coroutine, List, Optional, Tuple, Union
+from typing import ClassVar, Optional, Union
 
 from setup.conf import expand
 from setup.job import Job
@@ -12,12 +13,12 @@ from setup.process import async_proc
 
 @dataclass
 class Command(Manager):
-    desired: ClassVar[List["Command"]] = []
+    desired: ClassVar[list["Command"]] = []
     name: str
-    run_script: Union[str, List[str]]
-    state: Tuple[bool, str] = (False, "")
+    run_script: Union[str, list[str]]
+    state: tuple[bool, str] = (False, "")
     check_script: Optional[str] = None
-    depends_on: List[str] = field(default_factory=list)
+    depends_on: list[str] = field(default_factory=list)
     cwd: Optional[str] = None
 
     def __post_init__(self) -> None:
@@ -69,7 +70,7 @@ class Command(Manager):
 
     @staticmethod
     def perform_script(
-        name: str, script: Union[str, List[str]], cwd: Optional[str]
+        name: str, script: Union[str, list[str]], cwd: Optional[str]
     ) -> Callable[[Logger], Coroutine[None, None, bool]]:
         async def inner(logger: Logger) -> bool:
             logger.info(f"Running the {name} script...")

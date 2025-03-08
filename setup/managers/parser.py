@@ -1,7 +1,8 @@
 import os
+from collections.abc import Callable, Coroutine
 from dataclasses import dataclass
 from logging import Logger
-from typing import Callable, ClassVar, Coroutine, List, Tuple
+from typing import ClassVar
 
 from setup.conf import conf
 from setup.job import Job
@@ -12,11 +13,11 @@ from setup.process import async_proc
 
 @dataclass
 class Parser(Manager):
-    desired: ClassVar[List["Parser"]] = []
-    jobs: ClassVar[List[str]] = []
+    desired: ClassVar[list["Parser"]] = []
+    jobs: ClassVar[list[str]] = []
     name: str
     language: str
-    state: Tuple[bool, str] = (False, "")
+    state: tuple[bool, str] = (False, "")
 
     def __post_init__(self) -> None:
         mark_resource(self.name)

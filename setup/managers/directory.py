@@ -1,7 +1,8 @@
 import os
+from collections.abc import Callable, Coroutine
 from dataclasses import dataclass
 from logging import Logger
-from typing import Callable, ClassVar, Coroutine, List, Tuple
+from typing import ClassVar
 
 from setup.conf import expand
 from setup.job import Job
@@ -11,10 +12,10 @@ from setup.output import print_grid
 
 @dataclass
 class Directory(Manager):
-    desired: ClassVar[List["Directory"]] = []
+    desired: ClassVar[list["Directory"]] = []
     name: str
     path: str
-    state: Tuple[bool, str] = (False, "")
+    state: tuple[bool, str] = (False, "")
 
     def __post_init__(self) -> None:
         mark_resource(self.name)

@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import TYPE_CHECKING, List, Set
+from typing import TYPE_CHECKING
 
 from setup.job import Job
 from setup.output import green, red
@@ -10,10 +10,10 @@ if TYPE_CHECKING:
 
 
 class Apt:
-    resources: List[str] = []
-    all_apts: Set[str] = set()
-    apt_repos: List[str] = []
-    scripts: List[List[str]] = []
+    resources: list[str] = []
+    all_apts: set[str] = set()
+    apt_repos: list[str] = []
+    scripts: list[list[str]] = []
 
     @classmethod
     def apt_builder(cls, resource: "Exe") -> bool:

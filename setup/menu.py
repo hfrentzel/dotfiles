@@ -3,8 +3,8 @@ import os
 import subprocess
 import termios
 from abc import ABC, abstractmethod
+from collections.abc import Iterator
 from io import TextIOWrapper
-from typing import Iterator, List, Tuple
 
 
 class MenuPiece(ABC):
@@ -18,7 +18,7 @@ class MenuPiece(ABC):
 
     @staticmethod
     @abstractmethod
-    def keys() -> List[str]:
+    def keys() -> list[str]:
         pass
 
     @abstractmethod
@@ -31,7 +31,7 @@ class XX:
         self.size = size
 
     @contextlib.contextmanager
-    def tty_handler(self) -> Iterator[Tuple[TextIOWrapper, TextIOWrapper]]:
+    def tty_handler(self) -> Iterator[tuple[TextIOWrapper, TextIOWrapper]]:
         tty_in = open("/dev/tty", encoding="utf-8")
         tty_out = open("/dev/tty", "w", encoding="utf-8", errors="replace")
         old_term = termios.tcgetattr(tty_in.fileno())

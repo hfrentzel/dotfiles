@@ -1,8 +1,8 @@
 import asyncio
 import logging
 from asyncio import Future
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
-from typing import Awaitable, Callable, List, Tuple
 
 
 @dataclass
@@ -10,11 +10,11 @@ class Job:
     name: str
     job: Callable[[logging.Logger], Awaitable[bool]]
     description: str
-    resources: List[str] = field(default_factory=list)
+    resources: list[str] = field(default_factory=list)
     needs_root_access: bool = False
-    depends_on: List[str] = field(default_factory=list)
-    children: List[Future] = field(default_factory=list)
-    parents: List[Future] = field(default_factory=list)
+    depends_on: list[str] = field(default_factory=list)
+    children: list[Future] = field(default_factory=list)
+    parents: list[Future] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if len(self.resources) == 0:

@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import ClassVar, List, Optional, Sequence, Tuple
+from typing import ClassVar, Optional
 
 from setup.job import Job
 
-_all_resources: List[str] = []
+_all_resources: list[str] = []
 
 
 def mark_resource(name: str) -> None:
@@ -22,7 +23,7 @@ class Package(ABC):
 # https://github.com/python/mypy/issues/7041
 class Manager(ABC):
     name: str
-    state: Tuple[bool, str]
+    state: tuple[bool, str]
     desired: ClassVar[Sequence["Manager"]]
 
     @classmethod

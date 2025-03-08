@@ -5,7 +5,7 @@ import urllib
 from dataclasses import dataclass
 from itertools import zip_longest
 from logging import Logger
-from typing import Dict, List, Literal, Optional, Tuple, Union, overload
+from typing import Literal, Optional, Union, overload
 
 from .conf import conf
 
@@ -29,7 +29,7 @@ class RequestOutput:
 
 
 class OutputTracker:
-    all_outputs: List[Tuple[str, str, JobOutput]] = []
+    all_outputs: list[tuple[str, str, JobOutput]] = []
 
     @classmethod
     def add_log(cls, job: str, cmd: str, job_output: JobOutput) -> None:
@@ -93,7 +93,7 @@ async def async_proc(
 async def async_req(
     url: str,
     filename: Optional[str] = None,
-    headers: Optional[Dict[str, str]] = None,
+    headers: Optional[dict[str, str]] = None,
     logger: Optional[Logger] = None,
 ) -> RequestOutput:
     loop = asyncio.get_event_loop()
@@ -136,17 +136,17 @@ async def fetch_file(url: str, version: Optional[str] = None) -> str:
 
 @overload
 def filter_assets(
-    asset_list: List[str], return_all: Literal[True]
-) -> List[str]: ...
+    asset_list: list[str], return_all: Literal[True]
+) -> list[str]: ...
 
 
 @overload
-def filter_assets(asset_list: List[str]) -> Optional[str]: ...
+def filter_assets(asset_list: list[str]) -> Optional[str]: ...
 
 
 def filter_assets(
-    asset_list: List[str], return_all: Optional[bool] = False
-) -> Union[List[str], Optional[str]]:
+    asset_list: list[str], return_all: Optional[bool] = False
+) -> Union[list[str], Optional[str]]:
     system = platform.uname()
     system_os = system.system.lower()
     hardware = set_hardware(system.machine.lower())
@@ -173,7 +173,7 @@ def filter_assets(
     return None
 
 
-def set_hardware(machine: str) -> List[str]:
+def set_hardware(machine: str) -> list[str]:
     if machine in {"amd64", "x86_64"}:
         return AMD_64
     if machine == "aarch64" and platform.architecture()[0] == "64bit":

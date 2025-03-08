@@ -1,6 +1,5 @@
 import asyncio
 from dataclasses import dataclass, field
-from typing import List, Set, Tuple
 
 from .builder import get_resource
 from .job import Job
@@ -9,8 +8,8 @@ from .managers.manager import Manager
 
 
 async def create_jobs(
-    resources: List[Manager], complete: Set[str]
-) -> List[Job]:
+    resources: list[Manager], complete: set[str]
+) -> list[Job]:
     jobs = {}
     all_dependencies = set()
     all_job_resources = set()
@@ -55,11 +54,11 @@ async def create_jobs(
 @dataclass
 class TreeNode:
     name: str
-    resources: List[str] = field(default_factory=list)
-    children: List["TreeNode"] = field(default_factory=list)
+    resources: list[str] = field(default_factory=list)
+    children: list["TreeNode"] = field(default_factory=list)
 
 
-async def build_tree(jobs: List[Job]) -> Tuple[List[Job], List[TreeNode]]:
+async def build_tree(jobs: list[Job]) -> tuple[list[Job], list[TreeNode]]:
     tree_d = {j.name: TreeNode(j.name, j.resources, []) for j in jobs}
     tree = []
     for job in jobs:
@@ -82,7 +81,7 @@ async def build_tree(jobs: List[Job]) -> Tuple[List[Job], List[TreeNode]]:
 
 
 def print_job_tree(
-    jobs: List[TreeNode], level: int = 0, parent_is_last: bool = True
+    jobs: list[TreeNode], level: int = 0, parent_is_last: bool = True
 ) -> None:
     for i, job in enumerate(jobs):
         is_last_item = i == len(jobs) - 1
