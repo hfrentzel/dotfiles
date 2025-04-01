@@ -28,6 +28,9 @@
     last = log -1 --stat --first-parent
     showlast = !git show --first-parent $(git log -1 --pretty=format:"%H")
     view = !git diff $1^
+
+    # Generate a link to the most recent commit (HEAD)
+    mrc = !echo $(git config remote.origin.url | cut -d @ -f 2 | sed 's/:/\\//' | sed 's/.git$//' | sed s'/^/https:\\/\\//')/commit/$(git rev-parse HEAD)
 [blame]
     date = short
 [color "blame"]
