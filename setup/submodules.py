@@ -6,7 +6,7 @@ from .conf import conf, expand
 
 
 def check_submodules():
-    print("Fetcing submodules")
+    print("Fetching submodules")
     subprocess.run(
         shlex.split("git submodule foreach git fetch"), capture_output=True
     )
