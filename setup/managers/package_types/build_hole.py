@@ -36,5 +36,5 @@ def build_hole_builder(resource: "Exe") -> Job:
 async def get_hole(logger: Logger) -> Any:
     url = "https://raw.githubusercontent.com/hfrentzel/build-hole/master/hole.json"
     result = await async_req(url, logger=logger)
-    hole = json.loads(result)
+    hole = json.loads(result.output)
     return hole

@@ -1,7 +1,7 @@
 {
     "lua-language-server": {
         "type": "exe",
-        "version": "3.13.6",
+        "version": "3.14.0",
         "installers": ["bh"],
         "homepage": "https://luals.github.io",
         "source_repo": "https://github.com/LuaLS/lua-language-server"

@@ -15,7 +15,7 @@
     },
     "golangci-lint": {
         "type": "exe",
-        "version": "1.64.6",
+        "version": "2.0.2",
         "installers": ["bh", "Go"],
         "homepage": "https://golangci-lint.run",
         "source_repo": "https://github.com/golangci/golangci-lint",
