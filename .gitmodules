@@ -10,9 +10,6 @@
 [submodule "vim/nvim/pack/vendor/opt/command-t"]
 	path = vim/nvim/pack/vendor/opt/command-t
 	url = https://github.com/wincent/command-t.git
-[submodule "vim/nvim/pack/vendor/opt/nvim-lspconfig"]
-	path = vim/nvim/pack/vendor/opt/nvim-lspconfig
-	url = https://github.com/neovim/nvim-lspconfig
 [submodule "vim/nvim/pack/vendor/opt/nvim-cmp"]
 	path = vim/nvim/pack/vendor/opt/nvim-cmp
 	url = https://github.com/hrsh7th/nvim-cmp

@@ -2,30 +2,24 @@ local M = {}
 
 M.before_init = function(_, config)
     local helpers = require('dot_helpers')
-    local has_path, util = pcall(require, 'lspconfig/util')
-
-    if not has_path then
-        return
-    end
-    local path = util.path
 
     local jedi_args = {} -- object
     local mypy_args = { '--namespace-packages' } -- array
     local pylint_args = {} -- array
 
-    local venv_cfg = vim.fn.glob(path.join(config.root_dir, '*', 'pyvenv.cfg'))
+    local venv_cfg = vim.fn.glob(vim.fs.joinpath(config.root_dir, '*', 'pyvenv.cfg'))
     if venv_cfg ~= '' then
-        local venv_dir = path.dirname(venv_cfg)
+        local venv_dir = vim.fs.dirname(venv_cfg)
         jedi_args.environment = venv_dir
         table.insert(mypy_args, '--python-executable')
-        table.insert(mypy_args, path.join(venv_dir, 'bin', 'python'))
+        table.insert(mypy_args, vim.fs.joinpath(venv_dir, 'bin', 'python'))
 
         local version = helpers.get_python_major_version(venv_cfg)
         table.insert(mypy_args, '--python-version')
         table.insert(mypy_args, version)
         table.insert(pylint_args, '--py-version=' .. version)
 
-        local site_pkg_dir = vim.fn.glob(path.join(venv_dir, 'lib/*/site-packages/'))
+        local site_pkg_dir = vim.fn.glob(vim.fs.joinpath(venv_dir, 'lib/*/site-packages/'))
         if site_pkg_dir ~= '' then
             table.insert(
                 pylint_args,
