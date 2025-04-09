@@ -21,7 +21,7 @@ local toggleDiagnostics = function()
 end
 
 local format = function()
-    require('conform').format({ async = true, lsp_format = 'fallback' })
+    require('conform').format({ async = true })
 end
 
 local on_attach = function()
@@ -61,6 +61,7 @@ vim.lsp.config('*', {
 })
 vim.lsp.enable({
     'eslint',
+    'cssls',
     'gopls',
     'jsonls',
     'lua_ls',

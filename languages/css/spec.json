@@ -1,0 +1,32 @@
+{
+    "vscode-langservers-extracted": {
+        "type": "exe",
+        "command_name": "vscode-css-language-server",
+        "version": "4.10.0",
+        "installers": ["Npm"],
+        "version_cmd": "NPM",
+        "source_repo": "https://github.com/hrsh7th/vscode-langservers-extracted"
+    },
+    "stylelint": {
+        "type": "exe",
+        "version": "16.18.0",
+        "installers": ["Npm"],
+        "homepage": "https://stylelint.io/",
+        "source_repo": "https://github.com/stylelint/stylelint"
+    },
+    "stylelint-config-standard": {
+        "type": "library",
+        "version": "38.0.0",
+        "manager": "npm",
+        "source_repo": "https://github.com/stylelint/stylelint-config-standard"
+    },
+    "stylelintconfig": {
+        "type": "symlink",
+        "source": "DOT/languages/css/stylelintrc.json",
+        "target": "~/.config/stylelint/stylelintrc.json"
+    },
+    "ts-css": {
+        "type": "parser",
+        "language": "css"
+    }
+}

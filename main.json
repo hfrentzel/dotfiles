@@ -145,6 +145,7 @@
     "addons": {
         "build_tools": "clis/build_tools.json",
         "data_languages": "languages/data_languages.json",
+        "css": "languages/css/spec.json",
         "fzf": "clis/fzf.json",
         "javascript": "languages/javascript/spec.json",
         "lua": "languages/lua/spec.json",
