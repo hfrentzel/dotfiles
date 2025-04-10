@@ -1,93 +1,93 @@
 [submodule "vim/nvim/pack/vendor/opt/vim-surround"]
-	path = vim/nvim/pack/vendor/opt/vim-surround
+	path = vim/nvim/pack/vim-surround
 	url = https://tpope.io/vim/surround.git
 [submodule "vim/nvim/pack/vendor/opt/CamelCaseMotion"]
-	path = vim/nvim/pack/vendor/opt/CamelCaseMotion
+	path = vim/nvim/pack/CamelCaseMotion
 	url = https://github.com/bkad/CamelCaseMotion
 [submodule "vim/nvim/pack/vendor/opt/vim-visual-multi"]
-	path = vim/nvim/pack/vendor/opt/vim-visual-multi
+	path = vim/nvim/pack/vim-visual-multi
 	url = https://github.com/mg979/vim-visual-multi
 [submodule "vim/nvim/pack/vendor/opt/command-t"]
-	path = vim/nvim/pack/vendor/opt/command-t
+	path = vim/nvim/pack/command-t
 	url = https://github.com/wincent/command-t.git
 [submodule "vim/nvim/pack/vendor/opt/nvim-cmp"]
-	path = vim/nvim/pack/vendor/opt/nvim-cmp
+	path = vim/nvim/pack/nvim-cmp
 	url = https://github.com/hrsh7th/nvim-cmp
 [submodule "vim/nvim/pack/vendor/opt/cmp-nvim-lsp"]
-	path = vim/nvim/pack/vendor/opt/cmp-nvim-lsp
+	path = vim/nvim/pack/cmp-nvim-lsp
 	url = https://github.com/hrsh7th/cmp-nvim-lsp
 [submodule "vim/nvim/pack/vendor/opt/cmp-path"]
-	path = vim/nvim/pack/vendor/opt/cmp-path
+	path = vim/nvim/pack/cmp-path
 	url = https://github.com/hrsh7th/cmp-path
 [submodule "vim/nvim/pack/vendor/opt/cmp-buffer"]
-	path = vim/nvim/pack/vendor/opt/cmp-buffer
+	path = vim/nvim/pack/cmp-buffer
 	url = https://github.com/hrsh7th/cmp-buffer
 [submodule "vim/nvim/pack/vendor/opt/cmp-nvim-lua"]
-	path = vim/nvim/pack/vendor/opt/cmp-nvim-lua
+	path = vim/nvim/pack/cmp-nvim-lua
 	url = https://github.com/hrsh7th/cmp-nvim-lua
 [submodule "vim/nvim/pack/vendor/opt/fugitive"]
-	path = vim/nvim/pack/vendor/opt/fugitive
+	path = vim/nvim/pack/fugitive
 	url = https://tpope.io/vim/fugitive.git
 [submodule "vim/nvim/pack/vendor/opt/gitsigns.nvim"]
-	path = vim/nvim/pack/vendor/opt/gitsigns.nvim
+	path = vim/nvim/pack/gitsigns.nvim
 	url = https://github.com/lewis6991/gitsigns.nvim
 [submodule "vim/nvim/pack/vendor/opt/nvim-treesitter"]
-	path = vim/nvim/pack/vendor/opt/nvim-treesitter
+	path = vim/nvim/pack/nvim-treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter
 [submodule "vim/nvim/pack/vendor/opt/plenary.nvim"]
-	path = vim/nvim/pack/vendor/opt/plenary.nvim
+	path = vim/nvim/pack/plenary.nvim
 	url = https://github.com/nvim-lua/plenary.nvim
 [submodule "vim/nvim/pack/vendor/opt/LuaSnip"]
-	path = vim/nvim/pack/vendor/opt/LuaSnip
+	path = vim/nvim/pack/LuaSnip
 	url = https://github.com/L3MON4D3/LuaSnip
 [submodule "vim/nvim/pack/vendor/opt/cmp_luasnip"]
-	path = vim/nvim/pack/vendor/opt/cmp_luasnip
+	path = vim/nvim/pack/cmp_luasnip
 	url = https://github.com/saadparwaiz1/cmp_luasnip
 [submodule "vim/nvim/pack/vendor/opt/nvim-tree.lua"]
-	path = vim/nvim/pack/vendor/opt/nvim-tree.lua
+	path = vim/nvim/pack/nvim-tree.lua
 	url = https://github.com/nvim-tree/nvim-tree.lua
 [submodule "vim/nvim/pack/vendor/opt/telescope.nvim"]
-	path = vim/nvim/pack/vendor/opt/telescope.nvim
+	path = vim/nvim/pack/telescope.nvim
 	url = https://github.com/nvim-telescope/telescope.nvim
 [submodule "vim/nvim/pack/vendor/opt/nvim-dap"]
-	path = vim/nvim/pack/vendor/opt/nvim-dap
+	path = vim/nvim/pack/nvim-dap
 	url = https://github.com/mfussenegger/nvim-dap.git
 [submodule "vim/nvim/pack/vendor/opt/vim-slime"]
-	path = vim/nvim/pack/vendor/opt/vim-slime
+	path = vim/nvim/pack/vim-slime
 	url = https://github.com/jpalardy/vim-slime.git
 [submodule "vim/nvim/pack/vendor/opt/tmux.nvim"]
-	path = vim/nvim/pack/vendor/opt/tmux.nvim
+	path = vim/nvim/pack/tmux.nvim
 	url = https://github.com/aserowy/tmux.nvim
 [submodule "vim/nvim/pack/vendor/opt/eunuch"]
-	path = vim/nvim/pack/vendor/opt/eunuch
+	path = vim/nvim/pack/eunuch
 	url = https://tpope.io/vim/eunuch.git
 [submodule "vim/nvim/pack/vendor/opt/markdown-preview.nvim"]
-	path = vim/nvim/pack/vendor/opt/markdown-preview.nvim
+	path = vim/nvim/pack/markdown-preview.nvim
 	url = https://github.com/iamcco/markdown-preview.nvim
 [submodule "vim/nvim/pack/vendor/opt/lazy.nvim"]
-	path = vim/nvim/pack/vendor/opt/lazy.nvim
+	path = vim/nvim/pack/lazy.nvim
 	url = https://github.com/folke/lazy.nvim
 [submodule "vim/nvim/pack/vendor/opt/vim-sleuth"]
-	path = vim/nvim/pack/vendor/opt/vim-sleuth
+	path = vim/nvim/pack/vim-sleuth
 	url = https://github.com/tpope/vim-sleuth.git
 [submodule "vim/nvim/pack/vendor/opt/dressing.nvim"]
-	path = vim/nvim/pack/vendor/opt/dressing.nvim
+	path = vim/nvim/pack/dressing.nvim
 	url = https://github.com/stevearc/dressing.nvim.git
 [submodule "vim/nvim/pack/vendor/opt/nvim-treesitter-textobjects"]
-	path = vim/nvim/pack/vendor/opt/nvim-treesitter-textobjects
+	path = vim/nvim/pack/nvim-treesitter-textobjects
 	url = https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
 [submodule "vim/nvim/pack/vendor/opt/friendly-snippets"]
-	path = vim/nvim/pack/vendor/opt/friendly-snippets
+	path = vim/nvim/pack/friendly-snippets
 	url = https://github.com/rafamadriz/friendly-snippets.git
 [submodule "vim/nvim/pack/vendor/opt/conform.nvim"]
-	path = vim/nvim/pack/vendor/opt/conform.nvim
+	path = vim/nvim/pack/conform.nvim
 	url = https://github.com/stevearc/conform.nvim.git
 [submodule "vim/nvim/pack/vendor/opt/nvim-lint"]
-	path = vim/nvim/pack/vendor/opt/nvim-lint
+	path = vim/nvim/pack/nvim-lint
 	url = https://github.com/mfussenegger/nvim-lint.git
 [submodule "appearance/schemes"]
 	path = appearance/schemes
 	url = https://github.com/tinted-theming/schemes.git
 [submodule "vim/nvim/pack/vendor/opt/obsidian.nvim"]
-	path = vim/nvim/pack/vendor/opt/obsidian.nvim
+	path = vim/nvim/pack/obsidian.nvim
 	url = https://github.com/epwalsh/obsidian.nvim

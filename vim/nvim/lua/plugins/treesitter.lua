@@ -5,13 +5,13 @@
 return {
     {
         'nvim-treesitter',
-        dir = '~/.config/nvim/pack/vendor/opt/nvim-treesitter',
+        dev = true,
         event = { 'BufReadPost', 'BufNewFile' },
         cmd = { 'TSUpdate', 'TSUpdateSync', 'TSInstall', 'TSInstallSync' },
         dependencies = {
             {
                 'nvim-treesitter-textobjects',
-                dir = '~/.config/nvim/pack/vendor/opt/nvim-treesitter-textobjects',
+                dev = true,
             },
         },
         config = function()

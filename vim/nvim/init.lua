@@ -9,13 +9,13 @@ vim.cmd.source('~/.config/vim/vimrc')
 vim.o.guicursor =
     'n-v-c-sm:block-blinkon500-blinkwait200,i-ci-ve:ver25-blinkon500,r-cr-o:hor20-blinkon500'
 
-local lazypath = '~/.config/nvim/pack/vendor/opt/lazy.nvim'
+local lazypath = '~/.config/nvim/pack/lazy.nvim'
 vim.opt.rtp:prepend(lazypath)
 
 local function build_list(packages)
     local result = {}
     for _, package in ipairs(packages) do
-        table.insert(result, { package, dir = '~/.config/nvim/pack/vendor/opt/' .. package })
+        table.insert(result, { package, dev = true })
     end
     table.insert(result, { import = 'plugins' })
     return result
@@ -26,6 +26,9 @@ require('lazy').setup(
         'nvim-dap',
     }),
     {
+        dev = {
+            path = '~/.config/nvim/pack',
+        },
         performance = {
             rtp = {
                 disabled_plugins = {
@@ -41,7 +44,7 @@ require('lazy').setup(
     }
 )
 
-local localrc = vim.fn.expand("~/.config/vim/local.init.lua")
+local localrc = vim.fn.expand('~/.config/vim/local.init.lua')
 if vim.fn.filereadable(localrc) == 1 then
     vim.cmd.source(localrc)
 end

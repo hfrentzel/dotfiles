@@ -18,7 +18,7 @@ end
 return {
     {
         'fugitive',
-        dir = '~/.config/nvim/pack/vendor/opt/fugitive/',
+        dev = true,
         ft = 'gitcommit',
         cmd = { 'G', 'Git', 'Gvdiffsplit', 'Resolve' },
         keys = { '<c-b>' },
@@ -33,7 +33,7 @@ return {
     },
     {
         'gitsigns.nvim',
-        dir = '~/.config/nvim/pack/vendor/opt/gitsigns.nvim/',
+        dev = true,
         event = { 'BufReadPost', 'BufNewFile' },
         opts = {
             signs = {

@@ -5,17 +5,21 @@
 return {
     {
         'vim-sleuth',
-        dir = '~/.config/nvim/pack/vendor/opt/vim-sleuth',
+        dev = true,
         init = function()
             vim.o.expandtab = true
             vim.o.shiftwidth = 4
             vim.o.tabstop = 4
         end,
     },
-    { 'vim-surround', dir = '~/.config/nvim/pack/vendor/opt/vim-surround', event = 'VeryLazy' },
+    {
+        'vim-surround',
+        dev = true,
+        event = 'VeryLazy',
+    },
     {
         'CamelCaseMotion',
-        dir = '~/.config/nvim/pack/vendor/opt/CamelCaseMotion',
+        dev = true,
         keys = {
             { 'i<leader>w', '<Plug>CamelCaseMotion_iw', mode = { 'o', 'x' } },
         },

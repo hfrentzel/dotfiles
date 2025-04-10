@@ -5,7 +5,7 @@
 return {
     {
         'obsidian.nvim',
-        dir = '~/.config/nvim/pack/vendor/opt/obsidian.nvim',
+        dev = true,
         ft = { 'markdown' },
         keys = {
             {

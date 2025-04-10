@@ -14,7 +14,7 @@ end
 return {
     {
         'command-t',
-        dir = '~/.config/nvim/pack/vendor/opt/command-t',
+        dev = true,
         keys = {
             { '<leader>t', '<Plug>(CommandTRipgrep)' },
             { '<leader>h', '<Plug>(CommandTHelp)' },
@@ -42,8 +42,8 @@ return {
     },
 
     {
-        'telescope',
-        dir = '~/.config/nvim/pack/vendor/opt/telescope.nvim',
+        'telescope.nvim',
+        dev = true,
         keys = {
             { '<leader>g', mode = { 'n', 'v' } },
             'gu',

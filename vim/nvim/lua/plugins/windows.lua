@@ -5,7 +5,7 @@
 return {
     {
         'tmux.nvim',
-        dir = '~/.config/nvim/pack/vendor/opt/tmux.nvim',
+        dev = true,
         keys = {
             '<C-h>',
             '<C-j>',

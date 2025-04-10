@@ -4,7 +4,7 @@
 return {
     {
         'vim-slime',
-        dir = '~/.config/nvim/pack/vendor/opt/vim-slime',
+        dev = true,
         keys = {
             { '<leader><enter>', '<Plug>SlimeRegionSend', mode = 'x' },
             { '<leader><enter>', '<Plug>SlimeParagraphSend' },

@@ -14,16 +14,16 @@ end
 return {
     {
         'nvim-cmp',
-        dir = '~/.config/nvim/pack/vendor/opt/nvim-cmp',
+        dev = true,
         event = 'InsertEnter',
         dependencies = {
-            { 'cmp-buffer', dir = '~/.config/nvim/pack/vendor/opt/cmp-buffer' },
-            { 'cmp-nvim-lsp', dir = '~/.config/nvim/pack/vendor/opt/cmp-nvim-lsp' },
-            { 'cmp-nvim-lua', dir = '~/.config/nvim/pack/vendor/opt/cmp-nvim-lua' },
-            { 'cmp-path', dir = '~/.config/nvim/pack/vendor/opt/cmp-path' },
-            { 'cmp_luasnip', dir = '~/.config/nvim/pack/vendor/opt/cmp_luasnip' },
-            { 'LuaSnip', dir = '~/.config/nvim/pack/vendor/opt/LuaSnip' },
-            { 'friendly-snippets', dir = '~/.config/nvim/pack/vendor/opt/friendly-snippets' },
+            { 'cmp-buffer', dev = true },
+            { 'cmp-nvim-lsp', dev = true },
+            { 'cmp-nvim-lua', dev = true },
+            { 'cmp-path', dev = true },
+            { 'cmp_luasnip', dev = true },
+            { 'LuaSnip', dev = true },
+            { 'friendly-snippets', dev = true },
         },
         init = function()
             vim.o.completeopt = 'menu,menuone,noselect'

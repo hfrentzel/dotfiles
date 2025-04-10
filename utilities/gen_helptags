@@ -5,7 +5,7 @@ import shlex
 import subprocess
 
 for plugin in os.scandir(
-    os.path.expanduser("~/dotfiles/vim/nvim/pack/vendor/opt")
+    os.path.expanduser("~/dotfiles/vim/nvim/pack/")
 ):
     path = os.path.join(plugin.path, "doc")
     if not os.path.isdir(path):

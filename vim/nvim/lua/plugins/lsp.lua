@@ -4,7 +4,7 @@
 return {
     {
         'dressing.nvim',
-        dir = '~/.config/nvim/pack/vendor/opt/dressing.nvim',
+        dev = true,
         keys = {
             { '<leader>r', vim.lsp.buf.rename },
             { '<leader>a', vim.lsp.buf.code_action },
@@ -19,7 +19,7 @@ return {
     },
     {
         'conform.nvim',
-        dir = '~/.config/nvim/pack/vendor/opt/conform.nvim',
+        dev = true,
         ft = { 'lua', 'css' },
         opts = {
             default_format_opts = {
@@ -41,7 +41,7 @@ return {
     },
     {
         'nvim-lint',
-        dir = '~/.config/nvim/pack/vendor/opt/nvim-lint',
+        dev = true,
         ft = { 'lua', 'css' },
         config = function()
             local lint = require('lint')

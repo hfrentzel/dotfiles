@@ -16,12 +16,12 @@ end
 return {
     {
         'eunuch',
-        dir = '~/.config/nvim/pack/vendor/opt/eunuch/',
+        dev = true,
         cmd = { 'Copy', 'Duplicate', 'Mkdir', 'Move', 'Rename', 'Remove', 'SudoWrite' },
     },
     {
         'nvim-tree.lua',
-        dir = '~/.config/nvim/pack/vendor/opt/nvim-tree.lua/',
+        dev = true,
         keys = {
             { '<leader>1', ':NvimTreeFocus<CR>' },
             { '-', vinegar_open },

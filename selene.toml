@@ -1,5 +1,5 @@
 std = "vim"
-exclude = ["vim/nvim/pack/vendor/*"]
+exclude = ["vim/nvim/pack/*"]
 
 [lints]
 mixed_table = "allow"

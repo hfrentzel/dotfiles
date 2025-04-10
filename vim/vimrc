@@ -101,14 +101,5 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 
-if has('packages')
-    packadd! CamelCaseMotion
-    packadd! fugitive
-    packadd! eunuch
-    packadd! vim-slime
-    packadd! vim-surround
-    packadd! vim-visual-multi
-endif
-
 filetype plugin indent on
 syntax on
