@@ -1,10 +1,18 @@
 import contextlib
 import os
+import platform
 import subprocess
-import termios
+import sys
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from io import TextIOWrapper
+
+WINDOWS = platform.system() == "Windows"
+
+if WINDOWS:
+    import msvcrt
+else:
+    import termios
 
 
 class MenuPiece(ABC):
@@ -32,15 +40,20 @@ class XX:
 
     @contextlib.contextmanager
     def tty_handler(self) -> Iterator[tuple[TextIOWrapper, TextIOWrapper]]:
-        tty_in = open("/dev/tty", encoding="utf-8")
-        tty_out = open("/dev/tty", "w", encoding="utf-8", errors="replace")
-        old_term = termios.tcgetattr(tty_in.fileno())
-        new_term = termios.tcgetattr(tty_in.fileno())
-        new_term[3] = new_term[3] & ~termios.ICANON & ~termios.ECHO
-        termios.tcsetattr(tty_in.fileno(), termios.TCSAFLUSH, new_term)
+        if WINDOWS:
+            tty_in = open(sys.stdin.fileno(), encoding="utf-8")
+            tty_out = open(sys.stdout.fileno(), "w", encoding="utf-8")
+        else:
+            tty_in = open("/dev/tty", encoding="utf-8")
+            tty_out = open("/dev/tty", "w", encoding="utf-8", errors="replace")
+            old_term = termios.tcgetattr(tty_in.fileno())
+            new_term = termios.tcgetattr(tty_in.fileno())
+            new_term[3] = new_term[3] & ~termios.ICANON & ~termios.ECHO
+            termios.tcsetattr(tty_in.fileno(), termios.TCSAFLUSH, new_term)
 
-        # Enter terminal application mode to get expected escape codes for arrow keys
-        tty_out.write(TERM_COMMAND["enter_application_mode"])
+            # Enter terminal application mode to get expected escape codes
+            # for arrow keys
+            tty_out.write(TERM_COMMAND["enter_application_mode"])
         tty_out.write(TERM_COMMAND["cursor_invisible"])
         try:
             yield tty_in, tty_out
@@ -49,11 +62,27 @@ class XX:
         finally:
             tty_out.write(self.size * TERM_COMMAND["delete_line"])
             tty_out.flush()
-            termios.tcsetattr(tty_out.fileno(), termios.TCSAFLUSH, old_term)
+            if not WINDOWS:
+                termios.tcsetattr(tty_out.fileno(), termios.TCSAFLUSH, old_term)
             tty_out.write(TERM_COMMAND["cursor_visible"])
-            tty_out.write(TERM_COMMAND["exit_application_mode"])
+            if not WINDOWS:
+                tty_out.write(TERM_COMMAND["exit_application_mode"])
             tty_in.close()
             tty_out.close()
+
+
+CAP_TO_ANSI = {
+    "clear_to_end_of_line": "\033[K",
+    "cursor_down": "\033[1B",
+    "cursor_invisible": "\033[?25l",
+    "cursor_up": "\033[1A",
+    "cursor_visible": "\033[?25h",
+    "delete_line": "\033[1M",
+    "down": "\033[B",
+    "enter_application_mode": "",
+    "exit_application_mode": "",
+    "up": "\033[A",
+}
 
 
 def query_terminfo_database(capname: str) -> str:
@@ -74,16 +103,23 @@ CODENAME_TO_CAPNAME = {
 }
 TERM_COMMAND = {
     codename: query_terminfo_database(capname)
+    if not WINDOWS
+    else CAP_TO_ANSI[codename]
     for codename, capname in CODENAME_TO_CAPNAME.items()
 }
-TERM_COMMAND.update({"enter": "\012", "escape": "\033"})
+TERM_COMMAND.update({"enter": "\015" if WINDOWS else "\012", "escape": "\033"})
 DECODE_RAW_INPUT = {
     terminal_code: codename for codename, terminal_code in TERM_COMMAND.items()
 }
 
 
 def read_input(tty: TextIOWrapper) -> str:
-    code = os.read(tty.fileno(), 80).decode("ascii", errors="ignore")
+    if WINDOWS:
+        code = "\xe0"
+        while code in {"\xe0", "\x00"}:
+            code = msvcrt.getch().decode("ascii", errors="ignore")
+    else:
+        code = os.read(tty.fileno(), 80).decode("ascii", errors="ignore")
     next_key = DECODE_RAW_INPUT.get(code, code)
     return next_key
 
