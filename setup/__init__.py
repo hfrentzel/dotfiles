@@ -66,7 +66,9 @@ async def handle_jobs(
         print_job_tree(tree)
         return
 
-    timestamp = f"{datetime.datetime.now().isoformat()}_output.txt"
+    timestamp = (
+        f"{datetime.datetime.now().isoformat().replace(':', '/')}_output.txt"
+    )
     try:
         need_root_access = any(j.needs_root_access for j in ready_jobs)
         if need_root_access:

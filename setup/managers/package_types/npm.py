@@ -1,5 +1,6 @@
 import json
 import os
+import platform
 from logging import Logger
 from typing import Optional
 
@@ -56,11 +57,18 @@ class Npm:
 
     @classmethod
     def get_version(cls, package: Package) -> Optional[str]:
-        path = os.path.join(
-            expand("~/.local/lib/node_modules"),
-            package.name,
-            "package.json",
-        )
+        if platform.system() == "Linux":
+            path = os.path.join(
+                expand("~/.local/lib/node_modules"),
+                package.name,
+                "package.json",
+            )
+        else:
+            path = os.path.join(
+                expand("~/AppData/Roaming/npm/node_modules"),
+                package.name,
+                "package.json",
+            )
         if not os.path.exists(path):
             return None
         with open(path, encoding="utf-8") as f:
