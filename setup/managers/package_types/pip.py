@@ -1,6 +1,6 @@
 import os
+import platform
 import re
-import subprocess
 from logging import Logger
 from typing import Optional
 
@@ -57,18 +57,14 @@ class Pip:
     @classmethod
     def get_version(cls, package: Package) -> Optional[str]:
         if not cls.files:
-            try:
-                pip_dir = (
-                    subprocess.run(
-                        ["python", "-m", "site", "--user-site"],
-                        check=False,
-                        capture_output=True,
-                    )
-                    .stdout.decode()
-                    .strip()
+            if platform.system() == "Linux":
+                pip_dir = os.path.expanduser(
+                    "~/.local/lib/python3.11/site-packages"
                 )
-            except FileNotFoundError:
-                return None
+            else:
+                pip_dir = os.path.expanduser(
+                    "~/AppData/Local/Programs/Python/Python311/Lib/site-packages"
+                )
             cls.files = "\n".join([
                 s.replace("_", "-")
                 for s in os.listdir(pip_dir)
