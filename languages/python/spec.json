@@ -69,7 +69,7 @@
     "pylintrc": {
         "type": "symlink",
         "source": "DOT/languages/python/pylintrc",
-        "target": "~/.config/pylint/pylintrc"
+        "target": "CONFR/pylint/pylintrc"
     },
     "mypy": {
         "type": "exe",

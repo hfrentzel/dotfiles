@@ -101,7 +101,7 @@
         "gitconfig": {
             "type": "symlink",
             "source": "DOT/configs/gitconfig",
-            "target": "~/.config/git/config"
+            "target": "CONFR/git/config"
         },
         "ripgrep": {
             "type": "exe",
@@ -113,7 +113,7 @@
         "rgconfig": {
             "type": "symlink",
             "source": "DOT/configs/rgrc",
-            "target": "~/.config/ripgrep/config"
+            "target": "CONFR/ripgrep/config"
         },
         "bat": {
             "type": "exe",
@@ -130,7 +130,7 @@
         "batconfig": {
             "type": "symlink",
             "source": "DOT/configs/batconfig",
-            "target": "~/.config/bat/config"
+            "target": "CONFR/bat/config"
         },
         "npmrc": {
             "type": "symlink",
