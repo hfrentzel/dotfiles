@@ -34,11 +34,16 @@ async def create_jobs(
         all_dependencies - complete.union(all_job_resources)
     ):
         for dep in missing_dependencies:
-            r = get_resource(dep)
-            if await r.get_status():
-                complete.add(r.name)
-            elif new_job := r.create_job():
-                jobs[r.name] = new_job
+            d = get_resource(dep)
+            if d is None:
+                raise ValueError(
+                    f"A job is dependent on {d}, "
+                    "which is not managed on this OS"
+                )
+            if await d.get_status():
+                complete.add(d.name)
+            elif new_job := d.create_job():
+                jobs[d.name] = new_job
                 all_dependencies.update(new_job.depends_on)
                 all_job_resources.update(new_job.resources)
             else:

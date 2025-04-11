@@ -8,7 +8,8 @@
         "submodules": {
             "type": "command",
             "cwd": "DOT",
-            "check_script": "! git submodule status | grep -qv '^ '",
+            "check_script": "git submodule status | grep -qv '^ '",
+            "exit_code": 1,
             "run_script": [
                 "git submodule update --init --depth=10",
                 "./utilities/gen_helptags"
@@ -31,8 +32,10 @@
         },
         "clean_profile": {
             "type": "command",
+            "only_on": ["Linux"],
             "cwd": "~",
-            "check_script": "! grep -q \"private bin if it exists\" .profile",
+            "check_script": "grep -q \"private bin if it exists\" .profile",
+            "exit_code": 1,
             "run_script": "sed -i '/private bin if it exists/,/f1/d' .profile"
         },
         "inputrc": {
@@ -50,17 +53,20 @@
         },
         "tmux": {
             "type": "exe",
+            "only_on": ["Linux"],
             "version": "3.3",
             "installers": ["bh"],
             "source_repo": "https://github.com/tmux/tmux"
         },
         "tmux.conf": {
             "type": "symlink",
+            "only_on": ["Linux"],
             "source": "DOT/tmux/tmux.conf",
             "target": "~/.config/tmux/tmux.conf"
         },
         "tmux_dir": {
             "type": "symlink",
+            "only_on": ["Linux"],
             "source": "DOT/tmux/plugins",
             "target": "~/.config/tmux/plugins"
         },

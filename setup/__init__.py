@@ -101,6 +101,11 @@ async def handle_single_resource(resource: Manager) -> None:
     if len(job.depends_on) != 0:
         if not any(d.name in job.depends_on for d in all_desired()):
             dependency = get_resource(job.depends_on[0])
+            if dependency is None:
+                raise ValueError(
+                    f"{job.name} is dependent on {job.depends_on[0]}, "
+                    "which is not managed on this OS"
+                )
             complete = (
                 [dependency.name] if await dependency.get_status() else []
             )
@@ -127,6 +132,9 @@ async def handle_single_resource(resource: Manager) -> None:
 def check() -> None:
     if conf.args.only is not None:
         resource = get_resource(conf.args.only)
+        if resource is None:
+            print(f"{conf.args.only} can not be set up on this OS")
+            return
         asyncio.run(handle_single_resource(resource))
         return
 

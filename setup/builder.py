@@ -1,5 +1,6 @@
 import json
 import os
+import platform
 import re
 from typing import Any, Optional
 
@@ -22,16 +23,21 @@ def build_resources(types: list[str]) -> list[Manager]:
     for name, spec in specs.items():
         if spec.get("type") not in types:
             continue
-        all_resources.append(generate_resource(name, spec))
+        resource = generate_resource(name, spec)
+        if resource:
+            all_resources.append(resource)
 
     return all_resources
 
 
-def get_resource(name: str) -> Manager:
+def get_resource(name: str) -> Optional[Manager]:
     return generate_resource(name, get_spec(name))
 
 
-def generate_resource(name: str, spec: dict[str, Any]) -> Manager:
+def generate_resource(name: str, spec: dict[str, Any]) -> Optional[Manager]:
+    if spec.get("only_on"):
+        if platform.system() not in spec.pop("only_on"):
+            return None
     resource_type = spec.pop("type")
 
     args = {}

@@ -18,6 +18,7 @@ class Command(Manager):
     run_script: Union[str, list[str]]
     state: tuple[bool, str] = (False, "")
     check_script: Optional[str] = None
+    exit_code: int = 0
     depends_on: list[str] = field(default_factory=list)
     cwd: Optional[str] = None
 
@@ -38,7 +39,7 @@ class Command(Manager):
             return
 
         result = await async_proc(self.check_script, cwd=self.cwd)
-        if result.returncode == 0:
+        if result.returncode == self.exit_code:
             self.state = (True, "DONE")
             return
 
