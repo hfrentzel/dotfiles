@@ -55,7 +55,7 @@
     "ruffconfig": {
         "type": "symlink",
         "source": "DOT/languages/python/ruff.toml",
-        "target": "~/.config/ruff/pyproject.toml"
+        "target": "CONFR/ruff/pyproject.toml"
     },
     "pylint": {
         "type": "exe",

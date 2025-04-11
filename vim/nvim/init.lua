@@ -4,13 +4,17 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.rust_recommended_style = 0
-vim.cmd.source('~/.config/vim/vimrc')
-
 vim.o.guicursor =
     'n-v-c-sm:block-blinkon500-blinkwait200,i-ci-ve:ver25-blinkon500,r-cr-o:hor20-blinkon500'
 
-local lazypath = '~/.config/nvim/pack/lazy.nvim'
-vim.opt.rtp:prepend(lazypath)
+local confpath = ''
+if vim.loop.os_uname().sysname == 'Linux' then
+    confpath = '~/.config'
+else
+    confpath = '~/AppData/Local'
+end
+vim.cmd.source(confpath .. '/vim/vimrc')
+vim.opt.rtp:prepend(confpath .. '/nvim/pack/lazy.nvim')
 
 local function build_list(packages)
     local result = {}
@@ -27,7 +31,7 @@ require('lazy').setup(
     }),
     {
         dev = {
-            path = '~/.config/nvim/pack',
+            path = confpath .. '/nvim/pack',
         },
         performance = {
             rtp = {
