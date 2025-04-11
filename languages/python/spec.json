@@ -19,14 +19,10 @@
         "homepage": "https://www.python.org/",
         "source_repo": "https://github.com/python/cpython"
     },
-    "python_data": {
-        "type": "directory",
-        "path": "~/.local/share/python"
-    },
     "startup.py": {
         "type": "symlink",
         "source": "DOT/languages/python/startup.py",
-        "target": "~/.config/python/startup.py"
+        "target": "CONFR/python/startup.py"
     },
     "python-lsp-server": {
         "type": "exe",

@@ -12,7 +12,7 @@
             "exit_code": 1,
             "run_script": [
                 "git submodule update --init --depth=10",
-                "./utilities/gen_helptags"
+                "python utilities/gen_helptags"
             ]
         },
         "bashrc": {
@@ -40,16 +40,13 @@
         },
         "inputrc": {
             "type": "symlink",
+            "only_on": ["Linux"],
             "source": "DOT/bash/.inputrc",
             "target": "~/.config/readline/inputrc"
         },
         "bash_data": {
             "type": "directory",
             "path": "~/.local/share/bash"
-        },
-        "dotfiles_data": {
-            "type": "directory",
-            "path": "~/.local/share/dotfiles"
         },
         "tmux": {
             "type": "exe",
@@ -131,11 +128,6 @@
             "type": "symlink",
             "source": "DOT/configs/batconfig",
             "target": "CONFR/bat/config"
-        },
-        "npmrc": {
-            "type": "symlink",
-            "source": "DOT/configs/npmrc",
-            "target": "~/.config/npm/npmrc"
         },
         "clipin": {
             "type": "symlink",

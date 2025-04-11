@@ -11,6 +11,7 @@ import sys
 
 scheme = sys.argv[1]
 scheme_dir = os.path.expanduser("~/dotfiles/appearance/schemes/base16/")
+save_file = os.path.expanduser("~/.local/share/mysetup/base16")
 
 if os.environ.get('TMUX'):
     def apply_color(number, rgb):
@@ -35,7 +36,8 @@ with open(f"{scheme_dir}{scheme}.yaml", encoding="utf-8") as f:
         if line.startswith("  base"):
             colors[line[6:8]] = line[12:18]
 
-with open(os.path.expanduser("~/.local/share/dotfiles/base16"), "w") as c:
+os.makedirs(os.path.dirname(save_file), exist_ok=True)
+with open(save_file, "w") as c:
     c.write(scheme)
 
 apply_color(0, colors["00"])  # Black

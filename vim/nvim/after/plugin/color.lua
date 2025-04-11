@@ -34,7 +34,7 @@ end
 
 local function setColor(scheme)
     if scheme == nil then
-        local color_file = vim.fn.expand('~/.local/share/dotfiles/base16')
+        local color_file = vim.fn.expand('~/.local/share/mysetup/base16')
         if vim.fn.filereadable(color_file) == 0 then
             return
         end

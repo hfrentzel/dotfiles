@@ -5,6 +5,11 @@
         "installers": ["Tar"],
         "url":"https://nodejs.org/dist/v{version}/node-v{version}-linux-x64.tar.xz"
     },
+    "npmrc": {
+        "type": "symlink",
+        "source": "DOT/configs/npmrc",
+        "target": "~/.config/npm/npmrc"
+    },
     "typescript": {
         "type": "library",
         "version": "4.9.4",

@@ -42,8 +42,6 @@ fi
     export $(tmux show-environment | grep ^USERPROFILE) && \
     export $(tmux show-environment | grep ^WSLENV)
 
-test -f ~/dotfiles/git/git_stage.sh && source $HOME/dotfiles/git/git_stage.sh
-    
 test -f ~/variables && source $HOME/.config/bash/plugins/var_setup.sh
 test -f ~/workspaces && source $HOME/.config/bash/plugins/workspace_setup.sh
 test -f ~/.secrets && source ~/.secrets
@@ -55,7 +53,7 @@ source $HOME/.config/bash/plugins/utilities.sh
 source $HOME/.config/bash/plugins/aliases.sh
 source $HOME/.config/bash/plugins/env.sh
 
-BASE16_CONFIG="$HOME/.local/share/dotfiles/base16"
+BASE16_CONFIG="$HOME/.local/share/mysetup/base16"
 test -f $BASE16_CONFIG && color $(cat $BASE16_CONFIG)
 
 if command -v bat &> /dev/null; then
