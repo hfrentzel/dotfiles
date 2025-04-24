@@ -131,13 +131,15 @@
         },
         "clipin": {
             "type": "symlink",
-            "source": "DOT/utilities/copy-to-clipboard",
-            "target": "~/.local/bin/clipin"
+            "source": "DOT/utilities/copy-to-clipboard.py",
+            "target": "~/.local/bin/clipin",
+            "ext": ".py"
         },
         "clipout": {
             "type": "symlink",
-            "source": "DOT/utilities/paste-from-clipboard",
-            "target": "~/.local/bin/clipout"
+            "source": "DOT/utilities/paste-from-clipboard.py",
+            "target": "~/.local/bin/clipout",
+            "ext": ".py"
         }
     },
     "addons": {

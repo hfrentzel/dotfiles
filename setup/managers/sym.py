@@ -1,4 +1,5 @@
 import os
+import platform
 from collections.abc import Callable, Coroutine
 from dataclasses import dataclass
 from logging import Logger
@@ -16,11 +17,14 @@ class Symlink(Manager):
     name: str
     source: str
     target: str
+    ext: str = ""
     state: tuple[bool, str] = (False, "")
 
     def __post_init__(self) -> None:
         mark_resource(self.name)
         self.desired.append(self)
+        if platform.system() == "Windows" and self.ext:
+            self.target += self.ext
 
     async def _set_status(self) -> None:
         dest = expand(self.target)
