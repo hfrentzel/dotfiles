@@ -2,12 +2,12 @@
     "vimrc": {
         "type": "symlink",
         "source": "DOT/vim/vimrc",
-        "target": "CONFL/vim/vimrc"
+        "target": "CONFR/vim/vimrc"
     },
     "nvimconfig": {
         "type": "symlink",
         "source": "DOT/vim/nvim",
-        "target": "CONFL/nvim"
+        "target": "CONFR/nvim"
     },
     "neovim": {
         "type": "exe",

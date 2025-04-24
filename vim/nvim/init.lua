@@ -11,7 +11,7 @@ local confpath = ''
 if vim.loop.os_uname().sysname == 'Linux' then
     confpath = '~/.config'
 else
-    confpath = '~/AppData/Local'
+    confpath = '~/AppData/Roaming'
 end
 vim.cmd.source(confpath .. '/vim/vimrc')
 vim.opt.rtp:prepend(confpath .. '/nvim/pack/lazy.nvim')
