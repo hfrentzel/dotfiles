@@ -13,6 +13,7 @@
     },
     "npmrc": {
         "type": "symlink",
+        "only_on": ["Linux"],
         "source": "DOT/configs/npmrc",
         "target": "~/.config/npm/npmrc"
     },

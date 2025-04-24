@@ -17,11 +17,13 @@
         },
         "bashrc": {
             "type": "symlink",
+            "only_on": ["Linux"],
             "source": "DOT/bash/.bashrc",
             "target": "~/.bashrc"
         },
         "bash": {
             "type": "symlink",
+            "only_on": ["Linux"],
             "source": "DOT/bash/plugins",
             "target": "~/.config/bash/plugins"
         },
@@ -46,6 +48,7 @@
         },
         "bash_data": {
             "type": "directory",
+            "only_on": ["Linux"],
             "path": "~/.local/share/bash"
         },
         "tmux": {
