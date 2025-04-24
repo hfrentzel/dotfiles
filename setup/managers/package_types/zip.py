@@ -1,22 +1,32 @@
 from logging import Logger
 from os import chmod, makedirs, path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from zipfile import ZipFile
 
 from setup.conf import conf
 from setup.job import Job
 from setup.managers.package_types.archive import find_extract_path
 from setup.output import green, red
-from setup.process import fetch_file
+from setup.process import fetch_file, get_system
 
 if TYPE_CHECKING:
     from setup.managers.exe import Exe
 
 
-def zip_builder(resource: "Exe") -> Job:
+def zip_builder(resource: "Exe") -> Union[bool, Job]:
+    url = None
+    for installer in resource.installers:
+        if isinstance(installer, dict) and installer.get("installer") == "Zip":
+            print(get_system())
+            url = (installer.get("urls") or {}).get(get_system())
+        elif installer == "Zip":
+            url = resource.url
+    if url is None:
+        return False
+
     async def inner(logger: Logger) -> bool:
         logger.info(f"Installing {resource.name} from zip file...")
-        archive_file = await fetch_file(resource.url, resource.version)
+        archive_file = await fetch_file(url, resource.version)
 
         success = extract_zip(archive_file, resource.command_name)
 

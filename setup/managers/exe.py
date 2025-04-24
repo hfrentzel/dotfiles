@@ -55,6 +55,7 @@ class InstallerSpec(TypedDict):
     package_name: Optional[Union[str, list[str]]]
     apt_repo: Optional[str]
     post_script: Optional[list[str]]
+    urls: Optional[dict[str, str]]
 
 
 @dataclass

@@ -1,22 +1,31 @@
 import tarfile
 from logging import Logger
 from os import makedirs, path
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Union
 
 from setup.conf import conf
 from setup.job import Job
 from setup.managers.package_types.archive import find_extract_path
 from setup.output import green, red
-from setup.process import fetch_file
+from setup.process import fetch_file, get_system
 
 if TYPE_CHECKING:
     from setup.managers.exe import Exe
 
 
-def tar_builder(resource: "Exe") -> Job:
+def tar_builder(resource: "Exe") -> Union[bool, Job]:
+    url = None
+    for installer in resource.installers:
+        if isinstance(installer, dict) and installer.get("installer") == "Tar":
+            url = (installer.get("urls") or {}).get(get_system())
+        elif installer == "Tar":
+            url = resource.url
+    if url is None:
+        return False
+
     async def inner(logger: Logger) -> bool:
         logger.info(f"Installing {resource.name} from tarball...")
-        archive_file = await fetch_file(resource.url, resource.version)
+        archive_file = await fetch_file(url, resource.version)
 
         success = extract_tar(
             archive_file, resource.extract_path, resource.command_name

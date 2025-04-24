@@ -1,12 +1,11 @@
 import json
-import platform
 from logging import Logger
 from typing import TYPE_CHECKING, Any
 
 from setup.job import Job
 from setup.managers.package_types.tar import tar_builder
 from setup.output import green
-from setup.process import async_req
+from setup.process import async_req, get_system
 
 if TYPE_CHECKING:
     from setup.managers.exe import Exe
@@ -17,17 +16,13 @@ def build_hole_builder(resource: "Exe") -> Job:
         logger.info(green(f"Starting {resource.name} install with build-hole"))
         hole = await get_hole(logger)
 
-        hardware = platform.uname().machine.lower()
-        if hardware in {"x86_64", "amd64"}:
-            if platform.system() == "Linux":
-                env = "x86_64-linux-22.04"
-            else:
-                env = "x86_64-windows"
-        else:
-            env = "aarch64-linux-22.04"
+        env = get_system()
         resource.url = hole[resource.name][resource.version][env]
+        resource.installers = ["Tar"]
 
-        return await tar_builder(resource).run()
+        if isinstance(job := tar_builder(resource), Job):
+            return await job.run()
+        return False
 
     return Job(
         name=resource.name,

@@ -181,3 +181,15 @@ def set_hardware(machine: str) -> list[str]:
     if machine == "aarch64" and platform.architecture()[0] == "32bit":
         return ARM_32
     return [""]
+
+
+def get_system() -> str:
+    hardware = platform.uname().machine.lower()
+    if hardware in {"x86_64", "amd64"}:
+        if platform.system() == "Linux":
+            env = "x86_64-linux-22.04"
+        else:
+            env = "x86_64-windows"
+    else:
+        env = "aarch64-linux-22.04"
+    return env
