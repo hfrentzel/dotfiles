@@ -79,6 +79,6 @@ alias pyrun="python ~/dotfiles/languages/python/venv_management.py pyrun"
 alias pykill="python ~/dotfiles/languages/python/venv_management.py pykill"
 
 # JIRA
-alias jcurrent="jira issue list -a$(which jira && jira me) -s \"In Progress\""
+alias jcurrent='jira issue list -a$(which jira && jira me) -s "In Progress"'
 
 compalias gl glab
