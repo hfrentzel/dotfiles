@@ -26,12 +26,6 @@ set visualbell
 let base16colorspace=256
 let mapleader = ","
 
-" Copy to system clipboard
-if !empty($IS_WSL)
-    vnoremap <silent> <C-c> "+y:call system("clip.exe", getreg("+"))<CR>
-    vnoremap <silent> <RightMouse> "+y:call system("clip.exe", getreg("+"))<CR>
-endif
-
 nnoremap <leader>n :set rnu!<cr>
 
 " Open current fold and only current fold
@@ -79,6 +73,12 @@ if filereadable(s:vimrc_local)
 endif
 
 if !has('nvim')
+    " Copy to system clipboard
+    if filereadable("/proc/sys/fs/binfmt_misc/WSLInterop")
+        vnoremap <silent> <C-c> "+y:call system("clip.exe", getreg("+"))<CR>
+        vnoremap <silent> <RightMouse> "+y:call system("clip.exe", getreg("+"))<CR>
+    endif
+
     filetype plugin indent on
     syntax on
     finish

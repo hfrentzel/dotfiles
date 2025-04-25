@@ -13,7 +13,6 @@ export FZF_DEFAULT_OPTS='--height 20% --layout=reverse'
 # don't support 24-bit color
 export COLORTERM=truecolor
 
-export IS_WSL=$(uname -a | grep WSL)
 export GIT_COMPLETION_CHECKOUT_NO_GUESS=1
 
 if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -36,11 +35,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-[ -n "$TMUX" ] && \
-    tmux show-environment | grep ^USERPROFILE > /dev/null && \
-    export $(tmux show-environment | grep ^USERPROFILE) && \
-    export $(tmux show-environment | grep ^WSLENV)
 
 test -f ~/variables && source $HOME/.config/bash/plugins/var_setup.sh
 test -f ~/workspaces && source $HOME/.config/bash/plugins/workspace_setup.sh

@@ -7,6 +7,21 @@ vim.g.rust_recommended_style = 0
 vim.o.guicursor =
     'n-v-c-sm:block-blinkon500-blinkwait200,i-ci-ve:ver25-blinkon500,r-cr-o:hor20-blinkon500'
 
+vim.keymap.set('v', '<c-c>', '"+y', {silent = true})
+vim.keymap.set('v', '<RightMouse>', '"+y', {silent = true})
+if vim.fn.has('wsl') == 1 then
+    vim.g.clipboard = {
+        name = 'WslClipboard',
+        copy = {
+            ['+'] = 'clip.exe',
+        },
+        paste = {
+            ['+'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+        },
+        cache_enabled = 0,
+    }
+end
+
 local confpath = ''
 if vim.loop.os_uname().sysname == 'Linux' then
     confpath = '~/.config'
