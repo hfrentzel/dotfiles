@@ -1,0 +1,8 @@
+{
+    "jira": {
+        "type": "exe",
+        "version": "1.5.2",
+        "installers": ["bh"],
+        "source_repo": "https://github.com/ankitpokhrel/jira-cli"
+    }
+}
