@@ -8,7 +8,7 @@
         "submodules": {
             "type": "command",
             "cwd": "DOT",
-            "check_script": "git submodule status | grep -qv '^ '",
+            "check_script": "python utilities/submodule_check.py",
             "exit_code": 1,
             "run_script": [
                 "git submodule update --init --depth=10",
