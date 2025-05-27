@@ -3,7 +3,8 @@
         "mysetup": {
             "type": "symlink",
             "source": "DOT/main.py",
-            "target": "~/.local/bin/mysetup"
+            "target": "~/.local/bin/mysetup",
+            "ext": ".py"
         },
         "submodules": {
             "type": "command",

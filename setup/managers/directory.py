@@ -53,7 +53,7 @@ class Directory(Manager):
     def create_job(self) -> Job:
         return Job(
             name=self.name,
-            description=f"Create self at {self.path}",
+            description=f"Create directory at {self.path}",
             job=self.create_directory(self.path),
         )
 
