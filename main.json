@@ -154,6 +154,7 @@
         "javascript": "languages/javascript/spec.json",
         "jira": "clis/jira.json",
         "lua": "languages/lua/spec.json",
+        "nushell": "clis/nushell/nushell.json",
         "go": "languages/go.json",
         "python": "languages/python/spec.json",
         "rust": "languages/rust/spec.json",

@@ -1,0 +1,16 @@
+{
+    "nushell-config": {
+        "type": "symlink",
+        "source": "DOT/clis/nushell/config.nu",
+        "target": "CONFR/nushell/config.nu"
+    },
+    "nushell-env": {
+        "type": "symlink",
+        "source": "DOT/clis/nushell/env.nu",
+        "target": "CONFR/nushell/env.nu"
+    },
+    "ts-nushell": {
+        "type": "parser",
+        "language": "nu"
+    }
+}
