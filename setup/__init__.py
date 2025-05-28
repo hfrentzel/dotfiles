@@ -278,7 +278,7 @@ def run() -> None:
         os.path.dirname(os.path.abspath(__file__))
     )
 
-    local_bin = expand("~/.local/bin")
+    local_bin = expand(os.path.join("~", ".local/bin"))
     if local_bin not in os.environ["PATH"]:
         cargo_bin = expand("~/.local/share/cargo/bin")
         go_bin = expand("~/.local/go/bin")
