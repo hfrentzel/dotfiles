@@ -107,7 +107,7 @@ class Exe(Manager, Package):
             if version.returncode != 0:
                 if self.installers and set(self.installers) & {"Pip", "Npm"}:
                     if "Pip" in self.installers:
-                        curr_ver = Pip.get_version(self)
+                        curr_ver = await Pip.get_version(self)
                     elif "Npm" in self.installers:
                         curr_ver = Npm.get_version(self)
             elif string := VERSION_REGEX.search(version.stdout):

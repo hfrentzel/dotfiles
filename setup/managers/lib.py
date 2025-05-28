@@ -23,7 +23,7 @@ class Library(Manager, Package):
 
     async def _set_status(self) -> None:
         if self.manager == "pip":
-            self.state = Pip.check_install(self)
+            self.state = await Pip.check_install(self)
             return
         if self.manager == "npm":
             self.state = Npm.check_install(self)

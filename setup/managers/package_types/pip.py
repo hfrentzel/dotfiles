@@ -55,15 +55,22 @@ class Pip:
         )
 
     @classmethod
-    def get_version(cls, package: Package) -> Optional[str]:
+    async def get_version(cls, package: Package) -> Optional[str]:
         if not cls.files:
+            version_output = await async_proc("python --version")
+            if version_output.returncode != 0:
+                return None
+            m = re.search(r"3.(\d+).\d", version_output.stdout)
+            if m is None:
+                return None
+            minor = m.group(1)
             if platform.system() == "Linux":
                 pip_dir = os.path.expanduser(
-                    "~/.local/lib/python3.11/site-packages"
+                    f"~/.local/lib/python3.{minor}/site-packages"
                 )
             else:
                 pip_dir = os.path.expanduser(
-                    "~/AppData/Local/Programs/Python/Python311/Lib/site-packages"
+                    f"~/AppData/Local/Programs/Python/Python3{minor}/Lib/site-packages"
                 )
             cls.files = "\n".join([
                 s.replace("_", "-")
@@ -78,6 +85,6 @@ class Pip:
         return None
 
     @classmethod
-    def check_install(cls, package: Package) -> tuple[bool, str]:
-        curr_ver = cls.get_version(package)
+    async def check_install(cls, package: Package) -> tuple[bool, str]:
+        curr_ver = await cls.get_version(package)
         return check_install(curr_ver, package)
