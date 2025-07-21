@@ -10,7 +10,6 @@
             "type": "command",
             "cwd": "DOT",
             "check_script": "python utilities/submodule_check.py",
-            "exit_code": 1,
             "run_script": [
                 "git submodule update --init --depth=10",
                 "python utilities/gen_helptags"

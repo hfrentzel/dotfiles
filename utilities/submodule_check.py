@@ -7,7 +7,7 @@ import sys
 
 result = subprocess.run(["git", "submodule", "status"], capture_output=True)
 
-lines = result.stdout.decode().split("\n")
+lines = result.stdout.decode().rstrip().split("\n")
 
 if any(not line.startswith(" ") for line in lines):
     sys.exit(1)
