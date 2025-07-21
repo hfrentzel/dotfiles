@@ -11,4 +11,17 @@ $env.PYTHONSTARTUP = $env.XDG_CONFIG_HOME + "/python/startup.py"
 $env.CARGO_HOME = $env.USERPROFILE + "/.local/share/cargo"
 $env.RUSTUP_HOME = $env.USERPROFILE + "/.local/share/rustup"
 
+$env.config.keybindings = [
+    {
+        name: insert_last_token
+        modifier: alt
+        keycode: char_.
+        mode: emacs
+        event: [
+            { edit: InsertString, value: " !$" }
+            { send: Enter }
+        ]
+    }
+]
+
 source ~/.cache/zoxide.nu
