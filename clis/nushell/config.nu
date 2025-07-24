@@ -4,6 +4,8 @@ alias ll = ^ls -hlAF --color=auto
 alias g = git
 alias v = nvim
 
+$env.config.shell_integration.osc133 = false
+
 $env.XDG_CONFIG_HOME = $env.USERPROFILE + "/AppData/Roaming"
 $env.RIPGREP_CONFIG_PATH = $env.XDG_CONFIG_HOME + "/ripgrep/config"
 $env.PYLINTRC = $env.XDG_CONFIG_HOME + "/pylint/pylintrc"

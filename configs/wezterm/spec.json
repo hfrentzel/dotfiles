@@ -1,0 +1,7 @@
+{
+    "wezterm-config": {
+        "type": "symlink",
+        "source": "DOT/configs/wezterm/wezterm",
+        "target": "CONF/wezterm"
+    }
+}

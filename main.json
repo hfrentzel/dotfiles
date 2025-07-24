@@ -161,6 +161,7 @@
         "vim": "vim/spec.json",
         "kubernetes": "clis/kubernetes/spec.json",
         "gh": "clis/gh.json",
-        "glab": "clis/glab/spec.json"
+        "glab": "clis/glab/spec.json",
+        "wezterm": "configs/wezterm/spec.json"
     }
 }

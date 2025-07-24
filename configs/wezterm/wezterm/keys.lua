@@ -1,0 +1,67 @@
+local wezterm = require('wezterm')
+local config = {}
+
+config.leader = { key = ' ', mods = 'CTRL' }
+
+config.keys = {
+    -- General keymaps similar to most applications
+    { key = 'F11', mods = 'NONE', action = wezterm.action.ToggleFullScreen },
+    { key = 'Enter', mods = 'LEADER', action = wezterm.action.ActivateCopyMode },
+    { key = 'v', mods = 'CTRL', action = wezterm.action.PasteFrom('Clipboard') },
+
+    -- Pane Management
+    { key = '\\', mods = 'LEADER', action = wezterm.action.SplitHorizontal },
+    { key = '-', mods = 'LEADER', action = wezterm.action.SplitVertical },
+
+    -- Tab Management
+    { key = 'c', mods = 'LEADER', action = wezterm.action.SpawnTab('CurrentPaneDomain') },
+    { key = '0', mods = 'CTRL', action = wezterm.action.ActivateTabRelative(1) },
+    { key = '9', mods = 'CTRL', action = wezterm.action.ActivateTabRelative(-1) },
+}
+
+-- Copy Mode bindings
+local copy_mode = wezterm.gui.default_key_tables().copy_mode
+local new_copy_mode_keys = {
+    {
+        key = 'Escape',
+        mods = 'NONE',
+        action = wezterm.action_callback(function(win, pane)
+            if win:get_selection_text_for_pane(pane) ~= '' then
+                win:perform_action(wezterm.action.CopyMode('ClearSelectionMode'), pane)
+            else
+                win:perform_action(wezterm.action.CopyMode('Close'), pane)
+            end
+        end),
+    },
+    {
+        key = 'n',
+        mods = 'CTRL',
+        action = wezterm.action_callback(function(win, pane)
+            if win:get_selection_text_for_pane(pane) == '' then
+                win:perform_action(wezterm.action.CopyMode({ SetSelectionMode = 'Line' }), pane)
+            end
+            win:perform_action(
+                wezterm.action.Multiple({
+                    wezterm.action.CopyTo('Clipboard'),
+                    wezterm.action.CopyMode('ClearSelectionMode'),
+                    wezterm.action.CopyMode('Close'),
+                    wezterm.action.PasteFrom('Clipboard'),
+                }),
+                pane
+            )
+        end),
+    },
+    {
+        key = 'I',
+        mods = 'NONE',
+        action = wezterm.action.CopyMode({ SetSelectionMode = 'Word' }),
+    },
+}
+for _, value in ipairs(new_copy_mode_keys) do
+    table.insert(copy_mode, value)
+end
+config.key_tables = {
+    copy_mode = copy_mode,
+}
+
+return config

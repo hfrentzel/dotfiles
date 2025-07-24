@@ -34,6 +34,8 @@ def expand(path: str) -> str:
             path = path.replace("CONFR", "~/.config")
         else:
             path = path.replace("CONFR", "~/AppData/Roaming")
+    elif path.startswith("CONF"):
+        path = path.replace("CONF", "~/.config")
 
     path = os.path.expanduser(path)
     return path
