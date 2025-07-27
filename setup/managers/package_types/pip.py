@@ -72,11 +72,14 @@ class Pip:
                 pip_dir = os.path.expanduser(
                     f"~/AppData/Local/Programs/Python/Python3{minor}/Lib/site-packages"
                 )
-            cls.files = "\n".join([
-                s.replace("_", "-")
-                for s in os.listdir(pip_dir)
-                if "dist-info" in s
-            ])
+            if os.path.isdir(pip_dir):
+                cls.files = "\n".join([
+                    s.replace("_", "-")
+                    for s in os.listdir(pip_dir)
+                    if "dist-info" in s
+                ])
+            else:
+                cls.files = "x"
 
         if (
             m := re.search(f"{package.name}-(.*)\\.dist-info", cls.files)
