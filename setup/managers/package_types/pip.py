@@ -31,7 +31,8 @@ class Pip:
 
             logger.info(f"Running pip install for resources: {resources_str}")
             result = await async_proc(
-                f"python -m pip install {pip_string}", logger=logger
+                f"python -m pip install --break-system-packages {pip_string}",
+                logger=logger,
             )
             success = not result.returncode
             if success:
