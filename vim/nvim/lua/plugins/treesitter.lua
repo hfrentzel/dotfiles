@@ -6,7 +6,7 @@ return {
     {
         'nvim-treesitter',
         dev = true,
-        event = { 'BufReadPost', 'BufNewFile' },
+        event = { 'FileType' },
         cmd = { 'TSUpdate', 'TSUpdateSync', 'TSInstall', 'TSInstallSync' },
         dependencies = {
             {
@@ -15,59 +15,64 @@ return {
             },
         },
         config = function()
-            local treesitter = require('nvim-treesitter.configs')
-            treesitter.setup({
-                parser_install_dir = vim.fn.stdpath('data') .. '/site',
-                ensure_installed = { 'lua', 'python', 'vim' },
-                auto_installed = { 'lua', 'python', 'vim' },
-
-                highlight = {
-                    enable = true,
-                    additional_vim_regex_highlighting = false,
-                },
-
-                incremental_selection = {
-                    enable = true,
-                    keymaps = {
-                        init_selection = 'gnn',
-                        node_incremental = 'gk',
-                        node_decremental = 'gj',
-                    },
-                },
-
-                indent = {
-                    enable = true,
-                },
-
-                textobjects = {
-                    select = {
-                        enable = true,
-                        keymaps = {
-                            ['af'] = '@function.outer',
-                            ['if'] = '@function.inner',
-                            ['aif'] = '@conditional.outer',
-                            ['iif'] = '@conditional.inner',
-                        },
-                    },
-                    move = {
-                        enable = true,
-                        goto_next_start = {
-                            [']f'] = '@function.outer',
-                        },
-                        goto_previous_start = {
-                            ['[f'] = '@function.outer',
-                        },
-                    },
-                },
+            require('nvim-treesitter').setup({
+                install_dir = vim.fn.stdpath('data') .. '/site',
             })
 
-            vim.o.foldmethod = 'expr'
-            vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
-            vim.keymap.set(
-                'n',
-                '<leader>x',
-                '<cmd>lua print(require"nvim-treesitter.ts_utils".get_node_at_cursor():type())<CR>'
-            )
+            vim.keymap.set({ 'x', 'o' }, 'af', function()
+                require('nvim-treesitter-textobjects.select').select_textobject(
+                    '@function.outer',
+                    'textobjects'
+                )
+            end)
+            vim.keymap.set({ 'x', 'o' }, 'if', function()
+                require('nvim-treesitter-textobjects.select').select_textobject(
+                    '@function.inner',
+                    'textobjects'
+                )
+            end)
+            vim.keymap.set({ 'x', 'o' }, 'aif', function()
+                require('nvim-treesitter-textobjects.select').select_textobject(
+                    '@conditional.outer',
+                    'textobjects'
+                )
+            end)
+            vim.keymap.set({ 'x', 'o' }, 'iif', function()
+                require('nvim-treesitter-textobjects.select').select_textobject(
+                    '@conditional.inner',
+                    'textobjects'
+                )
+            end)
+            vim.keymap.set({ 'n', 'x', 'o' }, ']f', function()
+                require('nvim-treesitter-textobjects.move').goto_next_start(
+                    '@function.outer',
+                    'textobjects'
+                )
+            end)
+            vim.keymap.set({ 'n', 'x', 'o' }, '[f', function()
+                require('nvim-treesitter-textobjects.move').goto_previou_start(
+                    '@function.outer',
+                    'textobjects'
+                )
+            end)
+
+            vim.api.nvim_create_autocmd('FileType', {
+                pattern = { '*' },
+                callback = function()
+                    local hasStarted = pcall(vim.treesitter.start)
+                    if hasStarted then
+                        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                        vim.o.foldmethod = 'expr'
+                        vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+                    end
+                end,
+            })
+
+            -- vim.keymap.set(
+            --     'n',
+            --     '<leader>x',
+            --     '<cmd>lua print(require"nvim-treesitter.ts_utils".get_node_at_cursor():type())<CR>'
+            -- )
         end,
     },
 }

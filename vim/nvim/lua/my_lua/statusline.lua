@@ -2,7 +2,8 @@ local statusline = {}
 
 statusline.diagnostics = function()
     local b = vim.b
-    local tree = require('nvim-treesitter.parsers').has_parser() and '🌳' or '🪓'
+    -- local tree = require('nvim-treesitter.parsers').has_parser() and '🌳' or '🪓'
+    local tree = ' '
     local output = ''
     local no_problems = true
     if b.diags_ready ~= true then
