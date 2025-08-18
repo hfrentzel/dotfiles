@@ -46,9 +46,14 @@ local get_git_data = function()
     end
 
     if root_path ~= nil then
+        local final_slash = '/'
+        if vim.fn.has('macunix') ~= 1 then
+            final_slash = '\\'
+            root_path = string.gsub(root_path, '/', '\\\\')
+        end
         vim.b.adjusted_path = root_name
             .. vim.fn.matchstr(file_parent, root_path .. '\\zs.*\\ze')
-            .. '/'
+            .. final_slash
     else
         vim.b.adjusted_path = file_parent .. '/'
     end
