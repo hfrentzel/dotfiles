@@ -12,8 +12,9 @@ wezterm.on('update-right-status', function(win, _)
     end
     local date = wezterm.strftime('%H' .. colon .. '%M %m/%d/%y')
     local name = os.getenv('USERNAME') .. '@' .. wezterm.hostname()
+    local workspace = '(' .. win:active_workspace() .. ')'
 
-    win:set_right_status(name .. ' ' .. date)
+    win:set_right_status(workspace .. ' ' .. name .. ' ' .. date)
 end)
 
 return config
