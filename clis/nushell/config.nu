@@ -5,6 +5,7 @@ alias g = git
 alias v = nvim
 
 $env.config.shell_integration.osc133 = false
+$env.config.table.mode = "none"
 
 $env.XDG_CONFIG_HOME = $env.USERPROFILE + "/AppData/Roaming"
 $env.RIPGREP_CONFIG_PATH = $env.XDG_CONFIG_HOME + "/ripgrep/config"
@@ -25,5 +26,22 @@ $env.config.keybindings = [
         ]
     }
 ]
+
+$env.PROMPT_COMMAND_RIGHT = {||
+    # create a right prompt in magenta with green separators and am/pm underlined
+    let time_segment = ([
+        (ansi reset)
+        (ansi magenta)
+        (date now | format date '%D %H:%M:%S') # try to respect user's locale
+    ] | str join | str replace --regex --all "([/:])" $"(ansi green)${1}(ansi magenta)")
+
+    let last_exit_code = if ($env.LAST_EXIT_CODE != 0) {([
+        (ansi rb)
+        ($env.LAST_EXIT_CODE)
+    ] | str join)
+    } else { "" }
+
+    ([$last_exit_code, (char space), $time_segment] | str join)
+}
 
 source ~/.cache/zoxide.nu
