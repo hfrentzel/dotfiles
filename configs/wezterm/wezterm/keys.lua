@@ -12,12 +12,21 @@ config.keys = {
     -- Pane Management
     { key = '\\', mods = 'LEADER', action = wezterm.action.SplitHorizontal },
     { key = '-', mods = 'LEADER', action = wezterm.action.SplitVertical },
+    { key = '8', mods = 'CTRL', action = wezterm.action.RotatePanes('Clockwise') },
+    { key = '7', mods = 'CTRL', action = wezterm.action.PaneSelect(
+        {mode = 'SwapWithActiveKeepFocus' }) },
 
     -- Tab Management
     { key = 'c', mods = 'LEADER', action = wezterm.action.SpawnTab('CurrentPaneDomain') },
     { key = '0', mods = 'CTRL', action = wezterm.action.ActivateTabRelative(1) },
     { key = '9', mods = 'CTRL', action = wezterm.action.ActivateTabRelative(-1) },
+    { key = 's', mods = 'LEADER', action = wezterm.action.ShowLauncherArgs({flags = 'WORKSPACES'})},
 }
+
+local splits = require('splits')
+for _,v in ipairs(splits.keys) do
+    table.insert(config.keys, v)
+end
 
 -- Copy Mode bindings
 local copy_mode = wezterm.gui.default_key_tables().copy_mode

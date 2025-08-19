@@ -1,42 +1,30 @@
 -- windows.lua
 -- Keymaps for navigating and managing windows and panes, interoperate with
--- tmux using tmux.nvim
+-- wezterm and tmux using smart-splits.nvim
 
 return {
     {
-        'tmux.nvim',
+        'smart-splits.nvim',
         dev = true,
-        keys = {
-            '<C-h>',
-            '<C-j>',
-            '<C-k>',
-            '<C-l>',
-            '<M-Up>',
-            '<M-Down>',
-            '<M-Left>',
-            '<M-Right>',
-        },
         config = function()
-            local tmux = require('tmux')
-            tmux.setup({
-                copy_sync = {
-                    enable = false,
-                },
-                navigation = {
-                    cycle_navigation = false,
-                    enable_default_keybindings = true,
-                    persist_zoom = true,
-                },
-                resize = {
-                    enable_default_keybindings = false,
-                    resize_step_x = 1,
-                    resize_step_y = 1,
-                },
+            local splits = require('smart-splits')
+            splits.setup({
+                at_edge = 'stop',
             })
-            vim.keymap.set('n', '<m-right>', tmux.resize_right)
-            vim.keymap.set('n', '<m-up>', tmux.resize_top)
-            vim.keymap.set('n', '<m-left>', tmux.resize_left)
-            vim.keymap.set('n', '<m-down>', tmux.resize_bottom)
+            vim.keymap.set('n', '<C-h>', splits.move_cursor_left)
+            vim.keymap.set('n', '<C-j>', splits.move_cursor_down)
+            vim.keymap.set('n', '<C-k>', splits.move_cursor_up)
+            vim.keymap.set('n', '<C-l>', splits.move_cursor_right)
+
+            vim.keymap.set('n', '<M-h>', splits.resize_left)
+            vim.keymap.set('n', '<M-j>', splits.resize_down)
+            vim.keymap.set('n', '<M-k>', splits.resize_up)
+            vim.keymap.set('n', '<M-l>', splits.resize_right)
+
+            vim.keymap.set('n', '<leader><leader>h', splits.swap_buf_left)
+            vim.keymap.set('n', '<leader><leader>j', splits.swap_buf_down)
+            vim.keymap.set('n', '<leader><leader>k', splits.swap_buf_up)
+            vim.keymap.set('n', '<leader><leader>l', splits.swap_buf_right)
         end,
     },
 }

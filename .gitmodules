@@ -55,9 +55,6 @@
 [submodule "vim/nvim/pack/vendor/opt/vim-slime"]
 	path = vim/nvim/pack/vim-slime
 	url = https://github.com/jpalardy/vim-slime.git
-[submodule "vim/nvim/pack/vendor/opt/tmux.nvim"]
-	path = vim/nvim/pack/tmux.nvim
-	url = https://github.com/aserowy/tmux.nvim
 [submodule "vim/nvim/pack/vendor/opt/eunuch"]
 	path = vim/nvim/pack/eunuch
 	url = https://tpope.io/vim/eunuch.git
@@ -91,3 +88,6 @@
 [submodule "vim/nvim/pack/vendor/opt/obsidian.nvim"]
 	path = vim/nvim/pack/obsidian.nvim
 	url = https://github.com/epwalsh/obsidian.nvim
+[submodule "vim/nvim/pack/smart-splits.nvim"]
+	path = vim/nvim/pack/smart-splits.nvim
+	url = https://github.com/mrjones2014/smart-splits.nvim
