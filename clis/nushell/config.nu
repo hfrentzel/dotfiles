@@ -7,12 +7,18 @@ alias v = nvim
 $env.config.shell_integration.osc133 = false
 $env.config.table.mode = "none"
 
-$env.XDG_CONFIG_HOME = $env.USERPROFILE + "/AppData/Roaming"
+if $nu.os-info.name == 'windows' {
+    $env.XDG_CONFIG_HOME = $env.USERPROFILE + "/AppData/Roaming"
+    $env.CARGO_HOME = $env.USERPROFILE + "/.local/share/cargo"
+    $env.RUSTUP_HOME = $env.USERPROFILE + "/.local/share/rustup"
+} else {
+    $env.XDG_CONFIG_HOME = $env.HOME + "/.config"
+    $env.CARGO_HOME = $env.HOME + "/.local/share/cargo"
+    $env.RUSTUP_HOME = $env.HOME + "/.local/share/rustup"
+}
 $env.RIPGREP_CONFIG_PATH = $env.XDG_CONFIG_HOME + "/ripgrep/config"
 $env.PYLINTRC = $env.XDG_CONFIG_HOME + "/pylint/pylintrc"
 $env.PYTHONSTARTUP = $env.XDG_CONFIG_HOME + "/python/startup.py"
-$env.CARGO_HOME = $env.USERPROFILE + "/.local/share/cargo"
-$env.RUSTUP_HOME = $env.USERPROFILE + "/.local/share/rustup"
 
 $env.config.keybindings = [
     {
