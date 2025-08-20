@@ -6,15 +6,14 @@ local split_and_alternate = function()
         return
     end
     vim.api.nvim_feedkeys(
-        vim.api.nvim_replace_termcodes(
-            ':vsplit ' .. this_file .. '<cr><c-w>h:e ' .. alt_file .. '<cr>',
-            true,
-            true,
-            true
-        ),
+        vim.api.nvim_replace_termcodes(':leftabove vsplit #<cr>', true, true, true),
         'nt',
-        true
+        false
     )
 end
 
 vim.keymap.set('n', '<c-s>', split_and_alternate)
+
+vim.keymap.set('n', '<leader>=', '<C-W>=')
+vim.keymap.set('n', '<leader>h=', ':horizontal wincmd =<cr>', { silent = true })
+vim.keymap.set('n', '<leader>v=', ':vertical wincmd =<cr>', { silent = true })
