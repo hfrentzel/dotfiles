@@ -1,4 +1,11 @@
 {
+    "nushell": {
+        "type": "exe",
+        "command_name": "nu",
+        "version": "0.104.0",
+        "installers": ["bh"],
+        "source_repo": "https://github.com/nushell/nushell"
+    },
     "nushell-config": {
         "type": "symlink",
         "source": "DOT/clis/nushell/config.nu",
