@@ -3,6 +3,7 @@ $env.config.buffer_editor = "nvim"
 alias ll = ^ls -hlAF --color=auto
 alias g = git
 alias v = nvim
+alias :q = exit
 
 $env.config.shell_integration.osc133 = false
 $env.config.table.mode = "none"
