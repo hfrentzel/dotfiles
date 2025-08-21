@@ -1,7 +1,10 @@
 local wezterm = require('wezterm')
+local launchers = require('launchers')
 local config = {}
 
+
 config.leader = { key = ' ', mods = 'CTRL' }
+config.wsl_domains = launchers.wsl_domains
 
 config.keys = {
     -- General keymaps similar to most applications
@@ -21,6 +24,8 @@ config.keys = {
     { key = '0', mods = 'CTRL', action = wezterm.action.ActivateTabRelative(1) },
     { key = '9', mods = 'CTRL', action = wezterm.action.ActivateTabRelative(-1) },
     { key = 's', mods = 'LEADER', action = wezterm.action.ShowLauncherArgs({flags = 'WORKSPACES'})},
+    { key = 'w', mods = 'ALT', action = launchers.workspace_launcher},
+    { key = 't', mods = 'ALT', action = launchers.tab_launcher}
 }
 
 local splits = require('splits')
