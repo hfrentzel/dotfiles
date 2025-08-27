@@ -50,7 +50,7 @@ return {
                 )
             end)
             vim.keymap.set({ 'n', 'x', 'o' }, '[f', function()
-                require('nvim-treesitter-textobjects.move').goto_previou_start(
+                require('nvim-treesitter-textobjects.move').goto_previous_start(
                     '@function.outer',
                     'textobjects'
                 )
