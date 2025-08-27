@@ -1,5 +1,6 @@
 local config = {}
 
+config.harfbuzz_features = { 'calt = 0', 'clig = 0', 'liga = 0' }
 config.default_prog = { os.getenv('USERPROFILE') .. '/AppData/Local/Programs/nu/bin/nu.exe' }
 config.window_padding = { bottom = 0 }
 
