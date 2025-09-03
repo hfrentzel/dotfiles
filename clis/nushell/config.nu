@@ -20,6 +20,7 @@ if $nu.os-info.name == 'windows' {
 $env.RIPGREP_CONFIG_PATH = $env.XDG_CONFIG_HOME + "/ripgrep/config"
 $env.PYLINTRC = $env.XDG_CONFIG_HOME + "/pylint/pylintrc"
 $env.PYTHONSTARTUP = $env.XDG_CONFIG_HOME + "/python/startup.py"
+$env.FZF_DEFAULT_OPTS = "--height 20% --layout=reverse"
 
 $env.config.keybindings = [
     {
@@ -51,4 +52,5 @@ $env.PROMPT_COMMAND_RIGHT = {||
     ([$last_exit_code, (char space), $time_segment] | str join)
 }
 
+source ($nu.default-config-dir | path join "utilities.nu")
 source ~/.cache/zoxide.nu
