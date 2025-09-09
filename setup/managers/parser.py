@@ -1,5 +1,4 @@
 import os
-from collections.abc import Callable, Coroutine
 from dataclasses import dataclass
 from logging import Logger
 from typing import ClassVar
@@ -14,7 +13,7 @@ from setup.process import async_proc
 @dataclass
 class Parser(Manager):
     desired: ClassVar[list["Parser"]] = []
-    jobs: ClassVar[list[str]] = []
+    missing: ClassVar[list["Parser"]] = []
     name: str
     language: str
     state: tuple[bool, str] = (False, "")
@@ -46,38 +45,36 @@ class Parser(Manager):
             lines.append((parser.language, (parser.state[1], parser.state[0])))
         return print_grid(("TS PARSER", "STATUS"), lines)
 
-    def create_job(self) -> Job:
-        self.jobs.append(self.name)
-        return Job(
-            name=self.name,
-            description=f"Install treesitter parser for {self.language}",
-            depends_on=["nvim_init"],
-            job=self.install_ts_parser(self.language),
-        )
+    def create_job(self) -> None:
+        self.missing.append(self)
 
-    @staticmethod
-    def install_ts_parser(
-        language: str,
-    ) -> Callable[[Logger], Coroutine[None, None, bool]]:
+    @classmethod
+    def parser_job(cls) -> Job:
+        language_string = ",".join([f"'{p.language}'" for p in cls.missing])
+
         async def inner(logger: Logger) -> bool:
-            logger.info(f"Installing Treesitter parser for {language}...")
+            logger.info(
+                f"Installing Treesitter parsers for {language_string}..."
+            )
             await async_proc(
-                f'nvim --headless +"TSInstallSync {language}" +q', logger=logger
+                f"nvim --headless +\"lua require('nvim-treesitter')."
+                f'install({{{language_string}}}):wait(300000)" +q',
+                logger=logger,
             )
             return True
 
-        return inner
-
-    @classmethod
-    def nvim_init_job(cls) -> Job:
-        async def inner(logger: Logger) -> bool:
-            logger.info("Running nvim_init")
-            await async_proc("nvim --headless +q")
-            return True
-
         return Job(
-            name="nvim_init",
-            description="Run headless neovim to create scratch directories",
-            depends_on=["neovim", "submodules", "vimrc", "nvimconfig", "gcc"],
+            name="ts_parser_install",
+            resources=[p.name for p in cls.missing],
+            description=f"Install treesitter parsers for {language_string}",
+            depends_on=[
+                "neovim",
+                "submodules",
+                "vimrc",
+                "nvimconfig",
+                "gcc",
+                "tree-sitter-cli",
+                "tree-sitter-config",
+            ],
             job=inner,
         )

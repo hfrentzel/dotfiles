@@ -50,6 +50,6 @@ def create_bonus_jobs() -> dict[str, Job]:
         jobs["pip_install"] = Pip.pip_job()
     if len(Npm.all_packages) != 0:
         jobs["npm_install"] = Npm.npm_job()
-    if len(Parser.jobs) != 0:
-        jobs["nvim_init"] = Parser.nvim_init_job()
+    if len(Parser.missing) != 0:
+        jobs["nvim_init"] = Parser.parser_job()
     return jobs
