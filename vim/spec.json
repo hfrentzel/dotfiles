@@ -26,7 +26,7 @@
     },
     "tree-sitter-config": {
         "type": "symlink",
-        "source": "DOT/configs/tree-sitter-config.json",
+        "source": "DOT/configs/tree-sitter-cli.json",
         "target": "CONF/tree-sitter/config.json"
     },
     "ts-vim": {
