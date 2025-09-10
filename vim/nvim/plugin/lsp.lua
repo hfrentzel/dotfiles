@@ -61,6 +61,7 @@ vim.lsp.config('*', {
 })
 vim.lsp.enable({
     'eslint',
+    'clangd',
     'cssls',
     'gopls',
     'jsonls',

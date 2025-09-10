@@ -1,0 +1,9 @@
+{
+    "clangd": {
+        "type": "exe",
+        "version": "20.1.8",
+        "installers": ["bh"],
+        "homepage": "https://clangd.llvm.org",
+        "source_repo": "https://github.com/clangd/clangd"
+    }
+}

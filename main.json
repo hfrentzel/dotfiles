@@ -147,6 +147,7 @@
     },
     "addons": {
         "build_tools": "clis/build_tools.json",
+        "c": "languages/c.json",
         "data_languages": "languages/data_languages.json",
         "css": "languages/css/spec.json",
         "fzf": "clis/fzf.json",
