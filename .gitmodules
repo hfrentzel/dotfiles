@@ -46,9 +46,6 @@
 [submodule "vim/nvim/pack/vendor/opt/nvim-tree.lua"]
 	path = vim/nvim/pack/nvim-tree.lua
 	url = https://github.com/nvim-tree/nvim-tree.lua
-[submodule "vim/nvim/pack/vendor/opt/telescope.nvim"]
-	path = vim/nvim/pack/telescope.nvim
-	url = https://github.com/nvim-telescope/telescope.nvim
 [submodule "vim/nvim/pack/vendor/opt/nvim-dap"]
 	path = vim/nvim/pack/nvim-dap
 	url = https://github.com/mfussenegger/nvim-dap.git
@@ -91,3 +88,6 @@
 [submodule "vim/nvim/pack/smart-splits.nvim"]
 	path = vim/nvim/pack/smart-splits.nvim
 	url = https://github.com/mrjones2014/smart-splits.nvim
+[submodule "vim/nvim/pack/snacks.nvim"]
+	path = vim/nvim/pack/snacks.nvim
+	url = https://github.com/folke/snacks.nvim

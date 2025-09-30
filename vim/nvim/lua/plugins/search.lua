@@ -1,15 +1,8 @@
 -- search.lua
--- Implements File and Text Search using nvim-telescope and commant-t
+-- Implements File and Text Search using snacks.nvim and command-t
 
--- https://github.com/nvim-telescope/telescope.nvim/issues/1923
-local function getVisualSelection()
-    vim.cmd('noau normal! "vy"')
-    local text = vim.fn.getreg('v')
-    vim.fn.setreg('v', {})
-
-    text = string.gsub(text, '\n', '')
-    return (#text > 0) and text or ''
-end
+vim.api.nvim_set_hl(0, 'SnacksPicker', { link = 'Normal' })
+vim.api.nvim_set_hl(0, 'SnacksPickerSearch', { link = 'NormalNC' })
 
 return {
     {
@@ -40,75 +33,112 @@ return {
             })
         end,
     },
-
     {
-        'telescope.nvim',
+        'snacks.nvim',
         dev = true,
         keys = {
-            { '<leader>g', mode = { 'n', 'v' } },
-            'gu',
-            'gd',
+            {
+                '<leader>g',
+                function()
+                    require('snacks').picker.grep()
+                end,
+                mode = 'n',
+            },
+            {
+                '<leader>g',
+                function()
+                    require('snacks').picker.grep({
+                        search = function(picker)
+                            return picker:word()
+                        end,
+                    })
+                end,
+                mode = 'v',
+            },
+            {
+                'gu',
+                function()
+                    require('snacks').picker.lsp_references()
+                end,
+            },
+            {
+                'gd',
+                function()
+                    require('snacks').picker.lsp_definitions()
+                end,
+            },
         },
-        config = function()
-            require('telescope').setup({
-                defaults = {
-                    dynamic_preview_title = true,
-                    mappings = {
-                        i = {
-                            ['<c-j>'] = 'move_selection_next',
-                            ['<c-k>'] = 'move_selection_previous',
-                            ['<c-\\>'] = 'select_vertical',
-                            ['<c-s>'] = 'select_horizontal',
+        opts = {
+            picker = {
+                prompt = '',
+                icons = {
+                    files = { enabled = false },
+                },
+                layout = {
+                    layout = {
+                        backdrop = false,
+                        row = 1,
+                        width = 0.8,
+                        min_width = 80,
+                        height = 0.95,
+                        min_height = 30,
+                        box = 'vertical',
+                        {
+                            title = '{title} {flags}',
+                            border = 'rounded',
+                            box = 'vertical',
+                            { win = 'input', height = 1 },
+                            { win = 'list', border = 'top' },
                         },
-                    },
-                    path_display = { truncate = 50 },
-                    -- Default includes --smart-case, I don't want that
-                    vimgrep_arguments = {
-                        'rg',
-                        '--color=never',
-                        '--no-heading',
-                        '--with-filename',
-                        '--line-number',
-                        '--column',
+                        { win = 'preview', title = '{preview}', height = 0.6, border = 'rounded' },
                     },
                 },
-                pickers = {
-                    live_grep = {
-                        disable_coordinates = true,
-                        prompt_title = 'Search in Files',
-                        theme = 'dropdown',
-                        layout_config = {
-                            anchor = 'N',
-                            prompt_position = 'top',
-                            width = 0.8,
+                sources = {
+                    grep = {
+                        title = 'Search in files',
+                        ignore = true,
+                        ignore_case = false,
+                        live = true,
+                        toggles = {
+                            ignore = { icon = '--no-ignore', value = false },
+                            ignore_case = '--ignore-case',
                         },
-                    },
-                    lsp_definitions = {
-                        theme = 'dropdown',
-                        layout_config = {
-                            anchor = 'N',
-                            prompt_position = 'top',
-                            width = 0.8,
+                        finder = function(opts, ctx)
+                            local new_args = { '--case-sensitive' }
+                            if not opts.ignore then
+                                vim.list_extend(new_args, { '--no-ignore' })
+                            end
+                            if opts.ignore_case then
+                                vim.list_extend(new_args, { '--ignore-case' })
+                            end
+                            opts.args = new_args
+                            return require('snacks.picker.source.grep').grep(opts, ctx)
+                        end,
+                        actions = {
+                            toggle_ignore_case = function(picker)
+                                picker.opts.ignore_case = not picker.opts.ignore_case
+                                picker:find()
+                            end,
+                            toggle_ignore = function(picker)
+                                picker.opts.ignore = not picker.opts.ignore
+                                picker:find()
+                            end,
                         },
-                    },
-                    lsp_references = {
-                        theme = 'dropdown',
-                        layout_config = {
-                            anchor = 'N',
-                            prompt_position = 'top',
-                            width = 0.8,
+                        win = {
+                            input = {
+                                keys = {
+                                    ['<M-i>'] = { 'toggle_ignore', mode = { 'i', 'n' } },
+                                    ['<M-s>'] = { 'toggle_ignore_case', mode = { 'i', 'n' } },
+                                    ['<C-j>'] = { 'list_down', mode = { 'i', 'n' } },
+                                    ['<C-k>'] = { 'list_up', mode = { 'i', 'n' } },
+                                    ['<C-\\>'] = { 'edit_vsplit', mode = { 'i', 'n' } },
+                                    ['<C-s>'] = { 'edit_split', mode = { 'i', 'n' } },
+                                },
+                            },
                         },
                     },
                 },
-            })
-            local builtin = require('telescope.builtin')
-            vim.keymap.set('n', '<leader>g', builtin.live_grep)
-            vim.keymap.set('n', 'gu', builtin.lsp_references)
-            vim.keymap.set('n', 'gd', builtin.lsp_definitions)
-            vim.keymap.set('v', '<leader>g', function()
-                local text = getVisualSelection()
-                builtin.live_grep({ default_text = text })
-            end)
-        end,
+            },
+        },
     },
 }
