@@ -15,7 +15,7 @@ if platform.system() == "Linux":
             subprocess.run(
                 shlex.split("xclip -out -sel clipboard"),
                 capture_output=True,
-            ).stdout.decode()
+            ).stdout.decode(), end=""
         )
 else:
     output = subprocess.run(

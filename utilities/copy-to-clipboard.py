@@ -16,7 +16,6 @@ if platform.system() == "Linux":
         subprocess.run(
             shlex.split("xclip -sel clipboard"),
             stdin=sys.stdin,
-            capture_output=True,
         )
 else:
     subprocess.run(["clip.exe"], stdin=sys.stdin, encoding="utf_16le")
