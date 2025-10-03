@@ -50,12 +50,5 @@
         "manager": "pip",
         "homepage": "https://pynvim.readthedocs.io/en/latest",
         "source_repo": "https://github.com/neovim/pynvim"
-    },
-    "command-t": {
-        "type": "command",
-        "cwd": "DOT/vim/nvim/pack/command-t/lua/wincent/commandt/lib",
-        "run_script": "make",
-        "check_script": "test -f commandt.so",
-        "depends_on": ["submodules", "make", "gcc"]
     }
 }
