@@ -28,7 +28,7 @@ local on_attach = function()
     local args = { buffer = true, silent = true }
     vim.diagnostic.config({ severity_sort = true, virtual_text = true })
     vim.wo.signcolumn = 'yes'
-    vim.keymap.set('n', 'g=', format, args)
+    vim.keymap.set({'n', 'v'}, 'g=', format, args)
     vim.keymap.set('n', 'K', function()
         vim.lsp.buf.hover({ border = 'rounded' })
     end, args)
