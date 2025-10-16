@@ -14,6 +14,6 @@ end
 
 vim.keymap.set('n', '<c-s>', split_and_alternate)
 
-vim.keymap.set('n', '<leader>=', '<C-W>=')
-vim.keymap.set('n', '<leader>h=', ':horizontal wincmd =<cr>', { silent = true })
-vim.keymap.set('n', '<leader>v=', ':vertical wincmd =<cr>', { silent = true })
+vim.keymap.set('n', '<leader>==', '<C-W>=')
+vim.keymap.set('n', '<leader>=h', ':horizontal wincmd =<cr>', { silent = true })
+vim.keymap.set('n', '<leader>=v', ':vertical wincmd =<cr>', { silent = true })
