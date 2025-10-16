@@ -68,6 +68,12 @@ return {
                 end,
             })
 
+            vim.api.nvim_create_user_command('QueryEditor', function()
+                vim.treesitter.inspect_tree()
+                vim.treesitter.query.edit()
+                vim.cmd.wincmd('=')
+            end, {})
+
             -- vim.keymap.set(
             --     'n',
             --     '<leader>x',
