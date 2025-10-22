@@ -8,7 +8,7 @@
     },
     "nushell-config": {
         "type": "symlink",
-        "source": "DOT/clis/nushell",
+        "source": "DOT/configs/nushell",
         "target": "CONFR/nushell"
     },
     "ts-nushell": {

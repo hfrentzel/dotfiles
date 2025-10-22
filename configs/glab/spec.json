@@ -8,7 +8,7 @@
     },
     "glabconfig": {
         "type": "symlink",
-        "source": "DOT/clis/glab/config.yml",
+        "source": "DOT/configs/glab/config.yml",
         "target": "~/.config/glab-cli/config.yml"
     }
 }

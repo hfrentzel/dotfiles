@@ -27,12 +27,12 @@
     },
     "k9s-hotkeys": {
         "type": "symlink",
-        "source": "DOT/clis/kubernetes/hotkeys.yaml",
+        "source": "DOT/configs/k9s/hotkeys.yaml",
         "target": "~/.config/k9s/hotkeys.yaml"
     },
     "k9s-skin": {
         "type": "symlink",
-        "source": "DOT/clis/kubernetes/skin.yaml",
+        "source": "DOT/configs/k9s/skin.yaml",
         "target": "~/.config/k9s/skins/default.yaml"
     }
 }

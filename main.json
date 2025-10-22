@@ -61,13 +61,13 @@
         "tmux.conf": {
             "type": "symlink",
             "only_on": ["Linux"],
-            "source": "DOT/tmux/tmux.conf",
+            "source": "DOT/configs/tmux/tmux.conf",
             "target": "~/.config/tmux/tmux.conf"
         },
         "tmux_dir": {
             "type": "symlink",
             "only_on": ["Linux"],
-            "source": "DOT/tmux/plugins",
+            "source": "DOT/configs/tmux/plugins",
             "target": "~/.config/tmux/plugins"
         },
         "jq": {
@@ -146,23 +146,23 @@
         }
     },
     "addons": {
-        "build_tools": "clis/build_tools.json",
+        "build_tools": "specs/build_tools.json",
         "c": "languages/c.json",
         "data_languages": "languages/data_languages.json",
         "css": "languages/css/spec.json",
-        "fzf": "clis/fzf.json",
+        "fzf": "specs/fzf.json",
         "javascript": "languages/javascript/spec.json",
-        "jira": "clis/jira.json",
+        "jira": "specs/jira.json",
         "lua": "languages/lua/spec.json",
-        "nushell": "clis/nushell/nushell.json",
+        "nushell": "configs/nushell/nushell.json",
         "go": "languages/go.json",
         "python": "languages/python/spec.json",
         "rust": "languages/rust/spec.json",
         "terraform": "languages/terraform/spec.json",
         "vim": "vim/spec.json",
-        "kubernetes": "clis/kubernetes/spec.json",
-        "gh": "clis/gh.json",
-        "glab": "clis/glab/spec.json",
+        "kubernetes": "configs/k9s/spec.json",
+        "gh": "specs/gh.json",
+        "glab": "configs/glab/spec.json",
         "wezterm": "configs/wezterm/spec.json"
     }
 }
