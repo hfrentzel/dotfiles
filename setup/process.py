@@ -187,9 +187,9 @@ def get_system() -> str:
     hardware = platform.uname().machine.lower()
     if hardware in {"x86_64", "amd64"}:
         if platform.system() == "Linux":
-            env = "x86_64-linux-22.04"
+            env = "x86_64-linux-24.04"
         else:
             env = "x86_64-windows"
     else:
-        env = "aarch64-linux-22.04"
+        env = "aarch64-linux-24.04"
     return env
