@@ -1,7 +1,7 @@
 local StandardStatusLine = function()
     return table.concat({
         "%{%v:lua.require('my_lua.statusline').modified()%}",
-        '%{get(b:,"adjusted_path","")}',
+        '%<%{get(b:,"adjusted_path","")}',
         '%3*%t%* %y', -- filename and filetype
         '%=',
         "%{%v:lua.require('my_lua.statusline').diagnostics()%}",

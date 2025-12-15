@@ -153,8 +153,8 @@ local function setColor(scheme)
     hi('User1', { fg = colors['08'], bg = colors['02'] })
     hi('User2', { fg = colors['0A'], bg = colors['02'] })
     hi('User3', { fg = colors['04'], bg = colors['02'], attr = 'bold' })
-    hi('User4', { bg = colors['08'] })
-    hi('User5', { bg = colors['0B'] })
+    hi('User4', { fg = colors['02'], bg = colors['08'] })
+    hi('User5', { fg = colors['02'], bg = colors['0B'] })
 end
 
 local function colorschemeCompletion(prefix)

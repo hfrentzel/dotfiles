@@ -27,7 +27,7 @@ end
 
 statusline.modified = function()
     local padding = vim.fn.getwininfo(vim.fn.win_getid())[1].textoff
-    return (vim.bo.modified and '%4*' or '%5*') .. (' '):rep(padding) .. '%*'
+    return (vim.bo.modified and '%4*' or '%5*') .. '%{printf("%-' .. padding .. 'd", winnr())}%*'
 end
 
 statusline.status_rhs = function()
