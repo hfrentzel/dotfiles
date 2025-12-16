@@ -47,6 +47,17 @@ local get_ignore_args = function(opts)
     return new_args
 end
 
+local get_query = function(picker)
+    local filter = picker.finder.filter
+    if filter.pattern ~= '' then
+        return filter.pattern
+    end
+    if filter.search ~= '' then
+        return filter.search
+    end
+    return ''
+end
+
 return {
     {
         'snacks.nvim',
@@ -83,6 +94,16 @@ return {
                 mode = { 'n', 'v' },
             },
             {
+                '<leader>G',
+                function()
+                    require('snacks').picker.grep({
+                        search = function(picker)
+                            return picker:word()
+                        end,
+                    })
+                end,
+            },
+            {
                 '<leader>b',
                 function()
                     require('snacks').picker.buffers()
@@ -104,6 +125,12 @@ return {
                 'gd',
                 function()
                     require('snacks').picker.lsp_definitions()
+                end,
+            },
+            {
+                'g\\d',
+                function()
+                    require('snacks').picker.lsp_definitions({ confirm = 'vsplit' })
                 end,
             },
         },
@@ -130,17 +157,41 @@ return {
                         vim.api.nvim_set_current_win(winnr)
                         require('snacks.picker.actions').jump(picker, item, { action = 'confirm' })
                     end,
+                    open_files_picker = function(picker, _)
+                        picker:close()
+                        require('snacks').picker.files({ pattern = get_query(picker) })
+                    end,
+                    open_grep_picker = function(picker, _)
+                        picker:close()
+                        require('snacks').picker.grep({ search = get_query(picker) })
+                    end,
+                    open_help_picker = function(picker, _)
+                        picker:close()
+                        require('snacks').picker.help({ pattern = get_query(picker) })
+                    end,
                 },
                 win = {
                     input = {
                         keys = {
                             ['<M-i>'] = { 'toggle_ignore', mode = { 'i', 'n' } },
                             ['<M-s>'] = { 'toggle_ignore_case', mode = { 'i', 'n' } },
+                            ['<C-r>'] = { 'history_back', mode = { 'i', 'n' } },
+                            ['<C-r>#'] = '',
+                            ['<C-r>%'] = '',
+                            ['<C-r><c-a>'] = '',
+                            ['<C-r><c-f>'] = '',
+                            ['<C-r><c-p>'] = '',
+                            ['<C-r><c-l>'] = '',
+                            ['<C-r><c-w>'] = '',
                             ['<C-j>'] = { 'list_down', mode = { 'i', 'n' } },
                             ['<C-k>'] = { 'list_up', mode = { 'i', 'n' } },
                             ['<C-\\>'] = { 'edit_vsplit', mode = { 'i', 'n' } },
                             ['<C-s>'] = { 'edit_split', mode = { 'i', 'n' } },
                             ['<C-o>'] = { 'open_in_window', mode = { 'i', 'n' } },
+                            ['<C-u>'] = '',
+                            ['<leader>g'] = { 'open_grep_picker', mode = { 'n' } },
+                            ['<leader>t'] = { 'open_files_picker', mode = { 'n' } },
+                            ['<leader>h'] = { 'open_help_picker', mode = { 'n' } },
                         },
                     },
                 },

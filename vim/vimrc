@@ -42,7 +42,6 @@ nnoremap <leader>b :ls<CR>:b<Space>
 
 " UPPERCASE word
 nnoremap U mzviwUe`z
-inoremap <c-u> <esc>viwUea
 
 " Entire File text object
 onoremap <silent> ae :<C-U>normal! ggVG<CR>
