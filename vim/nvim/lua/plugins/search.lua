@@ -116,6 +116,21 @@ return {
                 layout = {
                     layout = layout,
                 },
+                actions = {
+                    open_in_window = function(picker, item)
+                        print('Pick a window: ')
+                        local n = vim.fn.nr2char(vim.fn.getchar()) + 0
+                        local wins = vim.api.nvim_list_wins()
+                        if n + 5 > #wins then
+                            vim.notify('Window ' .. n .. ' does not exist', vim.log.levels.WARN)
+                            return
+                        end
+
+                        local winnr = wins[n]
+                        vim.api.nvim_set_current_win(winnr)
+                        require('snacks.picker.actions').jump(picker, item, { action = 'confirm' })
+                    end,
+                },
                 win = {
                     input = {
                         keys = {
@@ -125,6 +140,7 @@ return {
                             ['<C-k>'] = { 'list_up', mode = { 'i', 'n' } },
                             ['<C-\\>'] = { 'edit_vsplit', mode = { 'i', 'n' } },
                             ['<C-s>'] = { 'edit_split', mode = { 'i', 'n' } },
+                            ['<C-o>'] = { 'open_in_window', mode = { 'i', 'n' } },
                         },
                     },
                 },
