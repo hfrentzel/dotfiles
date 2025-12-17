@@ -51,7 +51,7 @@ BASE16_CONFIG="$HOME/.local/share/mysetup/base16"
 test -f $BASE16_CONFIG && color $(cat $BASE16_CONFIG)
 
 if command -v bat &> /dev/null; then
-    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+    export MANPAGER="bat -plman"
 fi
 
 if command -v zoxide &> /dev/null; then
