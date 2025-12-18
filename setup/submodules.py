@@ -1,18 +1,21 @@
 import re
 import shlex
 import subprocess
+import os
 
 from .conf import conf, expand
 
 
 def check_submodules():
+    git = f"git -C {os.path.dirname(__file__)}"
+
     print("Fetching submodules")
     subprocess.run(
-        shlex.split("git submodule foreach git fetch"), capture_output=True
+        shlex.split(f"{git} submodule foreach git fetch"), capture_output=True
     )
 
     cmd = (
-        "git submodule --quiet foreach "
+        f"{git} submodule --quiet foreach "
         "'echo ${PWD##*/}; "
         "git show -s --format=%ci; "
         "git rev-list --count `git rev-parse --abbrev-ref HEAD`"
