@@ -16,6 +16,8 @@ return {
             },
         },
         opts = {
+            legacy_commands = false,
+            checkbox = { create_new = false },
             workspaces = {
                 {
                     name = 'notes',
@@ -31,7 +33,7 @@ return {
                     vim.keymap.set(
                         'v',
                         '<cr>',
-                        ':ObsidianLinkNew<cr>',
+                        ':Obsidian link_new<cr>',
                         { buffer = true, silent = true }
                     )
                 end,
@@ -39,20 +41,12 @@ return {
                     vim.wo.conceallevel = 0
                 end,
             },
-            mappings = {
-                ['<cr>'] = {
-                    action = function()
-                        return require('obsidian').util.smart_action()
-                    end,
-                    opts = { buffer = true, expr = true },
-                },
-            },
             note_id_func = function(title)
                 return title
             end,
-            note_frontmatter_func = function()
-                return {}
-            end,
+            frontmatter = {
+                enabled = false,
+            },
         },
     },
 }

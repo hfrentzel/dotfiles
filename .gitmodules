@@ -81,12 +81,12 @@
 [submodule "appearance/schemes"]
 	path = appearance/schemes
 	url = https://github.com/tinted-theming/schemes.git
-[submodule "vim/nvim/pack/vendor/opt/obsidian.nvim"]
-	path = vim/nvim/pack/obsidian.nvim
-	url = https://github.com/epwalsh/obsidian.nvim
 [submodule "vim/nvim/pack/smart-splits.nvim"]
 	path = vim/nvim/pack/smart-splits.nvim
 	url = https://github.com/mrjones2014/smart-splits.nvim
 [submodule "vim/nvim/pack/snacks.nvim"]
 	path = vim/nvim/pack/snacks.nvim
 	url = https://github.com/folke/snacks.nvim
+[submodule "vim/nvim/pack/obsidian.nvim"]
+	path = vim/nvim/pack/obsidian.nvim
+	url = https://github.com/obsidian-nvim/obsidian.nvim
