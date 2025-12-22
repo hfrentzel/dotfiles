@@ -20,6 +20,7 @@
 -- 0F: Deprecated
 local scheme_dir = vim.fn.expand('~/dotfiles/appearance/schemes/base16/')
 local scheme_dir_24 = vim.fn.expand('~/dotfiles/appearance/schemes/base24/')
+local color_file = vim.fn.expand('~/.local/share/mysetup/base16')
 
 local function hi(group, args)
     local command = string.format(
@@ -35,12 +36,14 @@ end
 
 local function setColor(scheme)
     if scheme == nil then
-        local color_file = vim.fn.expand('~/.local/share/mysetup/base16')
         if vim.fn.filereadable(color_file) == 0 then
             return
         end
-
         scheme = vim.fn.readfile(color_file, '', 1)[1]
+
+    elseif scheme == "--current" then
+        print(vim.fn.readfile(color_file, '', 1)[1])
+        return
     end
 
     local is_24 = false
