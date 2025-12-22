@@ -11,7 +11,9 @@ import sys
 
 scheme = sys.argv[1]
 scheme_dir = os.path.expanduser("~/dotfiles/appearance/schemes/base16/")
+scheme_dir_24 = os.path.expanduser("~/dotfiles/appearance/schemes/base24/")
 save_file = os.path.expanduser("~/.local/share/mysetup/base16")
+is_24 = False
 
 if os.environ.get('TMUX'):
     def apply_color(number, rgb):
@@ -30,8 +32,15 @@ else:
         x = f"{rgb[0:2]}/{rgb[2:4]}/{rgb[4:6]}"
         print(f"\033]{number};rgb:{x}\033\\", end="")
 
+if os.path.exists(f"{scheme_dir_24}{scheme}.yaml"):
+    scheme_file = f"{scheme_dir_24}{scheme}.yaml"
+    is_24 = True
+else:
+    scheme_file = f"{scheme_dir}{scheme}.yaml"
+
+
 colors = {}
-with open(f"{scheme_dir}{scheme}.yaml", encoding="utf-8") as f:
+with open(scheme_file, encoding="utf-8") as f:
     for line in f.readlines():
         if line.startswith("  base"):
             colors[line[6:8]] = line[12:18]
@@ -49,12 +58,12 @@ apply_color(5, colors["0E"])  # Magenta
 apply_color(6, colors["0C"])  # Cyan
 apply_color(7, colors["05"])  # White
 apply_color(8, colors["03"])  # Bright Black
-apply_color(9, colors["08"])
-apply_color(10, colors["0B"])
-apply_color(11, colors["0A"])
-apply_color(12, colors["0D"])
-apply_color(13, colors["0E"])
-apply_color(14, colors["0C"])
+apply_color(9, colors["12"] if is_24 else colors["08"])
+apply_color(10, colors["14"] if is_24 else colors["0B"])
+apply_color(11, colors["13"] if is_24 else colors["0A"])
+apply_color(12, colors["16"] if is_24 else colors["0D"])
+apply_color(13, colors["17"] if is_24 else colors["0E"])
+apply_color(14, colors["15"] if is_24 else colors["0C"])
 apply_color(15, colors["07"])
 apply_color(16, colors["09"])
 apply_color(17, colors["0F"])

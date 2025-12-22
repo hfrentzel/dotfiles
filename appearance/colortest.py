@@ -4,9 +4,17 @@ import sys
 
 scheme = sys.argv[1]
 scheme_dir = os.path.expanduser("~/dotfiles/appearance/schemes/base16/")
+scheme_dir_24 = os.path.expanduser("~/dotfiles/appearance/schemes/base24/")
+save_file = os.path.expanduser("~/.local/share/mysetup/base16")
+is_24 = False
+
+if os.path.exists(f"{scheme_dir_24}{scheme}.yaml"):
+    scheme_file = f"{scheme_dir_24}{scheme}.yaml"
+else:
+    scheme_file = f"{scheme_dir}{scheme}.yaml"
 
 colors = {}
-with open(f"{scheme_dir}{scheme}.yaml", encoding="utf-8") as f:
+with open(scheme_file, encoding="utf-8") as f:
     for line in f.readlines():
         if line.startswith("  base"):
             colors[line[6:8]] = line[12:18]

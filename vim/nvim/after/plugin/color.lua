@@ -19,6 +19,7 @@
 -- 0E: (Magenta) Keywords, Builtins
 -- 0F: Deprecated
 local scheme_dir = vim.fn.expand('~/dotfiles/appearance/schemes/base16/')
+local scheme_dir_24 = vim.fn.expand('~/dotfiles/appearance/schemes/base24/')
 
 local function hi(group, args)
     local command = string.format(
@@ -41,8 +42,15 @@ local function setColor(scheme)
 
         scheme = vim.fn.readfile(color_file, '', 1)[1]
     end
-    local scheme_file = scheme_dir .. scheme .. '.yaml'
-    if vim.fn.filereadable(scheme_file) == 0 then
+
+    local is_24 = false
+    local scheme_file
+    if vim.fn.filereadable(scheme_dir_24 .. scheme .. '.yaml') ~= 0 then
+        scheme_file = scheme_dir_24 .. scheme .. '.yaml'
+        is_24 = true
+    elseif vim.fn.filereadable(scheme_dir .. scheme .. '.yaml') ~= 0 then
+        scheme_file = scheme_dir .. scheme .. '.yaml'
+    else
         vim.api.nvim_err_writeln('Bad scheme ' .. scheme)
     end
 
@@ -52,6 +60,18 @@ local function setColor(scheme)
             colors[string.sub(line, 7, 8)] = string.sub(line, 12, 18)
         end
     end
+
+    if not is_24 then
+        colors['10'] = colors['00']
+        colors['11'] = colors['01']
+        colors['12'] = colors['08']
+        colors['13'] = colors['0A']
+        colors['14'] = colors['0B']
+        colors['15'] = colors['0C']
+        colors['16'] = colors['0D']
+        colors['17'] = colors['0E']
+    end
+
     hi('Comment', { fg = colors['03'], attr = 'italic' })
 
     hi('Operator', { fg = colors['05'] })
@@ -110,7 +130,7 @@ local function setColor(scheme)
     hi('VisualNOS', { fg = colors['08'] })
     hi('WarningMsg', { fg = colors['08'] })
     hi('WildMenu', { fg = colors['08'], bg = colors['0A'] })
-    hi('Title', { fg = colors['0D'] })
+    hi('Title', { fg = colors['16'] })
     hi('Conceal', { fg = colors['0D'], bg = colors['00'] })
     hi('Cursor', { fg = colors['00'], bg = colors['05'] })
     hi('NonText', { fg = colors['03'] })
@@ -144,14 +164,14 @@ local function setColor(scheme)
     hi('DiffText', { fg = colors['0D'], bg = colors['01'] })
     hi('DiffLine', { fg = colors['0D'], bg = colors['00'] })
 
-    hi('DiagnosticError', { fg = colors['08'] })
-    hi('DiagnosticHint', { fg = colors['0D'] })
-    hi('DiagnosticInfo', { fg = colors['0C'] })
-    hi('DiagnosticOk', { fg = colors['0B'] })
-    hi('DiagnosticWarn', { fg = colors['0A'] }) -- Was 0E
+    hi('DiagnosticError', { fg = colors['12'] })
+    hi('DiagnosticHint', { fg = colors['16'] })
+    hi('DiagnosticInfo', { fg = colors['15'] })
+    hi('DiagnosticOk', { fg = colors['14'] })
+    hi('DiagnosticWarn', { fg = colors['13'] }) -- Was 0E
 
-    hi('User1', { fg = colors['08'], bg = colors['02'] })
-    hi('User2', { fg = colors['0A'], bg = colors['02'] })
+    hi('User1', { fg = colors['12'], bg = colors['02'] })
+    hi('User2', { fg = colors['13'], bg = colors['02'] })
     hi('User3', { fg = colors['04'], bg = colors['02'], attr = 'bold' })
     hi('User4', { fg = colors['02'], bg = colors['08'] })
     hi('User5', { fg = colors['02'], bg = colors['0B'] })
