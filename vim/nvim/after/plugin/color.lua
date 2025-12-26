@@ -34,14 +34,74 @@ local function hi(group, args)
     vim.cmd(command)
 end
 
+local function getColorSchemes(prefix)
+    local schemes = {}
+    if prefix == nil then
+        prefix = ''
+    end
+
+    local d, dd = vim.loop.fs_scandir(scheme_dir)
+    while true do
+        local name, type = vim.loop.fs_scandir_next(d, dd)
+        if name == nil then
+            break
+        end
+        if name == 'README.md' then
+            goto continue
+        end
+
+        if type == 'file' and string.find(name, prefix, 1) == 1 then
+            local scheme = string.gsub(name, '.yaml', '')
+            table.insert(schemes, scheme)
+        end
+        ::continue::
+    end
+    return schemes
+end
+
 local function setColor(scheme)
     if scheme == nil then
         if vim.fn.filereadable(color_file) == 0 then
             return
         end
         scheme = vim.fn.readfile(color_file, '', 1)[1]
-
-    elseif scheme == "--current" then
+    elseif scheme == '--pick' then
+        local current_scheme = vim.fn.readfile(color_file, '', 1)[1]
+        local items = {}
+        local index = 1
+        for i, colorscheme in ipairs(getColorSchemes()) do
+            if colorscheme == current_scheme then
+                index = i
+            end
+            table.insert(items, {
+                idx = i,
+                score = i,
+                text = colorscheme,
+                name = colorscheme,
+                file = scheme_dir .. colorscheme .. '.yaml'
+            })
+        end
+        require('snacks').picker({
+            items = items,
+            format = 'text',
+            on_show = function(picker)
+                picker.list:view(index)
+            end,
+            on_change = function(_, item)
+                setColor(item.name)
+            end,
+            confirm = function(picker, item)
+                picker:close()
+                setColor(item.name)
+            end,
+            on_close = function(_, item)
+                if item == nil then
+                    setColor(current_scheme)
+                end
+            end
+        })
+        return
+    elseif scheme == '--current' then
         print(vim.fn.readfile(color_file, '', 1)[1])
         return
     end
@@ -180,33 +240,15 @@ local function setColor(scheme)
     hi('User5', { fg = colors['02'], bg = colors['0B'] })
 end
 
-local function colorschemeCompletion(prefix)
-    local schemes = {}
-
-    local d, dd = vim.loop.fs_scandir(scheme_dir)
-    while true do
-        local name, type = vim.loop.fs_scandir_next(d, dd)
-        if name == nil then
-            break
-        end
-        if name == 'README.md' then
-            goto continue
-        end
-
-        if type == 'file' and string.find(name, prefix, 1) == 1 then
-            local scheme = string.gsub(name, '.yaml', '')
-            table.insert(schemes, scheme)
-        end
-        ::continue::
-    end
-    return schemes
-end
-
 vim.api.nvim_create_user_command('Color', function(args)
-    setColor(args.args)
+    if args.args == '' then
+        setColor('--pick')
+    else
+        setColor(args.args)
+    end
 end, {
-    nargs = 1,
-    complete = colorschemeCompletion,
+    nargs = '?',
+    complete = getColorSchemes,
 })
 vim.api.nvim_create_augroup('TermColor', { clear = true })
 vim.api.nvim_create_autocmd('FocusGained', {
