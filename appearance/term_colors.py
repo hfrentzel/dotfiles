@@ -54,8 +54,9 @@ def set_color(scheme):
         return
 
     os.makedirs(os.path.dirname(save_file), exist_ok=True)
-    with open(save_file, "w") as c:
-        c.write(scheme)
+    if len(sys.argv) < 3 or sys.argv[2] != "--no-save":
+        with open(save_file, "w") as c:
+            c.write(scheme)
 
     apply_color(0, colors["00"])  # Black
     apply_color(1, colors["08"])  # Red
@@ -105,7 +106,32 @@ def print_current():
         print(f.read())
 
 
+def color_picker():
+    schemes = set(os.listdir(scheme_dir) + os.listdir(scheme_dir_24))
+    schemes = sorted({s.removesuffix(".yaml") for s in schemes})
+    schemes_str = "\n".join(schemes)
+
+    with open(save_file, encoding="utf-8") as f:
+        current_scheme = f.read()
+
+    curr_pos = schemes.index(current_scheme)
+    cmd = (
+        f"fzf --bind 'load:pos({curr_pos + 1}),"
+        "enter:execute(color {})+accept,"
+        "focus:execute(color {} --no-save),"
+        f"esc:execute(color {current_scheme})+abort'"
+    )
+
+    subprocess.run(
+        shlex.split(cmd),
+        input=bytes(schemes_str, encoding="utf-8"),
+    )
+
+
 if __name__ == "__main__":
+    if len(sys.argv) == 1:
+        color_picker()
+        sys.exit()
     scheme = sys.argv[1]
 
     if scheme == "--current":
