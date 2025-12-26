@@ -18,13 +18,13 @@
         "bashrc": {
             "type": "symlink",
             "only_on": ["Linux"],
-            "source": "DOT/bash/.bashrc",
+            "source": "DOT/configs/bash/.bashrc",
             "target": "~/.bashrc"
         },
         "bash": {
             "type": "symlink",
             "only_on": ["Linux"],
-            "source": "DOT/bash/plugins",
+            "source": "DOT/configs/bash/plugins",
             "target": "~/.config/bash/plugins"
         },
         "color": {
@@ -43,7 +43,7 @@
         "inputrc": {
             "type": "symlink",
             "only_on": ["Linux"],
-            "source": "DOT/bash/.inputrc",
+            "source": "DOT/configs/bash/.inputrc",
             "target": "~/.config/readline/inputrc"
         },
         "bash_data": {
