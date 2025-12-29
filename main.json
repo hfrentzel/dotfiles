@@ -106,7 +106,7 @@
         "ripgrep": {
             "type": "exe",
             "command_name": "rg",
-            "version": "14.1.1",
+            "version": "15.1.0",
             "installers": ["bh"],
             "source_repo": "https://github.com/BurntSushi/ripgrep"
         },
@@ -117,13 +117,13 @@
         },
         "bat": {
             "type": "exe",
-            "version": "0.25.0",
+            "version": "0.26.1",
             "installers": ["bh"],
             "source_repo": "https://github.com/sharkdp/bat"
         },
         "fd": {
             "type": "exe",
-            "version": "10.2.0",
+            "version": "10.3.0",
             "installers": ["bh"],
             "source_repo": "https://github.com/sharkdp/fd"
         },

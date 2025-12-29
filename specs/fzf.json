@@ -1,7 +1,7 @@
 {
     "fzf": {
         "type": "exe",
-        "version": "0.61.1",
+        "version": "0.67.0",
         "installers": ["bh"],
         "source_repo": "https://github.com/junegunn/fzf"
     }

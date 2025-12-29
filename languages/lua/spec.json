@@ -8,13 +8,13 @@
     },
     "selene": {
         "type": "exe",
-        "version": "0.28.0",
+        "version": "0.29.0",
         "installers": ["bh"],
         "source_repo": "https://github.com/Kampfkarren/selene"
     },
     "stylua": {
         "type": "exe",
-        "version": "2.0.2",
+        "version": "2.3.1",
         "installers": ["bh"],
         "source_repo": "https://github.com/JohnnyMorganz/StyLua"
     },
