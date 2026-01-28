@@ -24,20 +24,22 @@ local format = function()
     require('conform').format({ async = true })
 end
 
-local on_attach = function()
-    local args = { buffer = true, silent = true }
-    vim.diagnostic.config({ severity_sort = true, virtual_text = true })
-    vim.wo.signcolumn = 'yes'
-    vim.keymap.set({'n', 'v'}, 'g=', format, args)
-    vim.keymap.set('n', 'K', function()
-        vim.lsp.buf.hover({ border = 'rounded' })
-    end, args)
-    vim.keymap.set('n', '<leader>d', function()
-        vim.diagnostic.open_float({ border = 'rounded' })
-    end, args)
-    vim.keymap.set('n', '<leader>3', vim.diagnostic.setloclist, args)
-    vim.keymap.set('n', '<leader>4', toggleDiagnostics, args)
-end
+vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function()
+        local args = { buffer = true, silent = true }
+        vim.diagnostic.config({ severity_sort = true, virtual_text = true })
+        vim.wo.signcolumn = 'yes'
+        vim.keymap.set({ 'n', 'v' }, 'g=', format, args)
+        vim.keymap.set('n', 'K', function()
+            vim.lsp.buf.hover({ border = 'rounded' })
+        end, args)
+        vim.keymap.set('n', '<leader>d', function()
+            vim.diagnostic.open_float({ border = 'rounded' })
+        end, args)
+        vim.keymap.set('n', '<leader>3', vim.diagnostic.setloclist, args)
+        vim.keymap.set('n', '<leader>4', toggleDiagnostics, args)
+    end,
+})
 
 local updateDiags = function()
     vim.diagnostic.setloclist({ open = false })
@@ -53,11 +55,11 @@ vim.api.nvim_create_autocmd('DiagnosticChanged', {
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+capabilities =
+    vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
 vim.lsp.config('*', {
     capabilities = capabilities,
-    on_attach = on_attach,
 })
 vim.lsp.enable({
     'eslint',
