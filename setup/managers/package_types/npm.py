@@ -65,7 +65,7 @@ class Npm:
             )
         else:
             path = os.path.join(
-                expand("~/AppData/Roaming/npm/node_modules"),
+                expand("~/.local/share/node/node_modules"),
                 package.name,
                 "package.json",
             )

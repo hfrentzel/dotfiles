@@ -4,6 +4,7 @@ import datetime
 import json
 import logging
 import os
+import platform
 import webbrowser
 
 from .available import lookup_releases
@@ -282,9 +283,15 @@ def run() -> None:
     if local_bin not in os.environ["PATH"]:
         cargo_bin = expand("~/.local/share/cargo/bin")
         go_bin = expand("~/.local/go/bin")
-        os.environ["PATH"] = (
-            f"{local_bin}:{go_bin}:{cargo_bin}:{os.environ['PATH']}"
-        )
+        if platform.system() == "Windows":
+            node_bin = expand("~/.local/share/node")
+            os.environ["PATH"] = (
+                f"{local_bin}:{node_bin}:{go_bin}:{cargo_bin}:{os.environ['PATH']}"
+            )
+        else:
+            os.environ["PATH"] = (
+                f"{local_bin}:{go_bin}:{cargo_bin}:{os.environ['PATH']}"
+            )
 
     conf.args = argparser.parse_args()
     loglevel = LOG_LEVELS[conf.args.log]
