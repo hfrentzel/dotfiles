@@ -40,7 +40,7 @@ test -f ~/variables && source $HOME/.config/bash/plugins/var_setup.sh
 test -f ~/workspaces && source $HOME/.config/bash/plugins/workspace_setup.sh
 test -f ~/.secrets && source ~/.secrets
 
-source $HOME/.local/shell/fzf.sh 2> /dev/null
+source $HOME/.local/share/fzf/completion.sh 2> /dev/null
 source $HOME/.config/bash/plugins/path.sh
 source $HOME/.config/bash/plugins/completions.sh
 source $HOME/.config/bash/plugins/utilities.sh

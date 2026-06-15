@@ -1,20 +1,20 @@
 {
     "lua-language-server": {
         "type": "exe",
-        "version": "3.14.0",
+        "version": "3.18.2",
         "installers": ["bh"],
         "homepage": "https://luals.github.io",
         "source_repo": "https://github.com/LuaLS/lua-language-server"
     },
     "selene": {
         "type": "exe",
-        "version": "0.29.0",
+        "version": "0.31.0",
         "installers": ["bh"],
         "source_repo": "https://github.com/Kampfkarren/selene"
     },
     "stylua": {
         "type": "exe",
-        "version": "2.3.1",
+        "version": "2.5.2",
         "installers": ["bh"],
         "source_repo": "https://github.com/JohnnyMorganz/StyLua"
     },

@@ -83,7 +83,7 @@
         },
         "zoxide": {
             "type": "exe",
-            "version": "0.9.7",
+            "version": "0.9.9",
             "installers": ["bh"],
             "source_repo": "https://github.com/ajeetdsouza/zoxide"
         },
@@ -93,7 +93,7 @@
         },
         "delta": {
             "type": "exe",
-            "version": "0.18.2",
+            "version": "0.19.2",
             "installers": ["bh"],
             "homepage": "https://dandavison.github.io/delta/",
             "source_repo": "https://github.com/dandavison/delta"
@@ -123,7 +123,7 @@
         },
         "fd": {
             "type": "exe",
-            "version": "10.3.0",
+            "version": "10.4.2",
             "installers": ["bh"],
             "source_repo": "https://github.com/sharkdp/fd"
         },
