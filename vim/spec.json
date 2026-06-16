@@ -12,7 +12,7 @@
     "neovim": {
         "type": "exe",
         "command_name": "nvim",
-        "version": "0.11.0",
+        "version": "0.12.3",
         "installers": ["bh"],
         "homepage": "https://neovim.io",
         "source_repo": "https://github.com/neovim/neovim"
