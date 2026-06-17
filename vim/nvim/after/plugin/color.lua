@@ -154,6 +154,7 @@ local function setColor(scheme)
     hi('String', { fg = colors['0B'] })
 
     hi('Special', { fg = colors['0C'] })
+    hi('CustomSelectIdx', { fg = colors['0C'] })
 
     hi('Function', { fg = colors['0D'] })
     hi('Include', { fg = colors['0D'] })

@@ -3,21 +3,6 @@
 
 return {
     {
-        'dressing.nvim',
-        dev = true,
-        keys = {
-            { '<leader>r', vim.lsp.buf.rename },
-            { '<leader>a', vim.lsp.buf.code_action },
-        },
-        opts = {
-            input = { mappings = { i = { ['<Esc>'] = 'Close' } } },
-            select = {
-                backend = { 'builtin' },
-                builtin = { relative = 'cursor' },
-            },
-        },
-    },
-    {
         'conform.nvim',
         dev = true,
         ft = { 'lua', 'css' },

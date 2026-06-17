@@ -36,6 +36,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set('n', '<leader>d', function()
             vim.diagnostic.open_float({ border = 'rounded' })
         end, args)
+        vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, args)
         vim.keymap.set('n', '<leader>3', vim.diagnostic.setloclist, args)
         vim.keymap.set('n', '<leader>4', toggleDiagnostics, args)
     end,

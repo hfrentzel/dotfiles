@@ -63,6 +63,7 @@ return {
         'snacks.nvim',
         dev = true,
         keys = {
+            { '<leader>r', vim.lsp.buf.rename },
             {
                 '<leader>t',
                 function()
@@ -135,7 +136,23 @@ return {
             },
         },
         opts = {
+            styles = {
+                input = {
+                    relative = 'cursor',
+                    row = -3,
+                    col = 0,
+                    title_pos = 'left',
+                    width = 40,
+                    keys = {
+                        i_esc = { '<esc>', 'cancel', mode = 'i', expr = true },
+                    },
+                },
+            },
+            input = {
+                icon_pos = false,
+            },
             picker = {
+                ui_select = false,
                 prompt = '',
                 icons = {
                     files = { enabled = false },

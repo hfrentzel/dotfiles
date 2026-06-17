@@ -13,3 +13,7 @@ vim.api.nvim_create_user_command('Encode', function()
     end)
     vim.api.nvim_buf_set_text(0, start[2] - 1, start[3] - 1, last[2] - 1, last[3], { text })
 end, { range = true })
+
+vim.ui.select = function(...)
+    require("my_lua.ui_select").select(...)
+end
