@@ -5,8 +5,8 @@ local StandardStatusLine = function()
         '%3*%t%* %y', -- filename and filetype
         '%=',
         "%{%v:lua.require('my_lua.statusline').diagnostics()%}",
-        ' (%{get(b:,"git_branch","")}) ',
-        "%{v:lua.require('my_lua.statusline').status_rhs()}",
+        ' (%{get(b:,"gitsigns_head","")}) ',
+        "%{%v:lua.require('my_lua.statusline').status_rhs()%}",
     })
 end
 
@@ -34,15 +34,11 @@ local get_git_data = function()
     end
 
     local is_git_dir = run(git_prefix .. ' rev-parse --is-inside-work-tree')
-    if is_git_dir == 'true' then
-        vim.b.git_branch = run(git_prefix .. ' branch --show-current')
-
-        if root_path == nil then
-            root_path = run(git_prefix .. ' rev-parse --show-toplevel')
-            vim.b.git_root = root_path
-            local path_parts = vim.fn.split(root_path, '/')
-            root_name = '~' .. path_parts[#path_parts] .. '~'
-        end
+    if is_git_dir == 'true' and root_path == nil then
+        root_path = run(git_prefix .. ' rev-parse --show-toplevel')
+        vim.b.git_root = root_path
+        local path_parts = vim.fn.split(root_path, '/')
+        root_name = '~' .. path_parts[#path_parts] .. '~'
     end
 
     if root_path ~= nil then

@@ -2,8 +2,7 @@ local statusline = {}
 
 statusline.diagnostics = function()
     local b = vim.b
-    -- local tree = require('nvim-treesitter.parsers').has_parser() and '🌳' or '🪓'
-    local tree = ' '
+    local tree =  b.ts_highlight and '🌳' or '🪓'
     local output = ''
     local no_problems = true
     if b.diags_ready ~= true then
@@ -27,11 +26,11 @@ end
 
 statusline.modified = function()
     local padding = vim.fn.getwininfo(vim.fn.win_getid())[1].textoff
-    return (vim.bo.modified and '%4*' or '%5*') .. '%{printf("%-' .. padding .. 'd", winnr())}%*'
+    return (vim.bo.modified and '%4*' or '%5*') .. '%{printf("%' .. padding .. 'd", winnr())}%*'
 end
 
 statusline.status_rhs = function()
-    return string.format('%s/%s, %s', vim.fn.line('.'), vim.fn.line('$'), vim.fn.col('.'))
+    return '%l|%L│%2v|%-2{virtcol("$") - 1}'
 end
 
 statusline.determine_side = function()

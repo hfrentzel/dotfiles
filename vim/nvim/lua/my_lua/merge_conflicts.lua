@@ -10,7 +10,7 @@ local git_state = function()
             vim.fn.readfile(git_path .. 'MERGE_MSG')[1],
             "Merge branch '\\zs.*\\ze'"
         )
-        vim.g.merge_head = vim.b.git_branch
+        vim.g.merge_head = vim.b.gitsigns_head
     elseif
         vim.fn.isdirectory(git_path .. 'rebase-merge') ~= 0
         or vim.fn.isdirectory(git_path .. 'rebase-apply')

@@ -45,7 +45,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 local updateDiags = function()
     vim.diagnostic.setloclist({ open = false })
     vim.b.diags_ready = true
-    vim.wo.statusline = vim.wo.statusline
+    vim.cmd.redrawstatus()
 end
 
 vim.api.nvim_create_augroup('diagnostics', { clear = true })
