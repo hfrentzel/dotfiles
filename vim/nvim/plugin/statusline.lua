@@ -66,6 +66,8 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'FocusGained', 'BufWritePost' }, {
     callback = get_git_data,
 })
 
+vim.go.statusline = StandardStatusLine()
+
 vim.api.nvim_create_augroup('FileTypes', { clear = true })
 vim.api.nvim_create_autocmd('filetype', {
     group = 'FileTypes',
@@ -74,8 +76,6 @@ vim.api.nvim_create_autocmd('filetype', {
         vim.o.laststatus = 2
         if vim.regex('fugitive:///.*//[23]/.*'):match_str(vim.fn.expand('%')) then
             vim.wo.statusline = FugitiveStatusLine()
-        else
-            vim.wo.statusline = StandardStatusLine()
         end
     end,
 })
