@@ -22,6 +22,24 @@ local scheme_dir = vim.fn.expand('~/dotfiles/appearance/schemes/base16/')
 local scheme_dir_24 = vim.fn.expand('~/dotfiles/appearance/schemes/base24/')
 local color_file = vim.fn.expand('~/.local/share/mysetup/base16')
 
+local function to_rgb(hex)
+    local r = tonumber(hex:sub(2, 3), 16)
+    local g = tonumber(hex:sub(4, 5), 16)
+    local b = tonumber(hex:sub(6, 7), 16)
+    return r, g, b
+end
+
+local function darken(fg, bg, a)
+    local fr, fg_, fb = to_rgb(fg)
+    local br, bg_, bb = to_rgb(bg)
+
+    local r = math.floor((fr * (1 - a)) + (br * a) + 0.5)
+    local g = math.floor((fg_ * (1 - a)) + (bg_ * a) + 0.5)
+    local b = math.floor((fb * (1 - a)) + (bb * a) + 0.5)
+
+    return string.format("#%02x%02x%02x", r, g, b)
+end
+
 local function hi(group, args)
     local command = string.format(
         'highlight %s guifg=%s guibg=%s gui=%s guisp=%s',
@@ -219,7 +237,7 @@ local function setColor(scheme)
     hi('Changed', { fg = colors['0D'], bg = colors['01'] })
     hi('Removed', { fg = colors['08'], bg = colors['01'] })
     hi('DiffFile', { fg = colors['08'], bg = colors['00'] })
-    hi('DiffAdd', { fg = colors['01'], bg = colors['0B'] })
+    hi('DiffAdd', { fg = colors['0B'], bg = darken(colors['0B'], colors['00'], 0.86)})
     hi('DiffAdded', { fg = colors['0B'], bg = colors['00'] })
     hi('DiffNewFile', { fg = colors['0B'], bg = colors['00'] })
     hi('DiffChange', { fg = colors['03'], bg = colors['01'] })
