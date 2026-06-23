@@ -24,6 +24,7 @@ return {
                     path = '~/notes',
                 },
             },
+            new_notes_location = "current_dir",
             callbacks = {
                 post_setup = function()
                     vim.wo.conceallevel = 2
