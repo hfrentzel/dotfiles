@@ -13,7 +13,7 @@ else:
 class Conf:
     args: Namespace = field(default_factory=Namespace)
     dotfiles_home: str = ""
-    sources_dir: str = os.path.expanduser("~/.cache/env_setup")
+    sources_dir: str = os.path.expanduser("~/.cache/mysetup")
     parser_dir: str = parser_dir
     root_access: bool = False
 

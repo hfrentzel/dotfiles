@@ -198,7 +198,7 @@ def add_specfile() -> None:
 
 
 def run() -> None:
-    argparser = argparse.ArgumentParser(prog="EnvSetup")
+    argparser = argparse.ArgumentParser(prog="mysetup")
     argparser.set_defaults(func=check)
     argparser.add_argument(
         "-l",

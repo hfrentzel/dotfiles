@@ -10,7 +10,7 @@ from setup.managers import ALL_MANAGERS, Manager
 from setup.menu import MenuPiece, show
 from setup.output import green, red, yellow
 
-USER_CONFIG = expand("~/.config/env_setup/config.json")
+USER_CONFIG = expand("~/.config/mysetup/config.json")
 
 
 class NoSpecError(Exception):
