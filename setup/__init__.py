@@ -10,6 +10,7 @@ import webbrowser
 from .available import lookup_releases
 from .builder import (
     NoSpecError,
+    add_external_specfile,
     build_resources,
     edit_config,
     get_resource,
@@ -192,6 +193,10 @@ def download() -> None:
     asyncio.run(get_asset(conf.args.repo[0]))
 
 
+def add_specfile() -> None:
+    add_external_specfile(conf.args.specfile[0], conf.args.force)
+
+
 def run() -> None:
     argparser = argparse.ArgumentParser(prog="EnvSetup")
     argparser.set_defaults(func=check)
@@ -271,6 +276,11 @@ def run() -> None:
     diff_cmd = subm_cmds.add_parser("diff")
     diff_cmd.add_argument("repo", type=str, nargs=1)
     diff_cmd.set_defaults(func=submodule_diff)
+
+    addspec_cmd = subparsers.add_parser("addspec")
+    addspec_cmd.add_argument("specfile", type=str, nargs=1)
+    addspec_cmd.set_defaults(func=add_specfile)
+    addspec_cmd.add_argument("-f", "--force", action="store_true")
 
     os.environ["NPM_CONFIG_USERCONFIG"] = expand("~/.config/npm/npmrc")
     os.environ["CARGO_HOME"] = expand("~/.local/share/cargo")

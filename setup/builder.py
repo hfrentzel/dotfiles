@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import platform
 import re
@@ -7,7 +8,7 @@ from typing import Any, Optional
 from setup.conf import conf, expand
 from setup.managers import ALL_MANAGERS, Manager
 from setup.menu import MenuPiece, show
-from setup.output import green, red
+from setup.output import green, red, yellow
 
 USER_CONFIG = expand("~/.config/env_setup/config.json")
 
@@ -100,8 +101,13 @@ def get_base_specs() -> tuple[dict[str, dict[str, Any]], dict[str, str]]:
 
 
 def get_addon_specs(addon: str) -> dict[str, dict[str, Any]]:
-    with open(os.path.join(expand(addon)), encoding="utf-8") as f:
-        return json.loads(f.read())
+    logger = logging.getLogger("load_specs")
+    try:
+        with open(os.path.join(expand(addon)), encoding="utf-8") as f:
+            return json.loads(f.read())
+    except FileNotFoundError:
+        logger.warn(yellow(f"External addon spec {addon} not found"))
+        return {}
 
 
 def load_settings(
@@ -166,6 +172,20 @@ def write_config(
                 {"addons": choices, "external": external_addons}, indent=4
             )
         )
+
+
+def add_external_specfile(newfile, force):
+    choices, addons = read_config()
+    if newfile in addons:
+        print(f"{newfile} is already being tracked")
+        return
+    if not force and not os.path.exists(expand(newfile)):
+        print(
+            f"{newfile} does not exists. Rerun with -f to track file anyways"
+        )
+        return
+    addons.append(newfile)
+    write_config(choices, addons)
 
 
 class ConfigEditor(MenuPiece):
