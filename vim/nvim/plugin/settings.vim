@@ -14,6 +14,8 @@ set textwidth=80
 set formatoptions-=t                    " Don't autowrap text
 set termguicolors
 
+set undofile
+
 if has('nvim')
     set fillchars=eob:\ 
     set fillchars+=vert:┃ " U+2503
