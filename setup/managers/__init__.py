@@ -1,6 +1,7 @@
 from setup.job import Job
 
 from .command import Command
+from .config import LocalConfig
 from .directory import Directory
 from .exe import Exe
 from .lib import Library
@@ -15,6 +16,7 @@ __all__ = [
     "Command",
     "Directory",
     "Exe",
+    "LocalConfig",
     "Library",
     "Manager",
     "Parser",
@@ -23,6 +25,7 @@ __all__ = [
 
 ALL_MANAGERS: dict[str, type[Manager]] = {
     "command": Command,
+    "config": LocalConfig,
     "directory": Directory,
     "exe": Exe,
     "library": Library,
@@ -34,6 +37,7 @@ ALL_MANAGERS: dict[str, type[Manager]] = {
 def all_desired() -> list[Manager]:
     return [
         *Command.desired,
+        *LocalConfig.desired,
         *Directory.desired,
         *Exe.desired,
         *Library.desired,

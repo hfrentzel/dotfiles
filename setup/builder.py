@@ -86,6 +86,12 @@ def get_spec(name: str) -> dict[str, Any]:
         addons_specs = get_addon_specs(f"DOT/{file}")
         if name in addons_specs:
             return addons_specs[name]
+
+    _, external_addons = read_config()
+    for file in external_addons:
+        external_specs = get_addon_specs(file)
+        if name in external_specs:
+            return external_specs[name]
     raise NoSpecError(name)
 
 
@@ -106,7 +112,7 @@ def get_addon_specs(addon: str) -> dict[str, dict[str, Any]]:
         with open(os.path.join(expand(addon)), encoding="utf-8") as f:
             return json.loads(f.read())
     except FileNotFoundError:
-        logger.warn(yellow(f"External addon spec {addon} not found"))
+        logger.warning(yellow(f"External addon spec {addon} not found"))
         return {}
 
 
@@ -180,9 +186,7 @@ def add_external_specfile(newfile, force):
         print(f"{newfile} is already being tracked")
         return
     if not force and not os.path.exists(expand(newfile)):
-        print(
-            f"{newfile} does not exists. Rerun with -f to track file anyways"
-        )
+        print(f"{newfile} does not exists. Rerun with -f to track file anyways")
         return
     addons.append(newfile)
     write_config(choices, addons)

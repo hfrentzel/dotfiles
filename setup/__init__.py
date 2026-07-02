@@ -20,6 +20,7 @@ from .conf import conf, expand
 from .inspect import get_asset, search_assets
 from .managers import (
     ALL_MANAGERS,
+    LocalConfig,
     Manager,
     all_desired,
     create_bonus_jobs,
@@ -122,6 +123,8 @@ async def handle_single_resource(resource: Manager) -> None:
             return
 
     if conf.args.stage != "run":
+        if isinstance(resource, LocalConfig):
+            resource.print_diff()
         print(f"{resource.name} can be set up. Rerun with -r to run the job")
         return
 
