@@ -47,6 +47,14 @@ source $HOME/.config/bash/plugins/utilities.sh
 source $HOME/.config/bash/plugins/aliases.sh
 source $HOME/.config/bash/plugins/env.sh
 
+_fzf_compgen_path() {
+    fd --hidden --exclude '.git' . "${1}"
+}
+
+_fzf_compgen_dir() {
+    fd --type d --hidden --exclude '.git' . "${1}"
+}
+
 BASE16_CONFIG="$HOME/.local/share/mysetup/base16"
 test -f $BASE16_CONFIG && color $(cat $BASE16_CONFIG)
 
