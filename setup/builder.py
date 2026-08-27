@@ -12,17 +12,21 @@ from setup.output import green, red, yellow
 
 USER_CONFIG = expand("~/.config/mysetup/config.json")
 
+type Spec = dict[str, Any]
+type SpecMap = dict[str, Spec]
+type AddonFile = str
+
 
 class NoSpecError(Exception):
     def __init__(self, name: str) -> None:
         self.name = name
 
 
-def build_resources(types: list[str]) -> list[Manager]:
+def build_resources(resource_types: list[str]) -> list[Manager]:
     specs = collect_specs()
     all_resources = []
     for name, spec in specs.items():
-        if spec.get("type") not in types:
+        if spec.get("type") not in resource_types:
             continue
         resource = generate_resource(name, spec)
         if resource:
@@ -35,7 +39,7 @@ def get_resource(name: str) -> Optional[Manager]:
     return generate_resource(name, get_spec(name))
 
 
-def generate_resource(name: str, spec: dict[str, Any]) -> Optional[Manager]:
+def generate_resource(name: str, spec: Spec) -> Optional[Manager]:
     if spec.get("only_on"):
         if platform.system() not in spec.pop("only_on"):
             return None
@@ -62,7 +66,7 @@ def generate_resource(name: str, spec: dict[str, Any]) -> Optional[Manager]:
     return ALL_MANAGERS[resource_type](name, **args)
 
 
-def collect_specs(include_all: bool = False) -> dict[str, dict[str, Any]]:
+def collect_specs(include_all: bool = False) -> SpecMap:
     specs, addons = get_base_specs()
 
     choices, external_addons = load_settings(addons)
@@ -77,7 +81,7 @@ def collect_specs(include_all: bool = False) -> dict[str, dict[str, Any]]:
     return specs
 
 
-def get_spec(name: str) -> dict[str, Any]:
+def get_spec(name: str) -> Spec:
     specs, addons = get_base_specs()
     if name in specs:
         return specs[name]
@@ -95,7 +99,7 @@ def get_spec(name: str) -> dict[str, Any]:
     raise NoSpecError(name)
 
 
-def get_base_specs() -> tuple[dict[str, dict[str, Any]], dict[str, str]]:
+def get_base_specs() -> tuple[SpecMap, dict[str, AddonFile]]:
     with open(
         os.path.join(conf.dotfiles_home, "main.json"), encoding="utf-8"
     ) as f:
@@ -106,22 +110,22 @@ def get_base_specs() -> tuple[dict[str, dict[str, Any]], dict[str, str]]:
     return specs, addons
 
 
-def get_addon_specs(addon: str) -> dict[str, dict[str, Any]]:
+def get_addon_specs(filename: str) -> SpecMap:
     logger = logging.getLogger("load_specs")
     try:
-        with open(os.path.join(expand(addon)), encoding="utf-8") as f:
+        with open(os.path.join(expand(filename)), encoding="utf-8") as f:
             return json.loads(f.read())
     except FileNotFoundError:
-        logger.warning(yellow(f"External addon spec {addon} not found"))
+        logger.warning(yellow(f"External filename spec {filename} not found"))
         return {}
 
 
 def load_settings(
-    addons: dict[str, str],
-) -> tuple[dict[str, bool], list[str]]:
+    base_addons: dict[str, AddonFile],
+) -> tuple[dict[str, bool], list[AddonFile]]:
     choices, external_addons = read_config()
     if choices is not None:
-        if missing_addons := set(addons) - set(choices):
+        if missing_addons := set(base_addons) - set(choices):
             print("There are new addons that are not tracked on this machine")
             for addon in missing_addons:
                 choices[addon] = (
@@ -133,7 +137,7 @@ def load_settings(
         return choices, external_addons
 
     print("No config file found. Creating one...")
-    choices = select_addons([(a, True) for a in addons])
+    choices = select_addons([(a, True) for a in base_addons])
     os.makedirs(os.path.dirname(USER_CONFIG), exist_ok=True)
     write_config(choices)
 
@@ -159,7 +163,7 @@ def edit_config() -> None:
     write_config(choices, external)
 
 
-def read_config() -> tuple[Optional[dict[str, bool]], list[str]]:
+def read_config() -> tuple[Optional[dict[str, bool]], list[AddonFile]]:
     if not os.path.exists(USER_CONFIG):
         return None, []
     with open(USER_CONFIG, encoding="utf-8") as f:
@@ -170,7 +174,7 @@ def read_config() -> tuple[Optional[dict[str, bool]], list[str]]:
 
 
 def write_config(
-    choices: dict[str, bool], external_addons: Optional[list[str]] = None
+    choices: dict[str, bool], external_addons: Optional[list[AddonFile]] = None
 ) -> None:
     with open(USER_CONFIG, "w", encoding="utf-8") as f:
         f.write(
@@ -180,7 +184,7 @@ def write_config(
         )
 
 
-def add_external_specfile(newfile, force):
+def add_external_addon(newfile, force):
     choices, addons = read_config()
     if newfile in addons:
         print(f"{newfile} is already being tracked")

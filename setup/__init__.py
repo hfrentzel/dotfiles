@@ -10,7 +10,7 @@ import webbrowser
 from .available import lookup_releases
 from .builder import (
     NoSpecError,
-    add_external_specfile,
+    add_external_addon,
     build_resources,
     edit_config,
     get_resource,
@@ -197,7 +197,7 @@ def download() -> None:
 
 
 def add_specfile() -> None:
-    add_external_specfile(conf.args.specfile[0], conf.args.force)
+    add_external_addon(conf.args.specfile[0], conf.args.force)
 
 
 def run() -> None:
