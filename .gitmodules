@@ -87,3 +87,6 @@
 [submodule "vim/nvim/pack/obsidian.nvim"]
 	path = vim/nvim/pack/obsidian.nvim
 	url = https://github.com/obsidian-nvim/obsidian.nvim
+[submodule "vim/nvim/pack/backend-tmux"]
+	path = vim/nvim/pack/backend-tmux
+	url = https://github.com/smart-splits-nvim/backend-tmux

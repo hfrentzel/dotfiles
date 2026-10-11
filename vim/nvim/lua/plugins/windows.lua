@@ -3,10 +3,10 @@
 -- wezterm and tmux using smart-splits.nvim
 
 local directions = {
-    left = "h",
-    down = "j",
-    up = "k",
-    right = "l"
+    left = 'h',
+    down = 'j',
+    up = 'k',
+    right = 'l',
 }
 
 local function move_pane(dir)
@@ -14,7 +14,7 @@ local function move_pane(dir)
         local start_win = vim.fn.winnr()
         vim.cmd.wincmd(directions[dir])
         if vim.fn.winnr() == start_win then
-            vim.fn.system({'wezterm', 'cli', 'activate-pane-direction', dir})
+            vim.fn.system({ 'wezterm', 'cli', 'activate-pane-direction', dir })
         end
     end
 end
@@ -23,17 +23,21 @@ return {
     {
         'smart-splits.nvim',
         dev = true,
+        dependencies = {
+            { 'backend-tmux', dev = true, main = 'smart-splits-backend-tmux' },
+        },
         config = function()
             local splits = require('smart-splits')
             splits.setup({
-                at_edge = 'stop',
+                move = { at_edge = 'stop' },
+                mux = { backend = 'smart-splits-backend-tmux' },
             })
 
             if vim.trim((vim.env.TERM_PROGRAM or ''):lower()) == 'wezterm' then
-                vim.keymap.set('n', '<C-h>', move_pane("left"))
-                vim.keymap.set('n', '<C-j>', move_pane("down"))
-                vim.keymap.set('n', '<C-k>', move_pane("up"))
-                vim.keymap.set('n', '<C-l>', move_pane("right"))
+                vim.keymap.set('n', '<C-h>', move_pane('left'))
+                vim.keymap.set('n', '<C-j>', move_pane('down'))
+                vim.keymap.set('n', '<C-k>', move_pane('up'))
+                vim.keymap.set('n', '<C-l>', move_pane('right'))
             else
                 vim.keymap.set('n', '<C-h>', splits.move_cursor_left)
                 vim.keymap.set('n', '<C-j>', splits.move_cursor_down)
