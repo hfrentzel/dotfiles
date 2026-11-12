@@ -1,7 +1,7 @@
 {
     "node": {
         "type": "exe",
-        "version": "22.14.0",
+        "version": "24.22.2",
         "installers": ["bh"],
         "source_repo": "https://github.com/nodejs/node",
         "homepage": "https://nodejs.org"
