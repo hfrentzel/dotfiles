@@ -18,7 +18,6 @@ if $nu.os-info.name == 'windows' {
     $env.RUSTUP_HOME = $env.HOME + "/.local/share/rustup"
 }
 $env.RIPGREP_CONFIG_PATH = $env.XDG_CONFIG_HOME + "/ripgrep/config"
-$env.PYLINTRC = $env.XDG_CONFIG_HOME + "/pylint/pylintrc"
 $env.PYTHONSTARTUP = $env.XDG_CONFIG_HOME + "/python/startup.py"
 $env.FZF_DEFAULT_OPTS = "--height 20% --layout=reverse"
 

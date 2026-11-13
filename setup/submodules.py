@@ -1,7 +1,7 @@
+import os
 import re
 import shlex
 import subprocess
-import os
 
 from .conf import conf, expand
 

@@ -16,7 +16,6 @@ return {
             plugins = {
                 jedi_rename = { enabled = false },
                 pylsp_mypy = { enabled = true },
-                pylint = { enabled = true },
                 ruff = {
                     enabled = true,
                     format = { 'I' },

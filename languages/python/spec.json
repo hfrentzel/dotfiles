@@ -35,7 +35,7 @@
     },
     "ruff": {
         "type": "exe",
-        "version": "0.9.7",
+        "version": "0.17.5",
         "installers": [
             "Pip"
         ],
@@ -51,21 +51,7 @@
     "ruffconfig": {
         "type": "symlink",
         "source": "DOT/languages/python/ruff.toml",
-        "target": "CONFR/ruff/pyproject.toml"
-    },
-    "pylint": {
-        "type": "exe",
-        "version": "3.3.4",
-        "installers": [
-            "Pip"
-        ],
-        "homepage": "https://pylint.readthedocs.io/en/latest/",
-        "source_repo": "https://github.com/pylint-dev/pylint"
-    },
-    "pylintrc": {
-        "type": "symlink",
-        "source": "DOT/languages/python/pylintrc",
-        "target": "CONFR/pylint/pylintrc"
+        "target": "CONFR/ruff/ruff.toml"
     },
     "mypy": {
         "type": "exe",

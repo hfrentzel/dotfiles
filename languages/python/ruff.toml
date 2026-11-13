@@ -1,8 +1,7 @@
-[tool.ruff]
 line-length = 80
 preview = true
 
-[tool.ruff.lint]
+[lint]
 select = [
     # pycodestyle and Pyflakes
     "W", "E", "F", 
@@ -15,5 +14,10 @@ select = [
     # Pylint
     "PLC", "PLE", "PLR", "PLW"]
 
-[tool.ruff.lint.mccabe]
+ignore = [
+    "PLW1510", # subprocess-run-without-check
+    "PLW1514", # unspecified-encoding
+]
+
+[lint.mccabe]
 max-complexity = 15
